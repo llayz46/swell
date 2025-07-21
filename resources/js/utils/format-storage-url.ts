@@ -1,6 +1,6 @@
 export function getStorageUrl(imagePath: string | null | undefined): string {
     if (!imagePath) {
-        return '/storage/images/default.png';
+        return '/placeholder-image.svg';
     }
 
     if (imagePath.startsWith('http://') || imagePath.startsWith('https://') || imagePath.startsWith('blob:')) {

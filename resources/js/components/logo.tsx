@@ -7,7 +7,7 @@ export default function Logo() {
                 <AppLogoIcon className="size-5 fill-current text-white dark:text-black" />
             </div>
             <div className="hidden lg:block ml-1 grid flex-1 text-left text-2xl">
-                <span className="mb-0.5 leading-tight font-semibold">LAYZESPORT</span>
+                <span className="mb-0.5 leading-tight font-semibold">Swell</span>
             </div>
         </div>
     );
