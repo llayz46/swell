@@ -22,7 +22,4 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-resources/js/wayfinder
-resources/js/actions
-resources/js/routes
 roadmap.md

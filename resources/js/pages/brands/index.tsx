@@ -2,7 +2,6 @@ import BaseLayout from '@/layouts/base-layout';
 import { Head, Link } from '@inertiajs/react';
 import { Brand, PaginatedResponse } from '@/types';
 import { PaginationComponent } from '@/components/pagination-component';
-import { show } from "@/actions/App/Http/Controllers/BrandController";
 import { getStorageUrl } from '@/utils/format-storage-url';
 
 interface IndexProps {
@@ -34,7 +33,7 @@ export default function Index({ brands }: IndexProps) {
                                         </span>
                                     )}
                                 </div>
-                                <Link href={show(brand.slug).url} className="text-lg font-semibold text-center hover:underline">{brand.name}</Link>
+                                <Link href={route('brand.show', brand.slug)} className="text-lg font-semibold text-center hover:underline">{brand.name}</Link>
                             </div>
                         </div>
                     ))}

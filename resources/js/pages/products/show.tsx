@@ -7,7 +7,6 @@ import { Head, Link, WhenVisible } from '@inertiajs/react';
 import BaseLayout from '@/layouts/base-layout';
 import { useMemo, useState } from 'react';
 import { useWishlist } from '@/hooks/use-wishlist';
-import { show } from "@/actions/App/Http/Controllers/ProductController";
 import { cn } from '@/lib/utils';
 import { useCartContext } from '@/contexts/cart-context';
 import { ProductCard } from '@/components/product-card';
@@ -31,8 +30,6 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
     const { addItem } = useWishlist();
     const { addToCart, buyNow } = useCartContext();
-
-    const { url: baseUrl } = show(product.slug);
 
     const averageRating = useMemo(() => {
         if (comments.length === 0) return 0;
@@ -128,7 +125,7 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
                                 <h3 className="font-semibold text-foreground">Produits associés</h3>
                                 <div className="grid gap-3 max-h-120 overflow-y-auto pr-2">
                                     {product.group.products.map(relatedProduct => (
-                                        <RelatedProduct key={relatedProduct.id} product={relatedProduct} current={baseUrl} />
+                                        <RelatedProduct key={relatedProduct.id} product={relatedProduct} currentProductId={product.id} />
                                     ))}
                                 </div>
                             </div>
@@ -201,22 +198,22 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
     )
 }
 
-function RelatedProduct({ product, current }: { product: Product, current: string }) {
-    const { url } = show(product.slug);
+function RelatedProduct({ product, currentProductId }: { product: Product, currentProductId: number }) {
+    const current = product.id === currentProductId;
 
     return (
-        <article className={cn("px-4 py-2 border bg-card rounded-md", url !== current ? 'hover:bg-secondary/10 transition-colors' : 'border-ring')}>
+        <article className={cn("px-4 py-2 border bg-card rounded-md", !current ? 'hover:bg-secondary/10 transition-colors' : 'border-ring')}>
             <div className="flex items-center gap-4">
                 <div className="relative w-16 h-16 rounded-sm overflow-hidden">
                 <img src={getStorageUrl(product.featured_image?.image_url)} alt={product.featured_image?.alt_text} className="size-full bg-muted object-cover" />                </div>
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                        {url === current ? (
+                        {current ? (
                             <h4 className="font-medium text-foreground">{product.name}</h4>
                         ) : (
-                            <Link prefetch href={show(product.slug).url} className="hover:underline font-medium text-foreground">{product.name}</Link>
+                            <Link prefetch href={route('product.show', product.slug)} className="hover:underline font-medium text-foreground">{product.name}</Link>
                         )}
-                        {url === current && (
+                        {current && (
                             <Badge variant="secondary" className="rounded-sm text-xs">
                                 Actuel
                             </Badge>

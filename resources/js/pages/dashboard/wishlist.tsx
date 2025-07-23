@@ -7,7 +7,6 @@ import { Deferred, Head, Link } from '@inertiajs/react';
 import { LoaderCircle, Plus, ShoppingCart, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useCartContext } from '@/contexts/cart-context';
-import { show } from "@/actions/App/Http/Controllers/ProductController";
 import { useWishlistContext } from '@/contexts/wishlist-context';
 import { getStorageUrl } from '@/utils/format-storage-url';
 
@@ -67,7 +66,7 @@ export default function Wishlist({ items }: { items: Product[] }) {
                             <div className="px-4 text-center absolute inset-0 flex flex-col items-center justify-center">
                                 <h3 className="mb-2 text-xl font-semibold">Votre liste de souhaits est vide</h3>
                                 <p className="mb-4 text-muted-foreground">Parcourez notre catalogue et ajoutez des produits à votre wishlist</p>
-                                <Link href="/products" className={buttonVariants()}>Découvrir nos produits</Link>
+                                <Link href={route('product.index')} className={buttonVariants()}>Découvrir nos produits</Link>
                             </div>
                         </div>
                     )}
@@ -78,8 +77,6 @@ export default function Wishlist({ items }: { items: Product[] }) {
 }
 
 function WishlistItem({ product, onRemove, onAddToCart }: { product: Product, onRemove: () => void, onAddToCart: () => void }) {
-    const { url } = show(product.slug);
-
     return (
         <div className="flex items-center gap-4 rounded-md border p-3">
             <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm bg-neutral-700">
@@ -89,7 +86,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product, on
             <div className="flex-grow">
                 <div className="flex items-start justify-between">
                     <div>
-                        <Link href={url} className="font-medium hover:underline">
+                        <Link href={route('product.show', product.slug)} className="font-medium hover:underline">
                             {product.brand.name} {product.name}
                         </Link>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{product.short_description}</p>

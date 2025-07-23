@@ -10,7 +10,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Button, buttonVariants } from '@/components/ui/button';
 import { PaginationComponent } from '@/components/pagination-component';
 import { ConfirmDeleteDialog } from '@/components/confirm-delete-dialog';
-import { edit, show } from '@/actions/App/Http/Controllers/Admin/ProductController';
 
 interface ProductsType {
     breadcrumbs: BreadcrumbItem[]
@@ -163,7 +162,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="end" className="border-border bg-popover">
                                                                 <DropdownMenuItem asChild>
-                                                                    <Link href={show.url(product.slug)} className="cursor-pointer text-foreground hover:bg-muted">
+                                                                    <Link href={route('admin.products.show', product.slug)} className="cursor-pointer text-foreground hover:bg-muted">
                                                                         <Eye className="mr-1 h-4 w-4" />
                                                                         Voir détails
                                                                     </Link>
@@ -180,7 +179,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                                     </DropdownMenuItem>
                                                                 )}
                                                                 <DropdownMenuItem asChild>
-                                                                    <Link href={edit(product.slug).url} className="cursor-pointer text-foreground hover:bg-muted">
+                                                                    <Link href={route('admin.products.edit', product.slug)} className="cursor-pointer text-foreground hover:bg-muted">
                                                                         <Edit className="mr-1 h-4 w-4" />
                                                                         Modifier
                                                                     </Link>

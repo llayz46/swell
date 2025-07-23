@@ -7,11 +7,8 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import show from "@/actions/App/Http/Controllers/CategoryController";
 
 export function ProductBreadcrumb({ category, product }: { category: { name: string, slug: string }, product: { product: string, brand: string } }) {
-    const { url } = show(category.slug);
-
     return (
         <Breadcrumb>
             <BreadcrumbList>
@@ -23,7 +20,7 @@ export function ProductBreadcrumb({ category, product }: { category: { name: str
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                     <BreadcrumbLink asChild>
-                        <Link href={url}>{category.name}</Link>
+                        <Link href={route('category.show', category.slug)}>{category.name}</Link>
                     </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
