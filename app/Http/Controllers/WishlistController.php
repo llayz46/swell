@@ -33,14 +33,20 @@ class WishlistController extends Controller
      */
     public function index()
     {
-
         return Inertia::render('dashboard/wishlist', [
-            'items' => fn () => auth()->user()->wishlist?->products
+            'items' => Inertia::defer(fn () => auth()->user()->wishlist?->products
                 ? ProductResource::collection(auth()->user()->wishlist->products->load('brand', 'featuredImage'))
-                : [],
+                : []
+            )
         ]);
     }
 
+    /**
+     * Store a new product in the wishlist.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $wishlist = WishlistFactory::make();
@@ -60,6 +66,12 @@ class WishlistController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Update the wishlist by removing a product.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request)
     {
         $wishlist = WishlistFactory::make();
@@ -77,6 +89,11 @@ class WishlistController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Clear the wishlist.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy()
     {
         $wishlist = WishlistFactory::make();

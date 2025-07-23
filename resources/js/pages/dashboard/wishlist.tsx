@@ -3,9 +3,9 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type Product } from '@/types';
-import { Head, Link, WhenVisible } from '@inertiajs/react';
+import { Deferred, Head, Link } from '@inertiajs/react';
 import { LoaderCircle, Plus, ShoppingCart, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCartContext } from '@/contexts/cart-context';
 import { show } from "@/actions/App/Http/Controllers/ProductController";
 import { useWishlistContext } from '@/contexts/wishlist-context';
@@ -25,13 +25,19 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Wishlist({ items }: { items: Product[] }) {
     const { addToCart } = useCartContext();
     const { removeItem, removeItems, addItems } = useWishlistContext();
-    const [optimisticWishlist, setOptimisticWishlist] = useState<Product[]>(items);
+    const [optimisticWishlist, setOptimisticWishlist] = useState<Product[]>([]);
+
+    useEffect(() => {
+        if (items && items.length > 0) {
+            setOptimisticWishlist(items);
+        }
+    }, [items]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Wishlist" />
 
-            <WhenVisible data="items" fallback={<WishlistFallback />}>
+            <Deferred data="items" fallback={<WishlistFallback />}>
                 <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                     <div className="mb-4 flex items-center justify-between">
                         <h1 className="text-2xl font-bold">Ma liste de souhaits</h1>
@@ -66,7 +72,7 @@ export default function Wishlist({ items }: { items: Product[] }) {
                         </div>
                     )}
                 </div>
-            </WhenVisible>
+            </Deferred>
         </AppLayout>
     );
 }
