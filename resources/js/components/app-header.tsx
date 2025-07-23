@@ -10,7 +10,7 @@ import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folders, LayoutGrid, Megaphone, Menu, Package, Tags } from 'lucide-react';
+import { Folders, LayoutGrid, Megaphone, Menu, Package, Tags } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 import { getStorageUrl } from '@/utils/format-storage-url';
