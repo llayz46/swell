@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "swell/starter-kit",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Swell Starter Kit is a Laravel-based starter kit designed to kickstart your next e-commerce project with essential features and tools.",
     "keywords": [
         "laravel",
         "framework"

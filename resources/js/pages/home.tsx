@@ -1,6 +1,14 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import BaseLayout from '@/layouts/base-layout';
-import { ArrowRight, Award, Headphones, Shield, Sparkles, Star, Truck } from 'lucide-react';
+import {
+    ArrowRight,
+    BookOpenText,
+    Star,
+    ShoppingCartIcon,
+    Monitor,
+    Package,
+    Puzzle
+} from 'lucide-react';
 import { Product, ProductComment, SharedData } from '@/types';
 import { cn } from '@/lib/utils';
 import { ProductCard } from '@/components/product-card';
@@ -17,66 +25,66 @@ import { TextAnimate } from '@/components/magicui/text-animate';
 
 const benefits = [
     {
-        icon: Truck,
-        title: 'Livraison offerte',
-        description: 'À partir de 50€ d’achat en France métropolitaine'
+        icon: Monitor,
+        title: 'UI Simple et intuitive',
+        description: 'Des composants faciles à utiliser et à personnaliser'
     },
     {
-        icon: Shield,
-        title: 'Paiement sécurisé',
-        description: 'Transactions cryptées et 100% sécurisées'
+        icon: ShoppingCartIcon,
+        title: 'Panier, paiement...',
+        description: 'Logique clé en main pour une UX fluide',
     },
     {
-        icon: Headphones,
-        title: 'Support réactif',
-        description: 'Une équipe à votre écoute 7j/7'
+        icon: Package,
+        title: 'Performances optimisées',
+        description: 'Un code léger, optimisé et rapide à charger',
     },
     {
-        icon: Award,
-        title: 'Satisfait ou remboursé',
-        description: '30 jours pour changer d’avis'
+        icon: Puzzle,
+        title: 'Structure modulaire',
+        description: 'Architecture claire : contrôleurs légers, isolation.',
     }
 ];
 
 const categoriesList = [
     {
-        title: 'Périphériques',
-        description: 'Périphériques haut de gamme utilisé par les pros.',
+        title: 'Authentification',
+        description: 'Sécurisez l’accès des utilisateurs avec des outils modernes.',
         items: [
-            { name: 'Souris', count: 42 },
-            { name: 'Claviers', count: 30 },
-            { name: 'Tapis de Souris', count: 64, className: 'text-violet-400' },
-            { name: 'Casques', count: 15 }
+            { name: 'Laravel Built-in' },
+            { name: 'Auth 2FA' },
+            { name: 'Profil personnalisable', className: 'text-violet-400' },
+            { name: 'Vérification d\'email' },
         ]
     },
     {
-        title: 'Sièges & Bureaux',
-        description: 'Confort et ergonomie pour vos sessions de jeu',
+        title: 'Modélisation',
+        description: 'Des modèles Eloquent pour une gestion efficace des données.',
         items: [
-            { name: 'Sièges Gamers', count: 24, className: 'text-teal-400' },
-            { name: 'Bureaux', count: 8 },
-            { name: 'Sièges Ergonomiques', count: 20 },
-            { name: 'Bureaux Assis Debout', count: 6 }
+            { name: 'Produits : groupes, images' },
+            { name: 'Catégories et Marques' },
+            { name: 'Panier et Commandes' },
+            { name: 'Entièrement personnalisble', className: 'text-green-400' },
         ]
     },
     {
-        title: 'PC & Écrans',
-        description: 'Des machines puissantes pour les gamers exigeants',
+        title: 'Interface Utilisateur',
+        description: 'Grâce à Tailwind CSS et Shadcn UI.',
         items: [
-            { name: 'Écrans Gamers', count: 36, className: 'text-sky-400' },
-            { name: 'PC Gaming', count: 15 },
-            { name: 'PC Portables', count: 20 },
-            { name: 'Composants PC', count: 50 }
+            { name: 'Composants UI', className: 'text-blue-400' },
+            { name: 'Personnalisation facile' },
+            { name: 'Dark mode' },
+            { name: 'Responsive et accessible' }
         ]
     },
     {
-        title: 'Accessoires',
-        description: 'Tout le nécessaire pour optimiser votre setup',
+        title: 'Développement',
+        description: 'Un code propre, modulaire et facile à maintenir.',
         items: [
-            { name: 'Câbles & Adaptateurs', count: 100 },
-            { name: 'Supports & Racks', count: 25 },
-            { name: 'Éclairage LED', count: 18 },
-            { name: 'Autres Accessoires', count: 40, className: 'text-orange-400' }
+            { name: 'Laravel 12', className: 'text-[#F05340]' },
+            { name: 'Tests unitaires inclus' },
+            { name: 'Documentation complète' },
+            { name: 'Contribution' },
         ]
     }
 ];
@@ -135,16 +143,16 @@ export default function Home({ products, comments }: { products: Product[], comm
                             <h1 className="sm:leading-tighter mb-4 text-4xl leading-tight font-semibold tracking-tight text-black sm:mb-6 sm:text-5xl md:text-7xl dark:text-white">
                                 <BoxReveal boxColor="#3b82f6" duration={0.5}>
                                     <span className="text-center">
-                                        Votre boutique
+                                        Le starter-kit
                                     </span>
                                 </BoxReveal>
                                 <BoxReveal boxColor="#3b82f6" duration={0.5}>
                                     <span className="text-primary italic">
-                                        — gaming{' '}
-                                        <span className="relative pb-2">
-                                            de référence
+                                        — pour{' '}
+                                        <span className="relative">
+                                            vous lancer
                                             <span
-                                                className="absolute bottom-3 left-0 h-0.5 bg-primary"
+                                                className="absolute w-full bottom-1 left-0 h-0.5 bg-primary"
                                             />
                                         </span>
                                         .
@@ -158,16 +166,16 @@ export default function Home({ products, comments }: { products: Product[], comm
                                 delay={0.3}
                                 once
                             >
-                                Des produits de qualité, sélectionnés pour les joueurs exigeants.
+                                Pensé pour les développeurs : flexible, performant, scalable et prêt à l'emploi.
                             </TextAnimate>
                             <div
                                 className="mt-6 flex flex-col items-center justify-center gap-3 px-4 sm:mt-8 sm:flex-row sm:px-0">
-                                <PrimaryButton href="/products">Découvrir la boutique</PrimaryButton>
+                                <PrimaryButton href="/products">Voir la démo</PrimaryButton>
                                 <Link
                                     href="/news"
                                     className="inline-flex w-full items-center justify-center rounded-md border border-foreground/10 px-5 py-3 text-sm font-medium transition-colors hover:bg-foreground/5 sm:w-auto"
                                 >
-                                    <Sparkles className="mr-1.5 size-3.5" /> Nouveautés
+                                    <BookOpenText className="mr-1.5 size-3.5" /> Documentation
                                 </Link>
                             </div>
                         </div>
@@ -186,7 +194,7 @@ export default function Home({ products, comments }: { products: Product[], comm
                                     delay={0.4}
                                     once
                                 >
-                                    Des avantages qui font la différence.
+                                    Une base technique solide, prête à utiliser pour vos projets.
                                 </TextAnimate>
 
                                 <div
@@ -212,19 +220,17 @@ export default function Home({ products, comments }: { products: Product[], comm
             </section>
 
             {/* Join Section */}
-            <section className="relative sm:mx-4 md:mx-6 rounded-xl bg-muted/90 py-24 dark:bg-muted/40">
-                <div
-                    className="absolute top-0 left-1/2 h-24 w-px -translate-x-1/2 bg-gradient-to-b from-transparent to-border/40"></div>
+            <section className="sm:mx-4 md:mx-6 rounded-xl bg-muted/90 py-24 dark:bg-muted/40">
                 <div className="container mx-auto max-w-5xl px-4">
                     <div className="mx-auto mb-16 max-w-2xl text-center">
                         <h2 className="mb-3 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
-                            Rejoignez l'<span className="text-primary">élite</span> avec <span
+                            Conçevez des projets <span className="text-primary">ambitieux</span> avec <span
                             className="font-bold italic underline">{name}</span>
                         </h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
-                            Plus de <span className="font-bold text-primary">1000 produits</span> gaming de qualité
-                            professionnelle pour vous aider à
-                            <span className="text-3xl font-bold text-primary italic"> dominez la partie.</span>
+                            Un <span className="font-bold text-primary">starter-kit e-commerce</span> complet et évolutif,
+                            pensé pour accélérer vos projets et
+                            <span className="text-3xl font-bold text-primary italic"> intégrer facilement vos produits.</span>
                         </p>
                     </div>
 
@@ -243,39 +249,31 @@ export default function Home({ products, comments }: { products: Product[], comm
                                     {category.items.map((item, itemIndex) => (
                                         <li
                                             key={itemIndex}
-                                            className="group flex items-center justify-between rounded-md px-3 py-2 transition-all hover:bg-muted/50"
+                                            className="group rounded-md px-3 py-2 transition-all hover:bg-muted/50"
                                         >
                                             <span
                                                 className={cn('text-sm font-medium tracking-tighter text-foreground', item.className)}>
                                                 {item.name}
                                             </span>
-                                            <span
-                                                className="text-xs tracking-tighter text-foreground/70 tabular-nums">{item.count}+</span>
                                         </li>
                                     ))}
                                 </ul>
                             </div>
                         ))}
                     </div>
-
-                    <div className="relative mt-24">
-                        <div
-                            className="absolute bottom-0 left-1/2 h-24 w-px -translate-x-1/2 bg-gradient-to-t from-transparent to-border/40"></div>
-                    </div>
                 </div>
             </section>
 
             {/* Top Products Section */}
-            <section className="relative py-24">
-                <div
-                    className="absolute top-0 left-1/2 h-24 w-px -translate-x-1/2 bg-gradient-to-b from-transparent to-border/40"></div>
+            <section className="py-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mt-3 mb-8 md:mb-12 max-w-2xl text-center">
-                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Nos
-                            produits les plus populaires</h2>
+                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
+                            Exemples de produits
+                        </h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
-                            Découvrez les produits qui font le <span
-                            className="font-bold text-primary">buzz</span> parmi nos clients.
+                            Découvrez une sélection de produits <span
+                            className="font-bold text-primary">populaires</span> pour vous inspirer dans vos projets.
                         </p>
                     </div>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
@@ -284,17 +282,12 @@ export default function Home({ products, comments }: { products: Product[], comm
                         ))}
                     </div>
                 </div>
-                <div className="relative mt-26">
-                    <div
-                        className="absolute bottom-0 left-1/2 h-24 w-px -translate-x-1/2 bg-gradient-to-t from-transparent to-border/40"></div>
-                </div>
+
                 <ProductQuickViewDialog product={quickViewProduct} open={!!quickViewProduct} onClose={() => setQuickViewProduct(null)} />
             </section>
 
             {/* Last Review Section */}
-            <section className="relative py-24">
-                <div
-                    className="absolute top-0 left-1/2 h-24 w-px -translate-x-1/2 bg-gradient-to-b from-transparent to-border/40"></div>
+            <section className="pt-24 pb-36">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-8 md:mb-12 max-w-2xl text-center">
                         <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Ce que
@@ -342,32 +335,27 @@ export default function Home({ products, comments }: { products: Product[], comm
                         <CarouselNext />
                     </Carousel>
                 </div>
-                <div className="relative mt-28">
-                    <div
-                        className="absolute bottom-0 left-1/2 h-24 w-px -translate-x-1/2 bg-gradient-to-t from-transparent to-border/40"></div>
-                </div>
             </section>
 
             {/* CTA Section */}
             <section className="relative md:mx-4 rounded-xl bg-muted/90 dark:bg-muted/40 py-10 md:py-20">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-8 max-w-2xl text-center">
-                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Prêt à
-                            passer au niveau supérieur ?</h2>
+                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
+                            Prêt à lancer votre projet grâce à {name} ?
+                        </h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
-                            Rejoignez notre communauté de gamers passionnés et découvrez des produits qui feront la
-                            différence.
+                            Lancez vous rapidement avec Swell, conçu pour simplifier le développement et vous permettre de vous concentrer sur l'essentiel.
                         </p>
                     </div>
                     <div className="flex justify-center">
-                        <PrimaryButton href="/products">Explorer la boutique</PrimaryButton>
+                        <PrimaryButton href="/products">Voir la documentation</PrimaryButton>
                     </div>
                 </div>
             </section>
 
             {/* FAQ Section */}
-            <section className="relative sm:px-4 mt-12 py-24 max-w-6xl mx-auto">
-                <div className="absolute top-0 left-1/2 h-24 w-px -translate-x-1/2 bg-gradient-to-b from-transparent to-border/40"></div>
+            <section className="sm:px-4 mt-12 py-24 max-w-6xl mx-auto">
                 <div className="mx-auto mb-8 md:mb-16 max-w-2xl text-center">
                     <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
                         Questions Fréquemment Posées
@@ -397,9 +385,6 @@ export default function Home({ products, comments }: { products: Product[], comm
                         </AccordionItem>
                     ))}
                 </Accordion>
-                <div className="relative mt-28">
-                    <div className="absolute bottom-0 left-1/2 h-24 w-px -translate-x-1/2 bg-gradient-to-t from-transparent to-border/40"></div>
-                </div>
             </section>
 
             {/* Footer Section */}
@@ -407,15 +392,15 @@ export default function Home({ products, comments }: { products: Product[], comm
                 <footer className="relative w-full overflow-hidden bg-black dark:bg-white rounded-2xl tracking-tighter">
                     <div className="max-w-7xl mx-auto px-6 py-8 md:py-12">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-4">
-                            <div className="col-span-1 md:col-span-5">
+                            <div className="col-span-1 md:col-span-8">
                                 <Link href="/" className="text-lg font-bold text-secondary">
                                     {name}
                                 </Link>
                                 <p className="text-sm text-muted-foreground mb-6 max-w-xs">
-                                    La référence pour les gamers : produits de qualité, conseils et communauté passionnée.
+                                    Un starter-kit simple et flexible pour démarrer vos projets e-commerce.
                                 </p>
                                 <span className="text-sm text-muted-foreground">
-                                    © 2025 {name}. Tous droits réservés.
+                                    Free to contribute.
                                 </span>
                             </div>
                             <div className="flex flex-col col-span-1 md:col-span-2 items-start md:items-end">
@@ -429,19 +414,9 @@ export default function Home({ products, comments }: { products: Product[], comm
                             <div className="flex flex-col col-span-1 md:col-span-2 items-start md:items-end">
                                 <h3 className="font-medium text-white dark:text-black mb-3">Ressources</h3>
                                 <ul className="space-y-2 w-full md:text-right">
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Guide d'achat</Link></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Blog</Link></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Avis clients</Link></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Support</Link></li>
-                                </ul>
-                            </div>
-                            <div className="flex flex-col col-span-1 md:col-span-2 items-start md:items-end">
-                                <h3 className="font-medium text-white dark:text-black mb-3">Entreprise</h3>
-                                <ul className="space-y-2 w-full md:text-right">
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">À propos</Link></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Contact</Link></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Confidentialité</Link></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Conditions</Link></li>
+                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Documentation</Link></li>
+                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Discussion</Link></li>
+                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Roadmap</Link></li>
                                 </ul>
                             </div>
                         </div>
