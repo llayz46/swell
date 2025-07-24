@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\Wishlist\Http\Controllers;
 
-use App\Actions\Wishlist\HandleProductWishlist;
-use App\Factories\WishlistFactory;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
+use App\Modules\Wishlist\Actions\Wishlist\HandleProductWishlist;
+use App\Modules\Wishlist\Factories\WishlistFactory;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
 
 class WishlistController extends Controller
 {
@@ -33,6 +34,8 @@ class WishlistController extends Controller
      */
     public function index()
     {
+        if (!config('swell.wishlist.enabled', false)) abort(404);
+
         return Inertia::render('dashboard/wishlist', [
             'items' => Inertia::defer(fn () => auth()->user()->wishlist?->products
                 ? ProductResource::collection(auth()->user()->wishlist->products->load('brand', 'featuredImage'))

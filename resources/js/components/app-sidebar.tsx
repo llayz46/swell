@@ -1,8 +1,8 @@
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
+import { type NavItem, SharedData } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
 import { Calendar, Heart, LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
 
@@ -25,6 +25,12 @@ const mainNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    const { swell } = usePage<SharedData>().props
+
+    const filteredNavItems = mainNavItems.filter((item) => {
+        return !(item.title === 'Wishlist' && !swell.wishlist?.enabled);
+    });
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -40,7 +46,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={filteredNavItems} />
             </SidebarContent>
 
             <SidebarFooter>

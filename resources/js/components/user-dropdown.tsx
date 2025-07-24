@@ -17,12 +17,13 @@ import {
     CalendarIcon
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import type { User } from '@/types';
-import { Link, router } from '@inertiajs/react';
+import type { SharedData, User } from '@/types';
+import { Link, router, usePage } from '@inertiajs/react';
 import { useInitials } from '@/hooks/use-initials';
 import { getStorageUrl } from '@/utils/format-storage-url';
 
 export function UserDropdown({ user }: { user: User }) {
+    const { swell } = usePage<SharedData>().props
     const getInitials = useInitials();
     const isAdmin = user.roles.some(role => role.name === 'admin');
 
@@ -55,12 +56,14 @@ export function UserDropdown({ user }: { user: User }) {
                             <span>Dashboard</span>
                         </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                        <Link href="/wishlist" className="flex items-center gap-2">
-                            <HeartIcon size={16} className="opacity-60" aria-hidden="true" />
-                            <span>Wishlist</span>
-                        </Link>
-                    </DropdownMenuItem>
+                    {swell.wishlist.enabled && (
+                        <DropdownMenuItem asChild>
+                            <Link href="/wishlist" className="flex items-center gap-2">
+                                <HeartIcon size={16} className="opacity-60" aria-hidden="true" />
+                                <span>Wishlist</span>
+                            </Link>
+                        </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem asChild>
                         <Link href="/orders" className="flex items-center gap-2">
                             <CalendarIcon size={16} className="opacity-60" aria-hidden="true" />

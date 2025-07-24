@@ -9,7 +9,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductCommentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PromotionController;
-use App\Http\Controllers\WishlistController;
+use App\Modules\Wishlist\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -20,17 +20,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard/dashboard');
     })->name('dashboard');
 
-    Route::prefix('wishlist')->group(function () {
-        Route::get('/', [WishlistController::class, 'index'])->name('wishlist.index');
-        Route::post('/add', [WishlistController::class, 'store'])->name('wishlist.add');
-        Route::post('/remove', [WishlistController::class, 'update'])->name('wishlist.remove');
-        Route::post('/clear', [WishlistController::class, 'destroy'])->name('wishlist.clear');
-    });
-
     Route::prefix('checkout')->group(function () {
         Route::get('/', [CartController::class, 'checkout'])->name('cart.checkout');
         Route::get('/success', [CartController::class, 'success'])->name('checkout.success');
         Route::get('/{product}', [CartController::class, 'buy'])->name('cart.buy');
+    });
+
+    Route::middleware('feature:wishlist')->prefix('wishlist')->group(function () {
+        Route::get('/', [WishlistController::class, 'index'])->name('wishlist.index');
+        Route::post('/add', [WishlistController::class, 'store'])->name('wishlist.add');
+        Route::post('/remove', [WishlistController::class, 'update'])->name('wishlist.remove');
+        Route::post('/clear', [WishlistController::class, 'destroy'])->name('wishlist.clear');
     });
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');

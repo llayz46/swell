@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Wishlist;
+namespace App\Modules\Wishlist\Actions\Wishlist;
 
 class HandleProductWishlist
 {

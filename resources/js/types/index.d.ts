@@ -34,6 +34,11 @@ export type BannerItem = {
 
 export interface SharedData {
     name: string;
+    swell: {
+        wishlist: {
+            enabled: boolean;
+        }
+    };
     auth: Auth;
     ziggy: Config & { location: string };
     sidebarOpen: boolean;

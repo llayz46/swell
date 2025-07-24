@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Factories;
+namespace App\Modules\Wishlist\Factories;
 
-use App\Models\Wishlist;
+use App\Modules\Wishlist\Models\Wishlist;
 
 class WishlistFactory
 {

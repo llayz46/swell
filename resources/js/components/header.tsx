@@ -10,7 +10,7 @@ import { SetStateAction, useMemo, useState } from 'react';
 import debounce from 'lodash.debounce';
 
 export function Header() {
-    const { auth } = usePage<SharedData>().props;
+    const { auth, swell } = usePage<SharedData>().props;
 
     const [search, setSearch] = useState<string>(() => new URLSearchParams(window.location.search).get('search') || '');
 
@@ -78,9 +78,11 @@ export function Header() {
 
                     <CartSheet />
 
-                    <Link href="/wishlist" className={buttonVariants({ variant: 'ghost', size: 'icon' })}>
-                        <Heart size={20} />
-                    </Link>
+                    {swell.wishlist.enabled && (
+                        <Link href="/wishlist" className={buttonVariants({ variant: 'ghost', size: 'icon' })}>
+                            <Heart size={20} />
+                        </Link>
+                    )}
                 </div>
             </div>
         </header>

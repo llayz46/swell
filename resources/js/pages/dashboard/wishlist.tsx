@@ -38,12 +38,12 @@ export default function Wishlist({ items }: { items: Product[] }) {
 
             <Deferred data="items" fallback={<WishlistFallback />}>
                 <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                    <div className="mb-4 flex items-center justify-between">
+                    <div className="mb-2 flex items-center justify-between">
                         <h1 className="text-2xl font-bold">Ma liste de souhaits</h1>
                         {(optimisticWishlist && optimisticWishlist.length > 0) && (
                             <div className="flex justify-center items-center gap-2">
                                 <Button variant="outline" onClick={() => addItems(addToCart, optimisticWishlist)}>
-                                    <ShoppingCart className="mr-2 h-4 w-4" />
+                                    <ShoppingCart className="size-4" />
                                     Tout ajouter au panier
                                 </Button>
 
@@ -120,7 +120,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product, on
                     )}
                     <div className="ml-auto flex items-center gap-2">
                         <Button variant="outline" size="sm" disabled={product.stock === 0} onClick={onAddToCart}>
-                            <Plus className="mr-1 h-3.5 w-3.5" /> Panier
+                            <Plus className="size-3.5" /> Panier
                         </Button>
                         <Button
                             variant="destructive"
@@ -128,7 +128,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product, on
                             className="size-8"
                             onClick={onRemove}
                         >
-                            <Trash2 className="h-3.5 w-3.5" />
+                            <Trash2 className="size-3.5" />
                         </Button>
                     </div>
                 </div>
@@ -145,7 +145,7 @@ function WishlistFallback() {
 
                 <div className="flex justify-center items-center gap-2">
                     <Button variant="outline">
-                        <ShoppingCart className="mr-2 h-4 w-4" />
+                        <ShoppingCart className="size-4" />
                         Tout ajouter au panier
                     </Button>
 

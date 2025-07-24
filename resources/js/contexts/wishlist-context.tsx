@@ -1,6 +1,6 @@
 import { createContext, useContext, ReactNode } from 'react';
 import { useWishlist } from '@/hooks/use-wishlist';
-import { Product, WishlistType } from '@/types';
+import type { Product, WishlistType } from '@/types';
 
 type WishlistContextType = {
     addItem: (product: Product) => void;
@@ -13,15 +13,24 @@ const WishlistContext = createContext<WishlistContextType | undefined>(undefined
 
 type WishlistProviderProps = {
     children: ReactNode;
+    enabled?: boolean;
 };
 
-export function WishlistProvider({ children }: WishlistProviderProps) {
+export function WishlistProvider({ children, enabled }: WishlistProviderProps) {
+    const wishlistHook = useWishlist();
     const {
         addItem,
         removeItem,
         removeItems,
         addItems
-    } = useWishlist();
+    } = enabled
+        ? wishlistHook
+        : {
+            addItem: () => {},
+            removeItem: () => {},
+            removeItems: () => {},
+            addItems: () => {}
+        };
 
     return (
         <WishlistContext.Provider value={{

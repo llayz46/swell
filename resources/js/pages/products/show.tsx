@@ -1,9 +1,9 @@
-import type { Product, ProductImage, ProductComment } from '@/types';
+import type { Product, ProductImage, ProductComment, SharedData } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { Heart, RotateCcw, Shield, ShoppingCart, Star, Truck, Loader2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { Head, Link, WhenVisible } from '@inertiajs/react';
+import { Head, Link, usePage, WhenVisible } from '@inertiajs/react';
 import BaseLayout from '@/layouts/base-layout';
 import { useMemo, useState } from 'react';
 import { useWishlist } from '@/hooks/use-wishlist';
@@ -25,6 +25,7 @@ interface ShowProductProps {
 }
 
 export default function Show({ product, similarProducts, comments }: ShowProductProps) {
+    const { swell } = usePage<SharedData>().props
     const featuredImage: ProductImage | undefined = product.images?.find(image => image.is_featured) || product.images?.sort((a, b) => (a.order || 0) - (b.order || 0))[0];
     const [imageToShow, setImageToShow] = useState<ProductImage | undefined>(featuredImage || product.images?.[0]);
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
@@ -139,9 +140,11 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
                                     <ShoppingCart className="w-4 h-4 mr-2" />
                                     Ajouter au panier
                                 </Button>
-                                <Button size="lg" variant="outline" className="bg-background text-foreground border" onClick={() => addItem(product)}>
-                                    <Heart className="size-4" />
-                                </Button>
+                                {swell.wishlist.enabled && (
+                                    <Button size="lg" variant="outline" className="bg-background text-foreground border" onClick={() => addItem(product)}>
+                                        <Heart className="size-4" />
+                                    </Button>
+                                )}
                             </div>
 
                             <Button variant="outline" size="lg" className="w-full bg-background text-foreground border" onClick={() => buyNow(product)}>

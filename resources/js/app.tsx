@@ -16,13 +16,18 @@ createInertiaApp({
         const root = createRoot(el);
 
         const cart = (props.initialPage.props as unknown as { cart: Cart | null }).cart;
+        const wishlistEnabled = (props.initialPage.props as unknown as { swell: { wishlist: { enabled: boolean } } }).swell.wishlist.enabled;
 
         root.render(
-            <WishlistProvider>
-                <CartProvider initialCart={cart}>
+            <CartProvider initialCart={cart}>
+                {wishlistEnabled ? (
+                    <WishlistProvider enabled={wishlistEnabled}>
+                        <App {...props} />
+                    </WishlistProvider>
+                ) : (
                     <App {...props} />
-                </CartProvider>
-            </WishlistProvider>
+                )}
+            </CartProvider>
         );
     },
     progress: {

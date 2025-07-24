@@ -45,6 +45,11 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'swell' => [
+                'wishlist' => [
+                    'enabled' => config('swell.wishlist.enabled', true),
+                ]
+            ],
             'auth' => [
                 'user' => fn () => $request->user()?->with('roles')->first(),
             ],

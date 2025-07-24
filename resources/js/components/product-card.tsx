@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Eye, Heart, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
-import { Link } from '@inertiajs/react';
-import { Product } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
+import { Product, type SharedData } from '@/types';
 import { cn } from '@/lib/utils';
 import { useWishlist } from '@/hooks/use-wishlist';
 import { getStorageUrl } from '@/utils/format-storage-url';
@@ -12,6 +12,7 @@ import { getStorageUrl } from '@/utils/format-storage-url';
 export function ProductCard({ product, onQuickView }: { product: Product, onQuickView?: () => void }) {
     const [isHovered, setIsHovered] = useState(false)
     const { addItem } = useWishlist();
+    const { swell } = usePage<SharedData>().props
 
     return (
         <Card className="group gap-0 overflow-hidden h-full rounded-md p-0 transition-all duration-300 hover:shadow-md">
@@ -32,15 +33,17 @@ export function ProductCard({ product, onQuickView }: { product: Product, onQuic
                         isHovered ? 'translate-x-0 opacity-100' : 'translate-x-2 opacity-0'
                     }`}
                 >
-                    <Button
-                        size="sm"
-                        variant="secondary"
-                        className="size-10 cursor-pointer bg-white p-0 shadow-md backdrop-blur-sm hover:bg-gray-100"
-                        onClick={() => addItem(product)}
-                    >
-                        <Heart className="size-4 dark:text-background" />
-                        <span className="sr-only">Ajouter à la wishlist</span>
-                    </Button>
+                    {swell.wishlist.enabled && (
+                        <Button
+                            size="sm"
+                            variant="secondary"
+                            className="size-10 cursor-pointer bg-white p-0 shadow-md backdrop-blur-sm hover:bg-gray-100"
+                            onClick={() => addItem(product)}
+                        >
+                            <Heart className="size-4 dark:text-background" />
+                            <span className="sr-only">Ajouter à la wishlist</span>
+                        </Button>
+                    )}
 
                     <Button
                         size="sm"
