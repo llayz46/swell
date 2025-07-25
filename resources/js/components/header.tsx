@@ -2,12 +2,12 @@ import { Input } from '@/components/ui/input';
 import { Heart, SearchIcon, User } from 'lucide-react';
 import { Link, router, usePage } from '@inertiajs/react';
 import { buttonVariants } from '@/components/ui/button';
-import Logo from '@/components/logo';
 import type { SharedData } from '@/types';
 import { UserDropdown } from '@/components/user-dropdown';
 import { CartSheet } from '@/components/cart-sheet';
 import { SetStateAction, useMemo, useState } from 'react';
 import debounce from 'lodash.debounce';
+import AppLogoIcon from '@/components/app-logo-icon';
 
 export function Header() {
     const { auth, swell } = usePage<SharedData>().props;
@@ -36,7 +36,14 @@ export function Header() {
         <header className="layout-container flex items-center justify-between gap-6 lg:gap-12 border-b py-6">
             <div className="inline-flex w-full items-center gap-4 lg:gap-8">
                 <Link prefetch href="/">
-                    <Logo />
+                    <div className="flex items-center gap-2 group">
+                        <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground group-hover:invert transition duration-300">
+                            <AppLogoIcon className="size-5 fill-current text-white dark:text-black" />
+                        </div>
+                        <div className="hidden lg:block ml-1 grid flex-1 text-left text-2xl">
+                            <span className="mb-0.5 leading-tight font-semibold">Swell</span>
+                        </div>
+                    </div>
                 </Link>
 
                 <div className="w-full *:not-first:mt-2">
