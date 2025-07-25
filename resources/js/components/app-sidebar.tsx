@@ -4,6 +4,16 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import AppLogo from './app-logo';
+import { BookOpen } from 'lucide-react';
+import { NavFooter } from '@/components/nav-footer';
+
+const footerNavItems: NavItem[] = [
+    {
+        title: 'Documentation',
+        href: 'https://swellkit.dev',
+        icon: BookOpen,
+    },
+];
 
 export function AppSidebar({ mainNavItems }: { mainNavItems: NavItem[] }) {
     return (
@@ -25,6 +35,7 @@ export function AppSidebar({ mainNavItems }: { mainNavItems: NavItem[] }) {
             </SidebarContent>
 
             <SidebarFooter>
+                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
