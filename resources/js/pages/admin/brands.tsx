@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import AdminLayout from '@/layouts/admin/layout';
+import AdminLayout from '@/layouts/admin-layout';
 import { useMemo, useState } from 'react';
 import {
     DropdownMenu,

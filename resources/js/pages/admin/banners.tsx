@@ -1,5 +1,5 @@
 import { Head, router, useForm, usePage } from '@inertiajs/react';
-import AdminLayout from '@/layouts/admin/layout';
+import AdminLayout from '@/layouts/admin-layout';
 import type { BannerItem, BreadcrumbItem, SharedData } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {

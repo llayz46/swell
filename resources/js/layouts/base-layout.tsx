@@ -11,7 +11,6 @@ export default function BaseLayout({ children }: { children: ReactNode }) {
         <>
             <InfoBanner />
 
-
             <div className="mx-4">
                 <Header />
 

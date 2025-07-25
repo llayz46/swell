@@ -1,4 +1,4 @@
-import AdminLayout from '@/layouts/admin/layout';
+import AdminLayout from '@/layouts/admin-layout';
 import { Head } from '@inertiajs/react';
 import type { BreadcrumbItem, Product } from '@/types';
 import { Package } from 'lucide-react';

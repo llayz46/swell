@@ -3,7 +3,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import AdminLayout from '@/layouts/admin/layout';
+import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, Product } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import {

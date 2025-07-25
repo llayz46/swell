@@ -1,6 +1,6 @@
 import { Head, router, Deferred, Link } from '@inertiajs/react';
 import type { BreadcrumbItem, PaginatedResponse, Product } from '@/types';
-import AdminLayout from '@/layouts/admin/layout';
+import AdminLayout from '@/layouts/admin-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Edit, Eye, Loader2, MoreHorizontal, Package, Plus, Search, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
