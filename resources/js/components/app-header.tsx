@@ -10,39 +10,11 @@ import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folders, LayoutGrid, Megaphone, Menu, Package, Tags } from 'lucide-react';
+import { BookOpen, Menu } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/admin',
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Bannière',
-        href: '/admin/banners',
-        icon: Megaphone,
-    },
-    {
-        title: 'Catégories',
-        href: '/admin/categories',
-        icon: Folders,
-    },
-    {
-        title: 'Marques',
-        href: '/admin/brands',
-        icon: Tags,
-    },
-    {
-        title: 'Produits',
-        href: '/admin/products',
-        icon: Package,
-    },
-];
 
 const rightNavItems: NavItem[] = [
     {
@@ -56,9 +28,10 @@ const activeItemStyles = 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral
 
 interface AppHeaderProps {
     breadcrumbs?: BreadcrumbItem[];
+    mainNavItems: NavItem[];
 }
 
-export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
+export function AppHeader({ breadcrumbs = [], mainNavItems }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
