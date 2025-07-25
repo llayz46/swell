@@ -11,7 +11,9 @@ class EnsureFeatureIsEnabled
     public function handle(Request $request, Closure $next, string $feature)
     {
         if (!config("swell.{$feature}.enabled", false)) {
-            throw new NotFoundHttpException("La fonctionnalité [{$feature}] est désactivée.");
+            return inertia()->render('errors/feature-disabled', [
+                'feature' => $feature,
+            ])->toResponse($request)->setStatusCode(403);
         }
 
         return $next($request);

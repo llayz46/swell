@@ -22,7 +22,6 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ clients, products, orders, lastProducts, lastOrders }: DashboardProps) {
-    console.log(lastOrders);
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard Administrateur" />

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Modules\Banner\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\BannerMessage;
+use App\Modules\Banner\Models\BannerMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;

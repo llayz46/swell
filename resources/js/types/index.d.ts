@@ -38,6 +38,9 @@ export interface SharedData {
         wishlist: {
             enabled: boolean;
         }
+        banner: {
+            enabled: boolean;
+        }
     };
     auth: Auth;
     ziggy: Config & { location: string };

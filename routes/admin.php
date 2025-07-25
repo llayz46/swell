@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\BannerController;
+use App\Modules\Banner\Http\Controllers\BannerController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductGroupController;
@@ -26,9 +26,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::post('groups', ProductGroupController::class)->name('groups.store');
 
-    Route::get('/banners', [BannerController::class, 'index'])->name('banners.index');
-    Route::put('/banners/ordering', [BannerController::class, 'ordering'])->name('banners.ordering');
-    Route::put('/banners/{bannerMessage}', [BannerController::class, 'update'])->name('banners.update');
-    Route::post('/banners', [BannerController::class, 'store'])->name('banners.store');
-    Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
+    Route::middleware('feature:banner')->prefix('banners')->name('banners.')->group(function () {
+        Route::get('/', [BannerController::class, 'index'])->name('index');
+        Route::put('/ordering', [BannerController::class, 'ordering'])->name('ordering');
+        Route::put('/{bannerMessage}', [BannerController::class, 'update'])->name('update');
+        Route::post('/', [BannerController::class, 'store'])->name('store');
+        Route::delete('/{banner}', [BannerController::class, 'destroy'])->name('destroy');
+    });
 });

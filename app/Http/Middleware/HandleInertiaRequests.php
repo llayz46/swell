@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use App\Factories\CartFactory;
 use App\Http\Resources\CartResource;
 use App\Http\Resources\CategoryResource;
-use App\Models\BannerMessage;
+use App\Modules\Banner\Models\BannerMessage;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -48,6 +48,9 @@ class HandleInertiaRequests extends Middleware
             'swell' => [
                 'wishlist' => [
                     'enabled' => config('swell.wishlist.enabled', true),
+                ],
+                'banner' => [
+                    'enabled' => config('swell.banner.enabled', true),
                 ]
             ],
             'auth' => [
@@ -62,7 +65,7 @@ class HandleInertiaRequests extends Middleware
             'cart' => fn () => Cache::remember("cart-" . (auth()->check() ? 'user-' . auth()->id() : 'session-' . session()->getId()), 30, function () {
                 return CartResource::make(CartFactory::make()->load('items.product.images', 'items.product.brand'));
             }),
-            'infoBanner' => fn () => Cache::rememberForever('infoBanner', fn () => BannerMessage::orderBy('order')->get())
+            'infoBanner' => fn () => config('swell.banner.enabled', true) ? Cache::rememberForever('infoBanner', fn () => BannerMessage::orderBy('order')->get()) : [],
         ];
     }
 }
