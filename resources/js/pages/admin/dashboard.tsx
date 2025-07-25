@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import AdminLayout from '@/layouts/admin-layout';
+import AdminLayout from '@/layouts/admin/layout';
 import type { BreadcrumbItem, Order, Product } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -11,14 +11,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         title: 'Dashboard',
         href: '/dashboard',
     },
-];
-
-const recentOrders = [
-    { id: '#10428', client: 'Thomas Dubois', status: 'Complété', date: '2025-07-15', total: '€159.99' },
-    { id: '#10427', client: 'Marie Leclerc', status: 'En cours', date: '2025-07-15', total: '€89.99' },
-    { id: '#10426', client: 'Lucas Martin', status: 'En attente', date: '2025-07-14', total: '€249.99' },
-    { id: '#10425', client: 'Sophie Bernard', status: 'Complété', date: '2025-07-14', total: '€129.99' },
-    { id: '#10424', client: 'Alexandre Petit', status: 'Annulé', date: '2025-07-13', total: '€199.99' },
 ];
 
 interface DashboardProps {

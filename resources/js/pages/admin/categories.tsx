@@ -1,5 +1,5 @@
 import { Head, usePage } from '@inertiajs/react';
-import AdminLayout from '@/layouts/admin-layout';
+import AdminLayout from '@/layouts/admin/layout';
 import type { BreadcrumbItem, Category, SharedData } from '@/types';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import {

@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import AdminLayout from '@/layouts/admin-layout';
+import AdminLayout from '@/layouts/admin/layout';
 import type { BreadcrumbItem, Product } from '@/types';
 import { ProductFormPage } from '@/components/product-form-page';
 
