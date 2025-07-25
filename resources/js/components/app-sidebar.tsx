@@ -3,28 +3,9 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Calendar, Heart, LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Wishlist',
-        href: '/wishlist',
-        icon: Heart,
-    },
-    {
-        title: 'Commandes',
-        href: '/orders',
-        icon: Calendar,
-    },
-];
-
-export function AppSidebar() {
+export function AppSidebar({ mainNavItems }: { mainNavItems: NavItem[] }) {
     const { swell } = usePage<SharedData>().props
 
     const filteredNavItems = mainNavItems.filter((item) => {

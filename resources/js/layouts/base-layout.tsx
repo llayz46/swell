@@ -6,7 +6,6 @@ import { ReactNode } from 'react';
 import { ToasterWrapper } from '@/components/toaster-wrapper';
 
 export default function BaseLayout({ children }: { children: ReactNode }) {
-
     return (
         <>
             <InfoBanner />
