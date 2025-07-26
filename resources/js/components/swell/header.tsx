@@ -4,7 +4,7 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { buttonVariants } from '@/components/ui/button';
 import type { SharedData } from '@/types';
 import { UserDropdown } from '@/components/user-dropdown';
-import { CartSheet } from '@/components/cart-sheet';
+import { CartSheet } from '@/components/swell/cart-sheet';
 import { SetStateAction, useMemo, useState } from 'react';
 import debounce from 'lodash.debounce';
 import AppLogoIcon from '@/components/app-logo-icon';
@@ -35,7 +35,7 @@ export function Header() {
     return (
         <header className="layout-container flex items-center justify-between gap-6 lg:gap-12 border-b py-6">
             <div className="inline-flex w-full items-center gap-4 lg:gap-8">
-                <Link prefetch href="/">
+                <Link prefetch href="/public">
                     <div className="flex items-center gap-2 group">
                         <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground group-hover:invert transition duration-300">
                             <AppLogoIcon className="size-5 fill-current text-white dark:text-black" />

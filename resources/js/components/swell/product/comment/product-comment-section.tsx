@@ -1,9 +1,9 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star } from 'lucide-react';
-import { ProductCommentForm } from '@/components/product-comment-form';
+import { ProductCommentForm } from '@/components/swell/product/comment/product-comment-form';
 import { useProductComment } from '@/contexts/product-comment-context';
-import { ProductComment } from '@/components/product-comment';
+import { ProductComment } from '@/components/swell/product/comment/product-comment';
 
 export function ProductCommentSection() {
     const { comments } = useProductComment();

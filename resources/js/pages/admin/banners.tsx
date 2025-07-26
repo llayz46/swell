@@ -23,7 +23,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Transition } from '@headlessui/react';
 import { toast } from 'sonner';
 import { FormEventHandler, useMemo, useState } from 'react';
-import { BannerDialog } from '@/components/banner-dialog';
+import { BannerDialog } from '@/components/swell/banner-dialog';
 import { WordRotate } from '@/components/ui/word-rotate';
 
 export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[] }) {

@@ -9,12 +9,12 @@ import { useMemo, useState } from 'react';
 import { useWishlist } from '@/hooks/use-wishlist';
 import { cn } from '@/lib/utils';
 import { useCartContext } from '@/contexts/cart-context';
-import { ProductCard } from '@/components/product-card';
-import { ProductQuickViewDialog } from '@/components/product-quick-view-dialog';
-import { ProductBreadcrumb } from '@/components/product-breadcrumb';
+import { ProductCard } from '@/components/swell/product/product-card';
+import { ProductQuickViewDialog } from '@/components/swell/product/product-quick-view-dialog';
+import { ProductBreadcrumb } from '@/components/swell/product/product-breadcrumb';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getStorageUrl } from '@/utils/format-storage-url';
-import { ProductCommentSection } from '@/components/product-comment-section';
+import { ProductCommentSection } from '@/components/swell/product/comment/product-comment-section';
 import { ProductCommentProvider } from '@/contexts/product-comment-context';
 import { Card, CardContent } from '@/components/ui/card';
 

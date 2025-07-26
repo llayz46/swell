@@ -1,7 +1,7 @@
-import { FilterSheet } from '@/components/filter-sheet';
-import { PaginationComponent } from '@/components/pagination-component';
-import { ProductCard } from '@/components/product-card';
-import { ProductQuickViewDialog } from '@/components/product-quick-view-dialog';
+import { FilterSheet } from '@/components/swell/filter-sheet';
+import { PaginationComponent } from '@/components/swell/pagination-component';
+import { ProductCard } from '@/components/swell/product/product-card';
+import { ProductQuickViewDialog } from '@/components/swell/product/product-quick-view-dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import BaseLayout from '@/layouts/base-layout';
 import type { PaginatedResponse, Product } from '@/types';

@@ -26,8 +26,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { CategoryDialog } from '@/components/category-dialog';
-import { ConfirmDeleteDialog } from '@/components/confirm-delete-dialog';
+import { CategoryDialog } from '@/components/swell/category-dialog';
+import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 
 export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadcrumbs: BreadcrumbItem[] }) {
     const { categories } = usePage<SharedData>().props;

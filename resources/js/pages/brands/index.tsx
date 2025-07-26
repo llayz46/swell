@@ -1,7 +1,7 @@
 import BaseLayout from '@/layouts/base-layout';
 import { Head, Link } from '@inertiajs/react';
 import { Brand, PaginatedResponse } from '@/types';
-import { PaginationComponent } from '@/components/pagination-component';
+import { PaginationComponent } from '@/components/swell/pagination-component';
 import { getStorageUrl } from '@/utils/format-storage-url';
 
 interface IndexProps {

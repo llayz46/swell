@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, Product } from '@/types';
-import { ProductFormPage } from '@/components/product-form-page';
+import { ProductFormPage } from '@/components/swell/product/product-form-page';
 
 interface ProductCreateType {
     breadcrumbs: BreadcrumbItem[];

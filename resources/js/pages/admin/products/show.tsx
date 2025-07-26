@@ -21,7 +21,7 @@ import {
 import { useState } from 'react';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { calculateMargin, calculateProfit } from '@/utils/product-price-calculating';
-import { ConfirmDeleteDialog } from '@/components/confirm-delete-dialog';
+import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 
 interface ProductType {
     breadcrumbs: BreadcrumbItem[];

@@ -25,7 +25,7 @@ import { FormEventHandler, useEffect } from 'react';
 import InputError from '@/components/input-error';
 import { toast } from 'sonner';
 import { Category } from '@/types';
-import { CategoryTree } from '@/components/category-tree';
+import { CategoryTree } from '@/components/swell/category-tree';
 
 type CategoryForm = {
     name: string;

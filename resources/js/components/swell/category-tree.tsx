@@ -6,7 +6,7 @@ import {
 } from '@headless-tree/core';
 import { useTree } from '@headless-tree/react';
 import { CheckIcon, FileIcon, FolderIcon, FolderOpenIcon } from 'lucide-react';
-import { Tree, TreeItem, TreeItemLabel } from '@/components/tree';
+import { Tree, TreeItem, TreeItemLabel } from '@/components/swell/tree';
 import { SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { formatCategoryTree, getParentChainFromTree } from '@/utils/format-category-tree';

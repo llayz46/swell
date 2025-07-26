@@ -11,9 +11,9 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { BrandDialog } from '@/components/brand-dialog';
-import { ProductGroupDialog } from '@/components/product-group-dialog';
-import { CategoryTree } from '@/components/category-tree';
+import { BrandDialog } from '@/components/swell/brand-dialog';
+import { ProductGroupDialog } from '@/components/swell/product/product-group-dialog';
+import { CategoryTree } from '@/components/swell/category-tree';
 import { FormTabContentProps, ProductForm } from '@/types';
 import { useCharacterLimit } from '@/hooks/use-character-limit';
 

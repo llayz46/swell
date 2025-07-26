@@ -1,9 +1,9 @@
-import { CookieBanner } from '@/components/cookie-banner';
-import { Header } from '@/components/header';
-import { InfoBanner } from '@/components/info-banner';
-import { NavCategories } from '@/components/nav-categories';
+import { CookieBanner } from '@/components/swell/cookie-banner';
+import { Header } from '@/components/swell/header';
+import { InfoBanner } from '@/components/swell/info-banner';
+import { NavCategories } from '@/components/swell/nav-categories';
 import { ReactNode } from 'react';
-import { ToasterWrapper } from '@/components/toaster-wrapper';
+import { ToasterWrapper } from '@/components/swell/toaster-wrapper';
 import { SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 

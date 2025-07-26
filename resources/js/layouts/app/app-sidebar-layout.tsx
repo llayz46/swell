@@ -4,7 +4,7 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { AppSidebarHeader } from '@/components/app-sidebar-header';
 import { type BreadcrumbItem, NavItem } from '@/types';
 import { type PropsWithChildren } from 'react';
-import { ToasterWrapper } from '@/components/toaster-wrapper';
+import { ToasterWrapper } from '@/components/swell/toaster-wrapper';
 
 export default function AppSidebarLayout({ children, breadcrumbs = [], mainNavItems }: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[]; mainNavItems: NavItem[] }>) {
     return (

@@ -12,7 +12,7 @@ import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import { useCartContext } from '@/contexts/cart-context';
 import { Card, CardContent } from '@/components/ui/card';
 import { CartItem } from '@/types';
-import { CartClearConfirmationDialog } from '@/components/cart-clear-confirmation-dialog';
+import { CartClearConfirmationDialog } from '@/components/swell/cart-clear-confirmation-dialog';
 import { useState } from 'react';
 import { getStorageUrl } from '@/utils/format-storage-url';
 

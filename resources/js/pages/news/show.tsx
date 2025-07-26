@@ -1,5 +1,5 @@
 import type { PaginatedResponse, Product } from '@/types';
-import { ProductListPage } from '@/components/product-list-page';
+import { ProductListPage } from '@/components/swell/product/product-list-page';
 
 interface PromotionsProps {
     products: PaginatedResponse<Product>;

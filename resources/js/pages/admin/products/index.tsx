@@ -8,8 +8,8 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { PaginationComponent } from '@/components/pagination-component';
-import { ConfirmDeleteDialog } from '@/components/confirm-delete-dialog';
+import { PaginationComponent } from '@/components/swell/pagination-component';
+import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 
 interface ProductsType {
     breadcrumbs: BreadcrumbItem[]

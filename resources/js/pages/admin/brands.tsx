@@ -14,9 +14,9 @@ import {
     DropdownMenuItem, DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { BrandDialog } from '@/components/brand-dialog';
+import { BrandDialog } from '@/components/swell/brand-dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ConfirmDeleteDialog } from '@/components/confirm-delete-dialog';
+import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import { getStorageUrl } from '@/utils/format-storage-url';
 
 export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { breadcrumbs: BreadcrumbItem[], brands: Brand[] }) {

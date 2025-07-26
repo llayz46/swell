@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import AvatarProfileInput from '@/components/avatar-profile-input';
+import AvatarProfileInput from '@/components/swell/avatar-profile-input';
 import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [

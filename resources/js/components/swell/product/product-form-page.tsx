@@ -22,11 +22,11 @@ import { Link, useForm } from '@inertiajs/react';
 import type { Product, ProductForm } from '@/types';
 import { FormEventHandler, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { GeneralTabContent } from '@/components/product-form-tab-general';
-import { ImagesTabContent } from '@/components/product-form-tab-images';
-import { PricingTabContent } from '@/components/product-form-tab-pricing';
-import { InventoryTabContent } from '@/components/product-form-tab-inventory';
-import { SeoTabContent } from '@/components/product-form-tab-seo';
+import { GeneralTabContent } from '@/components/swell/product/form-tab/product-form-tab-general';
+import { ImagesTabContent } from '@/components/swell/product/form-tab/product-form-tab-images';
+import { PricingTabContent } from '@/components/swell/product/form-tab/product-form-tab-pricing';
+import { InventoryTabContent } from '@/components/swell/product/form-tab/product-form-tab-inventory';
+import { SeoTabContent } from '@/components/swell/product/form-tab/product-form-tab-seo';
 import { calculateMargin } from '@/utils/product-price-calculating';
 
 interface ProductFormType {

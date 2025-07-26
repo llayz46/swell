@@ -1,5 +1,5 @@
 import type { PaginatedResponse, Brand, Product } from '@/types';
-import { ProductListPage } from '@/components/product-list-page';
+import { ProductListPage } from '@/components/swell/product/product-list-page';
 
 interface BrandProps {
     brand: Brand;

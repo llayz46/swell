@@ -11,14 +11,14 @@ import {
 } from 'lucide-react';
 import { Product, ProductComment, SharedData } from '@/types';
 import { cn } from '@/lib/utils';
-import { ProductCard } from '@/components/product-card';
+import { ProductCard } from '@/components/swell/product/product-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { useInitials } from '@/hooks/use-initials';
 import { ReactNode, useEffect, useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ProductQuickViewDialog } from '@/components/product-quick-view-dialog';
+import { ProductQuickViewDialog } from '@/components/swell/product/product-quick-view-dialog';
 import { toast } from 'sonner';
 import { BoxReveal } from '@/components/magicui/box-reveal';
 import { TextAnimate } from '@/components/magicui/text-animate';

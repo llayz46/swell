@@ -2,9 +2,9 @@ import AdminLayout from '@/layouts/admin-layout';
 import { Head } from '@inertiajs/react';
 import type { BreadcrumbItem, Product } from '@/types';
 import { Package } from 'lucide-react';
-import { ConfirmDeleteDialog } from '@/components/confirm-delete-dialog';
+import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import { useState } from 'react';
-import { ProductFormPage } from '@/components/product-form-page';
+import { ProductFormPage } from '@/components/swell/product/product-form-page';
 
 interface ProductType {
     breadcrumbs: BreadcrumbItem[];

@@ -1,5 +1,5 @@
-import { Card, CardContent } from './ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Card, CardContent } from '../../../ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '../../../ui/avatar';
 import { Star } from 'lucide-react';
 import type { ProductComment as ProductCommentType } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
