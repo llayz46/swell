@@ -19,11 +19,6 @@ class PromotionController extends Controller
             ->whereNotNull('discount_price');
         $in = $request->boolean('in');
         $out = $request->boolean('out');
-
-        if ($query->count() === 0) {
-            return redirect()->route('home')->withErrors('Aucune promotion n\'est actuellement disponible.');
-        }
-
         $sort = $request->query('sort', 'news');
 
         $this->applyStockFilter($query, $in, $out);

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\BannerMessage;
+use App\Modules\Banner\Models\BannerMessage;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
