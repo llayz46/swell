@@ -16,9 +16,9 @@ return new class extends Migration
             $table->id();
             $table->string('order_number')->unique();
             $table->string('stripe_checkout_session_id');
-            $table->integer('amount_discount')->default(0);
-            $table->integer('amount_subtotal')->default(0);
-            $table->integer('amount_total')->default(0);
+            $table->unsignedInteger('amount_discount');
+            $table->unsignedInteger('amount_subtotal');
+            $table->unsignedInteger('amount_total');
             $table->json('billing_address');
             $table->json('shipping_address');
 
