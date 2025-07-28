@@ -14,4 +14,11 @@ class BannerServiceProvider extends ServiceProvider
             __DIR__ . '/database/migrations' => database_path('migrations'),
         ], 'swell-banner');
     }
+
+    public static function getPublishedFiles(): array
+    {
+        return [
+            __DIR__ . '/database/migrations' => database_path('migrations'),
+        ];
+    }
 }

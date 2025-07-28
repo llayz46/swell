@@ -10,6 +10,7 @@ namespace App\Models;
  use Illuminate\Foundation\Auth\User as Authenticatable;
  use Illuminate\Notifications\Notifiable;
  use Laravel\Cashier\Billable;
+ use Spatie\Permission\Models\Role;
  use Spatie\Permission\Traits\HasRoles;
 
  class User extends Authenticatable implements MustVerifyEmail
@@ -51,6 +52,15 @@ namespace App\Models;
             'password' => 'hashed',
         ];
     }
+
+     protected static function booted(): void
+     {
+         static::created(function (User $user) {
+             $userRole = Role::firstOrCreate(['name' => 'user']);
+
+             $user->roles()->attach($userRole);
+         });
+     }
 
     public function cart(): HasOne
     {
