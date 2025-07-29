@@ -1,6 +1,6 @@
 # Swell
 
-Discover **Swell**, the Laravel-based e-commerce starter kit.
+Discover **Swell**, a Laravel-based e-commerce starter kit.
 This project is designed to provide you with a solid foundation, with essential features ready to use for the development
 of modern e-commerce applications using Laravel 12, React, and Inertia.js.
 
@@ -33,7 +33,7 @@ A fully detailed documentation is available to help you get started quickly and 
 
 ## 🛠️ Contribution
 
-We welcome contributions to the Swell project!
+Contributions to the Swell project are welcome! If you have ideas, suggestions, or improvements, feel free to open an issue or a pull request on GitHub.
 
 ## 🧪 Demo
 
