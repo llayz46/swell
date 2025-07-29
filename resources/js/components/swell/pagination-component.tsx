@@ -62,7 +62,7 @@ export function PaginationComponent({ pagination, preserveQuery = [], only }: Pa
     if(!pagination.links.prev && !pagination.links.next) return
 
     return (
-        <Pagination>
+        <Pagination className="mb-8">
             <PaginationContent>
                 <PaginationItem>
                     <PaginationPrevious
