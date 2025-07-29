@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\Development;
+namespace Database\Seeders;
 
 use App\Models\Brand;
 use App\Models\Category;
