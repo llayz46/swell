@@ -5,7 +5,12 @@
     "description": "Swell Starter Kit is a Laravel-based starter kit designed to kickstart your next e-commerce project with essential features and tools.",
     "keywords": [
         "laravel",
-        "framework"
+        "framework",
+        "swell",
+        "starter-kit",
+        "e-commerce",
+        "inertia",
+        "react"
     ],
     "license": "MIT",
     "require": {

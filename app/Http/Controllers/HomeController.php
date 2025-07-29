@@ -17,11 +17,8 @@ class HomeController extends Controller
             ->where('status', true)
             ->get();
 
-        $comments = ProductComment::with(['user:id,name,avatar', 'product:id,name'])->latest()->take(3)->get();
-
         return Inertia::render('home', [
             'products' => fn () => ProductResource::collection($products),
-            'comments' => fn () => ProductCommentResource::collection($comments),
         ]);
     }
 }

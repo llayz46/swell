@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Development;
 
 use App\Models\Brand;
 use App\Models\Category;
@@ -9,7 +9,7 @@ use App\Models\ProductGroup;
 use App\Models\ProductImage;
 use Illuminate\Database\Seeder;
 
-class ProductSeeder extends Seeder
+class LocalProductSeeder extends Seeder
 {
     public function run(): void
     {

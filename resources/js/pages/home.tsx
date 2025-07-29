@@ -9,7 +9,7 @@ import {
     Package,
     Puzzle
 } from 'lucide-react';
-import { Product, ProductComment, SharedData } from '@/types';
+import type { Product, SharedData } from '@/types';
 import { cn } from '@/lib/utils';
 import { ProductCard } from '@/components/swell/product/product-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
@@ -23,7 +23,7 @@ import { toast } from 'sonner';
 import { BoxReveal } from '@/components/magicui/box-reveal';
 import { TextAnimate } from '@/components/magicui/text-animate';
 
-const benefits = [
+const BENEFITS = [
     {
         icon: Monitor,
         title: 'UI Simple et intuitive',
@@ -46,7 +46,7 @@ const benefits = [
     }
 ];
 
-const categoriesList = [
+const CATEGORIES = [
     {
         title: 'Authentification',
         description: 'Sécurisez l’accès des utilisateurs avec des outils modernes.',
@@ -89,7 +89,46 @@ const categoriesList = [
     }
 ];
 
-const faqItems = [
+const COMMENTS = [
+    {
+        id: 1,
+        user: {
+            name: 'Alice Dupont',
+            avatar: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Alice',
+        },
+        product: {
+            name: 'Produit A',
+        },
+        comment: 'J\'adore ce produit ! Il a vraiment changé ma façon de travailler.',
+        rating: 5,
+    },
+    {
+        id: 2,
+        user: {
+            name: 'Bob Martin',
+            avatar: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Bob',
+        },
+        product: {
+            name: 'Produit B',
+        },
+        comment: 'Très bon produit, mais j\'aurais aimé plus de documentation.',
+        rating: 4,
+    },
+    {
+        id: 3,
+        user: {
+            name: 'Claire Dubois',
+            avatar: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Claire',
+        },
+        product: {
+            name: 'Produit C',
+        },
+        comment: 'Le support client est excellent, ils m\'ont aidé rapidement.',
+        rating: 5,
+    },
+]
+
+const FAQ = [
     {
         question: 'Quand vais-je recevoir ma commande ?',
         answer: 'Les commandes sont généralement expédiées sous 24 à 48h. Une fois expédiée, la livraison prend entre 2 et 5 jours ouvrés selon votre lieu de résidence.'
@@ -116,9 +155,9 @@ const faqItems = [
     }
 ]
 
-export default function Home({ products, comments }: { products: Product[], comments: ProductComment[] }) {
+export default function Home({ products }: { products: Product[] }) {
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-    const { name, errors } = usePage<SharedData>().props;
+    const { errors } = usePage<SharedData>().props;
     const getInitials = useInitials();
 
     useEffect(() => {
@@ -170,13 +209,15 @@ export default function Home({ products, comments }: { products: Product[], comm
                             </TextAnimate>
                             <div
                                 className="mt-6 flex flex-col items-center justify-center gap-3 px-4 sm:mt-8 sm:flex-row sm:px-0">
-                                <PrimaryButton href="/products">Voir la démo</PrimaryButton>
-                                <Link
-                                    href="/news"
+                                <PrimaryButton href="/products">Voir nos produits</PrimaryButton>
+                                <a
+                                    href="https://swellkit.dev"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="inline-flex w-full items-center justify-center rounded-md border border-foreground/10 px-5 py-3 text-sm font-medium transition-colors hover:bg-foreground/5 sm:w-auto"
                                 >
                                     <BookOpenText className="mr-1.5 size-3.5" /> Documentation
-                                </Link>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -200,7 +241,7 @@ export default function Home({ products, comments }: { products: Product[], comm
                                 <div
                                     className="grid grid-cols-1 gap-4 md:gap-8 md:grid-cols-2 lg:grid-cols-4"
                                 >
-                                    {benefits.map((benefit, index) => (
+                                    {BENEFITS.map((benefit, index) => (
                                         <div
                                             key={index}
                                             className="space-y-2 rounded-md border border-border/40 bg-background/50 p-4 backdrop-blur-sm"
@@ -225,7 +266,7 @@ export default function Home({ products, comments }: { products: Product[], comm
                     <div className="mx-auto mb-16 max-w-2xl text-center">
                         <h2 className="mb-3 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
                             Conçevez des projets <span className="text-primary">ambitieux</span> avec <span
-                            className="font-bold italic underline">{name}</span>
+                            className="font-bold italic underline">Swell</span>
                         </h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
                             Un <span className="font-bold text-primary">starter-kit e-commerce</span> complet et évolutif,
@@ -235,7 +276,7 @@ export default function Home({ products, comments }: { products: Product[], comm
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
-                        {categoriesList.map((category, index) => (
+                        {CATEGORIES.map((category, index) => (
                             <div
                                 key={index}
                                 className="rounded-lg border border-border/40 bg-background/40 p-4 backdrop-blur-sm transition-all duration-500 hover:border-border/80"
@@ -298,7 +339,7 @@ export default function Home({ products, comments }: { products: Product[], comm
 
                     <Carousel className="mx-auto w-[calc(100%-48px)] sm:w-full max-w-3xl">
                         <CarouselContent>
-                            {comments.map((comment) => (
+                            {COMMENTS.map((comment) => (
                                 <CarouselItem key={comment.id}>
                                     <div className="flex flex-col items-center gap-4">
                                         <p className="px-4 text-center text-xl italic">{comment.comment}</p>
@@ -342,14 +383,14 @@ export default function Home({ products, comments }: { products: Product[], comm
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-8 max-w-2xl text-center">
                         <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
-                            Prêt à lancer votre projet grâce à {name} ?
+                            Prêt à lancer votre projet grâce à Swell ?
                         </h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
                             Lancez vous rapidement avec Swell, conçu pour simplifier le développement et vous permettre de vous concentrer sur l'essentiel.
                         </p>
                     </div>
                     <div className="flex justify-center">
-                        <PrimaryButton href="/products">Voir la documentation</PrimaryButton>
+                        <PrimaryButton href="https://swellkit.dev">Voir la documentation</PrimaryButton>
                     </div>
                 </div>
             </section>
@@ -370,7 +411,7 @@ export default function Home({ products, comments }: { products: Product[], comm
                     className="w-full space-y-3"
                     defaultValue="item-1"
                 >
-                    {faqItems.map((item, index) => (
+                    {FAQ.map((item, index) => (
                         <AccordionItem value={index.toString()} key={`item-${index.toString()}`} className="group">
                             <div className="rounded-xl transition-all duration-200 cursor-pointer hover:bg-muted/30 dark:hover:bg-muted/10 hover:ring-1 hover:ring-border group-data-[state=open]:ring-border group-data-[state=open]:ring-1 dark:group-data-[state=open]:bg-muted/10 group-data-[state=open]:bg-muted/30">
                                 <AccordionTrigger>{item.question}</AccordionTrigger>
@@ -394,7 +435,7 @@ export default function Home({ products, comments }: { products: Product[], comm
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-4">
                             <div className="col-span-1 md:col-span-8">
                                 <Link href="/" className="text-lg font-bold text-secondary">
-                                    {name}
+                                    Swell
                                 </Link>
                                 <p className="text-sm text-muted-foreground mb-6 max-w-xs">
                                     Un starter-kit simple et flexible pour démarrer vos projets e-commerce.
@@ -414,8 +455,8 @@ export default function Home({ products, comments }: { products: Product[], comm
                             <div className="flex flex-col col-span-1 md:col-span-2 items-start md:items-end">
                                 <h3 className="font-medium text-white dark:text-black mb-3">Ressources</h3>
                                 <ul className="space-y-2 w-full md:text-right">
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Documentation</Link></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Discussion</Link></li>
+                                    <li><a className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="https://swellkit.dev" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+                                    <li><a className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="https://github.com/llayz46/swell" target="_blank" rel="noopener noreferrer">Discussion</a></li>
                                     <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Roadmap</Link></li>
                                 </ul>
                             </div>
@@ -428,6 +469,22 @@ export default function Home({ products, comments }: { products: Product[], comm
 }
 
 const PrimaryButton = (props: { href: string, children: ReactNode }) => {
+    const externalLink = props.href && props.href.startsWith('http');
+
+    if (externalLink) {
+        return (
+            <a
+                href={props.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-6 py-3 text-sm font-medium tracking-tight text-white transition-colors hover:bg-blue-700 sm:w-auto dark:bg-blue-500 dark:hover:bg-blue-600"
+            >
+                {props.children}
+                <ArrowRight className="ml-1.5 size-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
+        );
+    }
+
     return (
         <Link
             href={props.href}
