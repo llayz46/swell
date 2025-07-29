@@ -289,8 +289,8 @@ export function ProductFormPage({ product, brands, groups, setDeleteProduct, isD
                                 <Separator />
                                 {product && (
                                     <Button
-                                        variant="outline"
-                                        className="w-full justify-start border-border bg-background text-red-600 hover:text-red-600 dark:text-red-100 hover:border-red-400 dark:hover:border-red-900 hover:bg-red-50 dark:hover:bg-red-950"
+                                        variant="destructive"
+                                        className="w-full justify-start"
                                         type="button"
                                         onClick={() => setDeleteProduct && setDeleteProduct(product)}
                                     >

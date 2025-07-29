@@ -51,7 +51,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                             <Edit className="size-4" />
                             Modifier
                         </Link>
-                        <Button variant="outline" className="border-border bg-background text-red-600 hover:border-red-300 hover:bg-red-200 dark:text-red-400 dark:hover:border-red-900 dark:hover:bg-red-950" onClick={() => setDeleteProduct(product)}>
+                        <Button variant="destructive" onClick={() => setDeleteProduct(product)}>
                             <Trash2 className="size-4" />
                             Supprimer
                         </Button>
