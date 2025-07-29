@@ -2,7 +2,6 @@
 
 namespace App\Actions\Product;
 
-use App\Enums\CategoryStatus;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -166,7 +165,7 @@ class HandleProduct
     {
         $category = Category::findOrFail($categoryId);
 
-        if ($category->status !== CategoryStatus::Active) throw new \Exception('La catégorie est inactive.');
+        if (!$category->status) throw new \Exception('La catégorie est inactive.');
 
         $product->categories()->sync($categoryId);
     }

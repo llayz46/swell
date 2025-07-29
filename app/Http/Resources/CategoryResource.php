@@ -21,7 +21,7 @@ class CategoryResource extends JsonResource
             'parent_id' => $this->parent_id,
             'parent' => CategoryResource::make($this->whenLoaded('parent')),
             'children' => CategoryResource::collection($this->whenLoaded('childrenRecursive')),
-            'is_active' => $this->when(isset($this->status), $this->status?->value === 'active'),
+            'is_active' => $this->status,
             'products_count' => $this->when($this->parent_id, $this->products_count ?? 0),
             'total_products_count' => $this->when(!$this->parent_id, $childrenProductCount),
             'created_at' => $this->created_at,

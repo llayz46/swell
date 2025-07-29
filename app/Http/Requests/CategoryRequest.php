@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\CategoryStatus;
 use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
@@ -30,7 +29,7 @@ class CategoryRequest extends FormRequest
 
             'parent_id' => ['nullable', 'exists:categories,id'],
 
-            'status' => ['required', Rule::enum(CategoryStatus::class)],
+            'status' => ['required', 'boolean'],
         ];
     }
 

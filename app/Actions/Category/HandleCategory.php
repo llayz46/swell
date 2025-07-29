@@ -2,7 +2,6 @@
 
 namespace App\Actions\Category;
 
-use App\Enums\CategoryStatus;
 use App\Models\Category;
 use Illuminate\Support\Facades\Cache;
 
@@ -15,7 +14,7 @@ class HandleCategory
             'slug' => $data['slug'],
             'description' => $data['description'] ?? null,
             'parent_id' => $data['parent_id'] ?? null,
-            'status' => $data['status'] ?? CategoryStatus::Inactive,
+            'status' => $data['status'],
         ]);
 
         Cache::forget("categories");
@@ -28,7 +27,7 @@ class HandleCategory
             'slug' => $data['slug'],
             'description' => $data['description'] ?? null,
             'parent_id' => $data['parent_id'] ?? null,
-            'status' => $data['status'] ?? CategoryStatus::Inactive,
+            'status' => $data['status'],
         ]);
 
         Cache::forget("categories");
