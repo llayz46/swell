@@ -1,10 +1,13 @@
 <?php
 
+use App\Actions\Product\HandleProduct;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ProductGroup;
+use App\Models\ProductImage;
 use App\Models\User;
 use App\Models\Product;
+use Illuminate\Http\UploadedFile;
 use Spatie\Permission\Models\Role;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -252,4 +255,177 @@ test('admin user can delete product', function () {
     $this->assertDatabaseMissing('products', [
         'id' => $product->id,
     ]);
+});
+
+it('can delete product from handleProduct', function () {
+    $product = Product::factory()->create();
+
+    $handleProduct = new HandleProduct();
+
+    $handleProduct->delete($product);
+
+    $this->assertDatabaseMissing('products', [
+        'id' => $product->id,
+    ]);
+});
+
+it('create a product with images', function () {
+    Storage::fake('public');
+    $handleProduct = new HandleProduct();
+
+    $data = [
+        'name' => 'Produit test',
+        'slug' => 'produit-test',
+        'description' => 'Ceci est un produit de test.',
+        'short_description' => 'Description courte du produit de test.',
+        'meta_title' => 'Titre Meta du Produit Test',
+        'meta_description' => 'Description Meta du Produit Test',
+        'meta_keywords' => 'test, produit, exemple',
+        'brand_id' => Brand::factory()->create()->id,
+        'category_id' => Category::factory()->create()->id,
+        'price' => 100,
+        'cost_price' => 80,
+        'stock' => 10,
+        'reorder_level' => 2,
+        'status' => true,
+        'images' => [
+            [
+                'image_file' => UploadedFile::fake()->image('photo1.jpg'),
+                'alt_text' => 'Image 1',
+                'is_featured' => true,
+                'order' => 1,
+            ]
+        ]
+    ];
+
+    $product = $handleProduct->create($data);
+
+    expect($product->images)->toHaveCount(1);
+    Storage::disk('public')->assertExists($product->images->first()->image_url);
+    expect($product->images->first()->alt_text)->toBe('Image 1')
+        ->and($product->images->first()->is_featured)->toBe(1);
+});
+
+it('update imagddddes of product', function () {
+    Storage::fake('public');
+    $handleProduct = new HandleProduct();
+
+    $product = Product::factory()->create();
+    $img1 = $product->images()->create([
+        'image_url' => 'old1.jpg',
+        'alt_text' => 'Ancienne 1',
+        'is_featured' => true,
+        'order' => 1,
+    ]);
+    $img2 = $product->images()->create([
+        'image_url' => 'img2.jpg',
+        'alt_text' => 'Image 2',
+        'is_featured' => false,
+        'order' => 2,
+    ]);
+    Storage::disk('public')->put('old1.jpg', 'fake');
+    Storage::disk('public')->put('img2.jpg', 'fake');
+
+    $images = [
+        ProductImage::factory()->create([
+            'image_url' => UploadedFile::fake()->image('new1.jpg'),
+            'product_id' => $product->id,
+        ])
+    ];
+
+    $handleProduct->update($product, [
+        'images' => $images,
+        'name' => 'Produit test',
+        'slug' => 'produit-test',
+        'description' => 'Ceci est un produit de test.',
+        'short_description' => 'Description courte du produit de test.',
+        'meta_title' => 'Titre Meta du Produit Test',
+        'meta_description' => 'Description Meta du Produit Test',
+        'meta_keywords' => 'test, produit, exemple',
+        'brand_id' => Brand::factory()->create()->id,
+        'category_id' => Category::factory()->create()->id,
+        'price' => 100,
+        'cost_price' => 80,
+        'stock' => 10,
+        'reorder_level' => 2,
+        'status' => true,
+    ]);
+
+    Storage::disk('public')->assertMissing('old1.jpg');
+    $this->assertDatabaseMissing('product_images', [
+        'id' => $img1->id,
+    ]);
+//    expect($img1->alt_text)->toBe('Nouvelle 1')
+//        ->and($img1->is_featured)->toBe(0);
+
+    Storage::disk('public')->assertMissing('old2.jpg');
+    $this->assertDatabaseMissing('product_images', [
+        'id' => $img2->id,
+    ]);
+//    expect($img2->alt_text)->toBe('Modifiée 2')
+//        ->and($img2->is_featured)->toBe(1);
+});
+
+it('update images of product', function () {
+    Storage::fake('public');
+    $handleProduct = new HandleProduct();
+
+    $product = Product::factory()->create();
+    $img1 = $product->images()->create([
+        'image_url' => 'img1.jpg',
+        'alt_text' => 'Image 1',
+        'is_featured' => false,
+        'order' => 1,
+    ]);
+    $img2 = $product->images()->create([
+        'image_url' => 'img2.jpg',
+        'alt_text' => 'Image 2',
+        'is_featured' => false,
+        'order' => 2,
+    ]);
+    Storage::disk('public')->put('img1.jpg', 'fake');
+    Storage::disk('public')->put('img2.jpg', 'fake');
+
+    $images = [
+        [
+            'id' => $img2->id,
+            'image_file' => UploadedFile::fake()->image('new2.jpg'),
+            'alt_text' => 'Image 222',
+        ]
+    ];
+
+    $handleProduct->update($product, [
+        'images' => $images,
+        'name' => 'Produit test',
+        'slug' => 'produit-test',
+        'description' => 'Ceci est un produit de test.',
+        'short_description' => 'Description courte du produit de test.',
+        'meta_title' => 'Titre Meta du Produit Test',
+        'meta_description' => 'Description Meta du Produit Test',
+        'meta_keywords' => 'test, produit, exemple',
+        'brand_id' => Brand::factory()->create()->id,
+        'category_id' => Category::factory()->create()->id,
+        'price' => 100,
+        'cost_price' => 80,
+        'stock' => 10,
+        'reorder_level' => 2,
+        'status' => true,
+    ]);
+
+    Storage::disk('public')->assertMissing('img1.jpg');
+    Storage::disk('public')->assertMissing('img2.jpg');
+    $this->assertDatabaseMissing('product_images', [
+        'id' => $img1->id,
+    ]);
+
+    $this->assertDatabaseHas('product_images', [
+        'id' => $img2->id,
+        'alt_text' => 'Image 222',
+    ]);
+
+    $firstImage = ProductImage::where('product_id', $product->id)
+        ->orderBy('order', 'asc')
+        ->first();
+
+    $this->expect($firstImage->is_featured)->toBe(1);
 });

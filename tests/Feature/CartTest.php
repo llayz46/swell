@@ -398,7 +398,6 @@ test('can get cart as json', function () {
         ],
     ]);
 
-    // Optionnel : vérifie les valeurs
     $response->assertJsonFragment([
         'name' => 'Test Product',
         'quantity' => 2,
