@@ -3,6 +3,12 @@
 use App\Models\Product;
 use App\Models\User;
 
+beforeEach(function () {
+    if (!config('swell.wishlist.enabled')) {
+        $this->markTestSkipped('La fonctionnalité wishlist est désactivée.');
+    }
+});
+
 test('users can add products to wishlist', function () {
     $user = User::factory()->create();
     $user->wishlist()->create();

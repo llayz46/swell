@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -14,6 +15,7 @@ class OrderFactory extends Factory
             'stripe_checkout_session_id' => $this->faker->uuid,
             'amount_discount' => $this->faker->numberBetween(0, 1000),
             'amount_total' => $this->faker->numberBetween(10000, 50000),
+            'amount_subtotal' => $this->faker->numberBetween(10000, 50000),
             'billing_address' => [
                 'name' => $this->faker->name,
                 'email' => $this->faker->email,
@@ -33,6 +35,7 @@ class OrderFactory extends Factory
                 'postal_code' => $this->faker->postcode,
                 'state' => $this->faker->state,
             ],
+            'user_id' => User::factory(),
         ];
     }
 }

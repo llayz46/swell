@@ -56,3 +56,16 @@ it('has many items', function () {
         ->and($cart->items->first()->id)->toBe($cartItem->first()->id)
         ->and($cart->items->last()->id)->toBe($cartItem->last()->id);
 });
+
+test('cart_item belongs to cart', function () {
+    $user = User::factory()->create();
+    $cart = $user->cart()->create();
+
+    $cartItem = $cart->items()->create([
+        'product_id' => Product::factory()->create()->id,
+        'quantity' => 1,
+    ]);
+
+    expect($cartItem->cart)->toBeInstanceOf(Cart::class)
+        ->and($cartItem->cart->id)->toBe($cart->id);
+});

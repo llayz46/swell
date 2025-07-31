@@ -167,7 +167,7 @@ class CartController extends Controller
         $sessionId = $request->get('session_id');
 
         if (!$sessionId) {
-            return redirect()->route('home')->withErrors(['session_id' => 'Session ID is required.']);
+            return redirect()->route('home')->withErrors(['session_id' => "L'id de session n'est pas fourni."]);
         }
 
         return Inertia::render('checkout/success', [
