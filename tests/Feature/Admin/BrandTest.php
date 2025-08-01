@@ -125,3 +125,52 @@ test('admin user can delete a brand', function () {
         'slug' => 'test-brand',
     ]);
 });
+
+it('can update a brand without logo', function () {
+    $user = User::factory()->create();
+    Role::create(['name' => 'admin']);
+    $user->assignRole('admin');
+
+    $brand = Brand::create([
+        'name' => 'Test Brand',
+        'slug' => 'test-brand',
+        'logo_url' => \Illuminate\Http\UploadedFile::fake()->image('brand-logo.jpg'),
+    ]);
+
+    $this->actingAs($user)
+        ->post(route('admin.brands.update', $brand), [
+            'name' => 'Updated Brand Without Logo',
+            'slug' => 'updated-brand-without-logo',
+            'logo_url' => null,
+        ]);
+
+    $this->assertDatabaseHas('brands', [
+        'name' => 'Updated Brand Without Logo',
+        'slug' => 'updated-brand-without-logo',
+    ]);
+});
+
+it("can't delete brand with products", function () {
+    $user = User::factory()->create();
+    Role::create(['name' => 'admin']);
+    $user->assignRole('admin');
+
+    $brand = Brand::create([
+        'name' => 'Test Brand',
+        'slug' => 'test-brand',
+        'logo_url' => \Illuminate\Http\UploadedFile::fake()->image('brand-logo.jpg'),
+    ]);
+
+    \App\Models\Product::factory()->create(['brand_id' => $brand->id]);
+
+    $this->actingAs($user)
+        ->delete(route('admin.brands.destroy', $brand), [
+            'name' => 'Test Brand'
+        ])
+        ->assertSessionHasErrors(['error' => 'Impossible de supprimer la marque car elle est associée à des produits.']);
+
+    $this->assertDatabaseHas('brands', [
+        'name' => 'Test Brand',
+        'slug' => 'test-brand',
+    ]);
+});
