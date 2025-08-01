@@ -60,6 +60,11 @@ class Product extends Model
         });
     }
 
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status;
+    }
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'category_product', 'product_id', 'category_id');
