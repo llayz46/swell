@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_SECRET }}
       ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+      ALGOLIA_SECRET: ${{ secrets.ALGOLIA_SECRET }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
