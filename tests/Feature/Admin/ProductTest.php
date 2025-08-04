@@ -369,3 +369,20 @@ it('update images of product', function () {
 
     $this->expect($firstImage->is_featured)->toBe(1);
 });
+
+it('can filter products by group id', function () {
+    $user = User::factory()->create();
+    Role::create(['name' => 'admin']);
+    $user->assignRole('admin');
+
+    $group = ProductGroup::factory()->create();
+    Product::factory(2)->create(['product_group_id' => $group->id]);
+    Product::factory(5)->create(['product_group_id' => null]);
+
+    $this->actingAs($user)
+        ->get(route('admin.products.index'), ['group_id' => $group->id])
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/products/index')
+            ->has('groupId')
+        );
+});

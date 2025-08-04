@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItem extends Model
 {
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
+
     protected $fillable = [
         'order_id',
         'product_id',
@@ -17,11 +19,6 @@ class OrderItem extends Model
         'amount_discount',
         'amount_total',
     ];
-
-//    protected $casts = [
-//        'amount_discount' => 'integer',
-//        'amount_total' => 'integer',
-//    ];
 
     public function order(): BelongsTo
     {

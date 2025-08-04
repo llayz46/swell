@@ -43,3 +43,22 @@ test('users can remove products from wishlist', function () {
         'product_id' => $product->id,
     ]);
 });
+
+test('users has one wishlist', function () {
+    $user = User::factory()->create();
+    $wishlist = $user->wishlist()->create();
+
+    $this->assertInstanceOf(\App\Models\Wishlist::class, $wishlist);
+    $this->assertEquals($user->id, $wishlist->user_id);
+});
+
+test('products can belongs to wishlist', function () {
+    $user = User::factory()->create();
+    $wishlist = $user->wishlist()->create();
+
+    $product = Product::factory()->create();
+
+    $wishlist->products()->attach($product->id);
+
+    $this->assertTrue($wishlist->products->contains($product));
+});
