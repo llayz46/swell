@@ -14,11 +14,4 @@ class WishlistServiceProvider extends ServiceProvider
             __DIR__ . '/database/migrations' => database_path('migrations'),
         ], 'swell-wishlist');
     }
-
-    public static function getPublishedFiles(): array
-    {
-        return [
-            __DIR__ . '/database/migrations' => database_path('migrations'),
-        ];
-    }
 }
