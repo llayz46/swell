@@ -62,7 +62,7 @@ class Product extends Model
 
     public function shouldBeSearchable(): bool
     {
-        return $this->status;
+        return $this->status === true;
     }
 
     public function categories(): BelongsToMany
