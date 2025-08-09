@@ -104,7 +104,7 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
 
             <Card className="max-sm:py-4 border-border bg-card">
                 <CardHeader className="max-sm:px-4">
-                    <CardTitle className="text-foreground">Marques</CardTitle>
+                    <CardTitle className="text-foreground">Organisation</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4 max-sm:px-4">
                     <div className="grid gap-4 md:grid-cols-2">
