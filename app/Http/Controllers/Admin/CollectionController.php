@@ -16,7 +16,7 @@ class CollectionController extends Controller
         return Inertia::render('admin/collections', [
             'breadcrumbs' => [
                 ['title' => 'Admin', 'href' => route('admin.dashboard')],
-                ['title' => 'Collections', 'href' => route('admin.categories.index')],
+                ['title' => 'Collections', 'href' => route('admin.collections.index')],
             ],
             'collections' => fn () => CollectionResource::collection(Collection::withCount('products')->get()),
         ]);
@@ -53,7 +53,7 @@ class CollectionController extends Controller
         try {
             $collection->delete();
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Impossible de supprimer la collection car elle est associée à des produits.']);
+            return redirect()->back()->withErrors(['error' => 'Impossible de supprimer la collection.']);
         }
 
         return redirect()->route('admin.collections.index');
