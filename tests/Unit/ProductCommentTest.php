@@ -4,6 +4,12 @@ use App\Models\Product;
 use App\Models\User;
 use App\Modules\Review\Models\ProductComment;
 
+beforeEach(function () {
+    if (!config('swell.review.enabled')) {
+        $this->markTestSkipped('La fonctionnalité review est désactivée.');
+    }
+});
+
 it('can create a product comment', function () {
     $product = Product::factory()->create();
     $user =  User::factory()->create();

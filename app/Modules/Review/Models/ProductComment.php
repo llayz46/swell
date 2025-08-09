@@ -24,6 +24,11 @@ class ProductComment extends Model
         'rating' => 'integer',
     ];
 
+    protected static function newFactory()
+    {
+        return \App\Modules\Review\database\factories\ProductCommentFactory::new();
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
