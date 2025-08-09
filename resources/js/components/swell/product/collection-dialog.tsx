@@ -9,11 +9,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { LoaderCircle, Plus, Boxes } from 'lucide-react';
+import { LoaderCircle, Plus, Boxes, Box } from 'lucide-react';
 import { useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useEffect } from 'react';
 import InputError from '@/components/input-error';
 import { toast } from 'sonner';
+import type { Collection } from '@/types';
 
 type CollectionForm = {
     title: string;
@@ -22,36 +23,69 @@ type CollectionForm = {
 interface CollectionDialogProps {
     open: boolean;
     setOpen: (open: boolean) => void;
+    collection?: Collection | null;
 }
 
-export function CollectionDialog({ open, setOpen }: CollectionDialogProps) {
-    const { data, setData, post, processing, errors, reset } = useForm<CollectionForm>({
+export function CollectionDialog({ open, setOpen, collection }: CollectionDialogProps) {
+    const { data, setData, post, put, processing, errors, reset } = useForm<CollectionForm>({
         title: '',
     });
+
+    useEffect(() => {
+        if (collection) {
+            setData({
+                title: collection.title || '',
+            });
+        } else {
+            reset();
+        }
+    }, [collection]);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        post(route('admin.collections.store'), {
-            preserveScroll: true,
-            onSuccess: () => {
-                reset('title');
-                setOpen(false);
-                toast.success('Collection créé avec succès', {
-                    description: data.title + ' a bien été créé.',
-                    icon: <Boxes className="size-4" />,
-                });
-            },
-            onError: (errors) => {
-                const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
+        if (!collection) {
+            post(route('admin.collections.store'), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    reset('title');
+                    setOpen(false);
+                    toast.success('Collection créé avec succès', {
+                        description: data.title + ' a bien été créé.',
+                        icon: <Boxes className="size-4" />,
+                    });
+                },
+                onError: (errors) => {
+                    const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                toast.error('Erreur lors de la création de la collection.', {
-                    description: allErrors,
-                    icon: <Boxes className="size-4" />,
-                });
-            },
-        })
+                    toast.error('Erreur lors de la création de la collection.', {
+                        description: allErrors,
+                        icon: <Boxes className="size-4" />,
+                    });
+                },
+            })
+        } else {
+            put(route('admin.collections.update', collection.id), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    reset('title');
+                    setOpen(false);
+                    toast.success('Collection modifiée avec succès', {
+                        description: data.title + ' a bien été modifiée.',
+                        icon: <Box className="size-4" />,
+                    });
+                },
+                onError: (errors) => {
+                    const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
+
+                    toast.error('Erreur lors de la modification de la collection.', {
+                        description: allErrors,
+                        icon: <Boxes className="size-4" />,
+                    });
+                },
+            })
+        }
     };
 
     return (
@@ -63,10 +97,10 @@ export function CollectionDialog({ open, setOpen }: CollectionDialogProps) {
             </DialogTrigger>
             <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5">
                 <DialogHeader className="contents space-y-0 text-left">
-                    <DialogTitle className="border-b px-6 py-4 text-base">Créer une nouvelle collection</DialogTitle>
+                    <DialogTitle className="border-b px-6 py-4 text-base">{collection ? `Modifier la collection : ${collection.title}` : 'Créer une nouvelle collection'}</DialogTitle>
                 </DialogHeader>
                 <DialogDescription className="sr-only">
-                    Créer une nouvelle collection pour organiser vos produits.
+                    {collection ? 'Modifier les détails de la collection' : 'Créer une nouvelle collection pour organiser vos produits. Remplissez les informations ci-dessous pour ajouter une nouvelle collection à votre boutique.'}
                 </DialogDescription>
                 <div className="overflow-y-auto">
                     <div className="pt-4">

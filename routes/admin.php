@@ -14,6 +14,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('categories', CategoryController::class)
         ->only(['index', 'store', 'update', 'destroy']);
 
+    Route::resource('collections', CollectionController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
+
     Route::resource('brands', BrandController::class)->only(['index', 'store', 'destroy']);
     Route::post('brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
 
@@ -23,8 +26,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         ]);
     Route::post('products/{product}', [ProductController::class, 'update'])
         ->name('products.update');
-
-    Route::post('collections', CollectionController::class)->name('collections.store');
 
     Route::middleware('feature:banner')->prefix('banners')->name('banners.')->group(function () {
         Route::get('/', [BannerController::class, 'index'])->name('index');

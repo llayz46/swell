@@ -175,6 +175,7 @@ export interface Collection {
     title: string;
     slug: string;
     products: Product[];
+    products_count?: number | null;
     created_at: string;
     updated_at: string;
 }

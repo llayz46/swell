@@ -1,6 +1,6 @@
 import { type BreadcrumbItem, type NavItem, SharedData } from '@/types';
 import { type PropsWithChildren } from 'react';
-import { Folders, LayoutGrid, Megaphone, Package, Tags } from 'lucide-react';
+import { Boxes, Folders, LayoutGrid, Megaphone, Package, Tags } from 'lucide-react';
 import { usePage } from '@inertiajs/react';
 import AdminLayoutTemplate from '@/layouts/app/app-header-layout';
 
@@ -11,7 +11,7 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Bannière',
+        title: 'Bannières',
         href: '/admin/banners',
         icon: Megaphone,
     },
@@ -19,6 +19,11 @@ const mainNavItems: NavItem[] = [
         title: 'Catégories',
         href: '/admin/categories',
         icon: Folders,
+    },
+    {
+        title: 'Collections',
+        href: '/admin/collections',
+        icon: Boxes,
     },
     {
         title: 'Marques',
