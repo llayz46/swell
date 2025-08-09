@@ -16,4 +16,12 @@ return [
     'banner' => [
         'enabled' => env('SWELL_BANNER_ENABLED', false),
     ],
+
+    /*
+     * Enable or disable the review product feature.
+     * This can be controlled via the SWELL_REVIEW_ENABLED environment variable.
+     */
+    'review' => [
+        'enabled' => env('SWELL_REVIEW_ENABLED', false),
+    ],
 ];

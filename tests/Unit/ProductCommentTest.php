@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\Product;
-use App\Models\ProductComment;
 use App\Models\User;
+use App\Modules\Review\Models\ProductComment;
 
 it('can create a product comment', function () {
     $product = Product::factory()->create();

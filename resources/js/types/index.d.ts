@@ -41,6 +41,9 @@ export interface SharedData {
         banner: {
             enabled: boolean;
         }
+        review: {
+            enabled: boolean;
+        }
     };
     auth: Auth;
     ziggy: Config & { location: string };
@@ -141,6 +144,7 @@ export interface Product {
     images?: ProductImage[] | null;
     image?: ProductImage | null;
     featured_image?: ProductImage;
+    comments?: ProductComment[] | null;
     status: boolean;
     meta_title: string | null;
     meta_description: string | null;

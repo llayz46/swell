@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Modules\Review\Resources;
 
-use App\Models\ProductComment;
+use App\Http\Resources\ProductResource;
+use App\Http\Resources\UserResource;
+use App\Modules\Review\Models\ProductComment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

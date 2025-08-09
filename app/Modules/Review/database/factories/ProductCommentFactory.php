@@ -1,9 +1,9 @@
 <?php
 
-namespace Database\Factories;
+namespace App\Modules\Review\database\factories;
 
-use App\Models\ProductComment;
 use App\Models\User;
+use App\Modules\Review\Models\ProductComment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 

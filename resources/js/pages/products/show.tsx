@@ -32,11 +32,11 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
     const { addItem } = useWishlist();
     const { addToCart, buyNow } = useCartContext();
 
-    const averageRating = useMemo(() => {
-        if (comments.length === 0) return 0;
-        const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
-        return totalRating / comments.length;
-    }, [comments]);
+        const averageRating = useMemo(() => {
+            if (comments.length === 0) return 0;
+            const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
+            return totalRating / comments.length;
+        }, [comments]);
 
     return (
         <BaseLayout>
@@ -80,19 +80,21 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
                         <div className="space-y-2">
                             <p className="text-sm text-muted-foreground font-medium">{product.brand.name}</p>
                             <h1 className="text-3xl font-bold text-foreground">{product.name}</h1>
-                            <div className="flex items-center gap-2">
-                                <div className="flex items-center">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <Star
-                                            key={star}
-                                            className={`size-4 ${
-                                                averageRating === 0 ? 'fill-primary text-primary' : averageRating >= star ? 'fill-primary text-primary' : 'text-primary'
-                                            }`}
-                                        />
-                                    ))}
+                            {swell.review.enabled && (
+                                <div className="flex items-center gap-2">
+                                    <div className="flex items-center">
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                            <Star
+                                                key={star}
+                                                className={`size-4 ${
+                                                    averageRating === 0 ? 'fill-primary text-primary' : averageRating >= star ? 'fill-primary text-primary' : 'text-primary'
+                                                }`}
+                                            />
+                                        ))}
+                                    </div>
+                                    <span className="text-sm text-muted-foreground">({comments.length} avis)</span>
                                 </div>
-                                <span className="text-sm text-muted-foreground">({comments.length} avis)</span>
-                            </div>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -173,11 +175,13 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
                     </div>
                 </div>
 
-                <WhenVisible data="comments" fallback={<ProductCommentSectionFallback />}>
-                    <ProductCommentProvider productId={product.id} comments={comments}>
-                        <ProductCommentSection />
-                    </ProductCommentProvider>
-                </WhenVisible>
+                {swell.review.enabled && (
+                    <WhenVisible data="comments" fallback={<ProductCommentSectionFallback />}>
+                        <ProductCommentProvider productId={product.id} comments={comments}>
+                            <ProductCommentSection />
+                        </ProductCommentProvider>
+                    </WhenVisible>
+                )}
 
                 <WhenVisible data="similarProducts" fallback={<RelatedProductFallback />}>
                     <div className="my-16 max-w-7xl mx-auto">

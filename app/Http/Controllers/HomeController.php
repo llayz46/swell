@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ProductCommentResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use App\Models\ProductComment;
 use Inertia\Inertia;
 
 class HomeController extends Controller

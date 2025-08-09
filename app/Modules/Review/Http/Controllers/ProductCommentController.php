@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\Review\Http\Controllers;
 
-use App\Http\Requests\ProductCommentRequest;
-use App\Http\Resources\ProductCommentResource;
-use App\Models\ProductComment;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Modules\Review\Models\ProductComment;
+use App\Modules\Review\Requests\ProductCommentRequest;
 use Illuminate\Support\Facades\Auth;
 
 class ProductCommentController extends Controller

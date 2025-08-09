@@ -51,6 +51,9 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'banner' => [
                     'enabled' => config('swell.banner.enabled', true),
+                ],
+                'review' => [
+                    'enabled' => config('swell.review.enabled', true),
                 ]
             ],
             'auth' => [
