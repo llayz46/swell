@@ -8,7 +8,7 @@ use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Brand;
 use App\Models\Product;
-use App\Models\ProductGroup;
+use App\Models\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -33,25 +33,25 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $groupId = $request->input('group_id');
+        $collectionId = $request->input('collection_id');
 
         if ($search) {
             $products = Product::search($search)
-                ->query(function ($query) use ($groupId) {
+                ->query(function ($query) use ($collectionId) {
                     $query->where('status', true)
-                        ->with('brand', 'group:id');
+                        ->with('brand', 'collection:id');
 
-                    if ($groupId) {
-                        $query->where('product_group_id', $groupId);
+                    if ($collectionId) {
+                        $query->where('collection_id', $collectionId);
                     }
                 })->paginate(16)->withQueryString();
         } else {
             $query = Product::query()
                 ->where('status', true)
-                ->with('brand', 'group:id');
+                ->with('brand', 'collection:id');
 
-            if ($groupId) {
-                $query->where('product_group_id', $groupId);
+            if ($collectionId) {
+                $query->where('collection_id', $collectionId);
             }
 
             $products = $query->paginate(16)->withQueryString();
@@ -63,7 +63,7 @@ class ProductController extends Controller
                 ['title' => 'Produits', 'href' => route('admin.products.index')],
             ],
             'search' => fn () => $search,
-            'groupId' => fn () => $groupId,
+            'collectionId' => fn () => $collectionId,
             'products' => Inertia::defer(fn () => ProductResource::collection($products)),
         ]);
     }
@@ -79,9 +79,9 @@ class ProductController extends Controller
                 ['title' => 'Créer un produit', 'href' => route('admin.products.create')],
             ],
             'brands' => fn () => Brand::select('id', 'name')->orderBy('name')->get(),
-            'groups' => fn () => ProductGroup::select('id', 'name')->orderBy('name')->get()->load('products:id,name,product_group_id'),
+            'collections' => fn () => Collection::select('id', 'title')->orderBy('title')->get()->load('products:id,name,collection_id'),
             'duplicate' => (bool)$product,
-            'product' => fn () => $product ? ProductResource::make($product->load(['images', 'brand:id,name', 'categories:id,parent_id', 'group:id,name'])) : null
+            'product' => fn () => $product ? ProductResource::make($product->load(['images', 'brand:id,name', 'categories:id,parent_id', 'collection:id,name'])) : null
         ]);
     }
 
@@ -99,7 +99,7 @@ class ProductController extends Controller
                 },
                 'brand',
                 'categories',
-                'group'
+                'collection'
             ])),
         ]);
     }
@@ -127,9 +127,9 @@ class ProductController extends Controller
                 ['title' => $product->name, 'href' => route('admin.products.show', $product)],
                 ['title' => 'Modifier', 'href' => route('admin.products.edit', $product)],
             ],
-            'product' => fn () => ProductResource::make($product->load(['images', 'brand:id,name', 'categories:id,parent_id', 'group:id,name'])),
+            'product' => fn () => ProductResource::make($product->load(['images', 'brand:id,name', 'categories:id,parent_id', 'collection:id,name'])),
             'brands' => fn () => Brand::select('id', 'name')->orderBy('name')->get(),
-            'groups' => fn () => ProductGroup::select('id', 'name')->orderBy('name')->get()->load('products:id,name,product_group_id'),
+            'collections' => fn () => Collection::select('id', 'title')->orderBy('title')->get()->load('products:id,name,collection_id'),
         ]);
     }
 

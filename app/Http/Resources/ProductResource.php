@@ -36,7 +36,7 @@ class ProductResource extends JsonResource
 
             'brand' => BrandResource::make($this->whenLoaded('brand')),
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
-            'group' => ProductGroupResource::make($this->whenLoaded('group')),
+            'collection' => CollectionResource::make($this->whenLoaded('collection')),
             'featured_image' => ProductImageResource::make($this->whenLoaded('featuredImage')),
             'images' => ProductImageResource::collection($this->whenLoaded('images')),
             'comments' => ProductCommentResource::make($this->whenLoaded('comments')),

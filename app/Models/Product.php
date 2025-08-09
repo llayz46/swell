@@ -37,7 +37,7 @@ class Product extends Model
         'meta_description',
         'meta_keywords',
         'brand_id',
-        'product_group_id',
+        'collection_id',
     ];
 
     protected $casts = [
@@ -86,9 +86,9 @@ class Product extends Model
         return $this->hasOne(ProductImage::class)->where('is_featured', true);
     }
 
-    public function group(): BelongsTo
+    public function collection(): BelongsTo
     {
-        return $this->belongsTo(ProductGroup::class, 'product_group_id');
+        return $this->belongsTo(Collection::class, 'collection_id');
     }
 
     public function wishlists(): BelongsToMany

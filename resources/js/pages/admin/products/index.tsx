@@ -15,10 +15,10 @@ interface ProductsType {
     breadcrumbs: BreadcrumbItem[]
     products: PaginatedResponse<Product>;
     search?: string | null;
-    groupId?: number | null;
+    collectionId?: number | null;
 }
 
-export default function Index({ breadcrumbs: initialBreadcrumbs, products, search, groupId }: ProductsType) {
+export default function Index({ breadcrumbs: initialBreadcrumbs, products, search, collectionId }: ProductsType) {
     const [searchTerm, setSearchTerm] = useState<string>(search || '');
     const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
     const isFirstRender = useRef(true)
@@ -56,8 +56,8 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
         return initialBreadcrumbs;
     }, [initialBreadcrumbs, deleteProduct]);
 
-    const handleGroupedProducts = (group_id: number) => {
-        router.get(route('admin.products.index'), { group_id }, {
+    const handleCollectionProducts = (collection_id: number) => {
+        router.get(route('admin.products.index'), { collection_id }, {
             preserveState: true,
             replace: true,
         });
@@ -80,7 +80,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                     className="pl-10 bg-background border-border text-foreground placeholder:text-muted-foreground"
                                 />
                             </form>
-                            {groupId && (
+                            {collectionId && (
                                 <Button
                                     variant="outline"
                                     onClick={() => router.get(route('admin.products.index'))}
@@ -167,14 +167,14 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                                         Voir détails
                                                                     </Link>
                                                                 </DropdownMenuItem>
-                                                                {product.group && (
+                                                                {product.collection && (
                                                                     <DropdownMenuItem asChild>
                                                                         <button
                                                                             className="cursor-pointer text-foreground hover:bg-muted"
-                                                                            onClick={() => handleGroupedProducts(product.group?.id || 0)}
+                                                                            onClick={() => handleCollectionProducts(product.collection?.id || 0)}
                                                                         >
                                                                             <Eye className="mr-1 size-4" />
-                                                                            Voir groupe
+                                                                            Voir collection
                                                                         </button>
                                                                     </DropdownMenuItem>
                                                                 )}

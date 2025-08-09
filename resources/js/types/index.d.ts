@@ -140,7 +140,7 @@ export interface Product {
     isWishlisted: boolean;
     brand: Brand;
     categories?: Category[] | null;
-    group?: ProductGroup | null;
+    collection?: Collection | null;
     images?: ProductImage[] | null;
     image?: ProductImage | null;
     featured_image?: ProductImage;
@@ -170,9 +170,9 @@ export interface ProductImage {
     updated_at: string;
 }
 
-export interface ProductGroup {
+export interface Collection {
     id: number;
-    name: string;
+    title: string;
     slug: string;
     products: Product[];
     created_at: string;
@@ -276,7 +276,7 @@ interface FormTabContentProps<T> {
     errors?: Record<string, string>;
     processing?: boolean;
     brands?: { id: number; name: string }[];
-    groups?: { id: number; name: string, products: { id: number; name: string }[] }[];
+    collections?: { id: number; title: string, products: { id: number; name: string }[] }[];
 }
 
 type ProductForm = {
@@ -302,5 +302,5 @@ type ProductForm = {
     meta_keywords?: string | null;
     brand_id: number | null;
     category_id: string;
-    group_id: string;
+    collection_id: string;
 }

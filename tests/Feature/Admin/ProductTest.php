@@ -3,7 +3,7 @@
 use App\Actions\Product\HandleProduct;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\ProductGroup;
+use App\Models\Collection;
 use App\Models\ProductImage;
 use App\Models\User;
 use App\Models\Product;
@@ -69,13 +69,13 @@ test('admin user can access product show page', function () {
         );
 });
 
-test('admin user can access create product page with breadcrumbs & brands & groups', function () {
+test('admin user can access create product page with breadcrumbs & brands & collections', function () {
     $user = User::factory()->create();
     Role::create(['name' => 'admin']);
     $user->assignRole('admin');
 
     Brand::factory(2)->create();
-    ProductGroup::factory(3)->create();
+    Collection::factory(3)->create();
 
     $this->actingAs($user)
         ->get(route('admin.products.create'))
@@ -95,7 +95,7 @@ test('admin user can access create product page with breadcrumbs & brands & grou
                 ->where('href', route('admin.products.create'))
             )
             ->has('brands', 2)
-            ->has('groups', 3)
+            ->has('collections', 3)
         );
 });
 
@@ -370,19 +370,19 @@ it('update images of product', function () {
     $this->expect($firstImage->is_featured)->toBe(1);
 });
 
-it('can filter products by group id', function () {
+it('can filter products by collection id', function () {
     $user = User::factory()->create();
     Role::create(['name' => 'admin']);
     $user->assignRole('admin');
 
-    $group = ProductGroup::factory()->create();
-    Product::factory(2)->create(['product_group_id' => $group->id]);
-    Product::factory(5)->create(['product_group_id' => null]);
+    $collection = Collection::factory()->create();
+    Product::factory(2)->create(['collection_id' => $collection->id]);
+    Product::factory(5)->create(['collection_id' => null]);
 
     $this->actingAs($user)
-        ->get(route('admin.products.index'), ['group_id' => $group->id])
+        ->get(route('admin.products.index'), ['collection_id' => $collection->id])
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/products/index')
-            ->has('groupId')
+            ->has('collectionId')
         );
 });

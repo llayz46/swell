@@ -15,38 +15,38 @@ import { FormEventHandler } from 'react';
 import InputError from '@/components/input-error';
 import { toast } from 'sonner';
 
-type ProductGroupForm = {
-    name: string;
+type CollectionForm = {
+    title: string;
 };
 
-interface ProductGroupDialogProps {
+interface CollectionDialogProps {
     open: boolean;
     setOpen: (open: boolean) => void;
 }
 
-export function ProductGroupDialog({ open, setOpen }: ProductGroupDialogProps) {
-    const { data, setData, post, processing, errors, reset } = useForm<ProductGroupForm>({
-        name: '',
+export function CollectionDialog({ open, setOpen }: CollectionDialogProps) {
+    const { data, setData, post, processing, errors, reset } = useForm<CollectionForm>({
+        title: '',
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        post(route('admin.groups.store'), {
+        post(route('admin.collections.store'), {
             preserveScroll: true,
             onSuccess: () => {
-                reset('name');
+                reset('title');
                 setOpen(false);
-                toast.success('Groupe créé avec succès', {
-                    description: data.name + ' a bien été créé.',
+                toast.success('Collection créé avec succès', {
+                    description: data.title + ' a bien été créé.',
                     icon: <Boxes className="size-4" />,
                 });
             },
             onError: (errors) => {
                 const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                toast.error('Erreur lors de la création du groupe.', {
+                toast.error('Erreur lors de la création de la collection.', {
                     description: allErrors,
                     icon: <Boxes className="size-4" />,
                 });
@@ -58,32 +58,32 @@ export function ProductGroupDialog({ open, setOpen }: ProductGroupDialogProps) {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button size="sm">
-                    <Plus /> Nouveau groupe
+                    <Plus /> Nouvelle collection
                 </Button>
             </DialogTrigger>
             <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5">
                 <DialogHeader className="contents space-y-0 text-left">
-                    <DialogTitle className="border-b px-6 py-4 text-base">Créer un nouveau groupe</DialogTitle>
+                    <DialogTitle className="border-b px-6 py-4 text-base">Créer une nouvelle collection</DialogTitle>
                 </DialogHeader>
                 <DialogDescription className="sr-only">
-                    Créer un nouveau groupe pour organiser vos produits.
+                    Créer une nouvelle collection pour organiser vos produits.
                 </DialogDescription>
                 <div className="overflow-y-auto">
                     <div className="pt-4">
                         <form className="space-y-4 *:not-last:px-6" onSubmit={submit}>
                             <div className="*:not-first:mt-2">
-                                <Label htmlFor="name">Nom</Label>
+                                <Label htmlFor="title">Nom</Label>
                                 <Input
-                                    id="name"
+                                    id="title"
                                     placeholder="Gamme Saturn Pro"
                                     type="text"
                                     required
                                     tabIndex={1}
-                                    onChange={(e) => setData('name', e.target.value)}
-                                    value={data.name}
+                                    onChange={(e) => setData('title', e.target.value)}
+                                    value={data.title}
                                     disabled={processing}
                                 />
-                                <InputError message={errors.name} />
+                                <InputError message={errors.title} />
                             </div>
                             <DialogFooter className="border-t px-6 py-4">
                                 <DialogClose asChild>

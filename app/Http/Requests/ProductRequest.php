@@ -56,7 +56,7 @@ class ProductRequest extends FormRequest
 
             'category_id' => ['required', 'exists:categories,id'],
 
-            'group_id' => ['nullable', 'exists:product_groups,id'],
+            'collection_id' => ['nullable', 'exists:collections,id'],
         ];
     }
 
@@ -132,7 +132,7 @@ class ProductRequest extends FormRequest
             'category_id.required' => 'La catégorie du produit est obligatoire.',
             'category_id.exists' => 'La catégorie sélectionnée n\'existe pas.',
 
-            'group_id.exists' => 'Le groupe de produits sélectionné n\'existe pas.',
+            'collection_id.exists' => 'La collection sélectionné n\'existe pas.',
         ];
     }
 }

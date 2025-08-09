@@ -2,7 +2,7 @@
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductGroup;
+use App\Models\Collection;
 use App\Models\ProductImage;
 
 it('can be created', function () {
@@ -101,14 +101,14 @@ it('can dissociate its images', function () {
     expect($image->product_id)->toBeNull();
 });
 
-it('can belong to a product group', function () {
+it('can belong to a collection', function () {
     $product = Product::factory()->create();
-    $productGroup = ProductGroup::factory()->create();
+    $collection = Collection::factory()->create();
 
-    $product->group()->associate($productGroup);
+    $product->collection()->associate($collection);
 
     expect($product)->toBeInstanceOf(Product::class)
-        ->and($product->product_group_id)->toBe($productGroup->id);
+        ->and($product->collection_id)->toBe($collection->id);
 });
 
 it('can retrieve its discount price', function () {

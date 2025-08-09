@@ -3,7 +3,7 @@
 use App\Modules\Banner\Http\Controllers\BannerController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\ProductGroupController;
+use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +24,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('products/{product}', [ProductController::class, 'update'])
         ->name('products.update');
 
-    Route::post('groups', ProductGroupController::class)->name('groups.store');
+    Route::post('collections', CollectionController::class)->name('collections.store');
 
     Route::middleware('feature:banner')->prefix('banners')->name('banners.')->group(function () {
         Route::get('/', [BannerController::class, 'index'])->name('index');

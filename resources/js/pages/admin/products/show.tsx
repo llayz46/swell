@@ -154,12 +154,12 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                     </Link>
                                                 </div>
                                             </div>
-                                            {product.group && (
+                                            {product.collection && (
                                                 <div>
-                                                    <label className="text-sm font-medium text-muted-foreground">Groupe associé</label>
+                                                    <label className="text-sm font-medium text-muted-foreground">Collection associé</label>
                                                     <div className="flex items-center gap-2">
                                                         <Boxes className="size-4 text-muted-foreground" />
-                                                        <p className="font-medium text-foreground">{product.group.name}</p>
+                                                        <p className="font-medium text-foreground">{product.collection.title}</p>
                                                     </div>
                                                 </div>
                                             )}

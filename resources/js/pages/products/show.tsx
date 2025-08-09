@@ -123,11 +123,11 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
                             <p className="text-muted-foreground leading-relaxed">{product.description}</p>
                         </div>
 
-                        {(product.group && product.group.products.length > 1) && (
+                        {(product.collection && product.collection.products.length > 1) && (
                             <div className="space-y-4">
                                 <h3 className="font-semibold text-foreground">Produits associés</h3>
                                 <div className="grid gap-3 max-h-120 overflow-y-auto pr-2">
-                                    {product.group.products.map(relatedProduct => (
+                                    {product.collection.products.map(relatedProduct => (
                                         <RelatedProduct key={relatedProduct.id} product={relatedProduct} currentProductId={product.id} />
                                     ))}
                                 </div>

@@ -35,9 +35,9 @@ interface ProductFormType {
         id: number;
         name: string;
     }[];
-    groups: {
+    collections: {
         id: number;
-        name: string;
+        title: string;
         products: {
             id: number;
             name: string;
@@ -47,7 +47,7 @@ interface ProductFormType {
     isDuplicate: boolean;
 }
 
-export function ProductFormPage({ product, brands, groups, setDeleteProduct, isDuplicate = false }: ProductFormType) {
+export function ProductFormPage({ product, brands, collections, setDeleteProduct, isDuplicate = false }: ProductFormType) {
     const { data, setData, post, errors, processing } = useForm<ProductForm>({
         name: product?.name ?? '',
         short_description: product?.short_description ?? '',
@@ -71,7 +71,7 @@ export function ProductFormPage({ product, brands, groups, setDeleteProduct, isD
         meta_keywords: product?.meta_keywords ?? null,
         brand_id: product?.brand.id ?? null,
         category_id: product?.categories && product?.categories.length > 0 ? String(product?.categories[0].id) : '',
-        group_id: product?.group ? String(product?.group.id) : '',
+        collection_id: product?.collection ? String(product?.collection.id) : '',
     });
 
     const [initialData, setInitialData] = useState(data);
@@ -194,7 +194,7 @@ export function ProductFormPage({ product, brands, groups, setDeleteProduct, isD
                         </TabsList>
 
                         <GeneralTabContent data={data} setData={setData} errors={errors} processing={processing}
-                                           brands={brands} groups={groups} />
+                                           brands={brands} collections={collections} />
 
                         <ImagesTabContent data={data} setData={setData} processing={processing} />
 

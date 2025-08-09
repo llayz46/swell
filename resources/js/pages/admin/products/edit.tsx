@@ -13,9 +13,9 @@ interface ProductType {
         id: number;
         name: string;
     }[];
-    groups: {
+    collections: {
         id: number;
-        name: string;
+        title: string;
         products: {
             id: number;
             name: string;
@@ -23,7 +23,7 @@ interface ProductType {
     }[]
 }
 
-export default function Edit({ breadcrumbs, product, brands, groups }: ProductType) {
+export default function Edit({ breadcrumbs, product, brands, collections }: ProductType) {
     const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
 
     return (
@@ -33,7 +33,7 @@ export default function Edit({ breadcrumbs, product, brands, groups }: ProductTy
             <ProductFormPage
                 product={product}
                 brands={brands}
-                groups={groups}
+                collections={collections}
                 isDuplicate={false}
                 setDeleteProduct={setDeleteProduct}
             />

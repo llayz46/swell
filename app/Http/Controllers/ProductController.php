@@ -72,7 +72,7 @@ class ProductController extends Controller
             return ProductResource::make(
                 $product->load([
                     'brand',
-                    'group.products.featuredImage',
+                    'collection.products.featuredImage',
                     'images' => function ($query) {
                         $query->orderBy('order');
                     },

@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Brand;
-use App\Models\ProductGroup;
+use App\Models\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -35,7 +35,7 @@ class ProductFactory extends Factory
             'meta_description' => $this->faker->sentence(),
             'meta_keywords' => $this->faker->words(3, true),
             'brand_id' => Brand::factory(),
-            'product_group_id' => null,
+            'collection_id' => null,
             'created_at' => now()->subDays(rand(1, 123)),
         ];
     }

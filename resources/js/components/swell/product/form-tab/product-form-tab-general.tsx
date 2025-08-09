@@ -12,16 +12,16 @@ import { cn } from '@/lib/utils';
 import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { BrandDialog } from '@/components/swell/brand-dialog';
-import { ProductGroupDialog } from '@/components/swell/product/product-group-dialog';
+import { CollectionDialog } from '@/components/swell/product/collection-dialog';
 import { CategoryTree } from '@/components/swell/category-tree';
 import { FormTabContentProps, ProductForm } from '@/types';
 import { useCharacterLimit } from '@/hooks/use-character-limit';
 
-export function GeneralTabContent({ data, setData, brands, groups, processing, errors }: FormTabContentProps<ProductForm>) {
+export function GeneralTabContent({ data, setData, brands, collections, processing, errors }: FormTabContentProps<ProductForm>) {
     const [openBrand, setOpenBrand] = useState<boolean>(false)
-    const [openGroups, setOpenGroups] = useState<boolean>(false)
+    const [openCollections, setOpenCollections] = useState<boolean>(false)
     const [openBrandDialog, setOpenBrandDialog] = useState<boolean>(false);
-    const [openGroupDialog, setOpenGroupDialog] = useState<boolean>(false);
+    const [openCollectionDialog, setOpenCollectionDialog] = useState<boolean>(false);
     const [brandInputValue, setBrandInputValue] = useState<string>('')
 
     const maxLength = 500
@@ -165,51 +165,51 @@ export function GeneralTabContent({ data, setData, brands, groups, processing, e
                                 <InputError message={errors?.brand_id} />
                             </div>
                             <div className="*:not-first:mt-2">
-                                <Label htmlFor="group">Groupe de produits</Label>
-                                <Popover open={openGroups} onOpenChange={setOpenGroups}>
+                                <Label htmlFor="collection">Collection de produits</Label>
+                                <Popover open={openCollections} onOpenChange={setOpenCollections}>
                                     <PopoverTrigger asChild tabIndex={5} disabled={processing}>
                                         <Button
                                             variant="outline"
                                             role="combobox"
-                                            aria-expanded={openGroups}
+                                            aria-expanded={openCollections}
                                             className="w-full justify-between border-input bg-background px-3 font-normal outline-offset-0 outline-none hover:bg-background focus-visible:outline-[3px]"
                                         >
-                                            <span className={cn('truncate', (data.group_id === null || data.group_id === undefined) && 'text-muted-foreground')}>
-                                                {data.group_id
-                                                    ? groups?.find(group => String(group.id) === data.group_id)?.name ?? 'Sélectionner un groupe'
-                                                    : 'Aucun groupe'}
+                                            <span className={cn('truncate', (data.collection_id === null || data.collection_id === undefined) && 'text-muted-foreground')}>
+                                                {data.collection_id
+                                                    ? collections?.find(collection => String(collection.id) === data.collection_id)?.title ?? 'Sélectionner une collection'
+                                                    : 'Aucune collection'}
                                             </span>
                                             <ChevronDownIcon size={16} className="shrink-0 text-muted-foreground/80" aria-hidden="true" />
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-full min-w-[var(--radix-popper-anchor-width)] border-input p-0" align="start">
                                         <Command>
-                                            <CommandInput placeholder="Rechercher un groupe..." />
+                                            <CommandInput placeholder="Rechercher une collection..." />
                                             <CommandList>
                                                 <CommandEmpty>
-                                                    <ProductGroupDialog open={openGroupDialog} setOpen={() => { setOpenGroupDialog(!openGroupDialog) }} />
+                                                    <CollectionDialog open={openCollectionDialog} setOpen={() => { setOpenCollectionDialog(!openCollectionDialog) }} />
                                                 </CommandEmpty>
                                                 <CommandGroup>
-                                                    {groups?.map(group => (
+                                                    {collections?.map(collection => (
                                                         <CommandItem
-                                                            key={group.id}
-                                                            value={group.name}
+                                                            key={collection.id}
+                                                            value={collection.title}
                                                             onSelect={() => {
-                                                                setData('group_id', String(group.id));
-                                                                setOpenGroups(false);
+                                                                setData('collection_id', String(collection.id));
+                                                                setOpenCollections(false);
                                                             }}
                                                         >
                                                             <span className="flex flex-col gap-1">
-                                                                {group.name}
+                                                                {collection.title}
                                                                 <span className="text-xs text-muted-foreground text-wrap">
-                                                                    {group.products.map((product, index) => (
+                                                                    {collection.products.map((product, index) => (
                                                                         <span key={product.id} className="text-xs text-muted-foreground ml-1">
-                                                                            {product.name} {index < group.products.length - 1 ? ',' : ''}
+                                                                            {product.name} {index < collection.products.length - 1 ? ',' : ''}
                                                                         </span>
                                                                     ))}
                                                                 </span>
                                                             </span>
-                                                            {data.group_id === String(group.id) && <CheckIcon size={16} className="ml-auto" />}
+                                                            {data.collection_id === String(collection.id) && <CheckIcon size={16} className="ml-auto" />}
                                                         </CommandItem>
                                                     ))}
                                                 </CommandGroup>
@@ -217,7 +217,7 @@ export function GeneralTabContent({ data, setData, brands, groups, processing, e
                                         </Command>
                                     </PopoverContent>
                                 </Popover>
-                                <InputError message={errors?.group_id} />
+                                <InputError message={errors?.collection_id} />
                             </div>
                         </div>
                         <div className="*:not-first:mt-2">

@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductGroup;
+use App\Models\Collection;
 use App\Models\ProductImage;
 use Illuminate\Database\Seeder;
 
@@ -30,8 +30,8 @@ class LocalProductSeeder extends Seeder
             'slug' => 'artisan-fx',
         ]);
 
-        $moldenEdgeGroup = ProductGroup::factory()->create([
-            'name' => 'Molden Edge',
+        $moldenEdgeCollection = Collection::factory()->create([
+            'title' => 'Molden Edge',
             'slug' => 'molden-edge',
         ]);
 
@@ -46,7 +46,7 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 32.45,
             'stock' => 0,
             'brand_id' => $laOnda->id,
-            'product_group_id' => $moldenEdgeGroup->id,
+            'collection_id' => $moldenEdgeCollection->id,
         ]);
         $sr->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
@@ -68,7 +68,7 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 32.45,
             'stock' => 100,
             'brand_id' => $laOnda->id,
-            'product_group_id' => $moldenEdgeGroup->id,
+            'collection_id' => $moldenEdgeCollection->id,
         ]);
         $qcw->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
@@ -79,8 +79,8 @@ class LocalProductSeeder extends Seeder
             'is_featured' => true,
         ]);
 
-        $saturnProGroup = ProductGroup::factory()->create([
-            'name' => 'Saturn Pro',
+        $saturnProCollection = Collection::factory()->create([
+            'title' => 'Saturn Pro',
             'slug' => 'saturn-pro',
         ]);
 
@@ -95,7 +95,7 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 38.90,
             'stock' => 100,
             'brand_id' => $lethalGamingGear->id,
-            'product_group_id' => $saturnProGroup->id,
+            'collection_id' => $saturnProCollection->id,
         ]);
         $saturnProSoftXlSquareRouge->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
@@ -117,7 +117,7 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 38.90,
             'stock' => 100,
             'brand_id' => $lethalGamingGear->id,
-            'product_group_id' => $saturnProGroup->id,
+            'collection_id' => $saturnProCollection->id,
         ]);
         $saturnProSoftXlSquareNoir->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
@@ -128,8 +128,8 @@ class LocalProductSeeder extends Seeder
             'is_featured' => true,
         ]);
 
-        $jupiterProGroup = ProductGroup::factory()->create([
-            'name' => 'Jupiter Pro',
+        $jupiterProCollection = Collection::factory()->create([
+            'title' => 'Jupiter Pro',
             'slug' => 'jupiter-pro',
         ]);
 
@@ -144,7 +144,7 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 38.90,
             'stock' => 100,
             'brand_id' => $lethalGamingGear->id,
-            'product_group_id' => $jupiterProGroup->id,
+            'collection_id' => $jupiterProCollection->id,
         ]);
         $jupiterProXSoftXlSquareNoir->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
@@ -166,7 +166,7 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 38.90,
             'stock' => 100,
             'brand_id' => $lethalGamingGear->id,
-            'product_group_id' => $jupiterProGroup->id,
+            'collection_id' => $jupiterProCollection->id,
         ]);
         $jupiterProXSoftXlSquareRouge->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
@@ -177,8 +177,8 @@ class LocalProductSeeder extends Seeder
             'is_featured' => true,
         ]);
 
-        $type99Group = ProductGroup::factory()->create([
-            'name' => 'TYPE 99',
+        $type99Collection = Collection::factory()->create([
+            'title' => 'TYPE 99',
             'slug' => 'type-99',
         ]);
 
@@ -193,7 +193,7 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 44.90,
             'stock' => 32,
             'brand_id' => $artisanfx->id,
-            'product_group_id' => $type99Group->id,
+            'collection_id' => $type99Collection->id,
         ]);
         $type99noir->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
@@ -215,7 +215,7 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 44.90,
             'stock' => 32,
             'brand_id' => $artisanfx->id,
-            'product_group_id' => $type99Group->id,
+            'collection_id' => $type99Collection->id,
         ]);
         $type99matcha->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
@@ -237,7 +237,7 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 44.90,
             'stock' => 32,
             'brand_id' => $artisanfx->id,
-            'product_group_id' => $type99Group->id,
+            'collection_id' => $type99Collection->id,
         ]);
         $type99gris->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
