@@ -23,7 +23,7 @@ class ProductFactory extends Factory
         return [
             'name' => $name = $this->faker->words(3, true),
             'slug' => Str::slug($name),
-            'sku' => 'LO-' . Str::between(Str::slug($name), 0, 6) . '-' . Str::upper(Str::random(4)),
+            'sku' => 'CAT-BRD-MDL-' . $this->faker->unique()->bothify('#####'),
             'description' => $this->faker->paragraph(),
             'short_description' => $this->faker->sentences(4, true),
             'price' => $this->faker->randomFloat(2, 10, 1000),
