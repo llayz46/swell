@@ -90,7 +90,8 @@ export function InventoryTabContent({ data, setData, errors, processing }: FormT
                             placeholder="###-###-###-#####"
                         />
                         <p className="text-xs text-muted-foreground">
-                            Le SKU est un identifiant unique pour chaque produit, utilisé pour la gestion des stocks. <br /> Exemple : TAP-LGG-SPS-XLRED pour un <b>tapis de souris</b> de marque <b>Lethal Gaming Gear</b>, <b>Saturn Pro Soft Rouge</b>.
+                            Le SKU est un identifiant unique pour chaque produit, utilisé pour la gestion des stocks. <br />
+                            Exemple : TAP-LGG-SPS-XLRED pour un <b>tapis de souris</b> de marque <b>Lethal Gaming Gear</b>, <b>Saturn Pro Soft, XL Rouge</b>.
                         </p>
                     </div>
                 </CardContent>
