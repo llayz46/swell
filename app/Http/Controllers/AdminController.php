@@ -16,7 +16,7 @@ class AdminController extends Controller
         $clients = User::where('created_at', '>=', now()->startOfMonth())->count();
         $products = Product::where('status', true)->count();
         $orders = Order::where('created_at', '>=', now()->startOfMonth())->count();
-        $lastProducts = Product::orderBy('created_at', 'desc')->with(['brand:id,name', 'categories:id,name'])->take(5)->get();
+        $lastProducts = Product::orderBy('created_at', 'desc')->with(['brand:id,name', 'category:id,name'])->take(5)->get();
         $lastOrders = Order::orderBy('created_at', 'desc')->with('user:id,name')->take(5)->get();
 
         return Inertia::render('admin/dashboard', [

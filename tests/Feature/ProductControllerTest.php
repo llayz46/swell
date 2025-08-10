@@ -16,10 +16,9 @@ it('can visit product index page', function () {
 it('can visit product show page', function () {
     $category = Category::factory()->create();
 
-    $product = Product::factory()->create();
-    $product->categories()->attach($category);
+    $product = Product::factory()->create(['category_id' => $category->id]);
 
-    $category->products()->attach(Product::factory(3)->create());
+    Product::factory(3)->create(['category_id' => $category->id]);
 
     $this->get(route('product.show', $product))
         ->assertInertia(fn (Assert $page) => $page

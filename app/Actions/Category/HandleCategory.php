@@ -35,7 +35,7 @@ class HandleCategory
 
     public function delete($category)
     {
-        $category->products()->detach();
+        $category->products()->update(['category_id' => null]);
 
         $category->delete();
 

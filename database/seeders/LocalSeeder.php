@@ -91,16 +91,18 @@ class LocalSeeder extends Seeder
                     'parent_id' => $menu,
                 ]);
 
-                $product = Product::factory()->create([
-                    'brand_id' => $brand->id
+                $product = Product::factory(rand(1, 3))->create([
+                    'brand_id' => $brand->id,
+                    'category_id' => $category->id,
                 ]);
-                $product->categories()->attach($category);
 
-                ProductImage::factory()
-                    ->count(rand(1, 5))
-                    ->create([
-                        'product_id' => $product->id,
-                    ]);
+                foreach ($product as $p) {
+                    ProductImage::factory()
+                        ->count(rand(1, 5))
+                        ->create([
+                            'product_id' => $p->id,
+                        ]);
+                }
             }
         }
 

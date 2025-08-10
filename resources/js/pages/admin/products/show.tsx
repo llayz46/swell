@@ -149,8 +149,8 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                 <label className="text-sm font-medium text-muted-foreground">Catégorie</label>
                                                 <div className="flex items-center gap-2">
                                                     <FolderOpen className="size-4 text-muted-foreground" />
-                                                    <Link href={route('category.show', product.categories?.[0].slug)} className="text-primary hover:underline">
-                                                        {product.categories?.[0].name}
+                                                    <Link href={route('category.show', product.category?.slug)} className="text-primary hover:underline">
+                                                        {product.category?.name}
                                                     </Link>
                                                 </div>
                                             </div>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Collection;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -35,6 +36,7 @@ return new class extends Migration
             $table->string('meta_keywords', 255)->nullable();
 
             $table->foreignIdFor(Brand::class)->constrained()->restrictOnDelete();
+            $table->foreignIdFor(Category::class)->constrained()->nullOnDelete();
             $table->foreignIdFor(Collection::class)->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });

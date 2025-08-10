@@ -71,7 +71,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
         meta_description: product?.meta_description ?? null,
         meta_keywords: product?.meta_keywords ?? null,
         brand_id: product?.brand.id ?? null,
-        category_id: product?.categories && product?.categories.length > 0 ? String(product?.categories[0].id) : '',
+        category_id: product?.category ? String(product?.category.id) : '',
         collection_id: product?.collection ? String(product?.collection.id) : '',
     });
 

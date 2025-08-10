@@ -139,7 +139,7 @@ export interface Product {
     isNew: boolean;
     isWishlisted: boolean;
     brand: Brand;
-    categories?: Category[] | null;
+    category?: Category | null;
     collection?: Collection | null;
     images?: ProductImage[] | null;
     image?: ProductImage | null;

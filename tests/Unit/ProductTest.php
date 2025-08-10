@@ -29,26 +29,11 @@ it('can be deleted', function () {
 });
 
 it('can belong to a category', function () {
-    $product = Product::factory()->create();
     $category = Category::factory()->create();
-
-    $product->categories()->attach($category);
-
-    expect($product)->toBeInstanceOf(Product::class)
-        ->and($product->categories)->contains($category)->toBeTrue();
-});
-
-it('can belongs to many categories', function () {
-    $product = Product::factory()->create();
-    $category1 = Category::factory()->create();
-    $category2 = Category::factory()->create();
-
-    $product->categories()->attach([$category1, $category2]);
+    $product = Product::factory()->create(['category_id' => $category->id]);
 
     expect($product)->toBeInstanceOf(Product::class)
-        ->and($product->categories)->toHaveCount(2)
-        ->and($product->categories->contains($category1))->toBeTrue()
-        ->and($product->categories->contains($category2))->toBeTrue();
+        ->and($product->category->id)->toBe($category->id);
 });
 
 it('can belong to a brand', function () {
@@ -61,15 +46,14 @@ it('can belong to a brand', function () {
         ->and($product->brand_id)->toBe($brand->id);
 });
 
-it('can dissociate its category', function () {
-    $product = Product::factory()->create();
-    $category = Category::factory()->create();
+it('can switch its category', function () {
+    $category1 = Category::factory()->create();
+    $category2 = Category::factory()->create();
 
-    $product->categories()->attach($category);
-    $product->categories()->detach($category);
+    $product = Product::factory()->create(['category_id' => $category1->id]);
+    $product->update(['category_id' => $category2->id]);
 
-    expect($product->categories)->toHaveCount(0)
-        ->and($product->categories->contains($category))->toBeFalse();
+    expect($product->category->id)->toBe($category2->id);
 });
 
 it('can dissociate its brand', function () {

@@ -198,7 +198,7 @@ export default function Dashboard({ clients, products, orders, lastProducts, las
                                                         {product.stock}
                                                     </span>
                                                 </TableCell>
-                                                <TableCell>{product.categories && product.categories[0].name}</TableCell>
+                                                <TableCell>{product.category?.name}</TableCell>
                                                 <TableCell className="text-right">{product.discount_price?.toFixed(2) ?? product.price.toFixed(2)} €</TableCell>
                                             </TableRow>
                                         ))}

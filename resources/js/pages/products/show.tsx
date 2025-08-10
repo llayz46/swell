@@ -43,9 +43,9 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
             <Head title={`${product.brand.name} ${product.name}`} />
 
             <div className="container mx-auto">
-                {product.categories && (
+                {product.category && (
                     <nav className="max-w-7xl mx-auto mb-5">
-                        <ProductBreadcrumb category={{name: product.categories[0].name, slug: product.categories[0].slug }} product={{ product: product.name, brand: product.brand.name }} />
+                        <ProductBreadcrumb category={{name: product.category.name, slug: product.category.slug }} product={{ product: product.name, brand: product.brand.name }} />
                     </nav>
                 )}
 

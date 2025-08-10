@@ -34,12 +34,9 @@ class HandleProduct
             'meta_description' => $data['meta_description'] ?? null,
             'meta_keywords' => $data['meta_keywords'] ?? null,
             'brand_id' => $data['brand_id'] ?? null,
-            'product_group_id' => $data['group_id'] ?? null,
+            'category_id' => $data['category_id'] ?? null,
+            'collection_id' => $data['group_id'] ?? null,
         ]);
-
-        if (isset($data['category_id'])) {
-            $this->handleCategories($data['category_id'], $product);
-        }
 
         if (isset($data['images']) && is_array($data['images'])) {
             $this->handleImages($product, $data['images']);
@@ -69,12 +66,9 @@ class HandleProduct
             'meta_description' => $data['meta_description'] ?? null,
             'meta_keywords' => $data['meta_keywords'] ?? null,
             'brand_id' => $data['brand_id'] ?? null,
-            'product_group_id' => $data['group_id'] ?? null,
+            'category_id' => $data['category_id'] ?? null,
+            'collection_id' => $data['collection_id'] ?? null,
         ]);
-
-        if (isset($data['category_id'])) {
-            $this->handleCategories($data['category_id'], $product);
-        }
 
         if (isset($data['images']) && is_array($data['images'])) {
             $this->handleImages($product, $data['images']);
@@ -161,14 +155,5 @@ class HandleProduct
                 $firstImage->update(['is_featured' => true]);
             }
         }
-    }
-
-    protected function handleCategories(int $categoryId, Product $product): void
-    {
-        $category = Category::findOrFail($categoryId);
-
-        if (!$category->status) throw new \Exception('La catégorie est inactive.');
-
-        $product->categories()->sync($categoryId);
     }
 }

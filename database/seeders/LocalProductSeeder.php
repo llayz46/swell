@@ -46,9 +46,9 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 32.45,
             'stock' => 0,
             'brand_id' => $laOnda->id,
+            'category_id' => $categoryTapisDeSouris->id,
             'collection_id' => $moldenEdgeCollection->id,
         ]);
-        $sr->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
             'product_id' => $sr->id,
         ]);
@@ -68,9 +68,9 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 32.45,
             'stock' => 100,
             'brand_id' => $laOnda->id,
+            'category_id' => $categoryTapisDeSouris->id,
             'collection_id' => $moldenEdgeCollection->id,
         ]);
-        $qcw->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
             'product_id' => $qcw->id,
         ]);
@@ -95,9 +95,9 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 38.90,
             'stock' => 100,
             'brand_id' => $lethalGamingGear->id,
+            'category_id' => $categoryTapisDeSouris->id,
             'collection_id' => $saturnProCollection->id,
         ]);
-        $saturnProSoftXlSquareRouge->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
             'product_id' => $saturnProSoftXlSquareRouge->id,
         ]);
@@ -117,9 +117,9 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 38.90,
             'stock' => 100,
             'brand_id' => $lethalGamingGear->id,
+            'category_id' => $categoryTapisDeSouris->id,
             'collection_id' => $saturnProCollection->id,
         ]);
-        $saturnProSoftXlSquareNoir->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
             'product_id' => $saturnProSoftXlSquareNoir->id,
         ]);
@@ -144,9 +144,9 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 38.90,
             'stock' => 100,
             'brand_id' => $lethalGamingGear->id,
+            'category_id' => $categoryTapisDeSouris->id,
             'collection_id' => $jupiterProCollection->id,
         ]);
-        $jupiterProXSoftXlSquareNoir->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
             'product_id' => $jupiterProXSoftXlSquareNoir->id,
         ]);
@@ -166,9 +166,9 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 38.90,
             'stock' => 100,
             'brand_id' => $lethalGamingGear->id,
+            'category_id' => $categoryTapisDeSouris->id,
             'collection_id' => $jupiterProCollection->id,
         ]);
-        $jupiterProXSoftXlSquareRouge->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
             'product_id' => $jupiterProXSoftXlSquareRouge->id,
         ]);
@@ -193,9 +193,9 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 44.90,
             'stock' => 32,
             'brand_id' => $artisanfx->id,
+            'category_id' => $categoryTapisDeSouris->id,
             'collection_id' => $type99Collection->id,
         ]);
-        $type99noir->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
             'product_id' => $type99noir->id,
         ]);
@@ -215,9 +215,9 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 44.90,
             'stock' => 32,
             'brand_id' => $artisanfx->id,
+            'category_id' => $categoryTapisDeSouris->id,
             'collection_id' => $type99Collection->id,
         ]);
-        $type99matcha->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
             'product_id' => $type99matcha->id,
         ]);
@@ -237,9 +237,9 @@ class LocalProductSeeder extends Seeder
             'cost_price' => 44.90,
             'stock' => 32,
             'brand_id' => $artisanfx->id,
+            'category_id' => $categoryTapisDeSouris->id,
             'collection_id' => $type99Collection->id,
         ]);
-        $type99gris->categories()->attach($categoryTapisDeSouris->id);
         ProductImage::factory(3)->create([
             'product_id' => $type99gris->id,
         ]);
@@ -248,8 +248,9 @@ class LocalProductSeeder extends Seeder
             'is_featured' => true,
         ]);
 
-        $categoryTapisDeSouris->products()->attach(Product::factory(37)->create([
+        Product::factory(37)->create([
             'brand_id' => fn() => Brand::inRandomOrder()->first()->id,
-        ]));
+            'category_id' => $categoryTapisDeSouris->id,
+        ]);
     }
 }

@@ -35,7 +35,7 @@ it('need a unique slug to be created', function () {
 
 it('cannot be deleted if it has products', function () {
     $category = Category::factory()->create();
-    Product::factory()->create()->categories()->attach($category);
+    Product::factory()->create(['category_id' => $category->id]);
 
     expect(fn() => $category->delete())
         ->toThrow(\Illuminate\Database\QueryException::class);

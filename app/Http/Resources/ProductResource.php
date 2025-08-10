@@ -35,7 +35,7 @@ class ProductResource extends JsonResource
             'isWishlisted' => $this->whenLoaded('wishlists', fn () => $this->wishlists->isNotEmpty()),
 
             'brand' => BrandResource::make($this->whenLoaded('brand')),
-            'categories' => CategoryResource::collection($this->whenLoaded('categories')),
+            'category' => CategoryResource::make($this->whenLoaded('category')),
             'collection' => CollectionResource::make($this->whenLoaded('collection')),
             'featured_image' => ProductImageResource::make($this->whenLoaded('featuredImage')),
             'images' => ProductImageResource::collection($this->whenLoaded('images')),

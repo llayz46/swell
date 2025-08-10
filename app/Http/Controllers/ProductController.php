@@ -76,14 +76,14 @@ class ProductController extends Controller
                     'images' => function ($query) {
                         $query->orderBy('order');
                     },
-                    'categories'
+                    'category'
                 ])
             );
         });
 
         $similarProducts = Cache::remember("product:{$product->id}:similar", now()->addHour(), function () use ($product) {
             return ProductResource::collection(
-                Category::find($product->categories->pluck('id'))
+                Category::find($product->category->pluck('id'))
                     ->load(['products' => function ($query) use ($product) {
                         $query->where('id', '!=', $product->id)
                             ->orderBy('created_at', 'desc')

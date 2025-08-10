@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 
 class Product extends Model
@@ -38,6 +37,7 @@ class Product extends Model
         'meta_description',
         'meta_keywords',
         'brand_id',
+        'category_id',
         'collection_id',
     ];
 
@@ -52,9 +52,9 @@ class Product extends Model
         return $this->status === true;
     }
 
-    public function categories(): BelongsToMany
+    public function category(): BelongsTo
     {
-        return $this->belongsToMany(Category::class, 'category_product', 'product_id', 'category_id');
+        return $this->belongsTo(Category::class);
     }
 
     public function brand(): BelongsTo
