@@ -21,6 +21,8 @@ class ProductRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
 
+            'sku' => ['nullable', 'string', 'max:100', Rule::unique(Product::class)->ignore($this->route('product')?->id)],
+
             'slug' => ['required', 'string', 'max:255', Rule::unique(Product::class)->ignore($this->route('product')?->id)],
 
             'description' => ['required', 'string', 'min:10', 'max:1000'],
@@ -66,6 +68,10 @@ class ProductRequest extends FormRequest
             'name.required' => 'Le nom du produit est obligatoire.',
             'name.string' => 'Le nom du produit doit être une chaîne de caractères.',
             'name.max' => 'Le nom du produit ne peut pas dépasser 255 caractères.',
+
+            'sku.string' => 'Le SKU du produit doit être une chaîne de caractères.',
+            'sku.max' => 'Le SKU du produit ne peut pas dépasser 100 caractères.',
+            'sku.unique' => 'Ce SKU est déjà utilisé par un autre produit.',
 
             'slug.required' => 'Le slug du produit est obligatoire.',
             'slug.string' => 'Le slug du produit doit être une chaîne de caractères.',

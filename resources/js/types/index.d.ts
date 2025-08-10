@@ -282,6 +282,7 @@ interface FormTabContentProps<T> {
 
 type ProductForm = {
     name: string;
+    sku?: string | null;
     short_description: string;
     description: string;
     price: number;

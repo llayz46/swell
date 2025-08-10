@@ -20,6 +20,7 @@ class HandleProduct
     {
         $product->update([
             'name' => $data['name'],
+            'sku' => $data['sku'] ?? null,
             'slug' => $data['slug'],
             'description' => $data['description'] ?? null,
             'short_description' => $data['short_description'] ?? null,
@@ -54,6 +55,7 @@ class HandleProduct
     {
         $product = Product::create([
             'name' => $data['name'],
+            'sku' => $data['sku'] ?? null,
             'slug' => $data['slug'],
             'description' => $data['description'] ?? null,
             'short_description' => $data['short_description'] ?? null,

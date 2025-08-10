@@ -40,7 +40,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                 <div className="flex max-sm:flex-col-reverse sm:items-center justify-between">
                     <div className="flex flex-col gap-4">
                         <h1 className="text-3xl font-bold text-foreground">{product.name}</h1>
-                        <p className="text-muted-foreground">SKU: {product.sku}</p>
+                        <p className="text-muted-foreground">SKU: {product.sku ? product.sku : "Ce produit n'a pas de SKU"}</p>
                     </div>
                     <div className="max-sm:mb-4 flex flex-wrap gap-2">
                         <Link href={route('admin.products.create')} data={{ duplicate: product.id }} className={buttonVariants({ variant: 'outline' })}>
@@ -70,7 +70,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                     <div className="lg:col-span-1">
                         <Card className="border-border bg-card py-0 rounded-md">
                             <CardContent className="p-4">
-                                <div className="space-y-4">
+                                <div className={product.images?.length ? 'space-y-4' : ''}>
                                     <div className="aspect-square overflow-hidden rounded-sm bg-muted">
                                         <img
                                             src={getStorageUrl(product.images?.[selectedImage]?.image_url)}

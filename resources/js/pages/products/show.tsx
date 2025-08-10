@@ -32,11 +32,11 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
     const { addItem } = useWishlist();
     const { addToCart, buyNow } = useCartContext();
 
-        const averageRating = useMemo(() => {
-            if (comments.length === 0) return 0;
-            const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
-            return totalRating / comments.length;
-        }, [comments]);
+    const averageRating = useMemo(() => {
+        if (comments.length === 0) return 0;
+        const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
+        return totalRating / comments.length;
+    }, [comments]);
 
     return (
         <BaseLayout>

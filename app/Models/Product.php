@@ -25,6 +25,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'slug',
+        'sku',
         'description',
         'short_description',
         'price',
@@ -45,21 +46,6 @@ class Product extends Model
         'discount_price' => 'float',
         'cost_price' => 'float',
     ];
-
-    protected static function booted()
-    {
-        static::creating(function ($product) {
-            if (!$product->sku) {
-                $product->sku = 'LO-' .
-                    collect(explode(' ', $product->name))
-                        ->filter()
-                        ->map(fn($word) => strtoupper($word[0]))
-                        ->take(6)
-                        ->implode('') .
-                    '-' . strtoupper(Str::random(4));
-            }
-        });
-    }
 
     public function shouldBeSearchable(): bool
     {

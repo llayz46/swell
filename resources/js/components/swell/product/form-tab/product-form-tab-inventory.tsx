@@ -10,8 +10,10 @@ import {
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import InputError from '@/components/input-error';
 import { FormTabContentProps, ProductForm } from '@/types';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
-export function InventoryTabContent({ data, setData, errors }: FormTabContentProps<ProductForm>) {
+export function InventoryTabContent({ data, setData, errors, processing }: FormTabContentProps<ProductForm>) {
     return (
         <TabsContent value="inventory" className="space-y-4">
             <Card className="max-sm:py-4 border-border bg-card">
@@ -76,6 +78,20 @@ export function InventoryTabContent({ data, setData, errors }: FormTabContentPro
                                 <InputError message={errors && errors.reorder_level} />
                             </div>
                         </NumberField>
+                    </div>
+                    <div className="*:not-first:mt-2">
+                        <Label htmlFor="sku">SKU (unité de gestion des stocks)</Label>
+                        <Input
+                            id="sku"
+                            disabled={processing}
+                            value={data.sku ?? ''}
+                            onChange={(e) => setData('sku', e.target.value)}
+                            type="text"
+                            placeholder="###-###-###-#####"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            Le SKU est un identifiant unique pour chaque produit, utilisé pour la gestion des stocks. <br /> Exemple : TAP-LGG-SPS-XLRED pour un <b>tapis de souris</b> de marque <b>Lethal Gaming Gear</b>, <b>Saturn Pro Soft Rouge</b>.
+                        </p>
                     </div>
                 </CardContent>
             </Card>

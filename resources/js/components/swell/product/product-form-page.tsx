@@ -50,6 +50,7 @@ interface ProductFormType {
 export function ProductFormPage({ product, brands, collections, setDeleteProduct, isDuplicate = false }: ProductFormType) {
     const { data, setData, post, errors, processing } = useForm<ProductForm>({
         name: product?.name ?? '',
+        sku: product?.sku ?? null,
         short_description: product?.short_description ?? '',
         description: product?.description ?? '',
         price: product?.price ?? 0,
@@ -200,7 +201,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
 
                         <PricingTabContent data={data} setData={setData} errors={errors} />
 
-                        <InventoryTabContent data={data} setData={setData} errors={errors} />
+                        <InventoryTabContent data={data} setData={setData} errors={errors} processing={processing} />
 
                         <SeoTabContent data={data} setData={setData} errors={errors} processing={processing} />
                     </Tabs>
@@ -225,7 +226,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                                 <Label>{!isDuplicate && product ? product.updated_at : 'N/A'}</Label>
                             </div>
                             <div className="flex items-center justify-between">
-                                <Label>Référence produit</Label>
+                                <Label>Référence produit (SKU)</Label>
                                 <Label>{!isDuplicate && product ? product.sku : 'N/A'}</Label>
                             </div>
                         </CardContent>
