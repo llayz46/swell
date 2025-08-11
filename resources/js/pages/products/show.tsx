@@ -49,7 +49,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                     </nav>
                 )}
 
-                <div className="grid lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
+                <div className="grid lg:grid-cols-2 gap-6 max-w-7xl mx-auto mb-4">
                     <div className="space-y-4">
                         <div className="border bg-card rounded-md overflow-hidden relative aspect-square">
                             <img
@@ -183,17 +183,19 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                     </WhenVisible>
                 )}
 
-                <WhenVisible data="similarProducts" fallback={<RelatedProductFallback />}>
-                    <div className="my-16 max-w-7xl mx-auto">
-                        <h2 className="text-2xl font-bold mb-6">Produits similaires</h2>
+                {similarProducts.length > 0 && (
+                    <WhenVisible data="similarProducts" fallback={<RelatedProductFallback />}>
+                        <div className="mt-12 mb-16 max-w-7xl mx-auto">
+                            <h2 className="text-2xl font-bold mb-6">Produits similaires</h2>
 
-                        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                            {similarProducts && similarProducts.map(product => (
-                                <ProductCard key={product.id} onQuickView={() => setQuickViewProduct(product)} product={product} />
-                            ))}
+                            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                                {similarProducts && similarProducts.map(product => (
+                                    <ProductCard key={product.id} onQuickView={() => setQuickViewProduct(product)} product={product} />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </WhenVisible>
+                    </WhenVisible>
+                )}
 
                 <ProductQuickViewDialog
                     product={quickViewProduct}

@@ -61,10 +61,10 @@ const CATEGORIES = [
         title: 'Modélisation',
         description: 'Des modèles Eloquent pour une gestion efficace des données.',
         items: [
-            { name: 'Produits : groupes, images' },
+            { name: 'Produits : collections, images' },
             { name: 'Catégories et Marques' },
             { name: 'Panier et Commandes' },
-            { name: 'Entièrement personnalisble', className: 'text-green-400' },
+            { name: 'Entièrement personnalisable', className: 'text-green-400' },
         ]
     },
     {
@@ -130,28 +130,28 @@ const REVIEWS = [
 
 const FAQ = [
     {
-        question: 'Quand vais-je recevoir ma commande ?',
-        answer: 'Les commandes sont généralement expédiées sous 24 à 48h. Une fois expédiée, la livraison prend entre 2 et 5 jours ouvrés selon votre lieu de résidence.'
+        question: 'Qu\'est-ce que le starter kit Swell ?',
+        answer: 'Swell est un starter kit e-commerce complet, prêt à l\'emploi, conçu pour accélérer le développement de vos projets web.'
     },
     {
-        question: 'Comment puis-je suivre ma commande ?',
-        answer: 'Vous recevrez un email avec un lien de suivi dès que votre commande sera expédiée. Vous pouvez également suivre votre commande depuis votre compte client.'
+        question: 'À qui s\'adresse ce starter kit ?',
+        answer: 'Il s\'adresse aux développeurs souhaitant démarrer rapidement un projet e-commerce moderne avec une base technique solide.'
     },
     {
-        question: 'Quels modes de paiement acceptez-vous ?',
-        answer: 'Nous utilisons Stripe pour sécuriser vos paiements. Vous pouvez payer par carte bancaire, virement bancaire et autres.'
+        question: 'Quels frameworks et technologies sont utilisés ?',
+        answer: 'Le starter kit utilise Laravel pour le backend, React et TypeScript pour le frontend, ainsi que Tailwind CSS et Shadcn UI pour l\'interface.'
     },
     {
-        question: 'Les produits sont-ils garantis ?',
-        answer: ' Oui, tous nos produits sont couverts par une garantie constructeur. La durée varie selon les marques.'
+        question: 'Puis-je personnaliser les composants et la structure ?',
+        answer: 'Oui, tous les composants et la structure du projet sont entièrement personnalisables pour s\'adapter à vos besoins.'
     },
     {
-        question: 'Puis-je retourner un produit ?',
-        answer: 'Oui, vous disposez de 30 jours pour retourner un produit qui ne vous convient pas. Il doit être dans son état d’origine et non utilisé.'
+        question: 'Le kit inclut-il des pages produits et autres ?',
+        answer: 'Oui, des pages sont directement fournies pour vous aider à démarrer rapidement.'
     },
     {
-        question: 'Un produit est en rupture, quand sera-t-il de retour ?',
-        answer: ' Nous faisons notre maximum pour réapprovisionner rapidement. Vous pouvez activer une alerte sur la fiche produit pour être informé dès son retour en stock.'
+        question: 'Comment obtenir de l\'aide ou contribuer au projet ?',
+        answer: 'Vous pouvez consulter la documentation, rejoindre la discussion sur GitHub ou proposer des contributions directement sur le dépôt.'
     }
 ]
 
