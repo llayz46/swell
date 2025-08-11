@@ -2,7 +2,7 @@ import { Head, router, Deferred, Link } from '@inertiajs/react';
 import type { BreadcrumbItem, PaginatedResponse, Product } from '@/types';
 import AdminLayout from '@/layouts/admin-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Edit, Eye, Loader2, MoreHorizontal, Package, Plus, Search, Trash2 } from 'lucide-react';
+import { Edit, Eye, Loader2, MoreHorizontal, MoveUp, Package, Plus, Search, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -10,16 +10,19 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Button, buttonVariants } from '@/components/ui/button';
 import { PaginationComponent } from '@/components/swell/pagination-component';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
+import { cn } from '@/lib/utils';
 
 interface ProductsType {
     breadcrumbs: BreadcrumbItem[]
     products: PaginatedResponse<Product>;
     search?: string | null;
     collectionId?: number | null;
+    sort?: string | null;
 }
 
-export default function Index({ breadcrumbs: initialBreadcrumbs, products, search, collectionId }: ProductsType) {
+export default function Index({ breadcrumbs: initialBreadcrumbs, products, search, collectionId, sort }: ProductsType) {
     const [searchTerm, setSearchTerm] = useState<string>(search || '');
+    const [sorting, setSorting] = useState<string | null>(sort || null);
     const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
     const isFirstRender = useRef(true)
 
@@ -58,6 +61,21 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
 
     const handleCollectionProducts = (collection_id: number) => {
         router.get(route('admin.products.index'), { collection_id }, {
+            preserveState: true,
+            replace: true,
+        });
+    }
+
+    const handleSort = (sort: string) => {
+        let newSorting: string;
+
+        if (!sorting) newSorting = `${sort}_desc`;
+        else if (sorting && sorting.endsWith('_desc')) newSorting = `${sort}_asc`;
+        else newSorting = `${sort}_desc`;
+
+        setSorting(newSorting);
+
+        router.get(route('admin.products.index'), { sort: newSorting }, {
             preserveState: true,
             replace: true,
         });
@@ -115,7 +133,13 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                             <Table>
                                 <TableHeader>
                                     <TableRow className="border-border hover:bg-transparent *:text-muted-foreground *:font-medium">
-                                        <TableHead>Nom</TableHead>
+                                        <TableHead
+                                            onClick={() => handleSort('name')}
+                                            className="flex items-center gap-1 cursor-default group"
+                                        >
+                                            Nom
+                                            <MoveUp className={cn("opacity-0 group-hover:opacity-100 transition-opacity", sorting?.endsWith('_desc') && 'rotate-180')} size={14} />
+                                        </TableHead>
                                         <TableHead>Slug</TableHead>
                                         <TableHead>Marque</TableHead>
                                         <TableHead className="text-center">Description</TableHead>

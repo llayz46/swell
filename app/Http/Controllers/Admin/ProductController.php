@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -33,6 +34,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $sort = $request->query('sort');
         $collectionId = $request->input('collection_id');
 
         if ($search) {
@@ -44,17 +46,22 @@ class ProductController extends Controller
                     if ($collectionId) {
                         $query->where('collection_id', $collectionId);
                     }
-                })->paginate(16)->withQueryString();
+                });
         } else {
-            $query = Product::query()
+            $products = Product::query()
                 ->where('status', true)
                 ->with('brand', 'collection:id');
 
             if ($collectionId) {
-                $query->where('collection_id', $collectionId);
+                $products->where('collection_id', $collectionId);
             }
+        }
 
-            $products = $query->paginate(16)->withQueryString();
+        if ($sort) {
+            [$field, $direction] = explode('_', $sort);
+            $products = $products->orderByRaw('LOWER(' . $field . ') ' . $direction)->paginate(16)->withQueryString();
+        } else {
+            $products = $products->paginate(16)->withQueryString();
         }
 
         return Inertia::render('admin/products/index', [
@@ -65,6 +72,7 @@ class ProductController extends Controller
             'search' => fn () => $search,
             'collectionId' => fn () => $collectionId,
             'products' => Inertia::defer(fn () => ProductResource::collection($products)),
+            'sort' => fn () => $sort
         ]);
     }
 
