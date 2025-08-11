@@ -10,102 +10,102 @@ beforeEach(function () {
     }
 });
 
-it('can create a product comment', function () {
+it('can create a review', function () {
     $product = Product::factory()->create();
     $user =  User::factory()->create();
 
-    $comment = Review::factory()->create([
+    $review = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'This is a great product!',
     ]);
 
-    expect($comment)->toBeInstanceOf(Review::class)
-        ->and($comment->product_id)->toBe($product->id)
-        ->and($comment->user_id)->toBe($user->id)
-        ->and($comment->comment)->toBe('This is a great product!');
+    expect($review)->toBeInstanceOf(Review::class)
+        ->and($review->product_id)->toBe($product->id)
+        ->and($review->user_id)->toBe($user->id)
+        ->and($review->comment)->toBe('This is a great product!');
 });
 
-it('can retrieve comments for a product', function () {
+it('can retrieve reviews for a product', function () {
     $product = Product::factory()->create();
     $user = User::factory()->create();
 
-    $comment1 = Review::factory()->create([
+    $review1 = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'First comment',
     ]);
 
-    $comment2 = Review::factory()->create([
+    $review2 = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'Second comment',
     ]);
 
-    $comments = $product->comments;
+    $reviews = $product->reviews;
 
-    expect($comments)->toBeInstanceOf(\Illuminate\Database\Eloquent\Collection::class)
-        ->and($comments->count())->toBe(2)
-        ->and($comments->contains($comment1))->toBeTrue()
-        ->and($comments->contains($comment2))->toBeTrue();
+    expect($reviews)->toBeInstanceOf(\Illuminate\Database\Eloquent\Collection::class)
+        ->and($reviews->count())->toBe(2)
+        ->and($reviews->contains($review1))->toBeTrue()
+        ->and($reviews->contains($review2))->toBeTrue();
 });
 
-it('can delete a product comment', function () {
+it('can delete a review', function () {
     $product = Product::factory()->create();
     $user = User::factory()->create();
 
-    $comment = Review::factory()->create([
+    $review = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'This is a comment to be deleted',
     ]);
 
-    $comment->delete();
+    $review->delete();
 
-    expect(Review::find($comment->id))->toBeNull();
+    expect(Review::find($review->id))->toBeNull();
 });
 
-it('can update a product comment', function () {
+it('can update a review', function () {
     $product = Product::factory()->create();
     $user = User::factory()->create();
 
-    $comment = Review::factory()->create([
+    $review = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'Original comment',
     ]);
 
-    $comment->update(['comment' => 'Updated comment']);
+    $review->update(['comment' => 'Updated comment']);
 
-    expect($comment->comment)->toBe('Updated comment');
+    expect($review->comment)->toBe('Updated comment');
 });
 
-it('can retrieve the user who made the comment', function () {
+it('can retrieve the user who made the review', function () {
     $product = Product::factory()->create();
     $user = User::factory()->create();
 
-    $comment = Review::factory()->create([
+    $review = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'This is a comment',
     ]);
 
-    expect($comment->user)->toBeInstanceOf(User::class)
-        ->and($comment->user->id)->toBe($user->id);
+    expect($review->user)->toBeInstanceOf(User::class)
+        ->and($review->user->id)->toBe($user->id);
 });
 
-it('can retrieve the product for a comment', function () {
+it('can retrieve the product for a review', function () {
     $product = Product::factory()->create();
     $user = User::factory()->create();
 
-    $comment = Review::factory()->create([
+    $review = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'This is a comment',
     ]);
 
-    expect($comment->product)->toBeInstanceOf(Product::class)
-        ->and($comment->product->id)->toBe($product->id);
+    expect($review->product)->toBeInstanceOf(Product::class)
+        ->and($review->product->id)->toBe($product->id);
 });
 
 it('can get the average rating for a product', function () {
@@ -126,8 +126,7 @@ it('can get the average rating for a product', function () {
         'rating' => 4,
     ]);
 
-    $averageRating = $product->comments()->avg('rating');
+    $averageRating = $product->reviews()->avg('rating');
 
-    expect($averageRating)->toBe(4.0)
-        ->and($product->averageRating())->toBe(4.0);
+    expect($averageRating)->toBe(4.0);
 });

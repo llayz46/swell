@@ -87,11 +87,6 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
-    public function averageRating(): float
-    {
-        return round($this->comments()->avg('rating') ?? 0, 1);
-    }
-
     public function getPrice(): Attribute
     {
         return Attribute::make(

@@ -24,7 +24,7 @@ it('can visit product show page', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('products/show')
             ->has('product')
-            ->has('comments')
+            ->has('reviews')
             ->has('similarProducts')
         );
 });

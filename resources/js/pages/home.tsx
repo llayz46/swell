@@ -89,7 +89,7 @@ const CATEGORIES = [
     }
 ];
 
-const COMMENTS = [
+const REVIEWS = [
     {
         id: 1,
         user: {
@@ -339,33 +339,33 @@ export default function Home({ products }: { products: Product[] }) {
 
                     <Carousel className="mx-auto w-[calc(100%-48px)] sm:w-full max-w-3xl">
                         <CarouselContent>
-                            {COMMENTS.map((comment) => (
-                                <CarouselItem key={comment.id}>
+                            {REVIEWS.map((review) => (
+                                <CarouselItem key={review.id}>
                                     <div className="flex flex-col items-center gap-4">
-                                        <p className="px-4 text-center text-xl italic">{comment.comment}</p>
+                                        <p className="px-4 text-center text-xl italic">{review.comment}</p>
                                         <div className="mb-2 flex items-center justify-center gap-1">
                                             {[1, 2, 3, 4, 5].map((star) => (
                                                 <Star
                                                     key={star}
                                                     className={`size-5 ${
-                                                        star <= comment.rating ? 'fill-primary text-primary' : 'text-muted-foreground'
+                                                        star <= review.rating ? 'fill-primary text-primary' : 'text-muted-foreground'
                                                     }`}
                                                 />
                                             ))}
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <Avatar className="size-8 overflow-hidden rounded-full">
-                                                <AvatarImage src={getStorageUrl(comment.user?.avatar)}
-                                                             alt={comment.user?.name} />
+                                                <AvatarImage src={getStorageUrl(review.user?.avatar)}
+                                                             alt={review.user?.name} />
                                                 <AvatarFallback
                                                     className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                                    {getInitials(comment.user ? comment.user.name : 'Anonyme')}
+                                                    {getInitials(review.user ? review.user.name : 'Anonyme')}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div className="grid flex-1 text-left text-sm leading-tight">
-                                                <span className="truncate font-medium">{comment.user?.name}</span>
+                                                <span className="truncate font-medium">{review.user?.name}</span>
                                                 <span
-                                                    className="truncate text-xs text-muted-foreground">{comment.product?.name}</span>
+                                                    className="truncate text-xs text-muted-foreground">{review.product?.name}</span>
                                             </div>
                                         </div>
                                     </div>
