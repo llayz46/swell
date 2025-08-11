@@ -4,7 +4,7 @@ namespace App\Modules\Review\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductCommentRequest extends FormRequest
+class ReviewRequest extends FormRequest
 {
     public function rules(): array
     {

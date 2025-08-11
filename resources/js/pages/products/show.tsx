@@ -1,4 +1,4 @@
-import type { Product, ProductImage, ProductComment, SharedData } from '@/types';
+import type { Product, ProductImage, Review, SharedData } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { Heart, RotateCcw, Shield, ShoppingCart, Star, Truck, Loader2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
@@ -14,17 +14,17 @@ import { ProductQuickViewDialog } from '@/components/swell/product/product-quick
 import { ProductBreadcrumb } from '@/components/swell/product/product-breadcrumb';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getStorageUrl } from '@/utils/format-storage-url';
-import { ProductCommentSection } from '@/components/swell/product/comment/product-comment-section';
-import { ProductCommentProvider } from '@/contexts/product-comment-context';
+import { ReviewSection } from '@/components/swell/product/review/review-section';
+import { ReviewProvider } from '@/contexts/review-context';
 import { Card, CardContent } from '@/components/ui/card';
 
 interface ShowProductProps {
     product: Product;
     similarProducts: Product[];
-    comments: ProductComment[];
+    reviews: Review[];
 }
 
-export default function Show({ product, similarProducts, comments }: ShowProductProps) {
+export default function Show({ product, similarProducts, reviews }: ShowProductProps) {
     const { swell } = usePage<SharedData>().props
     const featuredImage: ProductImage | undefined = product.images?.find(image => image.is_featured) || product.images?.sort((a, b) => (a.order || 0) - (b.order || 0))[0];
     const [imageToShow, setImageToShow] = useState<ProductImage | undefined>(featuredImage || product.images?.[0]);
@@ -33,10 +33,10 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
     const { addToCart, buyNow } = useCartContext();
 
     const averageRating = useMemo(() => {
-        if (comments.length === 0) return 0;
-        const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
-        return totalRating / comments.length;
-    }, [comments]);
+        if (reviews.length === 0) return 0;
+        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+        return totalRating / reviews.length;
+    }, [reviews]);
 
     return (
         <BaseLayout>
@@ -92,7 +92,7 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
                                             />
                                         ))}
                                     </div>
-                                    <span className="text-sm text-muted-foreground">({comments.length} avis)</span>
+                                    <span className="text-sm text-muted-foreground">({reviews.length} avis)</span>
                                 </div>
                             )}
                         </div>
@@ -176,10 +176,10 @@ export default function Show({ product, similarProducts, comments }: ShowProduct
                 </div>
 
                 {swell.review.enabled && (
-                    <WhenVisible data="comments" fallback={<ProductCommentSectionFallback />}>
-                        <ProductCommentProvider productId={product.id} comments={comments}>
-                            <ProductCommentSection />
-                        </ProductCommentProvider>
+                    <WhenVisible data="reviews" fallback={<ReviewSectionFallback />}>
+                        <ReviewProvider productId={product.id} reviews={reviews}>
+                            <ReviewSection />
+                        </ReviewProvider>
                     </WhenVisible>
                 )}
 
@@ -254,7 +254,7 @@ function RelatedProductFallback() {
     )
 }
 
-function ProductCommentSectionFallback() {
+function ReviewSectionFallback() {
     return (
         <div className="max-w-7xl mx-auto space-y-6 my-16">
             <div className="flex items-center justify-between">

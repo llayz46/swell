@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Modules\Review\Models\ProductComment;
+use App\Modules\Review\Models\Review;
 use App\Modules\Wishlist\Models\Wishlist;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -82,9 +82,9 @@ class Product extends Model
         return $this->belongsToMany(Wishlist::class, 'wishlist_items');
     }
 
-    public function comments(): HasMany
+    public function reviews(): HasMany
     {
-        return $this->hasMany(ProductComment::class);
+        return $this->hasMany(Review::class);
     }
 
     public function averageRating(): float

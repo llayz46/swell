@@ -18,34 +18,34 @@ class SwellEnableFeatureCommand extends Command
             $feature = $this->ask('Quelle fonctionnalité souhaitez-vous activer ?');
         }
 
-        $feature = ucfirst($feature);
+        $ucFeature = ucfirst($feature);
 
-        if (!class_exists("App\\Modules\\{$feature}\\{$feature}ServiceProvider")) {
-            $this->error("La fonctionnalité {$feature} de Swell n'existe pas.");
+        if (!class_exists("App\\Modules\\{$ucFeature}\\{$ucFeature}ServiceProvider")) {
+            $this->error("La fonctionnalité {$ucFeature} de Swell n'existe pas.");
             return;
         }
 
-        if (!config("swell." . strtolower($feature) . ".enabled", false)) {
-            $this->error("La fonctionnalité {$feature} de Swell n'est pas activée dans la configuration. Activez-la depuis votre .env");
+        if (!config("swell." . strtolower($ucFeature) . ".enabled", false)) {
+            $this->error("La fonctionnalité {$ucFeature} de Swell n'est pas activée dans la configuration. Activez-la depuis votre .env");
             return;
         }
 
-        $this->info("Activation de la fonctionnalité {$feature} de Swell...");
+        $this->info("Activation de la fonctionnalité {$ucFeature} de Swell...");
 
         $this->call('vendor:publish', [
-            '--provider' => "App\\Modules\\{$feature}\\{$feature}ServiceProvider",
+            '--provider' => "App\\Modules\\{$ucFeature}\\{$ucFeature}ServiceProvider",
             '--tag' => "swell-{$feature}",
             '--force' => true,
         ]);
 
         $this->callSilent('route:clear');
         $this->callSilent('route:cache');
-        $this->info("Les routes de la fonctionnalité {$feature} de Swell ont été mises à jour.");
+        $this->info("Les routes de la fonctionnalité {$ucFeature} de Swell ont été mises à jour.");
 
         if ($this->confirm('Souhaitez-vous lancer les migrations maintenant ?', true)) {
             $this->call('migrate');
         }
 
-        $this->info("La fonctionnalité {$feature} de Swell a été activée avec succès.");
+        $this->info("La fonctionnalité {$ucFeature} de Swell a été activée avec succès.");
     }
 }

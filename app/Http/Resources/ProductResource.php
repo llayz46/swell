@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Product;
-use App\Modules\Review\Resources\ProductCommentResource;
+use App\Modules\Review\Resources\ReviewResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -39,7 +39,7 @@ class ProductResource extends JsonResource
             'collection' => CollectionResource::make($this->whenLoaded('collection')),
             'featured_image' => ProductImageResource::make($this->whenLoaded('featuredImage')),
             'images' => ProductImageResource::collection($this->whenLoaded('images')),
-            'comments' => ProductCommentResource::make($this->whenLoaded('comments')),
+            'reviews' => ReviewResource::make($this->whenLoaded('reviews')),
 
             'meta_title' => $this->meta_title,
             'meta_description' => $this->meta_description,

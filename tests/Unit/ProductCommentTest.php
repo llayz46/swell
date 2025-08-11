@@ -2,7 +2,7 @@
 
 use App\Models\Product;
 use App\Models\User;
-use App\Modules\Review\Models\ProductComment;
+use App\Modules\Review\Models\Review;
 
 beforeEach(function () {
     if (!config('swell.review.enabled')) {
@@ -14,13 +14,13 @@ it('can create a product comment', function () {
     $product = Product::factory()->create();
     $user =  User::factory()->create();
 
-    $comment = ProductComment::factory()->create([
+    $comment = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'This is a great product!',
     ]);
 
-    expect($comment)->toBeInstanceOf(ProductComment::class)
+    expect($comment)->toBeInstanceOf(Review::class)
         ->and($comment->product_id)->toBe($product->id)
         ->and($comment->user_id)->toBe($user->id)
         ->and($comment->comment)->toBe('This is a great product!');
@@ -30,13 +30,13 @@ it('can retrieve comments for a product', function () {
     $product = Product::factory()->create();
     $user = User::factory()->create();
 
-    $comment1 = ProductComment::factory()->create([
+    $comment1 = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'First comment',
     ]);
 
-    $comment2 = ProductComment::factory()->create([
+    $comment2 = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'Second comment',
@@ -54,7 +54,7 @@ it('can delete a product comment', function () {
     $product = Product::factory()->create();
     $user = User::factory()->create();
 
-    $comment = ProductComment::factory()->create([
+    $comment = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'This is a comment to be deleted',
@@ -62,14 +62,14 @@ it('can delete a product comment', function () {
 
     $comment->delete();
 
-    expect(ProductComment::find($comment->id))->toBeNull();
+    expect(Review::find($comment->id))->toBeNull();
 });
 
 it('can update a product comment', function () {
     $product = Product::factory()->create();
     $user = User::factory()->create();
 
-    $comment = ProductComment::factory()->create([
+    $comment = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'Original comment',
@@ -84,7 +84,7 @@ it('can retrieve the user who made the comment', function () {
     $product = Product::factory()->create();
     $user = User::factory()->create();
 
-    $comment = ProductComment::factory()->create([
+    $comment = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'This is a comment',
@@ -98,7 +98,7 @@ it('can retrieve the product for a comment', function () {
     $product = Product::factory()->create();
     $user = User::factory()->create();
 
-    $comment = ProductComment::factory()->create([
+    $comment = Review::factory()->create([
         'product_id' => $product->id,
         'user_id' => $user->id,
         'comment' => 'This is a comment',
@@ -111,17 +111,17 @@ it('can retrieve the product for a comment', function () {
 it('can get the average rating for a product', function () {
     $product = Product::factory()->create();
 
-    ProductComment::factory()->create([
+    Review::factory()->create([
         'product_id' => $product->id,
         'rating' => 5,
     ]);
 
-    ProductComment::factory()->create([
+    Review::factory()->create([
         'product_id' => $product->id,
         'rating' => 3,
     ]);
 
-    ProductComment::factory()->create([
+    Review::factory()->create([
         'product_id' => $product->id,
         'rating' => 4,
     ]);

@@ -1,19 +1,19 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star } from 'lucide-react';
-import { ProductCommentForm } from '@/components/swell/product/comment/product-comment-form';
-import { useProductComment } from '@/contexts/product-comment-context';
-import { ProductComment } from '@/components/swell/product/comment/product-comment';
+import { ReviewForm } from '@/components/swell/product/review/review-form';
+import { useReview } from '@/contexts/review-context';
+import { Review } from '@/components/swell/product/review/review';
 
-export function ProductCommentSection() {
-    const { comments } = useProductComment();
+export function ReviewSection() {
+    const { reviews } = useReview();
 
     const ratingDistribution = [5, 4, 3, 2, 1].map(rating => ({
         rating,
-        count: comments.filter(comment => comment.rating === rating).length,
+        count: reviews.filter(review => review.rating === rating).length,
         percentage:
-            comments.length > 0
-                ? (comments.filter(comment => comment.rating === rating).length / comments.length) * 100
+            reviews.length > 0
+                ? (reviews.filter(review => review.rating === rating).length / reviews.length) * 100
                 : 0,
     }))
 
@@ -23,7 +23,7 @@ export function ProductCommentSection() {
                 <div className="flex items-center gap-4">
                     <h2 className="text-2xl font-bold text-foreground">Avis clients</h2>
                     <Badge variant="secondary" className="bg-muted text-muted-foreground rounded-full">
-                        {comments.length} avis
+                        {reviews.length} avis
                     </Badge>
                 </div>
             </div>
@@ -33,8 +33,8 @@ export function ProductCommentSection() {
                     <div className="grid md:grid-cols-2 gap-8">
                         <div className="flex flex-col items-center justify-center">
                             <div className="text-4xl font-bold text-foreground mb-2">
-                                {comments.length > 0
-                                    ? (comments.reduce((acc, comment) => acc + comment.rating, 0) / comments.length).toFixed(1)
+                                {reviews.length > 0
+                                    ? (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(1)
                                     : '0.0'}
                             </div>
                             <div className="flex items-center justify-center gap-1 mb-2">
@@ -43,8 +43,8 @@ export function ProductCommentSection() {
                                         key={star}
                                         className={`w-5 h-5 ${
                                             star <= Math.round(Number.parseFloat(
-                                                comments.length > 0
-                                                    ? (comments.reduce((acc, comment) => acc + comment.rating, 0) / comments.length).toFixed(1)
+                                                reviews.length > 0
+                                                    ? (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(1)
                                                     : '0.0'
                                             ))
                                                 ? "fill-primary text-primary"
@@ -53,7 +53,7 @@ export function ProductCommentSection() {
                                     />
                                 ))}
                             </div>
-                            <p className="text-muted-foreground">Basé sur {comments.length} avis</p>
+                            <p className="text-muted-foreground">Basé sur {reviews.length} avis</p>
                         </div>
 
                         <div className="space-y-2">
@@ -77,11 +77,11 @@ export function ProductCommentSection() {
                 </CardContent>
             </Card>
 
-            <ProductCommentForm />
+            <ReviewForm />
 
             <div className="space-y-4">
-                {comments.map((comment => (
-                    <ProductComment key={comment.id} comment={comment} />
+                {reviews.map((review => (
+                    <Review key={review.id} review={review} />
                 )))}
             </div>
         </div>

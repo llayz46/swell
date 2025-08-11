@@ -8,7 +8,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PromotionController;
-use App\Modules\Review\Http\Controllers\ProductCommentController;
+use App\Modules\Review\Http\Controllers\ReviewController;
 use App\Modules\Wishlist\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,9 +35,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 
-    Route::middleware('feature:review')->prefix('comments')->group(function () {
-        Route::post('/', [ProductCommentController::class, 'store'])->name('comments.store');
-        Route::put('/{productComment}', [ProductCommentController::class, 'update'])->name('comments.update');
+    Route::middleware('feature:review')->prefix('reviews')->group(function () {
+        Route::post('/', [ReviewController::class, 'store'])->name('reviews.store');
+        Route::put('/{Review}', [ReviewController::class, 'update'])->name('reviews.update');
     });
 });
 

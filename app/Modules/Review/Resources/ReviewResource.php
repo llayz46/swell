@@ -4,12 +4,12 @@ namespace App\Modules\Review\Resources;
 
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\UserResource;
-use App\Modules\Review\Models\ProductComment;
+use App\Modules\Review\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin ProductComment */
-class ProductCommentResource extends JsonResource
+/** @mixin Review */
+class ReviewResource extends JsonResource
 {
     public function toArray(Request $request): array
     {

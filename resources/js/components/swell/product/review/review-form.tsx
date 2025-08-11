@@ -7,28 +7,28 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { FormEventHandler } from 'react';
-import { useProductComment } from '@/contexts/product-comment-context';
+import { useReview } from '@/contexts/review-context';
 import { toast } from 'sonner';
 import { SharedData } from '@/types';
 
-type CommentForm = {
+type ReviewForm = {
     product_id: number;
     title: string;
     comment: string;
     rating: number;
 }
 
-export function ProductCommentForm() {
-    const { productId, comments } = useProductComment();
+export function ReviewForm() {
+    const { productId, reviews } = useReview();
     const { auth } = usePage<SharedData>().props;
 
-    const comment = comments.find(comment => comment.user_id === auth.user.id && comment.product_id === productId);
+    const review = reviews.find(review => review.user_id === auth.user.id && review.product_id === productId);
 
-    const { data, setData, errors, processing, post, put } = useForm<CommentForm>({
+    const { data, setData, errors, processing, post, put } = useForm<ReviewForm>({
         product_id: productId,
-        title: comment ? comment.title : '',
-        comment: comment ? comment.comment : '',
-        rating: comment ? comment.rating : 0,
+        title: review ? review.title : '',
+        comment: review ? review.comment : '',
+        rating: review ? review.rating : 0,
     })
 
     if (!auth.user) {
@@ -47,8 +47,8 @@ export function ProductCommentForm() {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        if (!comment) {
-            post(route('comments.store'), {
+        if (!review) {
+            post(route('reviews.store'), {
                 preserveScroll: true,
                 onSuccess: () => {
                     toast.success('Commentaire ajouté avec succès', {
@@ -64,7 +64,7 @@ export function ProductCommentForm() {
                 },
             })
         } else {
-            put(route('comments.update', comment.id), {
+            put(route('reviews.update', review.id), {
                 preserveScroll: true,
                 onSuccess: () => {
                     toast.success('Commentaire modifié avec succès', {
@@ -82,10 +82,10 @@ export function ProductCommentForm() {
         }
     }
 
-    const hasChanges = !comment ||
-        comment.title !== data.title ||
-        comment.comment !== data.comment ||
-        comment.rating !== data.rating;
+    const hasChanges = !review ||
+        review.title !== data.title ||
+        review.comment !== data.comment ||
+        review.rating !== data.rating;
 
     return (
         <Card className="max-sm:py-4">
@@ -136,12 +136,12 @@ export function ProductCommentForm() {
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="comment" className="text-foreground">
+                        <Label htmlFor="review" className="text-foreground">
                             Votre avis *
                         </Label>
 
                         <Textarea
-                            id="comment"
+                            id="review"
                             value={data.comment}
                             onChange={(e) => setData('comment', e.target.value)}
                             rows={4}
@@ -153,7 +153,7 @@ export function ProductCommentForm() {
 
                     <Button disabled={processing || !hasChanges}>
                         {processing ? <Loader2 className="animate-spin" /> : <Send />}
-                        {comment ? 'Modifier l\'avis' : 'Publier l\'avis'}
+                        {review ? 'Modifier l\'avis' : 'Publier l\'avis'}
                     </Button>
                 </form>
             </CardContent>

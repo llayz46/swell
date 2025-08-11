@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProductComment extends Model
+class Review extends Model
 {
     use HasFactory;
 
@@ -26,7 +26,7 @@ class ProductComment extends Model
 
     protected static function newFactory()
     {
-        return \App\Modules\Review\database\factories\ProductCommentFactory::new();
+        return \App\Modules\Review\database\factories\ReviewFactory::new();
     }
 
     public function user(): BelongsTo

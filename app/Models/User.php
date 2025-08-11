@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
- use App\Modules\Review\Models\ProductComment;
+ use App\Modules\Review\Models\Review;
  use App\Modules\Wishlist\Models\Wishlist;
  use Illuminate\Contracts\Auth\MustVerifyEmail;
  use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -78,8 +78,8 @@ namespace App\Models;
         return $this->hasMany(Order::class);
     }
 
-    public function comments(): HasMany
+    public function reviews(): HasMany
     {
-        return $this->hasMany(ProductComment::class);
+        return $this->hasMany(Review::class);
     }
 }

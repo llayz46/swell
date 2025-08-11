@@ -144,7 +144,7 @@ export interface Product {
     images?: ProductImage[] | null;
     image?: ProductImage | null;
     featured_image?: ProductImage;
-    comments?: ProductComment[] | null;
+    reviews?: Review[] | null;
     status: boolean;
     meta_title: string | null;
     meta_description: string | null;
@@ -180,7 +180,7 @@ export interface Collection {
     updated_at: string;
 }
 
-export interface ProductComment {
+export interface Review {
     id: number;
     product_id: number;
     user_id: number;

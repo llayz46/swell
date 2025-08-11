@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
-use App\Modules\Review\Resources\ProductCommentResource;
+use App\Modules\Review\Resources\ReviewResource;
 use App\Traits\Sortable;
 use App\Traits\StockFilterable;
 use Illuminate\Http\Request;
@@ -96,7 +96,7 @@ class ProductController extends Controller
 
         return Inertia::render('products/show', [
             'product' => fn () => $productResource,
-            'comments' => fn () => ProductCommentResource::collection(config('swell.review.enabled', true) ? $product->comments()->with('user')->latest()->take(5)->get() : []),
+            'reviews' => fn () => ReviewResource::collection(config('swell.review.enabled', true) ? $product->reviews()->with('user')->latest()->take(5)->get() : []),
             'similarProducts' => fn () => $similarProducts[0]->products ?? [],
         ]);
     }

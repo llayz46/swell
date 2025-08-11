@@ -1,15 +1,15 @@
 import { Card, CardContent } from '../../../ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../../../ui/avatar';
 import { Star } from 'lucide-react';
-import type { ProductComment as ProductCommentType } from '@/types';
+import type { Review as ReviewType } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { useInitials } from '@/hooks/use-initials';
 import { useState } from 'react';
 
-export function ProductComment({ comment }: { comment: ProductCommentType }) {
+export function Review({ review }: { review: ReviewType }) {
     const [expandedComments, setExpandedComments] = useState<Set<number>>(new Set())
-    const isExpanded = expandedComments.has(comment.id)
-    const shouldTruncate = comment.comment.length > 300
+    const isExpanded = expandedComments.has(review.id)
+    const shouldTruncate = review.comment.length > 300
 
     const getInitials = useInitials();
 
@@ -21,13 +21,13 @@ export function ProductComment({ comment }: { comment: ProductCommentType }) {
         })
     }
 
-    const toggleCommentExpansion = (commentId: number) => {
+    const toggleCommentExpansion = (reviewId: number) => {
         setExpandedComments((prev) => {
             const newSet = new Set(prev)
-            if (newSet.has(commentId)) {
-                newSet.delete(commentId)
+            if (newSet.has(reviewId)) {
+                newSet.delete(reviewId)
             } else {
-                newSet.add(commentId)
+                newSet.add(reviewId)
             }
             return newSet
         })
@@ -39,22 +39,14 @@ export function ProductComment({ comment }: { comment: ProductCommentType }) {
                 <div className="space-y-4">
                     <div className="flex items-center gap-4">
                         <Avatar className="h-10 w-10">
-                            <AvatarImage src={getStorageUrl(comment.user?.avatar)} alt="User avatar" />
+                            <AvatarImage src={getStorageUrl(review.user?.avatar)} alt="User avatar" />
                             <AvatarFallback className="bg-muted text-muted-foreground">
-                                {getInitials(comment.user?.name || '')}
+                                {getInitials(review.user?.name || '')}
                             </AvatarFallback>
                         </Avatar>
                         <div>
                             <div className="mb-1 flex items-center gap-2">
-                                <span className="font-medium text-foreground">{comment.user?.name}</span>
-                                {/*{comment.author.isVerifiedPurchaser && (*/}
-                                {/*    <Badge*/}
-                                {/*        variant="secondary"*/}
-                                {/*        className="bg-green-100 text-xs text-green-800 dark:bg-green-900 dark:text-green-200"*/}
-                                {/*    >*/}
-                                {/*        Achat vérifié*/}
-                                {/*    </Badge>*/}
-                                {/*)}*/}
+                                <span className="font-medium text-foreground">{review.user?.name}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="flex items-center gap-1">
@@ -62,24 +54,24 @@ export function ProductComment({ comment }: { comment: ProductCommentType }) {
                                         <Star
                                             key={star}
                                             className={`size-4 ${
-                                                star <= comment.rating ? 'fill-primary text-primary' : 'text-muted-foreground'
+                                                star <= review.rating ? 'fill-primary text-primary' : 'text-muted-foreground'
                                             }`}
                                         />
                                     ))}
                                 </div>
-                                <span className="text-sm text-muted-foreground">{formatDate(comment.created_at)}</span>
+                                <span className="text-sm text-muted-foreground">{formatDate(review.created_at)}</span>
                             </div>
                         </div>
                     </div>
 
                     <div className="space-y-3">
-                        <h4 className="font-semibold text-foreground">{comment.title}</h4>
+                        <h4 className="font-semibold text-foreground">{review.title}</h4>
                         <div className="text-foreground">
                             {shouldTruncate && !isExpanded ? (
                                 <>
-                                    {comment.comment.substring(0, 300)}...
+                                    {review.comment.substring(0, 300)}...
                                     <button
-                                        onClick={() => toggleCommentExpansion(comment.id)}
+                                        onClick={() => toggleCommentExpansion(review.id)}
                                         className="ml-2 text-sm font-medium text-primary hover:underline"
                                     >
                                         Lire la suite
@@ -87,10 +79,10 @@ export function ProductComment({ comment }: { comment: ProductCommentType }) {
                                 </>
                             ) : (
                                 <>
-                                    {comment.comment}
+                                    {review.comment}
                                     {shouldTruncate && isExpanded && (
                                         <button
-                                            onClick={() => toggleCommentExpansion(comment.id)}
+                                            onClick={() => toggleCommentExpansion(review.id)}
                                             className="ml-2 text-sm font-medium text-primary hover:underline"
                                         >
                                             Réduire

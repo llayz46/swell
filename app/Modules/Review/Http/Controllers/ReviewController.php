@@ -3,13 +3,13 @@
 namespace App\Modules\Review\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Review\Models\ProductComment;
-use App\Modules\Review\Requests\ProductCommentRequest;
+use App\Modules\Review\Models\Review;
+use App\Modules\Review\Requests\ReviewRequest;
 use Illuminate\Support\Facades\Auth;
 
-class ProductCommentController extends Controller
+class ReviewController extends Controller
 {
-    public function store(ProductCommentRequest $request)
+    public function store(ReviewRequest $request)
     {
         $data = $request->validated();
 
@@ -19,30 +19,30 @@ class ProductCommentController extends Controller
             return redirect()->back()->withErrors(['Vous devez avoir acheté ce produit pour pouvoir le commenter.']);
         }
 
-        $comment = Auth::user()->comments()->where('product_id', $data['product_id'])->get();
+        $comment = Auth::user()->reviews()->where('product_id', $data['product_id'])->get();
 
         if ($comment->isNotEmpty()) {
             return redirect()->back()->withErrors(['Vous avez déjà commenté ce produit.']);
         }
 
-        Auth::user()->comments()->create($data);
+        Auth::user()->reviews()->create($data);
 
         return redirect()->back();
     }
 
-    public function update(ProductComment $productComment, ProductCommentRequest $request)
+    public function update(Review $review, ReviewRequest $request)
     {
-        if ($productComment->user_id !== Auth::id()) {
+        if ($review->user_id !== Auth::id()) {
             return redirect()->back()->withErrors(['Vous n\'êtes pas autorisé à modifier ce commentaire.']);
         }
 
         $data = $request->validated();
 
-        if (array_diff($data, $productComment->only(['title', 'comment', 'rating', 'product_id'])) === []) {
+        if (array_diff($data, $review->only(['title', 'comment', 'rating', 'product_id'])) === []) {
             return redirect()->back()->withErrors(['Aucune modification n\'a été apportée.']);
         }
 
-        $productComment->update($data);
+        $review->update($data);
 
         return redirect()->back();
     }
