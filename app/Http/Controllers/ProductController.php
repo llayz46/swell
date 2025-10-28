@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
-use App\Modules\Review\Resources\ReviewResource;
+use App\Modules\Review\Http\Resources\ReviewResource;
 use App\Traits\Sortable;
 use App\Traits\StockFilterable;
 use Illuminate\Http\Request;

@@ -63,7 +63,7 @@ class CreateStripeCheckoutSession
                 'quantity' => $item->quantity,
             ];
         })->toArray();
-}
+    }
 
     /**
      * Create a Stripe Checkout session for a single product.

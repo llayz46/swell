@@ -2,7 +2,6 @@
 
 namespace App\Actions\Product;
 
-use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\UploadedFile;
@@ -38,6 +37,8 @@ class HandleProduct
             'collection_id' => $data['group_id'] ?? null,
         ]);
 
+        $this->handleOptions($product, $data['options']);
+
         if (isset($data['images']) && is_array($data['images'])) {
             $this->handleImages($product, $data['images']);
         }
@@ -69,6 +70,8 @@ class HandleProduct
             'category_id' => $data['category_id'] ?? null,
             'collection_id' => $data['collection_id'] ?? null,
         ]);
+
+        $this->handleOptions($product, $data['options']);
 
         if (isset($data['images']) && is_array($data['images'])) {
             $this->handleImages($product, $data['images']);
@@ -155,5 +158,41 @@ class HandleProduct
                 $firstImage->update(['is_featured' => true]);
             }
         }
+    }
+
+    protected function handleOptions(Product $product, array $options): void
+    {
+        $handledOptionIds = [];
+
+        foreach ($options as $option) {
+            if (empty($option['name']) || empty($option['values'])) {
+                continue;
+            }
+
+            $name = trim($option['name']);
+            $values = $option['values'];
+
+            $productOption = $product->options()->firstOrCreate(['name' => $name]);
+            $handledOptionIds[] = $productOption->id;
+
+            $handledValueIds = [];
+
+            foreach ($values as $value) {
+                if (empty($value)) {
+                    continue;
+                }
+
+                $value = trim($value['value']);
+                $optionValue = $productOption->values()->firstOrCreate(['value' => $value]);
+                $handledValueIds[] = $optionValue->id;
+            }
+
+            $productOption->values()->whereNotIn('id', $handledValueIds)->delete();
+        }
+
+        $product->options()->whereNotIn('id', $handledOptionIds)->each(function ($option) {
+            $option->values()->delete();
+            $option->delete();
+        });
     }
 }

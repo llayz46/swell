@@ -4,6 +4,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Collection;
 use App\Models\ProductImage;
+use App\Models\ProductOption;
 
 it('can be created', function () {
     $product = Product::factory()->create();
@@ -105,4 +106,14 @@ it('can retrieve its regular price if no discount is set', function () {
     $product = Product::factory()->create(['price' => 100.00, 'discount_price' => null]);
 
     expect($product->getPrice)->toBe(100.00);
+});
+
+it('can have many options', function () {
+    $product = Product::factory()->create();
+    $option1 = ProductOption::factory()->create(['product_id' => $product->id]);
+    $option2 = ProductOption::factory()->create(['product_id' => $product->id]);
+
+    expect($product->options)->toHaveCount(2)
+        ->and($product->options->contains($option1))->toBeTrue()
+        ->and($product->options->contains($option2))->toBeTrue();
 });

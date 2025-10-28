@@ -3,8 +3,8 @@
 namespace App\Modules\Review\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Review\Http\Requests\ReviewRequest;
 use App\Modules\Review\Models\Review;
-use App\Modules\Review\Requests\ReviewRequest;
 use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller

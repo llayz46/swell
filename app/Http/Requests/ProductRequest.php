@@ -59,6 +59,11 @@ class ProductRequest extends FormRequest
             'category_id' => ['required', 'exists:categories,id'],
 
             'collection_id' => ['nullable', 'exists:collections,id'],
+
+            'options' => ['array'],
+            'options.*.name' => ['nullable', 'string', 'max:255'],
+            'options.*.values' => ['array'],
+            'options.*.values.*.value' => ['string', 'max:255'],
         ];
     }
 
@@ -139,6 +144,13 @@ class ProductRequest extends FormRequest
             'category_id.exists' => 'La catégorie sélectionnée n\'existe pas.',
 
             'collection_id.exists' => 'La collection sélectionné n\'existe pas.',
+
+            'options.array' => 'Les options doivent être un tableau.',
+            'options.*.name.string' => 'Le nom de l\'option doit être une chaîne de caractères.',
+            'options.*.name.max' => 'Le nom de l\'option ne peut pas dépasser 255 caractères.',
+            'options.*.values.array' => 'Les valeurs de l\'option doivent être un tableau.',
+            'options.*.values.*.value.string' => 'Chaque valeur de l\'option doit être une chaîne de caractères.',
+            'options.*.values.*.value.max' => 'Chaque valeur de l\'option ne peut pas dépasser 255 caractères.',
         ];
     }
 }

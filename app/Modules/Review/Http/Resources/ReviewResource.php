@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Review\Resources;
+namespace App\Modules\Review\Http\Resources;
 
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\UserResource;

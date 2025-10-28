@@ -57,7 +57,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
         discount_price: product?.discount_price ?? null,
         cost_price: product?.cost_price ?? 0,
         stock: !isDuplicate && product?.stock ? product.stock : 0,
-        reorder_level: !isDuplicate && product?.reorder_level ? product.reorder_level : 0,
+        reorder_level: !isDuplicate && product?.reorder_level ? product.reorder_level : 5,
         status: !isDuplicate && Boolean(product?.status),
         images: !isDuplicate && product?.images ? product.images.map(img => ({
             id: img.id ?? null,
@@ -66,6 +66,14 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
             alt_text: img.alt_text ?? '',
             is_featured: Boolean(img.is_featured),
             order: img.order ?? 0,
+        })) : [],
+        options: product?.options ? product.options.map(option => ({
+            id: option.id ?? null,
+            name: option.name ?? '',
+            values: (option.values ?? []).map(v => ({
+                id: v.id ?? null,
+                value: v.value,
+            })),
         })) : [],
         meta_title: product?.meta_title ?? null,
         meta_description: product?.meta_description ?? null,

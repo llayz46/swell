@@ -47,6 +47,11 @@ class Product extends Model
         'cost_price' => 'float',
     ];
 
+    public function options(): HasMany
+    {
+        return $this->hasMany(ProductOption::class);
+    }
+
     public function shouldBeSearchable(): bool
     {
         return $this->status === true;

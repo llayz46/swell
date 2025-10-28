@@ -89,7 +89,7 @@ class ProductController extends Controller
             'brands' => fn () => Brand::select('id', 'name')->orderBy('name')->get(),
             'collections' => fn () => Collection::select('id', 'title')->orderBy('title')->get()->load('products:id,name,collection_id'),
             'duplicate' => (bool)$product,
-            'product' => fn () => $product ? ProductResource::make($product->load(['images', 'brand:id,name', 'category:id,parent_id', 'collection:id,name'])) : null
+            'product' => fn () => $product ? ProductResource::make($product->load(['images', 'brand:id,name', 'category:id,parent_id', 'collection:id,name', 'options.values'])) : null
         ]);
     }
 
@@ -107,7 +107,8 @@ class ProductController extends Controller
                 },
                 'brand',
                 'category',
-                'collection'
+                'collection',
+                'options.values'
             ])),
         ]);
     }
@@ -135,7 +136,7 @@ class ProductController extends Controller
                 ['title' => $product->name, 'href' => route('admin.products.show', $product)],
                 ['title' => 'Modifier', 'href' => route('admin.products.edit', $product)],
             ],
-            'product' => fn () => ProductResource::make($product->load(['images', 'brand:id,name', 'category:id,parent_id', 'collection:id,name'])),
+            'product' => fn () => ProductResource::make($product->load(['images', 'brand:id,name', 'category:id,parent_id', 'collection:id,name', 'options.values'])),
             'brands' => fn () => Brand::select('id', 'name')->orderBy('name')->get(),
             'collections' => fn () => Collection::select('id', 'title')->orderBy('title')->get()->load('products:id,name,collection_id'),
         ]);

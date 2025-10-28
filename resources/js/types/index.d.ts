@@ -145,6 +145,7 @@ export interface Product {
     image?: ProductImage | null;
     featured_image?: ProductImage;
     reviews?: Review[] | null;
+    options?: ProductOption[] | null;
     status: boolean;
     meta_title: string | null;
     meta_description: string | null;
@@ -168,6 +169,21 @@ export interface ProductImage {
     product_id: number;
     created_at: string;
     updated_at: string;
+}
+
+export interface ProductOption {
+    id: number;
+    name: string;
+    product_id: number;
+    product?: Product;
+    values?: ProductOptionValue[];
+}
+
+export interface ProductOptionValue {
+    id: number;
+    value: string;
+    product_option_id: number;
+    option?: ProductOption;
 }
 
 export interface Collection {
@@ -298,6 +314,14 @@ type ProductForm = {
         alt_text: string;
         is_featured: boolean;
         order: number;
+    }[];
+    options: {
+        id: number | null;
+        name: string;
+        values: {
+            id: number | null;
+            value: string;
+        }[];
     }[];
     meta_title?: string | null;
     meta_description?: string | null;

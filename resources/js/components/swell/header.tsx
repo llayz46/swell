@@ -66,7 +66,7 @@ export function Header() {
                     <Link href="/promotions" className={buttonVariants({ variant: 'link' })}>
                         Promotions
                     </Link>
-                    <Link href="/news" className={buttonVariants({ variant: 'link' })}>
+                    <Link href="/products?sort=news" className={buttonVariants({ variant: 'link' })}>
                         Nouveautés
                     </Link>
                     <Link href="/brands" className={buttonVariants({ variant: 'link' })}>

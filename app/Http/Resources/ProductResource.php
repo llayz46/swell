@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Product;
-use App\Modules\Review\Resources\ReviewResource;
+use App\Modules\Review\Http\Resources\ReviewResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -31,7 +31,6 @@ class ProductResource extends JsonResource
             ]),
 
             'isNew' => $this->whenLoaded('created_at', fn () => $this->created_at->diffInDays(now()) <= 7),
-
             'isWishlisted' => $this->whenLoaded('wishlists', fn () => $this->wishlists->isNotEmpty()),
 
             'brand' => BrandResource::make($this->whenLoaded('brand')),
@@ -40,6 +39,7 @@ class ProductResource extends JsonResource
             'featured_image' => ProductImageResource::make($this->whenLoaded('featuredImage')),
             'images' => ProductImageResource::collection($this->whenLoaded('images')),
             'reviews' => ReviewResource::make($this->whenLoaded('reviews')),
+            'options' => ProductOptionResource::collection($this->whenLoaded('options')),
 
             'meta_title' => $this->meta_title,
             'meta_description' => $this->meta_description,

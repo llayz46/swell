@@ -31,6 +31,7 @@ interface ProductType {
 export default function Show({ breadcrumbs, product }: ProductType) {
     const [selectedImage, setSelectedImage] = useState<number>(0);
     const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
+    console.log(product)
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
@@ -110,6 +111,11 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                 <TabsTrigger value="overview">
                                     Vue d'ensemble
                                 </TabsTrigger>
+                                {product.options && product.options.length > 0 && (
+                                    <TabsTrigger value="options">
+                                        Variantes
+                                    </TabsTrigger>
+                                )}
                                 <TabsTrigger value="inventory">
                                     Inventaire
                                 </TabsTrigger>
@@ -210,6 +216,34 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                     €{calculateProfit(product.cost_price, product.discount_price ?? product.price)}
                                                 </p>
                                             </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </TabsContent>
+
+                            <TabsContent value="options" className="space-y-4">
+                                <Card className="max-sm:py-4 border-border bg-card rounded-md">
+                                    <CardHeader className="max-sm:px-4">
+                                        <CardTitle className="text-foreground">Gestion des options</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="max-sm:px-4">
+                                        <div className="space-y-4">
+                                            {product.options && product.options.length > 0 ? (
+                                                product.options.map((option) => (
+                                                    <div key={option.id} className="space-y-2">
+                                                        <h3 className="text-lg font-semibold text-foreground">{option.name}</h3>
+                                                        <ul className="list-disc pl-5 space-y-1">
+                                                            {option.values?.map(value => (
+                                                                <li key={value.id} className="text-muted-foreground">
+                                                                    {value.value}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p className="text-muted-foreground">Aucune option disponible pour ce produit.</p>
+                                            )}
                                         </div>
                                     </CardContent>
                                 </Card>
