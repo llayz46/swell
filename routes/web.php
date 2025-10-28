@@ -53,6 +53,9 @@ Route::prefix('cart')->group(function () {
     Route::put('/update', [CartController::class, 'handleItemQuantity'])->name('cart.update');
 });
 
+Route::post('/cart/item/remove', [CartController::class, 'removeItemById'])->name('cart.item.remove');
+Route::put('/cart/item/update', [CartController::class, 'handleItemQuantityById'])->name('cart.item.update');
+
 Route::get('/brands', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/brands/{brand:slug}', [BrandController::class, 'show'])->name('brand.show');
 

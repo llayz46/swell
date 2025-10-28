@@ -100,6 +100,12 @@ export interface CartItem {
     created_at: string;
     updated_at: string;
     product: Product;
+    options: {
+        option_id: number;
+        option_name: string;
+        option_value_id: number;
+        option_value_name: string;
+    }[]
 }
 
 export interface Cart {

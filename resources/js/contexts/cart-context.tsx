@@ -5,10 +5,10 @@ import { Cart, Product } from '@/types';
 type CartContextType = {
     optimisticCart: Cart | null;
     loading: boolean;
-    addToCart: (product: Product, quantity?: number) => void;
-    removeItemOfCart: (productId: number) => void;
+    addToCart: (product: Product, selectedOptions?: Record<number, number>, quantity?: number) => void;
+    removeItemOfCart: (itemId: number) => void;
     clearCart: () => void;
-    handleQuantity : (type: "inc" | "dec", productId: number) => void;
+    handleQuantity : (type: "inc" | "dec", itemId: number) => void;
     checkout: () => void;
     buyNow: (product: Product) => void;
 };

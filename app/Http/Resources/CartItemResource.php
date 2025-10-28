@@ -14,6 +14,7 @@ class CartItemResource extends JsonResource
         return [
             'id' => $this->id,
             'quantity' => $this->quantity,
+            'options' => $this->options,
             'product' => [
                 'id' => $this->product->id,
                 'name' => $this->product->name,
@@ -22,6 +23,14 @@ class CartItemResource extends JsonResource
                     $this->product->images->firstWhere('is_featured', true)
                 ),
                 'brand' => BrandResource::make($this->product->brand),
+                'options' => $this->product->options->map(fn($opt) => [
+                    'id' => $opt->id,
+                    'name' => $opt->name,
+                    'values' => $opt->values->map(fn($val) => [
+                        'id' => $val->id,
+                        'value' => $val->value,
+                    ]),
+                ]),
             ],
         ];
     }

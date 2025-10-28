@@ -66,7 +66,7 @@ class HandleInertiaRequests extends Middleware
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'categories' => fn () => Cache::rememberForever('categories', fn () => CategoryResource::collection(Category::with(['childrenRecursive' => fn($q) => $q->withCount('products')])->withCount('products')->whereNull('parent_id')->get())),
             'cart' => fn () => Cache::remember("cart-" . (auth()->check() ? 'user-' . auth()->id() : 'session-' . session()->getId()), 30, function () {
-                return CartResource::make(CartFactory::make()->load('items.product.images', 'items.product.brand'));
+                return CartResource::make(CartFactory::make()->load('items.product.images', 'items.product.brand', 'items.product.options.values'));
             }),
             'infoBanner' => fn () => config('swell.banner.enabled', true) ? Cache::rememberForever('infoBanner', fn () => BannerMessage::orderBy('order')->get()) : [],
         ];

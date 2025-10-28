@@ -37,7 +37,13 @@ class CartController extends Controller
     public function index()
     {
         return response()->json([
-            'cart' => CartResource::make(CartFactory::make()->load('items.product')),
+            'cart' => CartResource::make(
+                CartFactory::make()->load(
+                    'items.product.images',
+                    'items.product.brand',
+                    'items.product.options.values'
+                )
+            ),
         ]);
     }
 
@@ -50,20 +56,31 @@ class CartController extends Controller
      */
     public function addItem(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'integer|min:1',
+            'options' => 'array|nullable',
+            'options.*.option_id' => 'required_with:options|integer',
+            'options.*.option_value_id' => 'required_with:options|integer',
         ]);
 
         try {
             $this->handleProductCart->add(
-                $request->product_id,
-                $request->quantity ?? 1,
-                $request->user()?->cart
+                $data['product_id'],
+                $data['quantity'] ?? 1,
+                $request->user()?->cart,
+                $data['options'] ?? null,
             );
         } catch (\Exception $e) {
             return redirect()->back()->withErrors([
                 'product_id' => $e->getMessage()
+            ]);
+        }
+
+        // Retour JSON pour resync côté front
+        if ($request->wantsJson()) {
+            return response()->json([
+                'cart' => CartResource::make(CartFactory::make()->load('items.product')),
             ]);
         }
 
@@ -88,6 +105,29 @@ class CartController extends Controller
             $request->user()?->cart
         );
 
+        if ($request->wantsJson()) {
+            return response()->json([
+                'cart' => CartResource::make(CartFactory::make()->load('items.product')),
+            ]);
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Remove an item from the cart by cart_item_id.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function removeItemById(Request $request)
+    {
+        $data = $request->validate([
+            'item_id' => 'required|integer',
+        ]);
+
+        $this->handleProductCart->removeByItemId($data['item_id'], $request->user()?->cart);
+
         return redirect()->back();
     }
 
@@ -101,6 +141,12 @@ class CartController extends Controller
     public function clear(Request $request)
     {
         $this->handleProductCart->clear($request->user()?->cart);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'cart' => CartResource::make(CartFactory::make()->load('items.product')),
+            ]);
+        }
 
         return redirect()->back();
     }
@@ -124,6 +170,34 @@ class CartController extends Controller
             $this->handleProductCart->increase($request->product_id, $cart);
         } elseif ($request->action === 'decrease') {
             $this->handleProductCart->decrease($request->product_id, $cart);
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'cart' => CartResource::make(CartFactory::make()->load('items.product')),
+            ]);
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Handle item quantity increase or decrease by cart_item_id.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function handleItemQuantityById(Request $request)
+    {
+        $data = $request->validate([
+            'item_id' => 'required|integer',
+            'action' => 'required|in:increase,decrease',
+        ]);
+
+        if ($data['action'] === 'increase') {
+            $this->handleProductCart->increaseByItemId($data['item_id'], $request->user()?->cart);
+        } else {
+            $this->handleProductCart->decreaseByItemId($data['item_id'], $request->user()?->cart);
         }
 
         return redirect()->back();

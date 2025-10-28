@@ -25,7 +25,6 @@ interface ShowProductProps {
 }
 
 export default function Show({ product, similarProducts, reviews }: ShowProductProps) {
-    console.log('product', product);
     const { swell } = usePage<SharedData>().props
     const featuredImage: ProductImage | undefined = product.images?.find(image => image.is_featured) || product.images?.sort((a, b) => (a.order || 0) - (b.order || 0))[0];
     const [imageToShow, setImageToShow] = useState<ProductImage | undefined>(featuredImage || product.images?.[0]);
@@ -34,15 +33,15 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
     const { addToCart, buyNow } = useCartContext();
 
     const initialSelections = useMemo(() => {
-        const selections: Record<number, number | null> = {};
+        const selections: Record<number, number> = {};
         product.options?.forEach(opt => {
-            selections[opt.id] = opt.values?.[0]?.id ?? null;
+            selections[opt.id] = opt.values?.[0]?.id as number;
         });
         return selections;
     }, [product.options]);
-    const [selectedOptions, setSelectedOptions] = useState<Record<number, number | null>>(initialSelections);
+    const [selectedOptions, setSelectedOptions] = useState<Record<number, number>>(initialSelections);
     const handleSelectOption = (optionId: number, valueId: number) => {
-        setSelectedOptions(prev => ({ ...prev, [optionId]: prev[optionId] === valueId ? null : valueId }));
+        setSelectedOptions(prev => (prev[optionId] === valueId ? prev : { ...prev, [optionId]: valueId }));
     };
 
     const averageRating = useMemo(() => {
@@ -192,7 +191,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
 
                         <div className="space-y-4">
                             <div className="flex gap-3">
-                                <Button size="lg" className="flex-1" onClick={() => addToCart(product)}>
+                                <Button size="lg" className="flex-1" onClick={() => addToCart(product, selectedOptions as unknown as Record<number, number>)}>
                                     <ShoppingCart className="w-4 h-4 mr-2" />
                                     Ajouter au panier
                                 </Button>

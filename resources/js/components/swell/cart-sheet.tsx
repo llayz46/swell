@@ -76,7 +76,7 @@ export function CartSheet() {
     );
 }
 
-function CardItem ({ item, removeItemOfCart, handleQuantity }: { item: CartItem, removeItemOfCart: (productId: number) => void, handleQuantity: (type: "inc" | "dec", productId: number) => void }) {
+function CardItem ({ item, removeItemOfCart, handleQuantity }: { item: CartItem, removeItemOfCart: (itemId: number) => void, handleQuantity: (type: "inc" | "dec", itemId: number) => void }) {
     return (
         <Card className="relative overflow-hidden py-0">
             <CardContent className="p-3">
@@ -84,9 +84,9 @@ function CardItem ({ item, removeItemOfCart, handleQuantity }: { item: CartItem,
                     variant="ghost"
                     size="icon"
                     className="absolute top-3 right-3 z-10 size-6 text-muted-foreground hover:text-destructive"
-                    onClick={() => removeItemOfCart(item.product.id)}
+                    onClick={() => removeItemOfCart(item.id)}
                 >
-                    <Trash2 className="h-3 w-3" />
+                    <Trash2 className="size-3" />
                 </Button>
 
                 <div className="relative flex items-start gap-4 pr-8">
@@ -98,16 +98,23 @@ function CardItem ({ item, removeItemOfCart, handleQuantity }: { item: CartItem,
 
                     <div className="flex h-18 min-w-0 flex-col">
                         <h3 className="line-clamp-2 leading-5 font-medium text-foreground">{item.product.brand.name} {item.product.name}</h3>
+                        {item.options && item.options.length > 0 && (
+                            <div className="text-xs my-1 text-muted-foreground">
+                                {item.options.map((o, idx) => (
+                                    <span key={`${o.option_id}-${o.option_value_id}`}>{o.option_name}: {o.option_value_name}{idx < item.options.length - 1 ? ' · ' : ''}</span>
+                                ))}
+                            </div>
+                        )}
                         <p className="mt-auto text-sm font-semibold text-foreground">{item.product.price.toFixed(2)} €</p>
                     </div>
 
                     <div className="absolute right-0 bottom-0 flex items-center gap-1">
-                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => handleQuantity("dec", item.product.id)}>
-                            <Minus className="h-3 w-3" />
+                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => handleQuantity("dec", item.id)}>
+                            <Minus className="size-3" />
                         </Button>
                         <span className="w-6 text-center text-sm font-medium">{item.quantity}</span>
-                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => handleQuantity("inc", item.product.id)}>
-                            <Plus className="h-3 w-3" />
+                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => handleQuantity("inc", item.id)}>
+                            <Plus className="size-3" />
                         </Button>
                     </div>
                 </div>

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Cart::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->unsignedInteger('quantity')->default(1);
+            $table->json('options')->nullable();
             $table->timestamps();
         });
     }
