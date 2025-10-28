@@ -147,7 +147,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                     </h1>
                     <p className="text-muted-foreground">
                         {!isDuplicate && product ? (
-                            `SKU: ${product.sku}`
+                            `SKU: ${product.sku ? product.sku : "Non défini"}`
                         ) : (
                             "Créez un nouveau produit pour commencer à le vendre."
                         )}
@@ -233,10 +233,12 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                                 <Label>Dernière modification</Label>
                                 <Label>{!isDuplicate && product ? product.updated_at : 'N/A'}</Label>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <Label>Référence produit (SKU)</Label>
-                                <Label>{!isDuplicate && product ? product.sku : 'N/A'}</Label>
-                            </div>
+                            {product && product.sku && (
+                                <div className="flex items-center justify-between">
+                                    <Label>Référence produit (SKU)</Label>
+                                    <Label>{!isDuplicate && product ? product.sku : 'N/A'}</Label>
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
 

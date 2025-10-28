@@ -25,12 +25,25 @@ interface ShowProductProps {
 }
 
 export default function Show({ product, similarProducts, reviews }: ShowProductProps) {
+    console.log('product', product);
     const { swell } = usePage<SharedData>().props
     const featuredImage: ProductImage | undefined = product.images?.find(image => image.is_featured) || product.images?.sort((a, b) => (a.order || 0) - (b.order || 0))[0];
     const [imageToShow, setImageToShow] = useState<ProductImage | undefined>(featuredImage || product.images?.[0]);
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
     const { addItem } = useWishlist();
     const { addToCart, buyNow } = useCartContext();
+
+    const initialSelections = useMemo(() => {
+        const selections: Record<number, number | null> = {};
+        product.options?.forEach(opt => {
+            selections[opt.id] = opt.values?.[0]?.id ?? null;
+        });
+        return selections;
+    }, [product.options]);
+    const [selectedOptions, setSelectedOptions] = useState<Record<number, number | null>>(initialSelections);
+    const handleSelectOption = (optionId: number, valueId: number) => {
+        setSelectedOptions(prev => ({ ...prev, [optionId]: prev[optionId] === valueId ? null : valueId }));
+    };
 
     const averageRating = useMemo(() => {
         if (reviews.length === 0) return 0;
@@ -130,6 +143,47 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                                     {product.collection.products.map(relatedProduct => (
                                         <RelatedProduct key={relatedProduct.id} product={relatedProduct} currentProductId={product.id} />
                                     ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {(product.options && product.options.length > 0) && (
+                            <div className="space-y-3">
+                                <h3 className="font-semibold text-foreground">Variantes</h3>
+                                <div className="space-y-4">
+                                    {product.options.map((option) => (
+                                        <div key={option.id} className="space-y-2">
+                                            <div className="flex items-center justify-between">
+                                                <p className="text-sm text-muted-foreground">{option.name}</p>
+                                            </div>
+                                            <div className="flex flex-wrap gap-2">
+                                                {option.values?.length ? option.values.map((val) => {
+                                                    const selected = selectedOptions[option.id] === val.id;
+                                                    return (
+                                                        <Button
+                                                            key={val.id}
+                                                            size="sm"
+                                                            variant={selected ? 'default' : 'outline'}
+                                                            className={cn('rounded-sm', !selected && 'bg-background text-foreground border')}
+                                                            type="button"
+                                                            onClick={() => handleSelectOption(option.id, val.id)}
+                                                        >
+                                                            {val.value}
+                                                        </Button>
+                                                    )
+                                                }) : (
+                                                    <span className="text-xs text-muted-foreground">Aucune valeur disponible</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                    Sélection: {product.options.map((o, idx) => {
+                                        const valId = selectedOptions[o.id];
+                                        const label = o.values?.find(v => v.id === valId)?.value ?? '—';
+                                        return <span key={o.id}>{o.name}: {label}{idx < (product.options?.length ?? 0) - 1 ? ' · ' : ''}</span>
+                                    })}
                                 </div>
                             </div>
                         )}

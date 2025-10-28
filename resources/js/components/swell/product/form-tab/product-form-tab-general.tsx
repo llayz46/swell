@@ -293,9 +293,9 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
                                     {finalizedOptionIds.includes(option.id as number) ? (
                                         <div className="relative space-y-2 p-4">
                                             <p>{option.name}</p>
-                                            <ul className="space-y-1">
+                                            <ul className="space-x-1 flex">
                                                 {option.values.map((v, index) => (
-                                                    <li key={index} className="w-fit rounded bg-muted px-1.5 py-1 text-sm text-muted-foreground">
+                                                    <li key={index} className="w-fit rounded bg-muted px-2 py-1 text-sm text-muted-foreground">
                                                         {v.value}
                                                     </li>
                                                 ))}

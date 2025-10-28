@@ -76,7 +76,8 @@ class ProductController extends Controller
                     'images' => function ($query) {
                         $query->orderBy('order');
                     },
-                    'category'
+                    'category',
+                    'options.values'
                 ])
             );
         });
