@@ -136,7 +136,7 @@ class CartController extends Controller
      *
      * @param Cart $cart
      * @param HandleProductCart $handleProductCart
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function clear(Request $request)
     {

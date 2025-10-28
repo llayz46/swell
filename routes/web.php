@@ -51,16 +51,15 @@ Route::prefix('cart')->group(function () {
     Route::post('/remove', [CartController::class, 'removeItem'])->name('cart.remove');
     Route::post('/clear/{cart}', [CartController::class, 'clear'])->name('cart.clear');
     Route::put('/update', [CartController::class, 'handleItemQuantity'])->name('cart.update');
+    Route::post('/item/remove', [CartController::class, 'removeItemById'])->name('cart.item.remove');
+    Route::put('/item/update', [CartController::class, 'handleItemQuantityById'])->name('cart.item.update');
 });
 
-Route::post('/cart/item/remove', [CartController::class, 'removeItemById'])->name('cart.item.remove');
-Route::put('/cart/item/update', [CartController::class, 'handleItemQuantityById'])->name('cart.item.update');
 
 Route::get('/brands', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/brands/{brand:slug}', [BrandController::class, 'show'])->name('brand.show');
 
 Route::get('/promotions', PromotionController::class)->name('promotions');
-Route::get('/news', NewsController::class)->name('news');
 
 Route::get('/products', [ProductController::class, 'index'])->name('product.index');
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('product.show');

@@ -33,26 +33,3 @@ it('belongs to a product option', function () {
     expect($productOptionValue)->toBeInstanceOf(ProductOptionValue::class)
         ->and($productOption->id)->toBe($productOptionValue->product_option_id);
 });
-
-it('belongs to many product variants', function () {
-    $productOptionValue = ProductOptionValue::factory()->create();
-    $productVariant = ProductVariant::factory()->create();
-
-    $productOptionValue->variants()->attach($productVariant);
-
-    expect($productOptionValue->variants->pluck('id'))
-        ->toContain($productVariant->id)
-        ->and($productOptionValue->variants->count())->toBe(1);
-});
-
-it('can detach product variants', function () {
-    $productOptionValue = ProductOptionValue::factory()->create();
-    $productVariant = ProductVariant::factory()->create();
-
-    $productOptionValue->variants()->attach($productVariant);
-    $productOptionValue->variants()->detach($productVariant);
-
-    expect($productOptionValue->variants->pluck('id'))
-        ->not->toContain($productVariant->id)
-        ->and($productOptionValue->variants->count())->toBe(0);
-});

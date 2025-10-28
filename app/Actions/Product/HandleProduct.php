@@ -37,7 +37,7 @@ class HandleProduct
             'collection_id' => $data['group_id'] ?? null,
         ]);
 
-        $this->handleOptions($product, $data['options']);
+        if (isset($data['options'])) $this->handleOptions($product, $data['options']);
 
         if (isset($data['images']) && is_array($data['images'])) {
             $this->handleImages($product, $data['images']);
@@ -71,7 +71,7 @@ class HandleProduct
             'collection_id' => $data['collection_id'] ?? null,
         ]);
 
-        $this->handleOptions($product, $data['options']);
+        if (isset($data['options'])) $this->handleOptions($product, $data['options']);
 
         if (isset($data['images']) && is_array($data['images'])) {
             $this->handleImages($product, $data['images']);
