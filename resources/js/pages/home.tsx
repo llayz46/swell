@@ -449,7 +449,7 @@ export default function Home({ products }: { products: Product[] }) {
                                 <ul className="space-y-2 w-full md:text-right">
                                     <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/promotions">Promotions</Link></li>
                                     <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/brands">Marques</Link></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/news">Nouveautés</Link></li>
+                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/products?sort=news">Nouveautés</Link></li>
                                 </ul>
                             </div>
                             <div className="flex flex-col col-span-1 md:col-span-2 items-start md:items-end">
@@ -457,7 +457,7 @@ export default function Home({ products }: { products: Product[] }) {
                                 <ul className="space-y-2 w-full md:text-right">
                                     <li><a className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="https://swellkit.dev" target="_blank" rel="noopener noreferrer">Documentation</a></li>
                                     <li><a className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="https://github.com/llayz46/swell" target="_blank" rel="noopener noreferrer">Discussion</a></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/">Roadmap</Link></li>
+                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="https://github.com/llayz46/swell" target="_blank" rel="noopener noreferrer">Roadmap</Link></li>
                                 </ul>
                             </div>
                         </div>
