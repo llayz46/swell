@@ -24,6 +24,7 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
     const [openBrandDialog, setOpenBrandDialog] = useState<boolean>(false);
     const [openCollectionDialog, setOpenCollectionDialog] = useState<boolean>(false);
     const [brandInputValue, setBrandInputValue] = useState<string>('');
+    const [collectionInputValue, setCollectionInputValue] = useState<string>('');
     const [finalizedOptionIds, setFinalizedOptionIds] = useState<number[]>(data.options?.filter(option => option.id !== null).map(option => option.id as number) || []);
 
     const maxLength = 500;
@@ -221,7 +222,7 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
                                     </PopoverTrigger>
                                     <PopoverContent className="w-full min-w-[var(--radix-popper-anchor-width)] border-input p-0" align="start">
                                         <Command>
-                                            <CommandInput placeholder="Rechercher une collection..." />
+                                            <CommandInput placeholder="Rechercher une collection..." onValueChange={(e) => setCollectionInputValue(e)} />
                                             <CommandList>
                                                 <CommandEmpty>
                                                     <CollectionDialog
@@ -229,6 +230,7 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
                                                         setOpen={() => {
                                                             setOpenCollectionDialog(!openCollectionDialog);
                                                         }}
+                                                        inputValue={collectionInputValue}
                                                     />
                                                 </CommandEmpty>
                                                 <CommandGroup>

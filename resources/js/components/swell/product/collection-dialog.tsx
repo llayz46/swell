@@ -24,9 +24,10 @@ interface CollectionDialogProps {
     open: boolean;
     setOpen: (open: boolean) => void;
     collection?: Collection | null;
+    inputValue?: string;
 }
 
-export function CollectionDialog({ open, setOpen, collection }: CollectionDialogProps) {
+export function CollectionDialog({ open, setOpen, collection, inputValue }: CollectionDialogProps) {
     const { data, setData, post, put, processing, errors, reset } = useForm<CollectionForm>({
         title: '',
     });
@@ -36,10 +37,14 @@ export function CollectionDialog({ open, setOpen, collection }: CollectionDialog
             setData({
                 title: collection.title || '',
             });
+        } else if (inputValue) {
+            setData({
+                title: inputValue
+            });
         } else {
             reset();
         }
-    }, [collection]);
+    }, [collection, inputValue]);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
