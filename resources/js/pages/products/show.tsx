@@ -283,7 +283,15 @@ function RelatedProduct({ product, currentProductId }: { product: Product, curre
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">{product.short_description}</p>
                     <div className="flex items-center justify-between">
-                        <span className="font-semibold text-foreground">{product.discount_price?.toFixed(2) ?? product.price.toFixed(2)} €</span>
+                        {product.discount_price != null ? (
+                            <div className="flex items-baseline gap-2">
+                                <span className="font-semibold text-foreground">{product.discount_price.toFixed(2)} €</span>
+                                <span className="text-sm mb-auto line-through text-muted-foreground">{product.price.toFixed(2)} €</span>
+                            </div>
+                        ) : (
+                            <span className="font-semibold text-foreground">{product.price.toFixed(2)} €</span>
+                        )}
+
                         <Badge className={cn('rounded-sm', product.stock === 0 ? 'bg-red-500' : product.stock < 11 ? 'bg-orange-500' : 'bg-green-500')}>
                             {product.stock === 0 ? 'Indisponible' : product.stock < 11 ? `Reste ${product.stock}` : 'En stock'}
                         </Badge>

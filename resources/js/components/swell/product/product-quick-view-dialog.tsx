@@ -27,7 +27,14 @@ export function ProductQuickViewDialog({ product, open, onClose }: { product: Pr
                 <DialogHeader className="gap-4">
                     <DialogTitle className="mr-4">{product.brand.name} {product.name}</DialogTitle>
 
-                    <span className="text-2xl font-bold text-primary">{product.discount_price ? product.discount_price.toFixed(2) : product.price.toFixed(2)} €</span>
+                    {product.discount_price != null ? (
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-2xl font-bold text-primary">{product.discount_price.toFixed(2)} €</span>
+                            <span className="text-base mb-auto line-through text-muted-foreground">{product.price.toFixed(2)} €</span>
+                        </div>
+                    ) : (
+                        <span className="text-2xl font-bold text-primary">{product.price.toFixed(2)} €</span>
+                    )}
 
                     <DialogDescription>
                         {product.short_description}

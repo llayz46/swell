@@ -14,7 +14,7 @@ export function ProductBreadcrumb({ category, product }: { category: { name: str
             <BreadcrumbList>
                 <BreadcrumbItem>
                     <BreadcrumbLink asChild>
-                        <Link href="/public">Accueil</Link>
+                        <Link href="/">Accueil</Link>
                     </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
