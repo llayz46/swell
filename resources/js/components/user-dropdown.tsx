@@ -14,7 +14,7 @@ import {
     LogOutIcon,
     ShieldCheckIcon,
     UserIcon,
-    CalendarIcon
+    CalendarIcon, SettingsIcon
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { SharedData, User } from '@/types';
@@ -68,6 +68,12 @@ export function UserDropdown({ user }: { user: User }) {
                         <Link href="/orders" className="flex items-center gap-2">
                             <CalendarIcon size={16} className="opacity-60" aria-hidden="true" />
                             <span>Commandes</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/settings" className="flex items-center gap-2">
+                            <SettingsIcon size={16} className="opacity-60" aria-hidden="true" />
+                            <span>Paramètres</span>
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
