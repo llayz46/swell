@@ -47,7 +47,10 @@ class CreateStripeCheckoutSession
      */
     private function formatCartItems(Collection $items)
     {
-        return $items->loadMissing('product.brand')->map(function (CartItem $item) {
+        return $items->loadMissing('product.brand', 'product.options')->map(function (CartItem $item) {
+            if($item->product->options) $variant = $this->resolveVariantFromOptions($item);
+            dd($variant);
+
             return [
                 'price_data' => [
                     'currency' => 'EUR',
@@ -104,5 +107,46 @@ class CreateStripeCheckoutSession
                     ],
                 ]
             );
+    }
+
+    private function resolveVariantFromOptions(CartItem $item)
+    {
+        if (!method_exists($item->product, 'options')) {
+            return null;
+        }
+
+        $optionPairs = collect($item->options ?? [])->map(function ($o) {
+            if (is_array($o)) {
+                return [
+                    $o['option_id'] ?? null,
+                    $o['option_value_id'] ?? null,
+                ];
+            }
+
+            return [
+                $o->option_id ?? null,
+                $o->option_value_id ?? null,
+            ];
+        })->filter(function ($pair) {
+            return !empty($pair[0]) && !empty($pair[1]);
+        })->values()->all();
+
+        if (empty($optionPairs)) {
+            return null;
+        }
+
+        $query = $item->product->options();
+
+        foreach ($optionPairs as [$optId, $valId]) {
+            $optId = (int) $optId;
+            $valId = (int) $valId;
+
+            $query->whereHas('values', function ($sq) use ($optId, $valId) {
+                $sq->where('option_id', $optId)
+                    ->where('id', $valId);
+            });
+        }
+
+        return $query->first();
     }
 }

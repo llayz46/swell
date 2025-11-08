@@ -34,7 +34,7 @@ class HandleProduct
             'meta_keywords' => $data['meta_keywords'] ?? null,
             'brand_id' => $data['brand_id'] ?? null,
             'category_id' => $data['category_id'] ?? null,
-            'collection_id' => $data['group_id'] ?? null,
+            'collection_id' => $data['collection_id'] ?? null,
         ]);
 
         if (isset($data['options'])) $this->handleOptions($product, $data['options']);

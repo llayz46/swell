@@ -14,14 +14,18 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 interface DashboardProps {
-    clients: number;
-    products: number;
-    orders: number;
+    totalUsers: number;
+    newUsers: number;
+    activeProducts: number;
+    totalOrders: number;
+    ordersPercentageChange: number;
+    totalRevenue: number;
+    revenuePercentageChange: number;
     lastProducts: Product[];
     lastOrders: Order[];
 }
 
-export default function Dashboard({ clients, products, orders, lastProducts, lastOrders }: DashboardProps) {
+export default function Dashboard({ totalUsers, newUsers, activeProducts, totalOrders, ordersPercentageChange, totalRevenue, revenuePercentageChange, lastProducts, lastOrders }: DashboardProps) {
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard Administrateur" />
@@ -36,8 +40,8 @@ export default function Dashboard({ clients, products, orders, lastProducts, las
                             <DollarSign className="size-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">€45,231.89</div>
-                            <p className="text-xs text-muted-foreground">+20.1% par rapport au mois dernier</p>
+                            <div className="text-2xl font-bold">{totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</div>
+                            <p className="text-xs text-muted-foreground">+{revenuePercentageChange}% par rapport au mois dernier</p>
                         </CardContent>
                     </Card>
                     <Card>
@@ -46,18 +50,18 @@ export default function Dashboard({ clients, products, orders, lastProducts, las
                             <CreditCard className="size-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">+{orders}</div>
-                            <p className="text-xs text-muted-foreground">+10.1% par rapport au mois dernier</p>
+                            <div className="text-2xl font-bold">+{totalOrders}</div>
+                            <p className="text-xs text-muted-foreground">+{ordersPercentageChange}% par rapport au mois dernier</p>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Clients</CardTitle>
+                            <CardTitle className="text-sm font-medium">Utilisateurs</CardTitle>
                             <Users className="size-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">+{clients}</div>
-                            <p className="text-xs text-muted-foreground">+19.5% par rapport au mois dernier</p>
+                            <div className="text-2xl font-bold">{totalUsers}</div>
+                            <p className="text-xs text-muted-foreground">{newUsers > 0 ? `+${newUsers}` : newUsers} nouveaux utilisateurs ce mois</p>
                         </CardContent>
                     </Card>
                     <Card>
@@ -66,7 +70,7 @@ export default function Dashboard({ clients, products, orders, lastProducts, las
                             <Activity className="size-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{products}</div>
+                            <div className="text-2xl font-bold">{activeProducts}</div>
                             <p className="text-xs text-muted-foreground">+7 nouveaux produits cette semaine</p>
                         </CardContent>
                     </Card>
