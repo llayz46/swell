@@ -27,6 +27,17 @@ class AdminController extends Controller
         $lastMonthRevenue = Order::whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])->sum('amount_total');
         $revenuePercentageChange = $lastMonthRevenue > 0 ? round((($currentMonthRevenue - $lastMonthRevenue) / $lastMonthRevenue) * 100, 2) : 0;
 
+        $monthlyRevenue = collect(range(5, 0))->map(function ($monthsAgo) {
+            $startOfMonth = now()->subMonths($monthsAgo)->startOfMonth();
+            $endOfMonth = now()->subMonths($monthsAgo)->endOfMonth();
+
+            return [
+                'month' => $startOfMonth->format('F'),
+                'revenue' => Order::whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                    ->sum('amount_total')
+            ];
+        });
+
         $lastProducts = Product::orderBy('created_at', 'desc')->with(['brand:id,name', 'category:id,name'])->take(5)->get();
         $lastOrders = Order::orderBy('created_at', 'desc')->with('user:id,name')->take(5)->get();
 
@@ -40,6 +51,8 @@ class AdminController extends Controller
             'revenuePercentageChange' => fn () => $revenuePercentageChange,
             'lastProducts' => fn () => ProductResource::collection($lastProducts),
             'lastOrders' => fn () => OrderResource::collection($lastOrders),
+            'monthlyRevenue' => fn () => $monthlyRevenue,
+            'topSellingProducts' => fn () => ProductResource::collection(Product::with(['brand:id,name', 'category:id,name'])->popular()->take(5)->get()),
         ]);
     }
 }

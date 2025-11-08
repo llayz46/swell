@@ -31,6 +31,7 @@ class ProductFactory extends Factory
             'cost_price' => $this->faker->randomFloat(2, 5, 500),
             'stock' => $this->faker->numberBetween(0, 100),
             'reorder_level' => $this->faker->numberBetween(1, 20),
+            'sales_count' => $this->faker->numberBetween(1, 200),
             'status' => true,
             'meta_title' => $name,
             'meta_description' => $this->faker->sentence(),

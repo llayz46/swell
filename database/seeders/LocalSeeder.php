@@ -107,5 +107,6 @@ class LocalSeeder extends Seeder
         }
 
         $this->call(LocalProductSeeder::class);
+        $this->call(LocalDashboardAdminSeeder::class);
     }
 }

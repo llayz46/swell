@@ -28,6 +28,7 @@ return new class extends Migration
 
             $table->unsignedInteger('stock')->default(0);
             $table->unsignedInteger('reorder_level')->default(10);
+            $table->unsignedInteger('sales_count')->default(0);
 
             $table->boolean('status')->default(true);
 

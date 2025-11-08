@@ -142,6 +142,7 @@ export interface Product {
     cost_price: number;
     stock: number;
     reorder_level: number;
+    sales_count: number;
     isNew: boolean;
     isWishlisted: boolean;
     brand: Brand;

@@ -32,6 +32,7 @@ class Product extends Model
         'cost_price',
         'stock',
         'reorder_level',
+        'sales_count',
         'status',
         'meta_title',
         'meta_description',
@@ -92,6 +93,11 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function getPrice(): Attribute
     {
         return Attribute::make(
@@ -102,5 +108,15 @@ class Product extends Model
     public function isOutOfStock(): bool
     {
         return $this->stock <= 0;
+    }
+
+    public function incrementSales(int $quantity = 1): void
+    {
+        $this->increment('sales_count', $quantity);
+    }
+
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->orderBy('sales_count', 'desc')->limit($limit);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\OrderItem;
+use App\Observers\OrderItemObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
@@ -23,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
     {
         JsonResource::withoutWrapping();
         Model::preventLazyLoading(!app()->isProduction());
+        OrderItem::observe(OrderItemObserver::class);
     }
 }

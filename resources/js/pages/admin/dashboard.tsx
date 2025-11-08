@@ -1,10 +1,12 @@
-import { Head, Link } from '@inertiajs/react';
-import AdminLayout from '@/layouts/admin-layout';
-import type { BreadcrumbItem, Order, Product } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AdminLayout from '@/layouts/admin-layout';
+import type { BreadcrumbItem, Order, Product } from '@/types';
+import { Head, Link } from '@inertiajs/react';
 import { Activity, ArrowRight, CreditCard, DollarSign, Users } from 'lucide-react';
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,14 +25,43 @@ interface DashboardProps {
     revenuePercentageChange: number;
     lastProducts: Product[];
     lastOrders: Order[];
+    monthlyRevenue: { month: string; revenue: number }[];
+    topSellingProducts: Product[];
 }
 
-export default function Dashboard({ totalUsers, newUsers, activeProducts, totalOrders, ordersPercentageChange, totalRevenue, revenuePercentageChange, lastProducts, lastOrders }: DashboardProps) {
+export default function Dashboard({
+    totalUsers,
+    newUsers,
+    activeProducts,
+    totalOrders,
+    ordersPercentageChange,
+    totalRevenue,
+    revenuePercentageChange,
+    lastProducts,
+    lastOrders,
+    monthlyRevenue,
+    topSellingProducts,
+}: DashboardProps) {
+    const chartConfig = {
+        desktop: {
+            label: 'Revenues',
+            color: 'var(--chart-1)',
+            icon: Activity,
+        },
+    } satisfies ChartConfig;
+
+    const chartData = monthlyRevenue.map((data) => ({
+        month: data.month,
+        Revenu: data.revenue,
+    }));
+
+    console.log(topSellingProducts)
+
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard Administrateur" />
 
-            <div className="flex flex-col gap-6 mt-12">
+            <div className="mt-12 flex flex-col gap-6">
                 <h1 className="text-3xl font-bold tracking-tight">Dashboard Administrateur</h1>
 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -51,7 +82,7 @@ export default function Dashboard({ totalUsers, newUsers, activeProducts, totalO
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">+{totalOrders}</div>
-                            <p className="text-xs text-muted-foreground">+{ordersPercentageChange}% par rapport au mois dernier</p>
+                            <p className="text-xs text-muted-foreground">{ordersPercentageChange}% par rapport au mois dernier</p>
                         </CardContent>
                     </Card>
                     <Card>
@@ -92,9 +123,33 @@ export default function Dashboard({ totalUsers, newUsers, activeProducts, totalO
                                     <CardDescription>Chiffre d'affaires mensuel</CardDescription>
                                 </CardHeader>
                                 <CardContent className="pl-2">
-                                    <div className="h-[200px] w-full bg-muted/20 flex items-center justify-center rounded">
-                                        <p className="text-muted-foreground">Graphique de chiffre d'affaires</p>
-                                    </div>
+                                    <ChartContainer config={chartConfig} className="max-h-64 w-full">
+                                        <AreaChart
+                                            accessibilityLayer
+                                            data={chartData}
+                                            margin={{
+                                                left: 12,
+                                                right: 12,
+                                            }}
+                                        >
+                                            <CartesianGrid vertical={false} />
+                                            <XAxis
+                                                dataKey="month"
+                                                tickLine={false}
+                                                axisLine={false}
+                                                tickMargin={8}
+                                                tickFormatter={(value) => value.slice(0, 3)}
+                                            />
+                                            <ChartTooltip cursor={false} content={<ChartTooltipContent hideIndicator />} />
+                                            <Area
+                                                dataKey="Revenu"
+                                                type="linear"
+                                                fill="var(--color-desktop)"
+                                                fillOpacity={0.4}
+                                                stroke="var(--color-desktop)"
+                                            />
+                                        </AreaChart>
+                                    </ChartContainer>
                                 </CardContent>
                             </Card>
 
@@ -102,30 +157,21 @@ export default function Dashboard({ totalUsers, newUsers, activeProducts, totalO
                             <Card className="lg:col-span-3">
                                 <CardHeader>
                                     <CardTitle>Produits les plus vendus</CardTitle>
-                                    <CardDescription>Top 5 des produits ce mois-ci</CardDescription>
+                                    <CardDescription>Les 5 produits les plus vendus ce mois-ci</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-2">
-                                        <div className="flex items-center">
-                                            <span className="font-medium">1. Clavier Gaming RGB Pro</span>
-                                            <span className="ml-auto">142 vendus</span>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <span className="font-medium">2. Souris Gaming sans fil</span>
-                                            <span className="ml-auto">98 vendus</span>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <span className="font-medium">3. Casque Gaming 7.1</span>
-                                            <span className="ml-auto">87 vendus</span>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <span className="font-medium">4. Tapis de souris XXL</span>
-                                            <span className="ml-auto">64 vendus</span>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <span className="font-medium">5. Moniteur 27" 144Hz</span>
-                                            <span className="ml-auto">53 vendus</span>
-                                        </div>
+                                        {topSellingProducts.map((product, index) => (
+                                            <div key={product.id} className="flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <span className="text-sm font-medium text-muted-foreground w-2">{index + 1}.</span>
+                                                    <Link href={route('product.show', product.slug)} className="font-medium hover:underline">
+                                                        {product.brand?.name} {product.name}
+                                                    </Link>
+                                                </div>
+                                                <span className="text-sm font-medium text-primary">{product.sales_count ?? 0} vendus</span>
+                                            </div>
+                                        ))}
                                     </div>
                                 </CardContent>
                             </Card>
@@ -154,13 +200,15 @@ export default function Dashboard({ totalUsers, newUsers, activeProducts, totalO
                                                 <TableCell className="font-medium">#{order.id}</TableCell>
                                                 <TableCell>{order.user?.name}</TableCell>
                                                 <TableCell>{order.created_at}</TableCell>
-                                                <TableCell className="text-right">{(order.amount_total / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</TableCell>
+                                                <TableCell className="text-right">
+                                                    {(order.amount_total / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                                                </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
                                 <div className="mt-4 flex justify-end">
-                                    <Link className="flex gap-1 items-center text-sm font-medium text-primary hover:underline" href="/admin">
+                                    <Link className="flex items-center gap-1 text-sm font-medium text-primary hover:underline" href="/admin">
                                         Voir toutes les commandes
                                         <ArrowRight size={16} />
                                     </Link>
@@ -189,27 +237,36 @@ export default function Dashboard({ totalUsers, newUsers, activeProducts, totalO
                                     <TableBody>
                                         {lastProducts.map((product) => (
                                             <TableRow key={product.id}>
-                                                <TableCell className="font-medium">{product.id}</TableCell>
-                                                <TableCell>{product.brand?.name} {product.name}</TableCell>
+                                                <TableCell className="font-medium">#{product.id}</TableCell>
                                                 <TableCell>
-                                                    <span className={`inline-block px-2 py-1 rounded-full text-xs ${
-                                                        product.stock > 30
-                                                            ? 'bg-green-100 text-green-800'
-                                                            : product.stock > product.reorder_level
-                                                            ? 'bg-yellow-100 text-yellow-800'
-                                                            : 'bg-red-100 text-red-800'
-                                                    }`}>
+                                                    {product.brand?.name} {product.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <span
+                                                        className={`inline-block rounded-full px-2 py-1 text-xs ${
+                                                            product.stock > 30
+                                                                ? 'bg-green-100 text-green-800'
+                                                                : product.stock > product.reorder_level
+                                                                  ? 'bg-yellow-100 text-yellow-800'
+                                                                  : 'bg-red-100 text-red-800'
+                                                        }`}
+                                                    >
                                                         {product.stock}
                                                     </span>
                                                 </TableCell>
                                                 <TableCell>{product.category?.name}</TableCell>
-                                                <TableCell className="text-right">{product.discount_price?.toFixed(2) ?? product.price.toFixed(2)} €</TableCell>
+                                                <TableCell className="text-right">
+                                                    {product.discount_price?.toFixed(2) ?? product.price.toFixed(2)} €
+                                                </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
                                 <div className="mt-4 flex justify-end">
-                                    <Link className="flex gap-1 items-center text-sm font-medium text-primary hover:underline" href={route('admin.products.index')}>
+                                    <Link
+                                        className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                                        href={route('admin.products.index')}
+                                    >
                                         Voir tous les produits
                                         <ArrowRight size={16} />
                                     </Link>
@@ -220,5 +277,5 @@ export default function Dashboard({ totalUsers, newUsers, activeProducts, totalO
                 </Tabs>
             </div>
         </AdminLayout>
-    )
+    );
 }
