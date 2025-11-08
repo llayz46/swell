@@ -1,40 +1,32 @@
-import { Head } from '@inertiajs/react';
+import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
+import { CollectionDialog } from '@/components/swell/product/collection-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, Collection } from '@/types';
+import { Head, Link } from '@inertiajs/react';
+import { Box, Boxes, Edit, Eye, MoreHorizontal, Search, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Search, Edit, Trash2, MoreHorizontal, Boxes, Box } from 'lucide-react';
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CollectionDialog } from '@/components/swell/product/collection-dialog';
 
-export default function Categories({ breadcrumbs: initialBreadcrumbs, collections }: { breadcrumbs: BreadcrumbItem[], collections: Collection[] }) {
-    const [searchTerm, setSearchTerm] = useState("")
+export default function Categories({ breadcrumbs: initialBreadcrumbs, collections }: { breadcrumbs: BreadcrumbItem[]; collections: Collection[] }) {
+    const [searchTerm, setSearchTerm] = useState('');
     const [deleteCollection, setDeleteCollection] = useState<Collection | null>(null);
     const [openCollectionDialog, setOpenCollectionDialog] = useState<boolean>(false);
     const [editCollection, setEditCollection] = useState<Collection | null>(null);
-    const [sortBy, setSortBy] = useState("title")
+    const [sortBy, setSortBy] = useState('title');
 
     const localBreadcrumbs = useMemo(() => {
         if (openCollectionDialog) {
             return [
                 ...initialBreadcrumbs,
                 {
-                    title: editCollection
-                        ? `Modifier : ${editCollection.title}`
-                        : 'Nouvelle collection',
-                    href: "#"
+                    title: editCollection ? `Modifier : ${editCollection.title}` : 'Nouvelle collection',
+                    href: '#',
                 },
             ];
         }
@@ -45,9 +37,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
         let filtered = collections;
 
         if (searchTerm) {
-            filtered = filtered.filter(collection =>
-                collection.title.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+            filtered = filtered.filter((collection) => collection.title.toLowerCase().includes(searchTerm.toLowerCase()));
         }
 
         return [...filtered].sort((a, b) => {
@@ -60,7 +50,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                     return a.title.localeCompare(b.title);
             }
         });
-    }
+    };
 
     const filteredCollections = filterCollections(collections, searchTerm, sortBy);
 
@@ -76,31 +66,31 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
 
             return acc + (passesFilter ? 1 : 0);
         }, 0);
-    }
+    };
 
     return (
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les collections" />
 
-            <Card className="mt-4 py-3 sm:py-4 border-border bg-card">
+            <Card className="mt-4 border-border bg-card py-3 sm:py-4">
                 <CardContent className="px-3 sm:px-4">
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                         <div className="flex-1">
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
                                 <Input
                                     placeholder="Rechercher une collection..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="pl-10 bg-background border-border text-foreground placeholder:text-muted-foreground"
+                                    className="border-border bg-background pl-10 text-foreground placeholder:text-muted-foreground"
                                 />
                             </div>
                         </div>
                         <Select value={sortBy} onValueChange={setSortBy}>
-                            <SelectTrigger className="sm:w-40 bg-background border-border text-foreground">
+                            <SelectTrigger className="border-border bg-background text-foreground sm:w-40">
                                 <SelectValue />
                             </SelectTrigger>
-                            <SelectContent className="bg-popover border-border">
+                            <SelectContent className="border-border bg-popover">
                                 <SelectItem value="title">Nom A-Z</SelectItem>
                                 <SelectItem value="date">Date création</SelectItem>
                             </SelectContent>
@@ -109,9 +99,11 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                 </CardContent>
             </Card>
 
-            <Card className="border-border bg-card pt-4 pb-0 gap-0">
-                <CardHeader className="px-4 pb-4 border-b border-border sm:flex-row justify-between">
-                    <CardTitle className="text-foreground text-lg">Liste des collections ({countCollectionsWithFilter(filteredCollections)})</CardTitle>
+            <Card className="gap-0 border-border bg-card pt-4 pb-0">
+                <CardHeader className="justify-between border-b border-border px-4 pb-4 sm:flex-row">
+                    <CardTitle className="text-lg text-foreground">
+                        Liste des collections ({countCollectionsWithFilter(filteredCollections)})
+                    </CardTitle>
 
                     <CollectionDialog
                         open={openCollectionDialog}
@@ -127,7 +119,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                 <CardContent className="p-0">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-border hover:bg-transparent *:text-muted-foreground *:font-medium">
+                            <TableRow className="border-border *:font-medium *:text-muted-foreground hover:bg-transparent">
                                 <TableHead>Nom</TableHead>
                                 <TableHead>Slug</TableHead>
                                 <TableHead className="text-center">Produits</TableHead>
@@ -136,7 +128,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                         </TableHeader>
                         <TableBody>
                             {filteredCollections.length > 0 ? (
-                                filteredCollections.map(collection => {
+                                filteredCollections.map((collection) => {
                                     return (
                                         <TableRow key={collection.id} className="border-border hover:bg-muted/50">
                                             <TableCell className="font-medium">
@@ -158,6 +150,15 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                                         </Button>
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end" className="border-border bg-popover">
+                                                        <DropdownMenuItem className="cursor-pointer text-foreground hover:bg-muted">
+                                                            <Link
+                                                                href={route('admin.products.index', { collection_id: collection.id })}
+                                                                className="flex items-center gap-2"
+                                                            >
+                                                                <Eye className="mr-2 size-4" />
+                                                                Voir les produits
+                                                            </Link>
+                                                        </DropdownMenuItem>
                                                         <DropdownMenuItem
                                                             className="cursor-pointer text-foreground hover:bg-muted"
                                                             onClick={() => {
@@ -165,7 +166,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                                                 setEditCollection(collection);
                                                             }}
                                                         >
-                                                            <Edit className="mr-2 h-4 w-4" />
+                                                            <Edit className="mr-2 size-4" />
                                                             Modifier
                                                         </DropdownMenuItem>
                                                         <DropdownMenuSeparator className="bg-border" />
@@ -180,12 +181,12 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                                 </DropdownMenu>
                                             </TableCell>
                                         </TableRow>
-                                    )
+                                    );
                                 })
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                                        {searchTerm ? "Aucune marque trouvée" : "Aucune marque disponible"}
+                                    <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
+                                        {searchTerm ? 'Aucune marque trouvée' : 'Aucune marque disponible'}
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -194,19 +195,17 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                 </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <Card className="border-border bg-card">
                     <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Total collections</p>
-                                <p className="text-2xl font-bold text-foreground">
-                                    {countCollectionsWithFilter(collections)}
-                                </p>
+                                <p className="text-2xl font-bold text-foreground">{countCollectionsWithFilter(collections)}</p>
                             </div>
                             <Badge
                                 variant="secondary"
-                                className="bg-muted text-muted-foreground size-8 rounded-full flex items-center justify-center"
+                                className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
                             >
                                 <Boxes />
                             </Badge>
@@ -225,7 +224,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                             </div>
                             <Badge
                                 variant="secondary"
-                                className="bg-muted text-muted-foreground h-8 w-8 rounded-full flex items-center justify-center"
+                                className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
                             >
                                 #
                             </Badge>
@@ -239,10 +238,10 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                             <div>
                                 <p className="text-sm text-muted-foreground">Sans produits</p>
                                 <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                                    {countCollectionsWithFilter(collections, collection => !collection.products_count)}
+                                    {countCollectionsWithFilter(collections, (collection) => !collection.products_count)}
                                 </p>
                             </div>
-                            <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 h-8 w-8 rounded-full flex items-center justify-center">
+                            <Badge className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
                                 !
                             </Badge>
                         </div>
@@ -261,5 +260,5 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                 prefix="La"
             />
         </AdminLayout>
-    )
+    );
 }
