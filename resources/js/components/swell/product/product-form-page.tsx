@@ -45,9 +45,10 @@ interface ProductFormType {
     }[];
     setDeleteProduct?: (product: Product) => void;
     isDuplicate: boolean;
+    preselectedCollectionId?: string;
 }
 
-export function ProductFormPage({ product, brands, collections, setDeleteProduct, isDuplicate = false }: ProductFormType) {
+export function ProductFormPage({ product, brands, collections, setDeleteProduct, isDuplicate = false, preselectedCollectionId }: ProductFormType) {
     const { data, setData, post, errors, processing } = useForm<ProductForm>({
         name: product?.name ?? '',
         sku: product?.sku ?? null,
@@ -80,7 +81,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
         meta_keywords: product?.meta_keywords ?? null,
         brand_id: product?.brand.id ?? null,
         category_id: product?.category ? String(product?.category.id) : '',
-        collection_id: product?.collection ? String(product?.collection.id) : '',
+        collection_id: product?.collection ? String(product?.collection.id) : preselectedCollectionId ?? '',
     });
 
     const [initialData, setInitialData] = useState(data);

@@ -123,7 +123,10 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                     )})
                                 </div>
 
-                                <Link href={route('admin.products.create')} className={buttonVariants({ variant: 'outline' })}>
+                                <Link
+                                    href={route('admin.products.create', collectionId ? { collection_id: collectionId } : {})}
+                                    className={buttonVariants({ variant: 'outline' })}
+                                >
                                     <Plus />
                                     Ajouter un produit
                                 </Link>

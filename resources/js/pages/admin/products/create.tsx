@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, Product } from '@/types';
 import { ProductFormPage } from '@/components/swell/product/product-form-page';
@@ -12,6 +12,10 @@ interface ProductCreateType {
 }
 
 export default function Create({ breadcrumbs, brands, collections, product, duplicate }: ProductCreateType) {
+    const { url } = usePage();
+    const params = new URLSearchParams(url.split('?')[1]);
+    const collectionId = params.get('collection_id');
+
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Créer un produit" />
@@ -21,6 +25,7 @@ export default function Create({ breadcrumbs, brands, collections, product, dupl
                 collections={collections}
                 product={product}
                 isDuplicate={duplicate}
+                preselectedCollectionId={collectionId ?? undefined}
             />
         </AdminLayout>
     )
