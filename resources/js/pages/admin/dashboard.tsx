@@ -81,7 +81,7 @@ export default function Dashboard({
                             <CreditCard className="size-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">+{totalOrders}</div>
+                            <div className="text-2xl font-bold">{totalOrders}</div>
                             <p className="text-xs text-muted-foreground">
                                 {ordersPercentageChange > 0 ? `+${ordersPercentageChange}` : ordersPercentageChange}% par rapport au mois dernier
                             </p>
