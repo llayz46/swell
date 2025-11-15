@@ -44,7 +44,7 @@ class ProdSeeder extends Seeder
                 'Robes & Jupes',
                 'Vestes & Manteaux Femme',
                 'Lingerie',
-                'Chaussures',
+                'Chaussures Femme',
             ],
             'Homme' => [
                 'T-shirts & Polos',
@@ -52,7 +52,7 @@ class ProdSeeder extends Seeder
                 'Chemises',
                 'Sweats & Hoodies',
                 'Vestes & Manteaux Homme',
-                'Chaussures',
+                'Chaussures Homme',
             ],
             'Accessoires' => [
                 'Sacs & Bagages',
