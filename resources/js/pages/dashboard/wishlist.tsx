@@ -80,7 +80,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product, on
     return (
         <div className="flex items-center gap-4 rounded-md border p-3">
             <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm bg-neutral-700">
-                <img src={product.featured_image && getStorageUrl(product.featured_image.image_url)} alt={product.featured_image ? product.featured_image.alt_text : product.name} className="size-full object-cover" />
+                <img src={product.featured_image && getStorageUrl(product.featured_image.url)} alt={product.featured_image ? product.featured_image.alt_text : product.name} className="size-full object-cover" />
             </div>
 
             <div className="flex-grow">

@@ -55,8 +55,6 @@ export default function Dashboard({
         Revenu: data.revenue,
     }));
 
-    console.log(topSellingProducts)
-
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard Administrateur" />

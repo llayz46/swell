@@ -76,7 +76,7 @@ export default function Orders({ orders }: { orders: Order[] }) {
                                             <div className="w-16 h-16 rounded-md overflow-hidden bg-muted flex-shrink-0">
                                                 {item.product?.featured_image ? (
                                                     <img
-                                                        src={getStorageUrl(item.product.featured_image.image_url)}
+                                                        src={getStorageUrl(item.product.featured_image.url)}
                                                         alt={item.product.featured_image.alt_text}
                                                         className="size-full object-cover"
                                                     />

@@ -19,7 +19,7 @@ export function ProductQuickViewDialog({ product, open, onClose }: { product: Pr
         <Dialog open={open} onOpenChange={open => !open && onClose()}>
             <DialogContent className="flex gap-8 !max-w-3xl">
                 {product.featured_image ? (
-                    <img className="block h-72 object-cover aspect-square rounded-sm" src={getStorageUrl(product.featured_image.image_url)} alt={product.featured_image.alt_text} />
+                    <img className="block h-72 object-cover aspect-square rounded-sm" src={getStorageUrl(product.featured_image.url)} alt={product.featured_image.alt_text} />
                 ) : (
                     <span className="block h-72 aspect-square rounded-sm bg-muted"></span>
                 )}

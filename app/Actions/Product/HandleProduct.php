@@ -88,14 +88,14 @@ class HandleProduct
             $imageFile = $imgData['image_file'] ?? null;
 
             if ($imageFile instanceof UploadedFile) {
-                $path = $imageFile->store('product-images', 'public');
+                $path = $imageFile->store('product-images');
 
                 if (!empty($imgData['id'])) {
                     $productImage = ProductImage::find($imgData['id']);
 
                     if ($productImage) {
                         if ($productImage->image_url) {
-                            Storage::disk('public')->delete($productImage->image_url);
+                            Storage::delete($productImage->image_url);
                         }
 
                         $productImage->update([
@@ -143,7 +143,7 @@ class HandleProduct
 
             foreach ($imagesToDelete as $img) {
                 if ($img->image_url) {
-                    Storage::disk('public')->delete($img->image_url);
+                    Storage::delete($img->image_url);
                 }
 
                 $img->delete();

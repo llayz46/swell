@@ -22,7 +22,7 @@ export function ProductCard({ product, onQuickView }: { product: Product, onQuic
                 onMouseLeave={() => setIsHovered(false)}
             >
                 <img
-                    src={getStorageUrl(product.featured_image?.image_url)}
+                    src={getStorageUrl(product.featured_image?.url)}
                     alt={product.featured_image?.alt_text}
                     className="size-full object-cover transition-transform duration-500 bg-muted group-hover:scale-103"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

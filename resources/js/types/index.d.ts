@@ -59,6 +59,7 @@ export interface User {
     name: string;
     email: string;
     avatar?: string;
+    avatar_url?: string;
     roles: {
         id: number;
         name: string;
@@ -170,6 +171,7 @@ export type MetaLink = {
 export interface ProductImage {
     id: number;
     image_url: string;
+    url: string;
     alt_text: string;
     is_featured: boolean;
     order: number;

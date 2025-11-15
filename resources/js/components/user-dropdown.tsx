@@ -38,7 +38,7 @@ export function UserDropdown({ user }: { user: User }) {
             <DropdownMenuContent className="max-w-64" align="end">
                 <DropdownMenuLabel className="flex items-center gap-3">
                     <Avatar>
-                        <AvatarImage src={getStorageUrl(user.avatar)} alt={user.name} />
+                        <AvatarImage src={getStorageUrl(user.avatar_url)} alt={user.name} />
                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                             {getInitials(user.name)}
                         </AvatarFallback>

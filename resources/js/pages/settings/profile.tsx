@@ -64,7 +64,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                     <HeadingSmall title="Information du profile" description="Modifier votre avatar, nom et adresse email" />
 
                     <form onSubmit={submit} className="space-y-6">
-                        <AvatarProfileInput onFileChange={(file) => setData('avatar', file)} value={auth.user.avatar ?? null} />
+                        <AvatarProfileInput onFileChange={(file) => setData('avatar', file)} value={auth.user.avatar_url ?? null} />
 
                         <div className="grid gap-2">
                             <Label htmlFor="name">Nom</Label>

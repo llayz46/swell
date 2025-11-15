@@ -62,7 +62,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
         status: !isDuplicate && Boolean(product?.status),
         images: !isDuplicate && product?.images ? product.images.map(img => ({
             id: img.id ?? null,
-            image_url: img.image_url,
+            image_url: img.url,
             image_file: null,
             alt_text: img.alt_text ?? '',
             is_featured: Boolean(img.is_featured),

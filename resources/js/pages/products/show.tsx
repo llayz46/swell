@@ -65,7 +65,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                     <div className="space-y-4">
                         <div className="border bg-card rounded-md overflow-hidden relative aspect-square">
                             <img
-                                src={getStorageUrl(imageToShow?.image_url)}
+                                src={getStorageUrl(imageToShow?.url)}
                                 alt={imageToShow?.alt_text || product.name}
                                 className="object-cover size-full"
                             />
@@ -78,7 +78,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                             {product.images?.map(image => (
                                 <div key={image.id} className="border bg-card rounded-md overflow-hidden aspect-[16/11] flex items-center justify-center">
                                     <img
-                                        src={getStorageUrl(image.image_url)}
+                                        src={getStorageUrl(image.url)}
                                         alt={image.alt_text}
                                         className="object-cover size-full"
                                         onClick={() => setImageToShow(image)}
@@ -267,7 +267,7 @@ function RelatedProduct({ product, currentProductId }: { product: Product, curre
         <article className={cn("px-4 py-2 border bg-card rounded-md", !current ? 'hover:bg-secondary/10 transition-colors' : 'border-ring')}>
             <div className="flex items-center gap-4">
                 <div className="relative w-16 h-16 rounded-sm overflow-hidden">
-                <img src={getStorageUrl(product.featured_image?.image_url)} alt={product.featured_image?.alt_text} className="size-full bg-muted object-cover" />                </div>
+                <img src={getStorageUrl(product.featured_image?.url)} alt={product.featured_image?.alt_text} className="size-full bg-muted object-cover" />                </div>
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                         {current ? (

@@ -39,7 +39,7 @@ export function Review({ review }: { review: ReviewType }) {
                 <div className="space-y-4">
                     <div className="flex items-center gap-4">
                         <Avatar className="h-10 w-10">
-                            <AvatarImage src={getStorageUrl(review.user?.avatar)} alt="User avatar" />
+                            <AvatarImage src={getStorageUrl(review.user?.avatar_url)} alt="User avatar" />
                             <AvatarFallback className="bg-muted text-muted-foreground">
                                 {getInitials(review.user?.name || '')}
                             </AvatarFallback>

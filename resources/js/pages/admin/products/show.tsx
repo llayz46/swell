@@ -31,7 +31,6 @@ interface ProductType {
 export default function Show({ breadcrumbs, product }: ProductType) {
     const [selectedImage, setSelectedImage] = useState<number>(0);
     const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
-    console.log(product)
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
@@ -74,7 +73,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                 <div className={product.images?.length ? 'space-y-4' : ''}>
                                     <div className="aspect-square overflow-hidden rounded-sm bg-muted">
                                         <img
-                                            src={getStorageUrl(product.images?.[selectedImage]?.image_url)}
+                                            src={getStorageUrl(product.images?.[selectedImage]?.url)}
                                             alt={product.images?.[selectedImage]?.alt_text || product.name}
                                             width={400}
                                             height={400}
@@ -91,7 +90,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                 }`}
                                             >
                                                 <img
-                                                    src={getStorageUrl(image.image_url)}
+                                                    src={getStorageUrl(image.url)}
                                                     alt={image.alt_text}
                                                     width={100}
                                                     height={100}
