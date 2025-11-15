@@ -22,7 +22,7 @@ class CategoryFactory extends Factory
             'slug' => Str::slug($name),
             'description' => $this->faker->sentence(),
             'parent_id' => null,
-            'status' => 'active',
+            'status' => true,
         ];
     }
 }
