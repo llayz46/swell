@@ -72,7 +72,9 @@ export default function Dashboard({
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">{totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</div>
-                            <p className="text-xs text-muted-foreground">+{revenuePercentageChange}% par rapport au mois dernier</p>
+                            <p className="text-xs text-muted-foreground">
+                                {revenuePercentageChange > 0 ? `+${revenuePercentageChange}` : revenuePercentageChange}% par rapport au mois dernier
+                            </p>
                         </CardContent>
                     </Card>
                     <Card>
@@ -82,7 +84,9 @@ export default function Dashboard({
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">+{totalOrders}</div>
-                            <p className="text-xs text-muted-foreground">{ordersPercentageChange}% par rapport au mois dernier</p>
+                            <p className="text-xs text-muted-foreground">
+                                {ordersPercentageChange > 0 ? `+${ordersPercentageChange}` : ordersPercentageChange}% par rapport au mois dernier
+                            </p>
                         </CardContent>
                     </Card>
                     <Card>
@@ -164,7 +168,7 @@ export default function Dashboard({
                                         {topSellingProducts.map((product, index) => (
                                             <div key={product.id} className="flex items-center justify-between">
                                                 <div className="flex items-center gap-3">
-                                                    <span className="text-sm font-medium text-muted-foreground w-2">{index + 1}.</span>
+                                                    <span className="w-2 text-sm font-medium text-muted-foreground">{index + 1}.</span>
                                                     <Link href={route('product.show', product.slug)} className="font-medium hover:underline">
                                                         {product.brand?.name} {product.name}
                                                     </Link>
