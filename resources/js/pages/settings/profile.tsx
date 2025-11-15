@@ -34,7 +34,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
     const { auth } = usePage<SharedData>().props;
 
     const { data, setData, post, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
-        avatar: auth.user.avatar || null,
+        avatar: null,
         name: auth.user.name,
         email: auth.user.email,
     });
