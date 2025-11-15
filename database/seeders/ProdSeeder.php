@@ -85,7 +85,7 @@ class ProdSeeder extends Seeder
         ];
 
         foreach ($brands as $brand) {
-            $brand = Brand::factory()->create([
+            Brand::factory()->create([
                 'name' => $brand,
                 'slug' => Str::slug($brand),
             ]);
