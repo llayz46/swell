@@ -195,7 +195,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                 </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 mb-10">
                 <SwellCard>
                     <SwellCardContent>
                         <div className="flex items-center justify-between">

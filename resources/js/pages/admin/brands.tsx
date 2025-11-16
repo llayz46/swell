@@ -1,6 +1,6 @@
 import type { Brand, BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
 import { Edit, MoreHorizontal, Search, Tags, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -203,9 +203,9 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                 </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Total marques</p>
@@ -220,11 +220,11 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                 <Tags />
                             </Badge>
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
 
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Total produits</p>
@@ -239,11 +239,11 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                 #
                             </Badge>
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
 
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Sans produits</p>
@@ -255,8 +255,8 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                 !
                             </Badge>
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
             </div>
 
             <ConfirmDeleteDialog
