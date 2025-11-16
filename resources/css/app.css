@@ -183,4 +183,25 @@
             transparent
         );
     }
+
+    .shadow-inner {
+        --tw-shadow: 0px 0px 1.5px 0.5px var(--tw-shadow-color, #0000001f) inset;
+        box-shadow: var(--tw-inset-shadow),
+        var(--tw-inset-ring-shadow),
+        var(--tw-ring-offset-shadow),
+        var(--tw-ring-shadow),
+        var(--tw-shadow);
+    }
+
+    .shadow-xs-with-border {
+        --tw-shadow:
+            0px 0px 0px 1px var(--tw-shadow-color, var(--color-slate-light-alpha, #001a3329)),
+            0px 0px 1px 0px var(--tw-shadow-color, #00000008),
+            0px 1px 2px 0px var(--tw-shadow-color, #0000000f);
+        box-shadow: var(--tw-inset-shadow),
+        var(--tw-inset-ring-shadow),
+        var(--tw-ring-offset-shadow),
+        var(--tw-ring-shadow),
+        var(--tw-shadow);
+    }
 }

@@ -15,16 +15,16 @@ export function ProductCard({ product, onQuickView }: { product: Product, onQuic
     const { swell } = usePage<SharedData>().props
 
     return (
-        <Card className="group gap-0 overflow-hidden h-full rounded-md p-0 transition-all duration-300 hover:shadow-md">
+        <Card className="bg-slate-light shadow-inner border-transparent p-1 gap-0 overflow-hidden h-full rounded-xl">
             <div
-                className="relative aspect-[4/3] overflow-hidden bg-gray-100"
+                className="relative aspect-[4/3] overflow-hidden rounded-lg shadow-xs-with-border"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
                 <img
                     src={getStorageUrl(product.featured_image?.url)}
                     alt={product.featured_image?.alt_text}
-                    className="size-full object-cover transition-transform duration-500 bg-muted group-hover:scale-103"
+                    className="rounded-lg size-full object-cover bg-muted"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
 
@@ -37,7 +37,7 @@ export function ProductCard({ product, onQuickView }: { product: Product, onQuic
                         <Button
                             size="sm"
                             variant="secondary"
-                            className="size-10 cursor-pointer bg-white p-0 shadow-md backdrop-blur-sm hover:bg-gray-100"
+                            className="size-9 cursor-pointer p-0 rounded-md !bg-slate-light shadow-inner"
                             onClick={() => addItem(product)}
                         >
                             <Heart className="size-4 dark:text-background" />
@@ -48,7 +48,7 @@ export function ProductCard({ product, onQuickView }: { product: Product, onQuic
                     <Button
                         size="sm"
                         variant="secondary"
-                        className="size-10 cursor-pointer bg-white p-0 shadow-md backdrop-blur-sm hover:bg-gray-100"
+                        className="size-9 cursor-pointer p-0 rounded-md !bg-slate-light shadow-inner"
                         onClick={onQuickView}
                     >
                         <Eye className="size-4 dark:text-background" />
@@ -57,18 +57,9 @@ export function ProductCard({ product, onQuickView }: { product: Product, onQuic
                 </div>
             </div>
 
-            <CardContent className="flex flex-1 flex-col p-4">
-                <div className="h-6 mb-1">
-                    {product.isNew && (
-                        <Badge variant="secondary" className="flex w-fit items-center gap-1.5 rounded-sm px-1.5 py-0.75 text-[10px] font-semibold dark:text-white">
-                            <Star size={16} className="fill-yellow-400 text-yellow-400" />
-                            NEW
-                        </Badge>
-                    )}
-                </div>
-
+            <CardContent className="flex flex-1 flex-col p-3">
                 <div className="mb-2">
-                    <Link href={route('product.show', product.slug)} className="mt-3 mb-1 line-clamp-1 text-base leading-tight font-semibold hover:underline">
+                    <Link href={route('product.show', product.slug)} className="mb-1 line-clamp-1 text-base leading-tight font-semibold hover:underline">
                         {product.brand.name} {product.name}
                     </Link>
 
@@ -82,9 +73,17 @@ export function ProductCard({ product, onQuickView }: { product: Product, onQuic
                     )}
                 </div>
 
-                <div className="mt-auto flex items-center gap-2">
-                    <span className={cn("block size-2 rounded-full", product.stock === 0 ? "bg-red-500/90" : product.stock < 11 ? "bg-orange-500/90" : "bg-green-500/90")} />
-                    <span className="text-xs font-medium text-muted-foreground">{product.stock === 0 ? 'Indisponible' : product.stock < 11 ? `Reste ${product.stock}` : 'En stock'}</span>
+                <div className="mt-auto flex justify-between items-center">
+                    <div className="flex gap-2 items-center">
+                        <span className={cn("block size-2 rounded-full", product.stock === 0 ? "bg-red-500/90" : product.stock < 11 ? "bg-orange-500/90" : "bg-green-500/90")} />
+                        <span className="text-xs font-medium text-muted-foreground">{product.stock === 0 ? 'Indisponible' : product.stock < 11 ? `Reste ${product.stock}` : 'En stock'}</span>
+                    </div>
+                    {product.isNew && (
+                        <Badge variant="secondary" className="bg-muted flex w-fit items-center gap-1.5 rounded-md px-1.5 py-0.75 text-[10px] font-semibold dark:text-white">
+                            <Star size={16} className="fill-yellow-400 text-yellow-400" />
+                            NEW
+                        </Badge>
+                    )}
                 </div>
             </CardContent>
         </Card>

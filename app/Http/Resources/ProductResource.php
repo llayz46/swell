@@ -31,7 +31,8 @@ class ProductResource extends JsonResource
                 'reorder_level' => $this->reorder_level,
             ]),
 
-            'isNew' => $this->whenLoaded('created_at', fn () => $this->created_at->diffInDays(now()) <= 7),
+//            'isNew' => $this->when('created_at', fn () => $this->created_at->diffInDays(now()) <= 7),
+            'isNew' => $this->created_at->diffInDays(now()) <= 7,
             'isWishlisted' => $this->whenLoaded('wishlists', fn () => $this->wishlists->isNotEmpty()),
 
             'brand' => BrandResource::make($this->whenLoaded('brand')),
