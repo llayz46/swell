@@ -15,7 +15,7 @@ import {
     Folders
 } from 'lucide-react';
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -296,8 +296,8 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
             </Card>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Total catégories</p>
@@ -312,11 +312,11 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                                 <FolderOpen />
                             </Badge>
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
 
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Catégories actives</p>
@@ -328,11 +328,11 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                                 ✓
                             </Badge>
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
 
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Total produits</p>
@@ -347,11 +347,11 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                                 #
                             </Badge>
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
 
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Catégories vides</p>
@@ -365,8 +365,8 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                                 !
                             </Badge>
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
             </div>
 
             <ConfirmDeleteDialog
@@ -379,7 +379,6 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                 icon={<Folders className="size-4" />}
                 prefix="La"
             />
-
         </AdminLayout>
     )
 }
