@@ -56,6 +56,9 @@
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
+
+    --color-slate-light: #f9f9fb;
+    --color-slate-light-alpha: #00002f26;
 }
 
 @layer base {
@@ -152,5 +155,32 @@
 @layer utilities {
     .layout-container {
         @apply max-w-7xl mx-auto;
+    }
+
+    .shadow-dialog {
+        --tw-shadow:
+            0px 0px 0px 1px var(--tw-shadow-color, #01213921),
+            0px 0px 0px 7px var(--tw-shadow-color, #ffffff4d),
+            0px 64px 24px 0px var(--tw-shadow-color, #0000),
+            0px 44px 22px 0px var(--tw-shadow-color, #00000005),
+            0px 28px 20px 0px var(--tw-shadow-color, #00000014),
+            0px 17px 17px 0px var(--tw-shadow-color, #00000021),
+            0px 10px 13px 0px var(--tw-shadow-color, #00000026);
+
+        box-shadow:
+            var(--tw-inset-shadow),
+            var(--tw-inset-ring-shadow),
+            var(--tw-ring-offset-shadow),
+            var(--tw-ring-shadow),
+            var(--tw-shadow);
+    }
+
+    .bg-stronger {
+        --bg-stronger-opacity: 12%;
+        background-color: color-mix(
+            in oklab,
+            #111113 var(--bg-stronger-opacity),
+            transparent
+        );
     }
 }
