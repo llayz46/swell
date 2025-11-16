@@ -57,8 +57,9 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-    --color-slate-light: #f9f9fb;
-    --color-slate-light-alpha: #00002f26;
+    --color-slate-light: var(--slate-light);
+    --color-slate-light-alpha: var(--slate-light-alpha);
+    --color-shadow-color: var(--shadow-color);
 }
 
 @layer base {
@@ -105,6 +106,9 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.87 0 0);
+    --slate-light: oklch(0.983 0.0026 286.35);
+    --slate-light-alpha: oklch(0.138 0.0956 264.05 / 0.15);
+    --shadow-color: oklch(0 0 0 / 0.12);
 }
 
 .dark {
@@ -140,6 +144,9 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(0.269 0 0);
     --sidebar-ring: oklch(0.439 0 0);
+    --slate-light: oklch(0.196 0 89.876);
+    --slate-light-alpha: oklch(1 0 89.88 / 0.15);
+    --shadow-color: oklch(0.65 0 89.876 / 0.12);
 }
 
 @layer base {
@@ -159,13 +166,13 @@
 
     .shadow-dialog {
         --tw-shadow:
-            0px 0px 0px 1px var(--tw-shadow-color, #01213921),
-            0px 0px 0px 7px var(--tw-shadow-color, #ffffff4d),
-            0px 64px 24px 0px var(--tw-shadow-color, #0000),
-            0px 44px 22px 0px var(--tw-shadow-color, #00000005),
-            0px 28px 20px 0px var(--tw-shadow-color, #00000014),
-            0px 17px 17px 0px var(--tw-shadow-color, #00000021),
-            0px 10px 13px 0px var(--tw-shadow-color, #00000026);
+            0px 0px 0px 1px var(--shadow-color, #01213921),
+            0px 0px 0px 7px var(--shadow-color, #ffffff4d),
+            0px 64px 24px 0px var(--shadow-color, #0000),
+            0px 44px 22px 0px var(--shadow-color, #00000005),
+            0px 28px 20px 0px var(--shadow-color, #00000014),
+            0px 17px 17px 0px var(--shadow-color, #00000021),
+            0px 10px 13px 0px var(--shadow-color, #00000026);
 
         box-shadow:
             var(--tw-inset-shadow),
@@ -185,7 +192,7 @@
     }
 
     .shadow-inner {
-        --tw-shadow: 0px 0px 1.5px 0.5px var(--tw-shadow-color, #0000001f) inset;
+        --tw-shadow: 0px 0px 1.5px 0.5px var(--shadow-color, #0000001f) inset;
         box-shadow: var(--tw-inset-shadow),
         var(--tw-inset-ring-shadow),
         var(--tw-ring-offset-shadow),
@@ -195,9 +202,9 @@
 
     .shadow-xs-with-border {
         --tw-shadow:
-            0px 0px 0px 1px var(--tw-shadow-color, var(--color-slate-light-alpha, #001a3329)),
-            0px 0px 1px 0px var(--tw-shadow-color, #00000008),
-            0px 1px 2px 0px var(--tw-shadow-color, #0000000f);
+            0px 0px 0px 1px var(--shadow-color, var(--color-slate-light-alpha, #001a3329)),
+            0px 0px 1px 0px var(--shadow-color, #00000008),
+            0px 1px 2px 0px var(--shadow-color, #0000000f);
         box-shadow: var(--tw-inset-shadow),
         var(--tw-inset-ring-shadow),
         var(--tw-ring-offset-shadow),
