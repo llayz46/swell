@@ -33,15 +33,6 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        Log::info('--- PROFILE UPDATE START ---', [
-            'session_id' => session()->getId(),
-            'auth_user_id' => Auth::id(),
-            'auth_user_email' => Auth::user()?->email,
-            'request_all' => $request->all(),
-            'cookies' => $request->cookies->all(),
-            'server' => $_SERVER['HOSTNAME'] ?? 'unknown',
-        ]);
-
         $request->validated();
 
         $user->fill($request->safe()->except('avatar'));
@@ -61,19 +52,6 @@ class ProfileController extends Controller
         }
 
         $user->save();
-
-        Log::info('--- PROFILE UPDATE AFTER SAVE ---', [
-            'session_id' => session()->getId(),
-            'saved_user_id' => $user->id,
-            'saved_user_email' => $user->email,
-            'auth_user_after_save' => Auth::id(),
-            'cookies' => $request->cookies->all(),
-        ]);
-
-        Log::info('--- PROFILE UPDATE END ---', [
-            'session_id' => session()->getId(),
-            'auth_user_id_end' => Auth::id(),
-        ]);
 
         return to_route('profile.edit');
     }
