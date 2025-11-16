@@ -55,6 +55,37 @@ export default function Dashboard({
         Revenu: data.revenue,
     }));
 
+    const stats = [
+        {
+            title: "Chiffre d'affaires",
+            value: totalRevenue.toLocaleString("fr-FR", { style: "currency", currency: "EUR" }),
+            percentage: revenuePercentageChange,
+            icon: <DollarSign className="size-4 text-muted-foreground" />,
+            description: (val: number) => (val > 0 ? `+${val}% par rapport au mois dernier` : `${val}% par rapport au mois dernier`),
+        },
+        {
+            title: "Commandes",
+            value: totalOrders,
+            percentage: ordersPercentageChange,
+            icon: <CreditCard className="size-4 text-muted-foreground" />,
+            description: (val: number) => (val > 0 ? `+${val}% par rapport au mois dernier` : `${val}% par rapport au mois dernier`),
+        },
+        {
+            title: "Utilisateurs",
+            value: totalUsers,
+            percentage: newUsers,
+            icon: <Users className="size-4 text-muted-foreground" />,
+            description: (val: number) => (val > 0 ? `+${val} nouveaux utilisateurs ce mois` : `${val} nouveaux utilisateurs ce mois`),
+        },
+        {
+            title: "Produits actifs",
+            value: activeProducts,
+            icon: <Activity className="size-4 text-muted-foreground" />,
+            description: () => "+7 nouveaux produits cette semaine",
+        },
+    ];
+
+
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard Administrateur" />
@@ -63,50 +94,27 @@ export default function Dashboard({
                 <h1 className="text-3xl font-bold tracking-tight">Dashboard Administrateur</h1>
 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Chiffre d'affaires</CardTitle>
-                            <DollarSign className="size-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</div>
-                            <p className="text-xs text-muted-foreground">
-                                {revenuePercentageChange > 0 ? `+${revenuePercentageChange}` : revenuePercentageChange}% par rapport au mois dernier
-                            </p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Commandes</CardTitle>
-                            <CreditCard className="size-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{totalOrders}</div>
-                            <p className="text-xs text-muted-foreground">
-                                {ordersPercentageChange > 0 ? `+${ordersPercentageChange}` : ordersPercentageChange}% par rapport au mois dernier
-                            </p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Utilisateurs</CardTitle>
-                            <Users className="size-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{totalUsers}</div>
-                            <p className="text-xs text-muted-foreground">{newUsers > 0 ? `+${newUsers}` : newUsers} nouveaux utilisateurs ce mois</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Produits actifs</CardTitle>
-                            <Activity className="size-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{activeProducts}</div>
-                            <p className="text-xs text-muted-foreground">+7 nouveaux produits cette semaine</p>
-                        </CardContent>
-                    </Card>
+                    {stats.map((stat, index) => (
+                        <Card key={index} className="gap-0 rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
+                                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+                                {stat.icon}
+                            </CardHeader>
+
+                            <CardContent className="shadow-xs-with-border h-full rounded-lg bg-background p-4">
+                                <div className="text-2xl font-bold">{stat.value}</div>
+                                {stat.percentage !== undefined ? (
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        {stat.description(stat.percentage)}
+                                    </p>
+                                ) : (
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        {stat.description()}
+                                    </p>
+                                )}
+                            </CardContent>
+                        </Card>
+                    ))}
                 </div>
 
                 <Tabs defaultValue="overview" className="space-y-4">
@@ -119,12 +127,12 @@ export default function Dashboard({
                     <TabsContent value="overview" className="space-y-4">
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                             {/* Graphique du chiffre d'affaires - 4 colonnes */}
-                            <Card className="lg:col-span-4">
-                                <CardHeader>
+                            <Card className="lg:col-span-4 gap-0 rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
+                                <CardHeader className="p-4">
                                     <CardTitle>Vue d'ensemble</CardTitle>
                                     <CardDescription>Chiffre d'affaires mensuel</CardDescription>
                                 </CardHeader>
-                                <CardContent className="pl-2">
+                                <CardContent className="pl-2 shadow-xs-with-border h-full rounded-lg bg-background p-4">
                                     <ChartContainer config={chartConfig} className="max-h-64 w-full">
                                         <AreaChart
                                             accessibilityLayer
@@ -156,12 +164,12 @@ export default function Dashboard({
                             </Card>
 
                             {/* Produits les plus vendus - 3 colonnes */}
-                            <Card className="lg:col-span-3">
-                                <CardHeader>
+                            <Card className="lg:col-span-3 gap-0 rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
+                                <CardHeader className="p-4">
                                     <CardTitle>Produits les plus vendus</CardTitle>
                                     <CardDescription>Les 5 produits les plus vendus ce mois-ci</CardDescription>
                                 </CardHeader>
-                                <CardContent>
+                                <CardContent className="shadow-xs-with-border h-full rounded-lg bg-background p-4">
                                     <div className="space-y-2">
                                         {topSellingProducts.map((product, index) => (
                                             <div key={product.id} className="flex items-center justify-between">
@@ -181,12 +189,12 @@ export default function Dashboard({
                     </TabsContent>
 
                     <TabsContent value="orders" className="space-y-4">
-                        <Card>
-                            <CardHeader>
+                        <Card className="gap-0 rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
+                            <CardHeader className="p-4">
                                 <CardTitle>Dernières commandes</CardTitle>
                                 <CardDescription>Liste des 5 dernières commandes passées</CardDescription>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="shadow-xs-with-border h-full rounded-lg bg-background p-4">
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
@@ -220,12 +228,12 @@ export default function Dashboard({
                     </TabsContent>
 
                     <TabsContent value="products" className="space-y-4">
-                        <Card>
-                            <CardHeader>
+                        <Card className="gap-0 rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
+                            <CardHeader className="p-4">
                                 <CardTitle>Derniers produits ajoutés</CardTitle>
                                 <CardDescription>Les 5 derniers produits ajoutés à votre catalogue</CardDescription>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="shadow-xs-with-border h-full rounded-lg bg-background p-4">
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
