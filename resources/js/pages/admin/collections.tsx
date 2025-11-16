@@ -2,7 +2,7 @@ import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import { CollectionDialog } from '@/components/swell/product/collection-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -196,8 +196,8 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
             </Card>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Total collections</p>
@@ -210,11 +210,11 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                 <Boxes />
                             </Badge>
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
 
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Total produits</p>
@@ -229,11 +229,11 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                 #
                             </Badge>
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
 
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Sans produits</p>
@@ -245,8 +245,8 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                 !
                             </Badge>
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
             </div>
 
             <ConfirmDeleteDialog
