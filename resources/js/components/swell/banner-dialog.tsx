@@ -112,7 +112,7 @@ export function BannerDialog({ open, setOpen, banner, onCreated }: BannerDialogP
                     <Plus size={16} /> Ajouter un message
                 </Button>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5">
+            <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 shadow-dialog border-transparent sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5">
                 <DialogHeader className="contents space-y-0 text-left">
                     <DialogTitle className="border-b px-6 py-4 text-base">{banner ? 'Modifier le message' : 'Ajouter un message'}</DialogTitle>
                 </DialogHeader>

@@ -14,8 +14,10 @@ import { router } from '@inertiajs/react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CheckedState } from '@radix-ui/react-checkbox';
+import { Slider } from '@/components/ui/slider';
 
 export function FilterSheet({ stock }: { stock: { in: boolean, out: boolean }; }) {
+    const [value, setValue] = useState([25, 75])
     const [disponibilityFilter, setDisponibilityFilter] = useState<{ in: boolean; out: boolean }>({
         in: stock.in,
         out: stock.out,
@@ -76,6 +78,16 @@ export function FilterSheet({ stock }: { stock: { in: boolean, out: boolean }; }
                                 <Label htmlFor="out-stock">Indisponible</Label>
                             </div>
                         </div>
+                    </div>
+                    <div className="w-full *:not-first:mt-2">
+                        <Label>Prix</Label>
+
+                        <Slider
+                            value={value}
+                            onValueChange={setValue}
+                            max={100}
+                            step={1}
+                        />
                     </div>
                 </div>
                 <SheetFooter className="flex-row-reverse justify-between">

@@ -106,7 +106,7 @@ export function BrandDialog({ open, setOpen, brand, inputValue }: BrandDialogPro
                     <Plus /> Nouvelle marque
                 </Button>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5">
+            <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5 shadow-dialog border-transparent">
                 <DialogHeader className="contents space-y-0 text-left">
                     <DialogTitle className="border-b px-6 py-4 text-base">{brand ? `Modifier la marque : ${brand.name}` : 'Créer une nouvelle marque'}</DialogTitle>
                 </DialogHeader>

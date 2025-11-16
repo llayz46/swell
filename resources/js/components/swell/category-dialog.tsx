@@ -129,7 +129,7 @@ export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDi
                     <Plus /> Nouvelle catégorie
                 </Button>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5">
+            <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5 shadow-dialog border-transparent">
                 <DialogHeader className="contents space-y-0 text-left">
                     <DialogTitle className="border-b px-6 py-4 text-base">{category ? `Modifier la catégorie : ${category.name}` : 'Créer une nouvelle catégorie'}</DialogTitle>
                 </DialogHeader>
