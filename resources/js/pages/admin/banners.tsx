@@ -1,7 +1,7 @@
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BannerItem, BreadcrumbItem, SharedData } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SwellCard, SwellCardContent, CardTitle, SwellCardHeader } from '@/components/ui/card';
 import {
     AlertCircle,
     CheckCircle,
@@ -120,14 +120,14 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Gérer la bannière" />
 
-                <Card className="mt-4 py-4 border-border bg-card">
-                    <CardHeader className="max-sm:px-4">
+                <SwellCard className="mt-4">
+                    <SwellCardHeader>
                         <CardTitle className="text-foreground flex items-center gap-2">
                             <Eye className="size-4" />
                             Aperçu de la bannière
                         </CardTitle>
-                    </CardHeader>
-                    <CardContent className="max-sm:px-4">
+                    </SwellCardHeader>
+                    <SwellCardContent>
                         <div className={`rounded-md overflow-hidden ${data.infoBanner.length === 0 && 'hidden'}`}>
                             <div className="w-full bg-black dark:bg-white">
                                 <WordRotate
@@ -137,12 +137,12 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
                                 />
                             </div>
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Total bannières</p>
@@ -150,11 +150,11 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
                             </div>
                             <Info className="size-6 text-primary" />
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
 
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Actives</p>
@@ -162,11 +162,11 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
                             </div>
                             <CheckCircle className="size-6 text-green-600 dark:text-green-400" />
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
 
-                <Card className="border-border bg-card">
-                    <CardContent className="p-4">
+                <SwellCard>
+                    <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Inactives</p>
@@ -174,8 +174,8 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
                             </div>
                             <EyeOff className="size-6 text-orange-600 dark:text-orange-400" />
                         </div>
-                    </CardContent>
-                </Card>
+                    </SwellCardContent>
+                </SwellCard>
             </div>
 
             <Transition
@@ -193,8 +193,8 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
                 </Alert>
             </Transition>
 
-            <Card className="max-sm:py-4 border-border bg-card">
-                <CardHeader className="max-sm:px-4 flex sm:flex-row sm:items-center justify-between">
+            <SwellCard>
+                <SwellCardHeader>
                     <div className="space-y-2">
                         <CardTitle className="text-foreground">Liste des messages de bannières</CardTitle>
                         <p className="text-sm text-muted-foreground">
@@ -227,8 +227,8 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
                             }}
                         />
                     </div>
-                </CardHeader>
-                <CardContent className="max-sm:px-4 flex flex-col gap-4">
+                </SwellCardHeader>
+                <SwellCardContent className="flex flex-col gap-4">
                     <DndContext
                         collisionDetection={closestCenter}
                         modifiers={[restrictToWindowEdges]}
@@ -256,8 +256,8 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
                             ))}
                         </SortableContext>
                     </DndContext>
-                </CardContent>
-            </Card>
+                </SwellCardContent>
+            </SwellCard>
         </AdminLayout>
     )
 }

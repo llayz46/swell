@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardDescription, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -95,13 +95,13 @@ export default function Dashboard({
 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     {stats.map((stat, index) => (
-                        <Card key={index} className="gap-0 rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
+                        <SwellCard key={index}>
+                            <SwellCardHeader>
                                 <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
                                 {stat.icon}
-                            </CardHeader>
+                            </SwellCardHeader>
 
-                            <CardContent className="shadow-xs-with-border h-full rounded-lg bg-background p-4">
+                            <SwellCardContent>
                                 <div className="text-2xl font-bold">{stat.value}</div>
                                 {stat.percentage !== undefined ? (
                                     <p className="text-xs text-muted-foreground mt-1">
@@ -112,8 +112,8 @@ export default function Dashboard({
                                         {stat.description()}
                                     </p>
                                 )}
-                            </CardContent>
-                        </Card>
+                            </SwellCardContent>
+                        </SwellCard>
                     ))}
                 </div>
 
@@ -127,12 +127,12 @@ export default function Dashboard({
                     <TabsContent value="overview" className="space-y-4">
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                             {/* Graphique du chiffre d'affaires - 4 colonnes */}
-                            <Card className="lg:col-span-4 gap-0 rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
-                                <CardHeader className="p-4">
+                            <SwellCard className="lg:col-span-4">
+                                <SwellCardHeader variant="column">
                                     <CardTitle>Vue d'ensemble</CardTitle>
                                     <CardDescription>Chiffre d'affaires mensuel</CardDescription>
-                                </CardHeader>
-                                <CardContent className="pl-2 shadow-xs-with-border h-full rounded-lg bg-background p-4">
+                                </SwellCardHeader>
+                                <SwellCardContent>
                                     <ChartContainer config={chartConfig} className="max-h-64 w-full">
                                         <AreaChart
                                             accessibilityLayer
@@ -160,16 +160,16 @@ export default function Dashboard({
                                             />
                                         </AreaChart>
                                     </ChartContainer>
-                                </CardContent>
-                            </Card>
+                                </SwellCardContent>
+                            </SwellCard>
 
                             {/* Produits les plus vendus - 3 colonnes */}
-                            <Card className="lg:col-span-3 gap-0 rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
-                                <CardHeader className="p-4">
+                            <SwellCard className="lg:col-span-3">
+                                <SwellCardHeader variant="column">
                                     <CardTitle>Produits les plus vendus</CardTitle>
                                     <CardDescription>Les 5 produits les plus vendus ce mois-ci</CardDescription>
-                                </CardHeader>
-                                <CardContent className="shadow-xs-with-border h-full rounded-lg bg-background p-4">
+                                </SwellCardHeader>
+                                <SwellCardContent>
                                     <div className="space-y-2">
                                         {topSellingProducts.map((product, index) => (
                                             <div key={product.id} className="flex items-center justify-between">
@@ -183,18 +183,18 @@ export default function Dashboard({
                                             </div>
                                         ))}
                                     </div>
-                                </CardContent>
-                            </Card>
+                                </SwellCardContent>
+                            </SwellCard>
                         </div>
                     </TabsContent>
 
                     <TabsContent value="orders" className="space-y-4">
-                        <Card className="gap-0 rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
-                            <CardHeader className="p-4">
+                        <SwellCard>
+                            <SwellCardHeader variant="column">
                                 <CardTitle>Dernières commandes</CardTitle>
                                 <CardDescription>Liste des 5 dernières commandes passées</CardDescription>
-                            </CardHeader>
-                            <CardContent className="shadow-xs-with-border h-full rounded-lg bg-background p-4">
+                            </SwellCardHeader>
+                            <SwellCardContent>
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
@@ -223,17 +223,17 @@ export default function Dashboard({
                                         <ArrowRight size={16} />
                                     </Link>
                                 </div>
-                            </CardContent>
-                        </Card>
+                            </SwellCardContent>
+                        </SwellCard>
                     </TabsContent>
 
                     <TabsContent value="products" className="space-y-4">
-                        <Card className="gap-0 rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
-                            <CardHeader className="p-4">
+                        <SwellCard>
+                            <SwellCardHeader variant="column">
                                 <CardTitle>Derniers produits ajoutés</CardTitle>
                                 <CardDescription>Les 5 derniers produits ajoutés à votre catalogue</CardDescription>
-                            </CardHeader>
-                            <CardContent className="shadow-xs-with-border h-full rounded-lg bg-background p-4">
+                            </SwellCardHeader>
+                            <SwellCardContent>
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
@@ -281,8 +281,8 @@ export default function Dashboard({
                                         <ArrowRight size={16} />
                                     </Link>
                                 </div>
-                            </CardContent>
-                        </Card>
+                            </SwellCardContent>
+                        </SwellCard>
                     </TabsContent>
                 </Tabs>
             </div>

@@ -1,6 +1,24 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { cva, type VariantProps } from 'class-variance-authority';
+
+const swellCardHeaderVariants = cva(
+    "flex p-4",
+    {
+        variants: {
+            variant: {
+                default:
+                    "justify-between items-center",
+                column:
+                    "flex-col gap-1.5",
+            },
+        },
+        defaultVariants: {
+            variant: "default",
+        },
+    }
+)
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -65,4 +83,38 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+function SwellCard({ className, ...props }: React.ComponentProps<"div">) {
+    return (
+        <div
+            data-slot="card"
+            className={cn(
+                "flex flex-col rounded-xl bg-slate-light p-1 shadow-inner",
+                className
+            )}
+            {...props}
+        />
+    )
+}
+
+function SwellCardHeader({ className, variant, ...props }: React.ComponentProps<"div"> &
+    VariantProps<typeof swellCardHeaderVariants>) {
+    return (
+        <div
+            data-slot="card-header"
+            className={cn(swellCardHeaderVariants({ variant, className }))}
+            {...props}
+        />
+    )
+}
+
+function SwellCardContent({ className, ...props }: React.ComponentProps<"div">) {
+    return (
+        <div
+            data-slot="card-content"
+            className={cn("shadow-xs-with-border rounded-lg bg-background p-4 h-full", className)}
+            {...props}
+        />
+    )
+}
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, SwellCard, SwellCardHeader, SwellCardContent }
