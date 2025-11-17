@@ -15,11 +15,15 @@ use Inertia\Inertia;
 
 Route::get('/', HomeController::class)->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard/dashboard');
     })->name('dashboard');
+    
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+});
 
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('checkout')->group(function () {
         Route::get('/', [CartController::class, 'checkout'])->name('cart.checkout');
         Route::get('/success', [CartController::class, 'success'])->name('checkout.success');
@@ -32,8 +36,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/remove', [WishlistController::class, 'update'])->name('wishlist.remove');
         Route::post('/clear', [WishlistController::class, 'destroy'])->name('wishlist.clear');
     });
-
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 
     Route::middleware('feature:review')->prefix('reviews')->group(function () {
         Route::post('/', [ReviewController::class, 'store'])->name('reviews.store');
