@@ -57,7 +57,7 @@ class HandleInertiaRequests extends Middleware
                 ]
             ],
             'auth' => [
-                'user' => fn () => $request->user()?->with('roles')->first(),
+                'user' => $request->user()?->with('roles')->first(),
             ],
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
