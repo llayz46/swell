@@ -20,6 +20,12 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
+        \Log::info('📄 PROFILE EDIT PAGE', [
+            'session_id' => session()->getId(),
+            'auth_user_id' => Auth::id(),
+            'auth_user_name' => Auth::user()->name,
+        ]);
+
         return Inertia::render('settings/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
@@ -31,6 +37,13 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        \Log::info('🔵 DÉBUT UPDATE', [
+            'session_id' => session()->getId(),
+            'auth_user_id' => Auth::id(),
+            'auth_user_name' => Auth::user()->name,
+            'auth_user_email' => Auth::user()->email,
+        ]);
+        
         $user = $request->user();
 
         $request->validated();
@@ -52,6 +65,15 @@ class ProfileController extends Controller
         }
 
         $user->save();
+
+        \Log::info('🟢 FIN UPDATE (avant redirect)', [
+            'session_id' => session()->getId(),
+            'auth_user_id' => Auth::id(),
+            'auth_user_name' => Auth::user()->name,
+            'auth_user_email' => Auth::user()->email,
+            'updated_user_id' => $user->id,
+            'updated_user_name' => $user->name,
+        ]);
 
         return to_route('profile.edit');
     }
