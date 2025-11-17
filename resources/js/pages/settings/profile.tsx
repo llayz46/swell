@@ -39,8 +39,11 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
         email: auth.user.email,
     });
 
+    console.log('🔍 EditUser rendered with user:', auth.user.id, auth.user.name);
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+        console.log('📤 Submitting for user:', auth.user.id, auth.user.name);
+        console.log('📍 URL:', route('users.update', auth.user.id));
 
         post(route('profile.update'), {
             preserveScroll: true,
