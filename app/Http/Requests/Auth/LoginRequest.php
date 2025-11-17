@@ -44,15 +44,6 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $user = User::where('email', $this->input('email'))->first();
-
-        if ($user && \Hash::check($this->input('password'), $user->password)) {
-            (new MigrateSessionCart)->migrate(
-                CartFactory::make(),
-                $user->cart ?: $user->cart()->create()
-            );
-        }
-
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
