@@ -1,40 +1,33 @@
-import type { Brand, BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
-import { Edit, MoreHorizontal, Search, Tags, Trash2 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import AdminLayout from '@/layouts/admin-layout';
-import { useMemo, useState } from 'react';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem, DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
 import { BrandDialog } from '@/components/swell/brand-dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AdminLayout from '@/layouts/admin-layout';
+import type { Brand, BreadcrumbItem } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
+import { Head } from '@inertiajs/react';
+import { Edit, MoreHorizontal, Search, Tags, Trash2 } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
-export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { breadcrumbs: BreadcrumbItem[], brands: Brand[] }) {
-    const [searchTerm, setSearchTerm] = useState("")
+export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { breadcrumbs: BreadcrumbItem[]; brands: Brand[] }) {
+    const [searchTerm, setSearchTerm] = useState('');
     const [deleteBrand, setDeleteBrand] = useState<Brand | null>(null);
     const [openBrandDialog, setOpenBrandDialog] = useState<boolean>(false);
     const [editBrand, setEditBrand] = useState<Brand | null>(null);
-    const [sortBy, setSortBy] = useState("name")
+    const [sortBy, setSortBy] = useState('name');
 
     const localBreadcrumbs = useMemo(() => {
         if (openBrandDialog) {
             return [
                 ...initialBreadcrumbs,
                 {
-                    title: editBrand
-                        ? `Modifier : ${editBrand.name}`
-                        : 'Nouvelle marque',
-                    href: "#"
+                    title: editBrand ? `Modifier : ${editBrand.name}` : 'Nouvelle marque',
+                    href: '#',
                 },
             ];
         }
@@ -45,9 +38,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
         let filtered = brands;
 
         if (searchTerm) {
-            filtered = filtered.filter(brand =>
-                brand.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+            filtered = filtered.filter((brand) => brand.name.toLowerCase().includes(searchTerm.toLowerCase()));
         }
 
         return [...filtered].sort((a, b) => {
@@ -62,7 +53,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                     return a.name.localeCompare(b.name);
             }
         });
-    }
+    };
 
     const filteredBrands = filterBrands(brands, searchTerm, sortBy);
 
@@ -78,31 +69,31 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
 
             return acc + (passesFilter ? 1 : 0);
         }, 0);
-    }
+    };
 
     return (
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les marques" />
 
-            <Card className="mt-4 py-3 sm:py-4 border-border bg-card">
+            <Card className="mt-4 border-border bg-card py-3 sm:py-4">
                 <CardContent className="px-3 sm:px-4">
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                         <div className="flex-1">
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
                                 <Input
                                     placeholder="Rechercher une marque..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="pl-10 bg-background border-border text-foreground placeholder:text-muted-foreground"
+                                    className="border-border bg-background pl-10 text-foreground placeholder:text-muted-foreground"
                                 />
                             </div>
                         </div>
                         <Select value={sortBy} onValueChange={setSortBy}>
-                            <SelectTrigger className="sm:w-40 bg-background border-border text-foreground">
+                            <SelectTrigger className="border-border bg-background text-foreground sm:w-40">
                                 <SelectValue />
                             </SelectTrigger>
-                            <SelectContent className="bg-popover border-border">
+                            <SelectContent className="border-border bg-popover">
                                 <SelectItem value="name">Nom A-Z</SelectItem>
                                 <SelectItem value="products">Nb produits</SelectItem>
                                 <SelectItem value="date">Date création</SelectItem>
@@ -112,9 +103,9 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                 </CardContent>
             </Card>
 
-            <Card className="border-border bg-card pt-4 pb-0 gap-0">
-                <CardHeader className="px-4 pb-4 border-b border-border sm:flex-row justify-between">
-                    <CardTitle className="text-foreground text-lg">Liste des marques ({countBrandsWithFilter(filteredBrands)})</CardTitle>
+            <Card className="gap-0 border-border bg-card pt-4 pb-0">
+                <CardHeader className="justify-between border-b border-border px-4 pb-4 sm:flex-row">
+                    <CardTitle className="text-lg text-foreground">Liste des marques ({countBrandsWithFilter(filteredBrands)})</CardTitle>
 
                     <BrandDialog
                         open={openBrandDialog}
@@ -128,7 +119,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                 <CardContent className="p-0">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-border hover:bg-transparent *:text-muted-foreground *:font-medium">
+                            <TableRow className="border-border *:font-medium *:text-muted-foreground hover:bg-transparent">
                                 <TableHead className="w-8">Logo</TableHead>
                                 <TableHead>Nom</TableHead>
                                 <TableHead>Slug</TableHead>
@@ -138,12 +129,17 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                         </TableHeader>
                         <TableBody>
                             {filteredBrands.length > 0 ? (
-                                filteredBrands.map(brand => {
+                                filteredBrands.map((brand) => {
                                     return (
                                         <TableRow key={brand.id} className="border-border hover:bg-muted/50">
                                             <TableCell>
                                                 {brand.logo_url ? (
-                                                    <img className="size-8 aspect-square rounded-md object-cover truncate" src={getStorageUrl(brand.logo_url)} alt={brand.name} loading="lazy" />
+                                                    <img
+                                                        className="aspect-square size-8 truncate rounded-md object-cover"
+                                                        src={getStorageUrl(brand.logo_url)}
+                                                        alt={brand.name}
+                                                        loading="lazy"
+                                                    />
                                                 ) : (
                                                     <span className="block size-8 rounded-md bg-muted"></span>
                                                 )}
@@ -189,12 +185,12 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                                 </DropdownMenu>
                                             </TableCell>
                                         </TableRow>
-                                    )
+                                    );
                                 })
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                                        {searchTerm ? "Aucune marque trouvée" : "Aucune marque disponible"}
+                                    <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
+                                        {searchTerm ? 'Aucune marque trouvée' : 'Aucune marque disponible'}
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -203,19 +199,17 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                 </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+            <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-3">
                 <SwellCard>
                     <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Total marques</p>
-                                <p className="text-2xl font-bold text-foreground">
-                                    {countBrandsWithFilter(brands)}
-                                </p>
+                                <p className="text-2xl font-bold text-foreground">{countBrandsWithFilter(brands)}</p>
                             </div>
                             <Badge
                                 variant="secondary"
-                                className="bg-muted text-muted-foreground size-8 rounded-full flex items-center justify-center"
+                                className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
                             >
                                 <Tags />
                             </Badge>
@@ -234,7 +228,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                             </div>
                             <Badge
                                 variant="secondary"
-                                className="bg-muted text-muted-foreground h-8 w-8 rounded-full flex items-center justify-center"
+                                className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
                             >
                                 #
                             </Badge>
@@ -248,10 +242,10 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                             <div>
                                 <p className="text-sm text-muted-foreground">Sans produits</p>
                                 <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                                    {countBrandsWithFilter(brands, brand => !brand.products_count)}
+                                    {countBrandsWithFilter(brands, (brand) => !brand.products_count)}
                                 </p>
                             </div>
-                            <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 h-8 w-8 rounded-full flex items-center justify-center">
+                            <Badge className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
                                 !
                             </Badge>
                         </div>
@@ -270,5 +264,5 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                 prefix="La"
             />
         </AdminLayout>
-    )
+    );
 }

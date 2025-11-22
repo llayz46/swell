@@ -1,27 +1,28 @@
-import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger
-} from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
-import { router } from '@inertiajs/react';
-import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { CheckedState } from '@radix-ui/react-checkbox';
+import { Label } from '@/components/ui/label';
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Slider } from '@/components/ui/slider';
+import { router } from '@inertiajs/react';
+import { CheckedState } from '@radix-ui/react-checkbox';
+import { useEffect, useState } from 'react';
 
-export function FilterSheet({ stock }: { stock: { in: boolean, out: boolean }; }) {
-    const [value, setValue] = useState([25, 75])
+interface FilterSheetProps {
+    stock: { in: boolean; out: boolean };
+    price?: { min: number | null; max: number | null; max_available: number };
+}
+
+export function FilterSheet({ stock, price }: FilterSheetProps) {
+    const maxPrice = price?.max_available ?? 1000;
+    const [priceRange, setPriceRange] = useState<[number, number]>([price?.min ?? 0, price?.max ?? maxPrice]);
     const [disponibilityFilter, setDisponibilityFilter] = useState<{ in: boolean; out: boolean }>({
         in: stock.in,
         out: stock.out,
     });
+
+    useEffect(() => {
+        setPriceRange([price?.min ?? 0, price?.max ?? maxPrice]);
+    }, [price?.min, price?.max, maxPrice]);
 
     const handleDisponibilityChange = (type: 'in' | 'out', checked: CheckedState) => {
         const updated = {
@@ -45,6 +46,46 @@ export function FilterSheet({ stock }: { stock: { in: boolean, out: boolean }; }
         currentParams.forEach((value, key) => {
             paramsObj[key] = value;
         });
+
+        router.get(window.location.pathname, paramsObj, {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+        });
+    };
+
+    const handlePriceChange = (value: number[]) => {
+        setPriceRange([value[0], value[1]]);
+    };
+
+    const applyPriceFilter = () => {
+        const currentParams = new URLSearchParams(window.location.search);
+
+        // Supprimer les anciens paramètres de prix pour les ajouter dans le bon ordre
+        currentParams.delete('min_price');
+        currentParams.delete('max_price');
+
+        // Construire l'objet de paramètres dans le bon ordre
+        const paramsObj: Record<string, string> = {};
+
+        // Ajouter les paramètres existants (sauf page)
+        currentParams.forEach((value, key) => {
+            if (key !== 'page') {
+                paramsObj[key] = value;
+            }
+        });
+
+        // Ajouter min_price et max_price dans le bon ordre
+        if (priceRange[0] > 0) {
+            paramsObj['min_price'] = priceRange[0].toString();
+        }
+
+        if (priceRange[1] < maxPrice) {
+            paramsObj['max_price'] = priceRange[1].toString();
+        }
+
+        // Ajouter page à la fin
+        paramsObj['page'] = '1';
 
         router.get(window.location.pathname, paramsObj, {
             preserveState: true,
@@ -79,15 +120,19 @@ export function FilterSheet({ stock }: { stock: { in: boolean, out: boolean }; }
                             </div>
                         </div>
                     </div>
-                    <div className="w-full *:not-first:mt-2">
-                        <Label>Prix</Label>
+                    <div className="w-full space-y-3 *:not-first:mt-2">
+                        <div className="flex items-center justify-between">
+                            <Label>Prix</Label>
+                            <span className="text-sm text-muted-foreground">
+                                {priceRange[0]}€ - {priceRange[1]}€
+                            </span>
+                        </div>
 
-                        <Slider
-                            value={value}
-                            onValueChange={setValue}
-                            max={100}
-                            step={1}
-                        />
+                        <Slider value={priceRange} onValueChange={handlePriceChange} max={maxPrice} min={0} step={1} />
+
+                        <Button onClick={applyPriceFilter} variant="outline" size="sm" className="w-full">
+                            Appliquer le filtre de prix
+                        </Button>
                     </div>
                 </div>
                 <SheetFooter className="flex-row-reverse justify-between">

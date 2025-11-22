@@ -6,7 +6,7 @@ import {
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
-} from "@/components/ui/pagination"
+} from '@/components/ui/pagination';
 import { MetaLink } from '@/types';
 
 interface PaginationProps {
@@ -34,9 +34,7 @@ interface PaginationProps {
 
 export function PaginationComponent({ pagination, preserveQuery = [], only }: PaginationProps) {
     const pageLinks = pagination.meta.links.filter(
-        (link: MetaLink) =>
-            !link.label.toLowerCase().includes("previous") &&
-            !link.label.toLowerCase().includes("next")
+        (link: MetaLink) => !link.label.toLowerCase().includes('previous') && !link.label.toLowerCase().includes('next'),
     );
 
     const getUrlWithPreservedQuery = (url: string | undefined): string | undefined => {
@@ -49,7 +47,7 @@ export function PaginationComponent({ pagination, preserveQuery = [], only }: Pa
         const urlObj = new URL(url);
         const currentUrl = new URL(window.location.href);
 
-        paramsToKeep.forEach(param => {
+        paramsToKeep.forEach((param) => {
             const value = currentUrl.searchParams.get(param);
             if (value) {
                 urlObj.searchParams.set(param, value);
@@ -59,23 +57,18 @@ export function PaginationComponent({ pagination, preserveQuery = [], only }: Pa
         return urlObj.toString();
     };
 
-    if(!pagination.links.prev && !pagination.links.next) return
+    if (!pagination.links.prev && !pagination.links.next) return;
 
     return (
         <Pagination className="mb-8">
             <PaginationContent>
                 <PaginationItem>
-                    <PaginationPrevious
-                        href={getUrlWithPreservedQuery(pagination.links.prev)}
-                    />
+                    <PaginationPrevious href={getUrlWithPreservedQuery(pagination.links.prev)} />
                 </PaginationItem>
                 {pageLinks.map((link) => (
                     <PaginationItem key={link.label}>
                         {link.url ? (
-                            <PaginationLink
-                                href={getUrlWithPreservedQuery(link.url)}
-                                isActive={link.active}
-                            >
+                            <PaginationLink href={getUrlWithPreservedQuery(link.url)} isActive={link.active}>
                                 {link.label}
                             </PaginationLink>
                         ) : (
@@ -84,9 +77,7 @@ export function PaginationComponent({ pagination, preserveQuery = [], only }: Pa
                     </PaginationItem>
                 ))}
                 <PaginationItem>
-                    <PaginationNext
-                        href={getUrlWithPreservedQuery(pagination.links.next)}
-                    />
+                    <PaginationNext href={getUrlWithPreservedQuery(pagination.links.next)} />
                 </PaginationItem>
             </PaginationContent>
         </Pagination>

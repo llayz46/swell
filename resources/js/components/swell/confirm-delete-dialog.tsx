@@ -62,7 +62,10 @@ export function ConfirmDeleteDialog<T extends { id: number | string } & Record<K
                 });
             },
             onError: (errors) => {
-                const allErrors = Object.values(errors).join('\n') || errorMessage || `Erreur lors de la suppression ${prefix === 'La' ? 'de la' : 'du'} ${itemLabel}. Veuillez réessayer.`;
+                const allErrors =
+                    Object.values(errors).join('\n') ||
+                    errorMessage ||
+                    `Erreur lors de la suppression ${prefix === 'La' ? 'de la' : 'du'} ${itemLabel}. Veuillez réessayer.`;
                 toast.error(`Erreur lors de la suppression ${prefix === 'La' ? 'de la' : 'du'} ${itemLabel}`, {
                     description: allErrors,
                     icon,
@@ -83,7 +86,7 @@ export function ConfirmDeleteDialog<T extends { id: number | string } & Record<K
                             Supprimer {prefix.toLowerCase()} {itemLabel} : <span className="text-foreground">{itemName}</span>
                         </DialogTitle>
                         <DialogDescription className="sm:text-center">
-                            Cette action est irréversible. Pour confirmer, veuillez saisir le nom {prefix === 'La' ? 'de la' : 'du'} {itemLabel} {" "}
+                            Cette action est irréversible. Pour confirmer, veuillez saisir le nom {prefix === 'La' ? 'de la' : 'du'} {itemLabel}{' '}
                             <span className="text-foreground">{itemName}</span>.
                         </DialogDescription>
                     </DialogHeader>

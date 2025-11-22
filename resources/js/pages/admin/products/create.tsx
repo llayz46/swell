@@ -1,12 +1,12 @@
-import { Head, usePage } from '@inertiajs/react';
+import { ProductFormPage } from '@/components/swell/product/product-form-page';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, Product } from '@/types';
-import { ProductFormPage } from '@/components/swell/product/product-form-page';
+import { Head, usePage } from '@inertiajs/react';
 
 interface ProductCreateType {
     breadcrumbs: BreadcrumbItem[];
     brands: { id: number; name: string }[];
-    collections: { id: number; title: string, products: { id: number; name: string; collection_id: number }[] }[];
+    collections: { id: number; title: string; products: { id: number; name: string; collection_id: number }[] }[];
     product?: Product;
     duplicate: boolean;
 }
@@ -28,5 +28,5 @@ export default function Create({ breadcrumbs, brands, collections, product, dupl
                 preselectedCollectionId={collectionId ?? undefined}
             />
         </AdminLayout>
-    )
+    );
 }

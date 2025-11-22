@@ -58,6 +58,19 @@ class Product extends Model
         return $this->status === true;
     }
 
+    /**
+     * Get the indexable data array for the model.
+     */
+    public function toSearchableArray(): array
+    {
+        $array = $this->toArray();
+
+        // Ajouter le prix effectif pour le filtrage Algolia
+        $array['effective_price'] = $this->discount_price ?? $this->price;
+
+        return $array;
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

@@ -1,8 +1,8 @@
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import { type BreadcrumbItem, type NavItem, SharedData } from '@/types';
-import { type ReactNode } from 'react';
-import { Calendar, Heart, LayoutGrid } from 'lucide-react';
 import { usePage } from '@inertiajs/react';
+import { Calendar, Heart, LayoutGrid } from 'lucide-react';
+import { type ReactNode } from 'react';
 
 const mainNavItems: NavItem[] = [
     {
@@ -28,7 +28,7 @@ interface AppLayoutProps {
 }
 
 export default function AppLayout({ children, breadcrumbs, ...props }: AppLayoutProps) {
-    const { swell } = usePage<SharedData>().props
+    const { swell } = usePage<SharedData>().props;
 
     const filteredNavItems = mainNavItems.filter((item) => {
         return !(item.title === 'Wishlist' && !swell.wishlist?.enabled);

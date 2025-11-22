@@ -1,3 +1,4 @@
+import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,23 +6,11 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, Product } from '@/types';
-import { Head, Link } from '@inertiajs/react';
-import {
-    Boxes,
-    Building2,
-    Calendar,
-    Copy,
-    Edit,
-    ExternalLink,
-    FolderOpen,
-    Package,
-    Trash2,
-    TrendingUp
-} from 'lucide-react';
-import { useState } from 'react';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { calculateMargin, calculateProfit } from '@/utils/product-price-calculating';
-import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
+import { Head, Link } from '@inertiajs/react';
+import { Boxes, Building2, Calendar, Copy, Edit, ExternalLink, FolderOpen, Package, Trash2, TrendingUp } from 'lucide-react';
+import { useState } from 'react';
 
 interface ProductType {
     breadcrumbs: BreadcrumbItem[];
@@ -37,13 +26,17 @@ export default function Show({ breadcrumbs, product }: ProductType) {
             <Head title={`Gérer : ${product.name}`} />
 
             <div className="space-y-6 py-6">
-                <div className="flex max-sm:flex-col-reverse sm:items-center justify-between">
+                <div className="flex justify-between max-sm:flex-col-reverse sm:items-center">
                     <div className="flex flex-col gap-4">
                         <h1 className="text-3xl font-bold text-foreground">{product.name}</h1>
                         <p className="text-muted-foreground">SKU: {product.sku ? product.sku : "Ce produit n'a pas de SKU"}</p>
                     </div>
-                    <div className="max-sm:mb-4 flex flex-wrap gap-2">
-                        <Link href={route('admin.products.create')} data={{ duplicate: product.id }} className={buttonVariants({ variant: 'outline' })}>
+                    <div className="flex flex-wrap gap-2 max-sm:mb-4">
+                        <Link
+                            href={route('admin.products.create')}
+                            data={{ duplicate: product.id }}
+                            className={buttonVariants({ variant: 'outline' })}
+                        >
                             <Copy className="size-4" />
                             Dupliquer
                         </Link>
@@ -59,7 +52,11 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                 </div>
 
                 <div className="flex gap-2">
-                    {product.status ? <Badge className="bg-green-900 text-green-200">Actif</Badge> : <Badge className="bg-red-900 text-red-200">Inactif</Badge>}
+                    {product.status ? (
+                        <Badge className="bg-green-900 text-green-200">Actif</Badge>
+                    ) : (
+                        <Badge className="bg-red-900 text-red-200">Inactif</Badge>
+                    )}
                     {product.isNew && <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">Nouveau</Badge>}
                     <Badge variant="secondary" className="bg-green-900 text-green-200">
                         En stock
@@ -68,7 +65,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
 
                 <div className="grid gap-6 lg:grid-cols-3">
                     <div className="lg:col-span-1">
-                        <Card className="border-border bg-card py-0 rounded-md">
+                        <Card className="rounded-md border-border bg-card py-0">
                             <CardContent className="p-4">
                                 <div className={product.images?.length ? 'space-y-4' : ''}>
                                     <div className="aspect-square overflow-hidden rounded-sm bg-muted">
@@ -107,27 +104,15 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                     <div className="lg:col-span-2">
                         <Tabs defaultValue="overview" className="space-y-4">
                             <TabsList className="flex flex-wrap">
-                                <TabsTrigger value="overview">
-                                    Vue d'ensemble
-                                </TabsTrigger>
-                                {product.options && product.options.length > 0 && (
-                                    <TabsTrigger value="options">
-                                        Variantes
-                                    </TabsTrigger>
-                                )}
-                                <TabsTrigger value="inventory">
-                                    Inventaire
-                                </TabsTrigger>
-                                <TabsTrigger value="seo">
-                                    SEO
-                                </TabsTrigger>
-                                <TabsTrigger value="analytics">
-                                    Analytics
-                                </TabsTrigger>
+                                <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
+                                {product.options && product.options.length > 0 && <TabsTrigger value="options">Variantes</TabsTrigger>}
+                                <TabsTrigger value="inventory">Inventaire</TabsTrigger>
+                                <TabsTrigger value="seo">SEO</TabsTrigger>
+                                <TabsTrigger value="analytics">Analytics</TabsTrigger>
                             </TabsList>
 
                             <TabsContent value="overview" className="space-y-4">
-                                <Card className="max-sm:py-4 border-border bg-card rounded-md">
+                                <Card className="rounded-md border-border bg-card max-sm:py-4">
                                     <CardHeader className="max-sm:px-4">
                                         <CardTitle className="text-foreground">Informations générales</CardTitle>
                                     </CardHeader>
@@ -154,7 +139,10 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                 <label className="text-sm font-medium text-muted-foreground">Catégorie</label>
                                                 <div className="flex items-center gap-2">
                                                     <FolderOpen className="size-4 text-muted-foreground" />
-                                                    <Link href={route('category.show', product.category?.slug)} className="text-primary hover:underline">
+                                                    <Link
+                                                        href={route('category.show', product.category?.slug)}
+                                                        className="text-primary hover:underline"
+                                                    >
                                                         {product.category?.name}
                                                     </Link>
                                                 </div>
@@ -180,16 +168,18 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                     </CardContent>
                                 </Card>
 
-                                <Card className="max-sm:py-4 border-border bg-card rounded-md">
+                                <Card className="rounded-md border-border bg-card max-sm:py-4">
                                     <CardHeader className="max-sm:px-4">
                                         <CardTitle className="text-foreground">Tarification</CardTitle>
                                     </CardHeader>
                                     <CardContent className="max-sm:px-4">
-                                        <div className="grid md:grid-cols-4 gap-4">
+                                        <div className="grid gap-4 md:grid-cols-4">
                                             {product.discount_price ? (
                                                 <div>
                                                     <label className="text-sm font-medium text-muted-foreground">Prix de vente (discount)</label>
-                                                    <p className="text-lg font-semibold text-muted-foreground">€{product.discount_price.toFixed(2)}</p>
+                                                    <p className="text-lg font-semibold text-muted-foreground">
+                                                        €{product.discount_price.toFixed(2)}
+                                                    </p>
                                                 </div>
                                             ) : (
                                                 <div>
@@ -199,9 +189,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                             )}
                                             <div>
                                                 <label className="text-sm font-medium text-muted-foreground">Prix coûtant</label>
-                                                <p className="text-lg font-semibold text-muted-foreground">
-                                                    €{product.cost_price.toFixed(2)}
-                                                </p>
+                                                <p className="text-lg font-semibold text-muted-foreground">€{product.cost_price.toFixed(2)}</p>
                                             </div>
                                             <div>
                                                 <label className="text-sm font-medium text-muted-foreground">Marge</label>
@@ -221,7 +209,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                             </TabsContent>
 
                             <TabsContent value="options" className="space-y-4">
-                                <Card className="max-sm:py-4 border-border bg-card rounded-md">
+                                <Card className="rounded-md border-border bg-card max-sm:py-4">
                                     <CardHeader className="max-sm:px-4">
                                         <CardTitle className="text-foreground">Gestion des options</CardTitle>
                                     </CardHeader>
@@ -231,8 +219,8 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                 product.options.map((option) => (
                                                     <div key={option.id} className="space-y-2">
                                                         <h3 className="text-lg font-semibold text-foreground">{option.name}</h3>
-                                                        <ul className="list-disc pl-5 space-y-1">
-                                                            {option.values?.map(value => (
+                                                        <ul className="list-disc space-y-1 pl-5">
+                                                            {option.values?.map((value) => (
                                                                 <li key={value.id} className="text-muted-foreground">
                                                                     {value.value}
                                                                 </li>
@@ -249,7 +237,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                             </TabsContent>
 
                             <TabsContent value="inventory" className="space-y-4">
-                                <Card className="max-sm:py-4 border-border bg-card rounded-md">
+                                <Card className="rounded-md border-border bg-card max-sm:py-4">
                                     <CardHeader className="max-sm:px-4">
                                         <CardTitle className="text-foreground">Gestion des stocks</CardTitle>
                                     </CardHeader>
@@ -270,7 +258,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                             </TabsContent>
 
                             <TabsContent value="seo" className="space-y-4">
-                                <Card className="max-sm:py-4 border-border bg-card">
+                                <Card className="border-border bg-card max-sm:py-4">
                                     <CardHeader className="max-sm:px-4">
                                         <CardTitle className="text-foreground">Optimisation SEO</CardTitle>
                                     </CardHeader>
@@ -290,8 +278,14 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                         <div>
                                             <label className="text-sm font-medium text-muted-foreground">URL du produit</label>
                                             <div className="mt-1 flex items-center gap-2">
-                                                <code className="rounded bg-muted px-2 py-1 text-sm text-muted-foreground">/products/{product.slug}</code>
-                                                <Link href={route('product.show', product.slug)} prefetch className={buttonVariants({ variant: 'ghost', size: 'icon' })}>
+                                                <code className="rounded bg-muted px-2 py-1 text-sm text-muted-foreground">
+                                                    /products/{product.slug}
+                                                </code>
+                                                <Link
+                                                    href={route('product.show', product.slug)}
+                                                    prefetch
+                                                    className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+                                                >
                                                     <ExternalLink />
                                                 </Link>
                                             </div>
@@ -302,7 +296,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
 
                             <TabsContent value="analytics" className="space-y-4">
                                 <div className="grid gap-4 md:grid-cols-2">
-                                    <Card className="max-sm:py-4 border-border bg-card">
+                                    <Card className="border-border bg-card max-sm:py-4">
                                         <CardHeader className="max-sm:px-4">
                                             <CardTitle className="flex items-center gap-2 text-foreground">
                                                 <TrendingUp className="h-5 w-5" />
@@ -321,15 +315,13 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                 </div>
                                                 <div className="flex justify-between">
                                                     <span className="text-muted-foreground">Taux de conversion:</span>
-                                                    <span className="font-semibold text-foreground">
-                                                        {((32 / 211) * 100).toFixed(1)}%
-                                                    </span>
+                                                    <span className="font-semibold text-foreground">{((32 / 211) * 100).toFixed(1)}%</span>
                                                 </div>
                                             </div>
                                         </CardContent>
                                     </Card>
 
-                                    <Card className="max-sm:py-4 border-border bg-card">
+                                    <Card className="border-border bg-card max-sm:py-4">
                                         <CardHeader className="max-sm:px-4">
                                             <CardTitle className="flex items-center gap-2 text-foreground">
                                                 <Calendar className="h-5 w-5" />

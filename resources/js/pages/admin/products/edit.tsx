@@ -1,10 +1,10 @@
-import AdminLayout from '@/layouts/admin-layout';
-import { Head } from '@inertiajs/react';
-import type { BreadcrumbItem, Product } from '@/types';
-import { Package } from 'lucide-react';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
-import { useState } from 'react';
 import { ProductFormPage } from '@/components/swell/product/product-form-page';
+import AdminLayout from '@/layouts/admin-layout';
+import type { BreadcrumbItem, Product } from '@/types';
+import { Head } from '@inertiajs/react';
+import { Package } from 'lucide-react';
+import { useState } from 'react';
 
 interface ProductType {
     breadcrumbs: BreadcrumbItem[];
@@ -20,7 +20,7 @@ interface ProductType {
             id: number;
             name: string;
         }[];
-    }[]
+    }[];
 }
 
 export default function Edit({ breadcrumbs, product, brands, collections }: ProductType) {
@@ -30,13 +30,7 @@ export default function Edit({ breadcrumbs, product, brands, collections }: Prod
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title={`Modification : ${product.name}`} />
 
-            <ProductFormPage
-                product={product}
-                brands={brands}
-                collections={collections}
-                isDuplicate={false}
-                setDeleteProduct={setDeleteProduct}
-            />
+            <ProductFormPage product={product} brands={brands} collections={collections} isDuplicate={false} setDeleteProduct={setDeleteProduct} />
 
             <ConfirmDeleteDialog
                 item={deleteProduct}

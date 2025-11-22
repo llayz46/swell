@@ -1,20 +1,22 @@
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
 import {
-    Dialog, DialogClose,
+    Dialog,
+    DialogClose,
     DialogContent,
-    DialogDescription, DialogFooter,
+    DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
+    DialogTrigger,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { LoaderCircle, Plus, Boxes, Box } from 'lucide-react';
-import { useForm } from '@inertiajs/react';
-import { FormEventHandler, useEffect } from 'react';
-import InputError from '@/components/input-error';
-import { toast } from 'sonner';
+import { Label } from '@/components/ui/label';
 import type { Collection } from '@/types';
+import { useForm } from '@inertiajs/react';
+import { Box, Boxes, LoaderCircle, Plus } from 'lucide-react';
+import { FormEventHandler, useEffect } from 'react';
+import { toast } from 'sonner';
 
 type CollectionForm = {
     title: string;
@@ -39,7 +41,7 @@ export function CollectionDialog({ open, setOpen, collection, inputValue }: Coll
             });
         } else if (inputValue) {
             setData({
-                title: inputValue
+                title: inputValue,
             });
         } else {
             reset();
@@ -69,7 +71,7 @@ export function CollectionDialog({ open, setOpen, collection, inputValue }: Coll
                         icon: <Boxes className="size-4" />,
                     });
                 },
-            })
+            });
         } else {
             put(route('admin.collections.update', collection.id), {
                 preserveScroll: true,
@@ -89,7 +91,7 @@ export function CollectionDialog({ open, setOpen, collection, inputValue }: Coll
                         icon: <Boxes className="size-4" />,
                     });
                 },
-            })
+            });
         }
     };
 
@@ -100,12 +102,16 @@ export function CollectionDialog({ open, setOpen, collection, inputValue }: Coll
                     <Plus /> Nouvelle collection
                 </Button>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5 shadow-dialog border-transparent">
+            <DialogContent className="shadow-dialog flex max-h-[calc(100vh-32px)] flex-col gap-0 overflow-y-visible border-transparent p-0 sm:max-w-xl [&>button:last-child]:top-3.5">
                 <DialogHeader className="contents space-y-0 text-left">
-                    <DialogTitle className="border-b px-6 py-4 text-base">{collection ? `Modifier la collection : ${collection.title}` : 'Créer une nouvelle collection'}</DialogTitle>
+                    <DialogTitle className="border-b px-6 py-4 text-base">
+                        {collection ? `Modifier la collection : ${collection.title}` : 'Créer une nouvelle collection'}
+                    </DialogTitle>
                 </DialogHeader>
                 <DialogDescription className="sr-only">
-                    {collection ? 'Modifier les détails de la collection' : 'Créer une nouvelle collection pour organiser vos produits. Remplissez les informations ci-dessous pour ajouter une nouvelle collection à votre boutique.'}
+                    {collection
+                        ? 'Modifier les détails de la collection'
+                        : 'Créer une nouvelle collection pour organiser vos produits. Remplissez les informations ci-dessous pour ajouter une nouvelle collection à votre boutique.'}
                 </DialogDescription>
                 <div className="overflow-y-auto">
                     <div className="pt-4">

@@ -1,33 +1,23 @@
-import { Button, buttonVariants } from '@/components/ui/button';
-import {
-    AlertCircle,
-    Bolt,
-    ChartNoAxesCombined,
-    Euro,
-    ExternalLink,
-    Eye,
-    Images,
-    Loader2, Package, Trash2,
-    Warehouse
-} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Transition } from '@headlessui/react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Separator } from '@/components/ui/separator';
-import { Link, useForm } from '@inertiajs/react';
-import type { Product, ProductForm } from '@/types';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import { GeneralTabContent } from '@/components/swell/product/form-tab/product-form-tab-general';
 import { ImagesTabContent } from '@/components/swell/product/form-tab/product-form-tab-images';
-import { PricingTabContent } from '@/components/swell/product/form-tab/product-form-tab-pricing';
 import { InventoryTabContent } from '@/components/swell/product/form-tab/product-form-tab-inventory';
+import { PricingTabContent } from '@/components/swell/product/form-tab/product-form-tab-pricing';
 import { SeoTabContent } from '@/components/swell/product/form-tab/product-form-tab-seo';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import type { Product, ProductForm } from '@/types';
 import { calculateMargin } from '@/utils/product-price-calculating';
+import { Transition } from '@headlessui/react';
+import { Link, useForm } from '@inertiajs/react';
+import { AlertCircle, Bolt, ChartNoAxesCombined, Euro, ExternalLink, Eye, Images, Loader2, Package, Trash2, Warehouse } from 'lucide-react';
+import { FormEventHandler, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 interface ProductFormType {
     product?: Product;
@@ -60,28 +50,33 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
         stock: !isDuplicate && product?.stock ? product.stock : 0,
         reorder_level: !isDuplicate && product?.reorder_level ? product.reorder_level : 5,
         status: !isDuplicate && Boolean(product?.status),
-        images: !isDuplicate && product?.images ? product.images.map(img => ({
-            id: img.id ?? null,
-            image_url: img.url,
-            image_file: null,
-            alt_text: img.alt_text ?? '',
-            is_featured: Boolean(img.is_featured),
-            order: img.order ?? 0,
-        })) : [],
-        options: product?.options ? product.options.map(option => ({
-            id: option.id ?? null,
-            name: option.name ?? '',
-            values: (option.values ?? []).map(v => ({
-                id: v.id ?? null,
-                value: v.value,
-            })),
-        })) : [],
+        images:
+            !isDuplicate && product?.images
+                ? product.images.map((img) => ({
+                      id: img.id ?? null,
+                      image_url: img.url,
+                      image_file: null,
+                      alt_text: img.alt_text ?? '',
+                      is_featured: Boolean(img.is_featured),
+                      order: img.order ?? 0,
+                  }))
+                : [],
+        options: product?.options
+            ? product.options.map((option) => ({
+                  id: option.id ?? null,
+                  name: option.name ?? '',
+                  values: (option.values ?? []).map((v) => ({
+                      id: v.id ?? null,
+                      value: v.value,
+                  })),
+              }))
+            : [],
         meta_title: product?.meta_title ?? null,
         meta_description: product?.meta_description ?? null,
         meta_keywords: product?.meta_keywords ?? null,
         brand_id: product?.brand.id ?? null,
         category_id: product?.category ? String(product?.category.id) : '',
-        collection_id: product?.collection ? String(product?.collection.id) : preselectedCollectionId ?? '',
+        collection_id: product?.collection ? String(product?.collection.id) : (preselectedCollectionId ?? ''),
     });
 
     const [initialData, setInitialData] = useState(data);
@@ -113,7 +108,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                         icon: <Package className="size-4" />,
                     });
                 },
-            })
+            });
         } else {
             post(route('admin.products.store'), {
                 preserveScroll: true,
@@ -131,33 +126,25 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                         icon: <Package className="size-4" />,
                     });
                 },
-            })
+            });
         }
     };
 
     return (
         <form className="space-y-6 py-6" onSubmit={submit}>
-            <div className="flex max-sm:flex-col max-sm:gap-4 sm:items-center justify-between">
+            <div className="flex justify-between max-sm:flex-col max-sm:gap-4 sm:items-center">
                 <div className="flex flex-col gap-2 sm:gap-4">
                     <h1 className="text-3xl font-bold text-foreground">
-                        {!isDuplicate && product ? (
-                            `Modifier : ${product.name}`
-                        ) : (
-                            "Créer un nouveau produit"
-                        )}
+                        {!isDuplicate && product ? `Modifier : ${product.name}` : 'Créer un nouveau produit'}
                     </h1>
                     <p className="text-muted-foreground">
-                        {!isDuplicate && product ? (
-                            `SKU: ${product.sku ? product.sku : "Non défini"}`
-                        ) : (
-                            "Créez un nouveau produit pour commencer à le vendre."
-                        )}
+                        {!isDuplicate && product
+                            ? `SKU: ${product.sku ? product.sku : 'Non défini'}`
+                            : 'Créez un nouveau produit pour commencer à le vendre.'}
                     </p>
                 </div>
                 <Button disabled={processing || (!isDuplicate && product && !isDirty)} className="w-fit">
-                    {processing && (
-                        <Loader2 className="animate-spin" />
-                    )}
+                    {processing && <Loader2 className="animate-spin" />}
                     {!isDuplicate && product ? 'Enregistrer les modifications' : 'Créer le produit'}
                 </Button>
             </div>
@@ -170,7 +157,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                 leaveTo="opacity-0 scale-95"
             >
                 <Alert className="border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950">
-                    <AlertCircle className="size-4 !text-orange-600 !dark:text-orange-400" />
+                    <AlertCircle className="!dark:text-orange-400 size-4 !text-orange-600" />
                     <AlertDescription className="text-orange-800 dark:text-orange-200">
                         Vous avez des modifications non enregistrées. N'oubliez pas de sauvegarder vos changements.
                     </AlertDescription>
@@ -203,8 +190,14 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                             </TabsTrigger>
                         </TabsList>
 
-                        <GeneralTabContent data={data} setData={setData} errors={errors} processing={processing}
-                                           brands={brands} collections={collections} />
+                        <GeneralTabContent
+                            data={data}
+                            setData={setData}
+                            errors={errors}
+                            processing={processing}
+                            brands={brands}
+                            collections={collections}
+                        />
 
                         <ImagesTabContent data={data} setData={setData} processing={processing} />
 
@@ -217,14 +210,18 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                 </div>
 
                 <div className="space-y-4 lg:col-span-1">
-                    <Card className="max-sm:py-4 border-border bg-card">
+                    <Card className="border-border bg-card max-sm:py-4">
                         <CardHeader className="max-sm:px-4">
                             <CardTitle className="text-foreground">Statut du produit</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4 max-sm:px-4">
                             <div className="flex items-center justify-between">
                                 <Label htmlFor="status">Produit actif</Label>
-                                <Switch id="status" defaultChecked={!isDuplicate && product && product.status} onCheckedChange={(checked) => setData('status', checked)} />
+                                <Switch
+                                    id="status"
+                                    defaultChecked={!isDuplicate && product && product.status}
+                                    onCheckedChange={(checked) => setData('status', checked)}
+                                />
                             </div>
                             <div className="flex items-center justify-between">
                                 <Label>Date du produit</Label>
@@ -243,7 +240,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                         </CardContent>
                     </Card>
 
-                    <Card className="max-sm:py-4 border-border bg-card">
+                    <Card className="border-border bg-card max-sm:py-4">
                         <CardHeader className="max-sm:px-4">
                             <CardTitle className="text-foreground">Aperçu rapide</CardTitle>
                         </CardHeader>
@@ -255,9 +252,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                             {data.discount_price !== null && data.discount_price !== 0 && (
                                 <div className="flex justify-between">
                                     <span className="text-muted-foreground">Prix promo:</span>
-                                    <span className="font-semibold text-green-600 dark:text-green-400">
-                                        €{data.discount_price.toFixed(2)}
-                                    </span>
+                                    <span className="font-semibold text-green-600 dark:text-green-400">€{data.discount_price.toFixed(2)}</span>
                                 </div>
                             )}
                             <div className="flex justify-between">
@@ -266,12 +261,22 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-muted-foreground">Marge:</span>
-                                <span className="font-semibold text-green-600 dark:text-green-400">{calculateMargin(data.cost_price, (data.discount_price !== null && data.discount_price !== 0) ? data.discount_price : data.price)}%</span>
+                                <span className="font-semibold text-green-600 dark:text-green-400">
+                                    {calculateMargin(
+                                        data.cost_price,
+                                        data.discount_price !== null && data.discount_price !== 0 ? data.discount_price : data.price,
+                                    )}
+                                    %
+                                </span>
                             </div>
                             <Separator />
                             <div className="space-y-2">
                                 <div className="flex flex-wrap gap-1">
-                                    {data.status ? <Badge className="bg-green-600 dark:bg-green-900 dark:text-green-200">Actif</Badge> : <Badge variant="destructive">Inactif</Badge>}
+                                    {data.status ? (
+                                        <Badge className="bg-green-600 dark:bg-green-900 dark:text-green-200">Actif</Badge>
+                                    ) : (
+                                        <Badge variant="destructive">Inactif</Badge>
+                                    )}
                                     {!isDuplicate && product && product.isNew && <Badge className="bg-blue-900 text-blue-200">Nouveau</Badge>}
                                 </div>
                             </div>
@@ -316,5 +321,5 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                 </div>
             </div>
         </form>
-    )
+    );
 }

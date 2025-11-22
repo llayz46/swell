@@ -1,5 +1,5 @@
-import { Toaster } from 'sonner';
 import { useAppearance } from '@/hooks/use-appearance';
+import { Toaster } from 'sonner';
 
 export function ToasterWrapper() {
     const { appearance } = useAppearance();
@@ -14,5 +14,5 @@ export function ToasterWrapper() {
                 },
             }}
         />
-    )
+    );
 }

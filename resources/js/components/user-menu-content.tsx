@@ -12,7 +12,7 @@ interface UserMenuContentProps {
 
 export function UserMenuContent({ user, page }: UserMenuContentProps) {
     const cleanup = useMobileNavigation();
-    const isAdmin = user.roles.some(role => role.name === 'admin');
+    const isAdmin = user.roles.some((role) => role.name === 'admin');
 
     const handleLogout = () => {
         cleanup();

@@ -14,10 +14,11 @@ interface ProductListPageProps {
     title: string;
     products: PaginatedResponse<Product>;
     sort: SortType;
-    stock: { in: boolean, out: boolean }
+    stock: { in: boolean; out: boolean };
+    price?: { min: number | null; max: number | null; max_available: number };
 }
 
-export function ProductListPage({ title, products, sort = 'news', stock }: ProductListPageProps) {
+export function ProductListPage({ title, products, sort = 'news', stock, price }: ProductListPageProps) {
     const [selectedSort, setSelectedSort] = useState<SortType>(sort);
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
@@ -27,18 +28,24 @@ export function ProductListPage({ title, products, sort = 'news', stock }: Produ
 
     const handleSortChange = (value: SortType) => {
         setSelectedSort(value);
-        router.get(
-            window.location.pathname,
-            {
-                sort: value,
-                page: products.meta.current_page,
-            },
-            {
-                preserveState: true,
-                preserveScroll: true,
-                replace: true,
-            },
-        );
+
+        // Préserver tous les paramètres de requête existants
+        const currentParams = new URLSearchParams(window.location.search);
+        const paramsObj: Record<string, string> = {};
+
+        currentParams.forEach((paramValue, key) => {
+            paramsObj[key] = paramValue;
+        });
+
+        // Mettre à jour le tri
+        paramsObj['sort'] = value;
+        paramsObj['page'] = products.meta.current_page.toString();
+
+        router.get(window.location.pathname, paramsObj, {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+        });
     };
 
     return (
@@ -47,7 +54,7 @@ export function ProductListPage({ title, products, sort = 'news', stock }: Produ
 
             <main className="layout-container">
                 <div className="flex items-center justify-between">
-                    <FilterSheet stock={stock} />
+                    <FilterSheet stock={stock} price={price} />
 
                     <Select onValueChange={handleSortChange} defaultValue={sort} value={selectedSort}>
                         <SelectTrigger className="w-52">
@@ -62,7 +69,7 @@ export function ProductListPage({ title, products, sort = 'news', stock }: Produ
                 </div>
 
                 <section className="mb-8 space-y-6">
-                    <ul className="mt-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <ul className="mt-4 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                         {products.data.map((product) => (
                             <li key={product.id}>
                                 <ProductCard product={product} onQuickView={() => setQuickViewProduct(product)} />
@@ -70,13 +77,12 @@ export function ProductListPage({ title, products, sort = 'news', stock }: Produ
                         ))}
                     </ul>
 
-                    {products.data.length === 0 && (
-                        <div className="text-center text-muted-foreground">
-                            Aucun produit trouvé.
-                        </div>
-                    )}
+                    {products.data.length === 0 && <div className="text-center text-muted-foreground">Aucun produit trouvé.</div>}
 
-                    <PaginationComponent pagination={{ links: products.links, meta: products.meta }} preserveQuery={['sort']} />
+                    <PaginationComponent
+                        pagination={{ links: products.links, meta: products.meta }}
+                        preserveQuery={['sort', 'min_price', 'max_price', 'in', 'out']}
+                    />
                 </section>
 
                 <ProductQuickViewDialog product={quickViewProduct} open={!!quickViewProduct} onClose={() => setQuickViewProduct(null)} />

@@ -1,20 +1,22 @@
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
 import {
-    Dialog, DialogClose,
+    Dialog,
+    DialogClose,
     DialogContent,
-    DialogDescription, DialogFooter,
+    DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
+    DialogTrigger,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { LoaderCircle, Megaphone, Plus } from 'lucide-react';
-import { useForm } from '@inertiajs/react';
-import { FormEventHandler, useEffect } from 'react';
-import InputError from '@/components/input-error';
-import { toast } from 'sonner';
+import { Label } from '@/components/ui/label';
 import { BannerItem } from '@/types';
+import { useForm } from '@inertiajs/react';
+import { LoaderCircle, Megaphone, Plus } from 'lucide-react';
+import { FormEventHandler, useEffect } from 'react';
+import { toast } from 'sonner';
 
 type BannerForm = {
     message: string;
@@ -60,28 +62,26 @@ export function BannerDialog({ open, setOpen, banner, onCreated }: BannerDialogP
 
                     const { props } = page;
 
-                    const newBanner = Array.isArray(props.infoBanner)
-                                        ? props.infoBanner.filter((b: BannerItem) => b.message === data.message)
-                                        : null;
+                    const newBanner = Array.isArray(props.infoBanner) ? props.infoBanner.filter((b: BannerItem) => b.message === data.message) : null;
 
                     if (newBanner && onCreated) {
                         onCreated(newBanner);
                     }
 
                     toast.success('Message ajouté avec succès', {
-                        description:'Le message a bien été ajouté.',
+                        description: 'Le message a bien été ajouté.',
                         icon: <Megaphone className="size-4" />,
                     });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error('Erreur lors de l\'ajout du message', {
+                    toast.error("Erreur lors de l'ajout du message", {
                         description: allErrors,
                         icon: <Megaphone className="size-4" />,
                     });
                 },
-            })
+            });
         } else {
             put(route('admin.banners.update', banner.id), {
                 preserveScroll: true,
@@ -89,7 +89,7 @@ export function BannerDialog({ open, setOpen, banner, onCreated }: BannerDialogP
                     reset('message');
                     setOpen(false);
                     toast.success('Message modifié avec succès', {
-                        description:'Le message a bien été modifié.',
+                        description: 'Le message a bien été modifié.',
                         icon: <Megaphone className="size-4" />,
                     });
                 },
@@ -101,7 +101,7 @@ export function BannerDialog({ open, setOpen, banner, onCreated }: BannerDialogP
                         icon: <Megaphone className="size-4" />,
                     });
                 },
-            })
+            });
         }
     };
 
@@ -112,13 +112,11 @@ export function BannerDialog({ open, setOpen, banner, onCreated }: BannerDialogP
                     <Plus size={16} /> Ajouter un message
                 </Button>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 shadow-dialog border-transparent sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5">
+            <DialogContent className="shadow-dialog flex max-h-[calc(100vh-32px)] flex-col gap-0 overflow-y-visible border-transparent p-0 sm:max-w-xl [&>button:last-child]:top-3.5">
                 <DialogHeader className="contents space-y-0 text-left">
                     <DialogTitle className="border-b px-6 py-4 text-base">{banner ? 'Modifier le message' : 'Ajouter un message'}</DialogTitle>
                 </DialogHeader>
-                <DialogDescription className="sr-only">
-                    {banner ? 'Modifier le message' : 'Ajouter un message.'}
-                </DialogDescription>
+                <DialogDescription className="sr-only">{banner ? 'Modifier le message' : 'Ajouter un message.'}</DialogDescription>
                 <div className="overflow-y-auto">
                     <div className="pt-4">
                         <form className="space-y-4 *:not-last:px-6" onSubmit={submit}>

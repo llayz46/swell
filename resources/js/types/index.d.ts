@@ -1,6 +1,6 @@
 import { LucideIcon } from 'lucide-react';
-import type { Config } from 'ziggy-js';
 import { Dispatch, SetStateAction } from 'react';
+import type { Config } from 'ziggy-js';
 
 export interface Auth {
     user: User;
@@ -30,20 +30,20 @@ export type BannerItem = {
     order: number;
     updated_at: string;
     created_at: string;
-}
+};
 
 export interface SharedData {
     name: string;
     swell: {
         wishlist: {
             enabled: boolean;
-        }
+        };
         banner: {
             enabled: boolean;
-        }
+        };
         review: {
             enabled: boolean;
-        }
+        };
     };
     auth: Auth;
     ziggy: Config & { location: string };
@@ -51,7 +51,7 @@ export interface SharedData {
     [key: string]: unknown;
     categories: Category[];
     cart: Cart;
-    infoBanner: BannerItem[]
+    infoBanner: BannerItem[];
 }
 
 export interface User {
@@ -106,7 +106,7 @@ export interface CartItem {
         option_name: string;
         option_value_id: number;
         option_value_name: string;
-    }[]
+    }[];
 }
 
 export interface Cart {
@@ -166,7 +166,7 @@ export type MetaLink = {
     url: string;
     label: string;
     active: boolean;
-}
+};
 
 export interface ProductImage {
     id: number;
@@ -302,7 +302,7 @@ interface FormTabContentProps<T> {
     errors?: Record<string, string>;
     processing?: boolean;
     brands?: { id: number; name: string }[];
-    collections?: { id: number; title: string, products: { id: number; name: string }[] }[];
+    collections?: { id: number; title: string; products: { id: number; name: string }[] }[];
 }
 
 type ProductForm = {
@@ -338,4 +338,4 @@ type ProductForm = {
     brand_id: number | null;
     category_id: string;
     collection_id: string;
-}
+};

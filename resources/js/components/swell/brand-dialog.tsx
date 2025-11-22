@@ -1,20 +1,22 @@
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
 import {
-    Dialog, DialogClose,
+    Dialog,
+    DialogClose,
     DialogContent,
-    DialogDescription, DialogFooter,
+    DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
+    DialogTrigger,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Tags, LoaderCircle, Plus } from 'lucide-react';
-import { useForm } from '@inertiajs/react';
-import { FormEventHandler, useEffect } from 'react';
-import InputError from '@/components/input-error';
-import { toast } from 'sonner';
+import { Label } from '@/components/ui/label';
 import { Brand } from '@/types';
+import { useForm } from '@inertiajs/react';
+import { LoaderCircle, Plus, Tags } from 'lucide-react';
+import { FormEventHandler, useEffect } from 'react';
+import { toast } from 'sonner';
 
 type BrandForm = {
     name: string;
@@ -31,19 +33,19 @@ interface BrandDialogProps {
 export function BrandDialog({ open, setOpen, brand, inputValue }: BrandDialogProps) {
     const { data, setData, post, processing, errors, reset } = useForm<BrandForm>({
         name: '',
-        logo_url: null
+        logo_url: null,
     });
 
     useEffect(() => {
         if (brand) {
             setData({
                 name: brand.name || '',
-                logo_url: null
+                logo_url: null,
             });
         } else if (inputValue) {
             setData({
                 name: inputValue,
-                logo_url: null
+                logo_url: null,
             });
         } else {
             reset();
@@ -74,7 +76,7 @@ export function BrandDialog({ open, setOpen, brand, inputValue }: BrandDialogPro
                         icon: <Tags className="size-4" />,
                     });
                 },
-            })
+            });
         } else {
             post(route('admin.brands.update', brand.id), {
                 method: 'put',
@@ -95,7 +97,7 @@ export function BrandDialog({ open, setOpen, brand, inputValue }: BrandDialogPro
                         icon: <Tags className="size-4" />,
                     });
                 },
-            })
+            });
         }
     };
 
@@ -106,12 +108,16 @@ export function BrandDialog({ open, setOpen, brand, inputValue }: BrandDialogPro
                     <Plus /> Nouvelle marque
                 </Button>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5 shadow-dialog border-transparent">
+            <DialogContent className="shadow-dialog flex max-h-[calc(100vh-32px)] flex-col gap-0 overflow-y-visible border-transparent p-0 sm:max-w-xl [&>button:last-child]:top-3.5">
                 <DialogHeader className="contents space-y-0 text-left">
-                    <DialogTitle className="border-b px-6 py-4 text-base">{brand ? `Modifier la marque : ${brand.name}` : 'Créer une nouvelle marque'}</DialogTitle>
+                    <DialogTitle className="border-b px-6 py-4 text-base">
+                        {brand ? `Modifier la marque : ${brand.name}` : 'Créer une nouvelle marque'}
+                    </DialogTitle>
                 </DialogHeader>
                 <DialogDescription className="sr-only">
-                    {brand ? 'Modifier les détails de la marque' : 'Créer une nouvelle marque pour organiser vos produits. Remplissez les informations ci-dessous pour ajouter une nouvelle marque à votre boutique.'}
+                    {brand
+                        ? 'Modifier les détails de la marque'
+                        : 'Créer une nouvelle marque pour organiser vos produits. Remplissez les informations ci-dessous pour ajouter une nouvelle marque à votre boutique.'}
                 </DialogDescription>
                 <div className="overflow-y-auto">
                     <div className="pt-4">

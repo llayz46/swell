@@ -1,16 +1,11 @@
-import {
-    syncDataLoaderFeature,
-    expandAllFeature,
-    FeatureImplementation,
-    selectionFeature
-} from '@headless-tree/core';
-import { useTree } from '@headless-tree/react';
-import { CheckIcon, FileIcon, FolderIcon, FolderOpenIcon } from 'lucide-react';
 import { Tree, TreeItem, TreeItemLabel } from '@/components/swell/tree';
-import { SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
-import { formatCategoryTree, getParentChainFromTree } from '@/utils/format-category-tree';
 import { Label } from '@/components/ui/label';
+import { SharedData } from '@/types';
+import { formatCategoryTree, getParentChainFromTree } from '@/utils/format-category-tree';
+import { expandAllFeature, FeatureImplementation, selectionFeature, syncDataLoaderFeature } from '@headless-tree/core';
+import { useTree } from '@headless-tree/react';
+import { usePage } from '@inertiajs/react';
+import { CheckIcon, FileIcon, FolderIcon, FolderOpenIcon } from 'lucide-react';
 
 interface Item {
     name: string;
@@ -24,40 +19,52 @@ const doubleClickExpandFeature: FeatureImplementation = {
         getProps: ({ tree, item, prev }) => ({
             ...prev?.(),
             onDoubleClick: () => {
-                item.primaryAction()
+                item.primaryAction();
 
                 if (!item.isFolder()) {
-                    return
+                    return;
                 }
 
                 if (item.isExpanded()) {
-                    item.collapse()
+                    item.collapse();
                 } else {
-                    item.expand()
+                    item.expand();
                 }
             },
             onClick: (e: React.MouseEvent) => {
                 if (e.shiftKey) {
-                    item.selectUpTo(e.ctrlKey || e.metaKey)
+                    item.selectUpTo(e.ctrlKey || e.metaKey);
                 } else if (e.ctrlKey || e.metaKey) {
-                    item.toggleSelect()
+                    item.toggleSelect();
                 } else {
-                    tree.setSelectedItems([item.getItemMeta().itemId])
+                    tree.setSelectedItems([item.getItemMeta().itemId]);
                 }
 
-                item.setFocused()
+                item.setFocused();
             },
         }),
     },
-}
+};
 
-export function CategoryTree({ label, setData, field, initialSelectedItem, onlyChildren }: { label: { htmlFor: string, name: string }, field: string, setData: (parentId: string, id: string) => void, initialSelectedItem?: string, onlyChildren?: boolean }) {
+export function CategoryTree({
+    label,
+    setData,
+    field,
+    initialSelectedItem,
+    onlyChildren,
+}: {
+    label: { htmlFor: string; name: string };
+    field: string;
+    setData: (parentId: string, id: string) => void;
+    initialSelectedItem?: string;
+    onlyChildren?: boolean;
+}) {
     const { categories } = usePage<SharedData>().props;
     const { items, rootItemId } = formatCategoryTree(categories);
 
     const tree = useTree<Item>({
         initialState: {
-            expandedItems: initialSelectedItem ? getParentChainFromTree(items, initialSelectedItem) ?? [] : [],
+            expandedItems: initialSelectedItem ? (getParentChainFromTree(items, initialSelectedItem) ?? []) : [],
             selectedItems: initialSelectedItem ? [initialSelectedItem] : [],
         },
         indent,
@@ -77,8 +84,12 @@ export function CategoryTree({ label, setData, field, initialSelectedItem, onlyC
                 <Label htmlFor={label.htmlFor}>{label.name}</Label>
 
                 <div className="space-x-2">
-                    <button type="button" className="text-xs text-muted-foreground" onClick={() => tree.expandAll()}>Développer</button>
-                    <button type="button" className="text-xs text-muted-foreground" onClick={() => tree.collapseAll()}>Réduire</button>
+                    <button type="button" className="text-xs text-muted-foreground" onClick={() => tree.expandAll()}>
+                        Développer
+                    </button>
+                    <button type="button" className="text-xs text-muted-foreground" onClick={() => tree.collapseAll()}>
+                        Réduire
+                    </button>
                 </div>
             </div>
             <div>
@@ -91,7 +102,7 @@ export function CategoryTree({ label, setData, field, initialSelectedItem, onlyC
                         return (
                             <TreeItem key={item.getId()} item={item}>
                                 <TreeItemLabel
-                                    className={`relative before:absolute before:inset-x-0 before:-inset-y-0.5 before:-z-10 before:bg-background ${item.isSelected() ? 'font-medium text-primary bg-accent/30 rounded' : ''}`}
+                                    className={`relative before:absolute before:inset-x-0 before:-inset-y-0.5 before:-z-10 before:bg-background ${item.isSelected() ? 'rounded bg-accent/30 font-medium text-primary' : ''}`}
                                     onClick={() => {
                                         if (onlyChildren) {
                                             if (item.getParent()?.getId() === 'root' && item.getChildren().length > 0) {
@@ -100,23 +111,27 @@ export function CategoryTree({ label, setData, field, initialSelectedItem, onlyC
                                         }
 
                                         setData(field, item.getId());
-                                        item.toggleSelect()
+                                        item.toggleSelect();
                                     }}
                                 >
                                     <span className="flex items-center gap-2">
                                         {item.isFolder() ? (
                                             item.isExpanded() ? (
-                                                <FolderOpenIcon className={`pointer-events-none size-4 ${item.isSelected() ? 'text-primary' : 'text-muted-foreground'}`} />
+                                                <FolderOpenIcon
+                                                    className={`pointer-events-none size-4 ${item.isSelected() ? 'text-primary' : 'text-muted-foreground'}`}
+                                                />
                                             ) : (
-                                                <FolderIcon className={`pointer-events-none size-4 ${item.isSelected() ? 'text-primary' : 'text-muted-foreground'}`} />
+                                                <FolderIcon
+                                                    className={`pointer-events-none size-4 ${item.isSelected() ? 'text-primary' : 'text-muted-foreground'}`}
+                                                />
                                             )
                                         ) : (
-                                            <FileIcon className={`pointer-events-none size-4 ${item.isSelected() ? 'text-primary' : 'text-muted-foreground'}`} />
+                                            <FileIcon
+                                                className={`pointer-events-none size-4 ${item.isSelected() ? 'text-primary' : 'text-muted-foreground'}`}
+                                            />
                                         )}
                                         {item.getItemName()}
-                                        {item.isSelected() && (
-                                            <CheckIcon className="size-4 text-primary" />
-                                        )}
+                                        {item.isSelected() && <CheckIcon className="size-4 text-primary" />}
                                     </span>
                                 </TreeItemLabel>
                             </TreeItem>

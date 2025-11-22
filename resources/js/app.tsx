@@ -1,11 +1,11 @@
-import '../css/app.css';
+import { CartProvider } from '@/contexts/cart-context';
+import { WishlistProvider } from '@/contexts/wishlist-context';
+import { Cart } from '@/types';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
+import '../css/app.css';
 import { initializeTheme } from './hooks/use-appearance';
-import { CartProvider } from '@/contexts/cart-context';
-import { Cart } from '@/types';
-import { WishlistProvider } from '@/contexts/wishlist-context';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -27,7 +27,7 @@ createInertiaApp({
                 ) : (
                     <App {...props} />
                 )}
-            </CartProvider>
+            </CartProvider>,
         );
     },
     progress: {

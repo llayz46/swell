@@ -5,22 +5,22 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
+import { getStorageUrl } from '@/utils/format-storage-url';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Menu } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
-import { getStorageUrl } from '@/utils/format-storage-url';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const rightNavItems: NavItem[] = [
     {
         title: 'Documentation',
         href: 'https://swellkit.dev',
-        icon: BookOpen
+        icon: BookOpen,
     },
 ];
 
@@ -66,11 +66,7 @@ export function AppHeader({ breadcrumbs = [], mainNavItems }: AppHeaderProps) {
 
                                         <div className="flex flex-col space-y-4">
                                             {rightNavItems.map((item) => (
-                                                <Link
-                                                    key={item.title}
-                                                    href={item.href}
-                                                    className="flex items-center space-x-2 font-medium"
-                                                >
+                                                <Link key={item.title} href={item.href} className="flex items-center space-x-2 font-medium">
                                                     {item.icon && <Icon iconNode={item.icon} className="size-5" />}
                                                     <span>{item.title}</span>
                                                 </Link>
@@ -95,15 +91,22 @@ export function AppHeader({ breadcrumbs = [], mainNavItems }: AppHeaderProps) {
                                             href={item.href}
                                             className={cn(
                                                 navigationMenuTriggerStyle(),
-                                                ((item.href !== '/admin' && (page.url === item.href || page.url.startsWith(item.href + '/') || page.url.startsWith(item.href + '?'))) ||
-                                                    (item.href === '/admin' && page.url === '/admin')) && activeItemStyles,
+                                                ((item.href !== '/admin' &&
+                                                    (page.url === item.href ||
+                                                        page.url.startsWith(item.href + '/') ||
+                                                        page.url.startsWith(item.href + '?'))) ||
+                                                    (item.href === '/admin' && page.url === '/admin')) &&
+                                                    activeItemStyles,
                                                 'h-9 cursor-pointer px-3',
                                             )}
                                         >
                                             {item.icon && <Icon iconNode={item.icon} className="mr-2 h-4 w-4" />}
                                             {item.title}
                                         </Link>
-                                        {((item.href !== '/admin' && (page.url === item.href || page.url.startsWith(item.href + '/') || page.url.startsWith(item.href + '?'))) ||
+                                        {((item.href !== '/admin' &&
+                                            (page.url === item.href ||
+                                                page.url.startsWith(item.href + '/') ||
+                                                page.url.startsWith(item.href + '?'))) ||
                                             (item.href === '/admin' && page.url === '/admin')) && (
                                             <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>
                                         )}
@@ -113,7 +116,7 @@ export function AppHeader({ breadcrumbs = [], mainNavItems }: AppHeaderProps) {
                         </NavigationMenu>
                     </div>
 
-                    <div className="ml-auto flex gap-2 items-center">
+                    <div className="ml-auto flex items-center gap-2">
                         <div className="hidden lg:flex">
                             {rightNavItems.map((item) => (
                                 <TooltipProvider key={item.title} delayDuration={0}>

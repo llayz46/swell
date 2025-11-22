@@ -6,6 +6,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
 use App\Modules\Review\Http\Resources\ReviewResource;
+use App\Traits\PriceFilterable;
 use App\Traits\Sortable;
 use App\Traits\StockFilterable;
 use Illuminate\Http\Request;
@@ -14,12 +15,11 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    use StockFilterable, Sortable;
+    use PriceFilterable, Sortable, StockFilterable;
 
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
      * @return \Inertia\Response
      */
     public function index(Request $request)
@@ -28,10 +28,30 @@ class ProductController extends Controller
         $search = $request->input('search');
         $in = $request->boolean('in');
         $out = $request->boolean('out');
+        $minPrice = $request->has('min_price') ? (float) $request->input('min_price') : null;
+        $maxPrice = $request->has('max_price') ? (float) $request->input('max_price') : null;
+
+        // Récupère le prix max pour le slider (en cache)
+        $maxProductPrice = Cache::remember('products:max_price', now()->addHour(), function () {
+            return Product::where('status', true)
+                ->selectRaw('MAX(COALESCE(discount_price, price)) as max_price')
+                ->value('max_price') ?? 1000;
+        });
 
         if ($search) {
-            $products = Product::search($search)
-                ->query(function ($query) use ($in, $out, $sort) {
+            $searchBuilder = Product::search($search);
+
+            // Appliquer les filtres de prix via Algolia
+            if ($minPrice !== null && $maxPrice !== null) {
+                $searchBuilder->where('effective_price', '>=', $minPrice)
+                    ->where('effective_price', '<=', $maxPrice);
+            } elseif ($minPrice !== null) {
+                $searchBuilder->where('effective_price', '>=', $minPrice);
+            } elseif ($maxPrice !== null) {
+                $searchBuilder->where('effective_price', '<=', $maxPrice);
+            }
+
+            $products = $searchBuilder->query(function ($query) use ($in, $out, $sort) {
                     $query->where('status', true)
                         ->with('featuredImage', 'brand');
 
@@ -44,6 +64,7 @@ class ProductController extends Controller
                 ->with('featuredImage', 'brand');
 
             $this->applyStockFilter($query, $in, $out);
+            $this->applyPriceFilter($query, $minPrice, $maxPrice);
             $this->applySort($query, $sort);
 
             $products = $query->paginate(16)->withQueryString();
@@ -56,6 +77,11 @@ class ProductController extends Controller
                 'in' => $in,
                 'out' => $out,
             ],
+            'price' => [
+                'min' => $minPrice,
+                'max' => $maxPrice,
+                'max_available' => $maxProductPrice,
+            ],
         ]);
     }
 
@@ -64,7 +90,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        if(!$product->status) abort(404);
+        if (! $product->status) {
+            abort(404);
+        }
 
         $cacheKey = "product:{$product->id}:details";
 
@@ -77,7 +105,7 @@ class ProductController extends Controller
                         $query->orderBy('order');
                     },
                     'category',
-                    'options.values'
+                    'options.values',
                 ])
             );
         });

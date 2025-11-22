@@ -8,7 +8,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans:
+        'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -142,73 +143,45 @@
     }
 
     body {
-        @apply bg-background text-foreground !mb-0;
+        @apply !mb-0 bg-background text-foreground;
     }
 }
 
 @layer utilities {
     .layout-container {
-        @apply max-w-7xl mx-auto;
+        @apply mx-auto max-w-7xl;
     }
 
     .shadow-dialog {
         --tw-shadow:
-            0px 0px 0px 1px var(--tw-shadow-color, #01213921),
-            0px 0px 0px 7px var(--tw-shadow-color, #ffffff4d),
-            0px 64px 24px 0px var(--tw-shadow-color, #0000),
-            0px 44px 22px 0px var(--tw-shadow-color, #00000005),
-            0px 28px 20px 0px var(--tw-shadow-color, #00000014),
-            0px 17px 17px 0px var(--tw-shadow-color, #00000021),
+            0px 0px 0px 1px var(--tw-shadow-color, #01213921), 0px 0px 0px 7px var(--tw-shadow-color, #ffffff4d),
+            0px 64px 24px 0px var(--tw-shadow-color, #0000), 0px 44px 22px 0px var(--tw-shadow-color, #00000005),
+            0px 28px 20px 0px var(--tw-shadow-color, #00000014), 0px 17px 17px 0px var(--tw-shadow-color, #00000021),
             0px 10px 13px 0px var(--tw-shadow-color, #00000026);
 
-        box-shadow:
-            var(--tw-inset-shadow),
-            var(--tw-inset-ring-shadow),
-            var(--tw-ring-offset-shadow),
-            var(--tw-ring-shadow),
-            var(--tw-shadow);
+        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .dark .shadow-dialog {
         --tw-shadow:
-            0px 0px 0px 1px rgba(115, 115, 115, 0.2),
-            0px 0px 0px 7px #00000066,
-            0px 64px 24px 0px #0000,
-            0px 44px 22px 0px #00000033,
-            0px 28px 20px 0px rgba(0, 0, 0, 0.23),
-            0px 17px 17px 0px rgba(0, 0, 0, 0.26),
-            0px 10px 13px 0px rgba(0, 0, 0, 0.32);
+            0px 0px 0px 1px rgba(115, 115, 115, 0.2), 0px 0px 0px 7px #00000066, 0px 64px 24px 0px #0000, 0px 44px 22px 0px #00000033,
+            0px 28px 20px 0px rgba(0, 0, 0, 0.23), 0px 17px 17px 0px rgba(0, 0, 0, 0.26), 0px 10px 13px 0px rgba(0, 0, 0, 0.32);
     }
 
     .bg-stronger {
         --bg-stronger-opacity: 12%;
-        background-color: color-mix(
-            in oklab,
-            #111113 var(--bg-stronger-opacity),
-            transparent
-        );
+        background-color: color-mix(in oklab, #111113 var(--bg-stronger-opacity), transparent);
     }
 
     .shadow-inner {
         --tw-shadow: 0px 0px 1.5px 0.5px var(--shadow-color, #0000001f) inset;
-        box-shadow:
-            var(--tw-inset-shadow),
-            var(--tw-inset-ring-shadow),
-            var(--tw-ring-offset-shadow),
-            var(--tw-ring-shadow),
-            var(--tw-shadow);
+        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .shadow-xs-with-border {
         --tw-shadow:
-            0px 0px 0px 1px var(--shadow-color, var(--color-slate-light-alpha, #001a3329)),
-            0px 0px 1px 0px var(--shadow-color, #00000008),
+            0px 0px 0px 1px var(--shadow-color, var(--color-slate-light-alpha, #001a3329)), 0px 0px 1px 0px var(--shadow-color, #00000008),
             0px 1px 2px 0px var(--shadow-color, #0000000f);
-        box-shadow:
-            var(--tw-inset-shadow),
-            var(--tw-inset-ring-shadow),
-            var(--tw-ring-offset-shadow),
-            var(--tw-ring-shadow),
-            var(--tw-shadow);
+        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 }

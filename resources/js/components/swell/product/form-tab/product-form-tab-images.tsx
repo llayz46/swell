@@ -7,21 +7,9 @@ import { TabsContent } from '@/components/ui/tabs';
 import { useFileUpload } from '@/hooks/use-file-upload';
 import { FormTabContentProps, ProductForm } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
-import {
-    DndContext,
-    MouseSensor,
-    TouchSensor,
-    useSensor,
-    useSensors,
-    DragEndEvent,
-    closestCenter
-} from '@dnd-kit/core';
-import {
-    SortableContext,
-    useSortable,
-    arrayMove
-} from '@dnd-kit/sortable';
+import { DndContext, DragEndEvent, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
+import { SortableContext, arrayMove, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { AlertCircleIcon, GripVertical, ImageIcon, Star, Trash2, Upload, UploadIcon } from 'lucide-react';
 
@@ -37,7 +25,7 @@ export function ImagesTabContent({ data, setData, processing }: FormTabContentPr
                 delay: 250,
                 tolerance: 5,
             },
-        })
+        }),
     );
 
     const [
@@ -67,7 +55,7 @@ export function ImagesTabContent({ data, setData, processing }: FormTabContentPr
                     image_file: fileWithPreview.file instanceof File ? fileWithPreview.file : null,
                     alt_text: fileWithPreview.file instanceof File ? fileWithPreview.file.name : '',
                     is_featured: false,
-                    order: baseOrder + index + 1
+                    order: baseOrder + index + 1,
                 };
             });
 
@@ -102,7 +90,7 @@ export function ImagesTabContent({ data, setData, processing }: FormTabContentPr
 
     return (
         <TabsContent value="images" className="space-y-4">
-            <Card className="max-sm:py-4 border-border bg-card">
+            <Card className="border-border bg-card max-sm:py-4">
                 <CardHeader className="max-sm:px-4">
                     <div className="flex items-center justify-between">
                         <CardTitle className="text-foreground">Images du produit</CardTitle>
@@ -161,15 +149,15 @@ export function ImagesTabContent({ data, setData, processing }: FormTabContentPr
 
                                 const newImages = arrayMove(data.images, oldIndex, newIndex).map((img, idx) => ({
                                     ...img,
-                                    order: idx + 1
+                                    order: idx + 1,
                                 }));
 
                                 setData('images', newImages);
                             }
                         }}
                     >
-                        <SortableContext items={data.images.map(img => img.alt_text)}>
-                            <div className="grid gap-4 md:grid-cols-2 w-full">
+                        <SortableContext items={data.images.map((img) => img.alt_text)}>
+                            <div className="grid w-full gap-4 md:grid-cols-2">
                                 {data.images.map((image, index) => (
                                     <ImageSortableItem
                                         key={index}
@@ -223,14 +211,7 @@ function ImageSortableItem({
     removeImage: (id: number) => void;
     handleImageAltChange: (id: number, altText: string) => void;
 }) {
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-        isDragging,
-    } = useSortable({
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: image.alt_text,
         transition: {
             duration: 150,
@@ -245,15 +226,13 @@ function ImageSortableItem({
         willChange: isDragging ? 'transform' : 'auto',
         zIndex: isDragging ? 999 : 'auto',
         opacity: isDragging ? 0.4 : 1,
-        boxShadow: isDragging ? '0 0 0 1px rgba(63, 63, 70, 0.1), 0 4px 8px -2px rgba(63, 63, 70, 0.1), 0 2px 4px -2px rgba(63, 63, 70, 0.1)' : 'none',
+        boxShadow: isDragging
+            ? '0 0 0 1px rgba(63, 63, 70, 0.1), 0 4px 8px -2px rgba(63, 63, 70, 0.1), 0 2px 4px -2px rgba(63, 63, 70, 0.1)'
+            : 'none',
     };
 
     return (
-        <div
-            ref={setNodeRef}
-            style={style}
-            className="space-y-3 rounded-lg border bg-muted/20 p-4 transition-shadow duration-200 hover:shadow-md"
-        >
+        <div ref={setNodeRef} style={style} className="space-y-3 rounded-lg border bg-muted/20 p-4 transition-shadow duration-200 hover:shadow-md">
             <div className="relative aspect-square overflow-hidden rounded-md bg-muted">
                 <img
                     src={getStorageUrl(image.image_url)}
@@ -268,7 +247,7 @@ function ImageSortableItem({
                         size="icon"
                         {...attributes}
                         {...listeners}
-                        className="bg-background/80 hover:bg-background cursor-grab active:cursor-grabbing"
+                        className="cursor-grab bg-background/80 hover:bg-background active:cursor-grabbing"
                     >
                         <GripVertical />
                     </Button>

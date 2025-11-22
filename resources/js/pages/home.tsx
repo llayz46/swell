@@ -1,33 +1,25 @@
-import { Head, Link, usePage } from '@inertiajs/react';
-import BaseLayout from '@/layouts/base-layout';
-import {
-    ArrowRight,
-    BookOpenText,
-    Star,
-    ShoppingCartIcon,
-    Monitor,
-    Package,
-    Puzzle
-} from 'lucide-react';
-import type { Product, SharedData } from '@/types';
-import { cn } from '@/lib/utils';
-import { ProductCard } from '@/components/swell/product/product-card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getStorageUrl } from '@/utils/format-storage-url';
-import { useInitials } from '@/hooks/use-initials';
-import { ReactNode, useEffect, useState } from 'react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ProductQuickViewDialog } from '@/components/swell/product/product-quick-view-dialog';
-import { toast } from 'sonner';
 import { BoxReveal } from '@/components/magicui/box-reveal';
 import { TextAnimate } from '@/components/magicui/text-animate';
+import { ProductCard } from '@/components/swell/product/product-card';
+import { ProductQuickViewDialog } from '@/components/swell/product/product-quick-view-dialog';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { useInitials } from '@/hooks/use-initials';
+import BaseLayout from '@/layouts/base-layout';
+import { cn } from '@/lib/utils';
+import type { Product, SharedData } from '@/types';
+import { getStorageUrl } from '@/utils/format-storage-url';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { ArrowRight, BookOpenText, Monitor, Package, Puzzle, ShoppingCartIcon, Star } from 'lucide-react';
+import { ReactNode, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 const BENEFITS = [
     {
         icon: Monitor,
         title: 'UI Simple et intuitive',
-        description: 'Des composants faciles à utiliser et à personnaliser'
+        description: 'Des composants faciles à utiliser et à personnaliser',
     },
     {
         icon: ShoppingCartIcon,
@@ -43,7 +35,7 @@ const BENEFITS = [
         icon: Puzzle,
         title: 'Structure modulaire',
         description: 'Architecture claire : contrôleurs légers, isolation.',
-    }
+    },
 ];
 
 const CATEGORIES = [
@@ -54,8 +46,8 @@ const CATEGORIES = [
             { name: 'Laravel Built-in' },
             { name: 'Auth 2FA' },
             { name: 'Profil personnalisable', className: 'text-violet-400' },
-            { name: 'Vérification d\'email' },
-        ]
+            { name: "Vérification d'email" },
+        ],
     },
     {
         title: 'Modélisation',
@@ -65,7 +57,7 @@ const CATEGORIES = [
             { name: 'Catégories et Marques' },
             { name: 'Panier et Commandes' },
             { name: 'Entièrement personnalisable', className: 'text-green-400' },
-        ]
+        ],
     },
     {
         title: 'Interface Utilisateur',
@@ -74,8 +66,8 @@ const CATEGORIES = [
             { name: 'Composants UI', className: 'text-blue-400' },
             { name: 'Personnalisation facile' },
             { name: 'Dark mode' },
-            { name: 'Responsive et accessible' }
-        ]
+            { name: 'Responsive et accessible' },
+        ],
     },
     {
         title: 'Développement',
@@ -85,8 +77,8 @@ const CATEGORIES = [
             { name: 'Tests unitaires inclus' },
             { name: 'Documentation complète' },
             { name: 'Contribution' },
-        ]
-    }
+        ],
+    },
 ];
 
 const REVIEWS = [
@@ -99,7 +91,7 @@ const REVIEWS = [
         product: {
             name: 'Produit A',
         },
-        comment: 'J\'adore ce produit ! Il a vraiment changé ma façon de travailler.',
+        comment: "J'adore ce produit ! Il a vraiment changé ma façon de travailler.",
         rating: 5,
     },
     {
@@ -111,7 +103,7 @@ const REVIEWS = [
         product: {
             name: 'Produit B',
         },
-        comment: 'Très bon produit, mais j\'aurais aimé plus de documentation.',
+        comment: "Très bon produit, mais j'aurais aimé plus de documentation.",
         rating: 4,
     },
     {
@@ -123,37 +115,37 @@ const REVIEWS = [
         product: {
             name: 'Produit C',
         },
-        comment: 'Le support client est excellent, ils m\'ont aidé rapidement.',
+        comment: "Le support client est excellent, ils m'ont aidé rapidement.",
         rating: 5,
     },
-]
+];
 
 const FAQ = [
     {
-        question: 'Qu\'est-ce que le starter kit Swell ?',
-        answer: 'Swell est un starter kit e-commerce complet, prêt à l\'emploi, conçu pour accélérer le développement de vos projets web.'
+        question: "Qu'est-ce que le starter kit Swell ?",
+        answer: "Swell est un starter kit e-commerce complet, prêt à l'emploi, conçu pour accélérer le développement de vos projets web.",
     },
     {
-        question: 'À qui s\'adresse ce starter kit ?',
-        answer: 'Il s\'adresse aux développeurs souhaitant démarrer rapidement un projet e-commerce moderne avec une base technique solide.'
+        question: "À qui s'adresse ce starter kit ?",
+        answer: "Il s'adresse aux développeurs souhaitant démarrer rapidement un projet e-commerce moderne avec une base technique solide.",
     },
     {
         question: 'Quels frameworks et technologies sont utilisés ?',
-        answer: 'Le starter kit utilise Laravel pour le backend, React et TypeScript pour le frontend, ainsi que Tailwind CSS et Shadcn UI pour l\'interface.'
+        answer: "Le starter kit utilise Laravel pour le backend, React et TypeScript pour le frontend, ainsi que Tailwind CSS et Shadcn UI pour l'interface.",
     },
     {
         question: 'Puis-je personnaliser les composants et la structure ?',
-        answer: 'Oui, tous les composants et la structure du projet sont entièrement personnalisables pour s\'adapter à vos besoins.'
+        answer: "Oui, tous les composants et la structure du projet sont entièrement personnalisables pour s'adapter à vos besoins.",
     },
     {
         question: 'Le kit inclut-il des pages produits et autres ?',
-        answer: 'Oui, des pages sont directement fournies pour vous aider à démarrer rapidement.'
+        answer: 'Oui, des pages sont directement fournies pour vous aider à démarrer rapidement.',
     },
     {
-        question: 'Comment obtenir de l\'aide ou contribuer au projet ?',
-        answer: 'Vous pouvez consulter la documentation, rejoindre la discussion sur GitHub ou proposer des contributions directement sur le dépôt.'
-    }
-]
+        question: "Comment obtenir de l'aide ou contribuer au projet ?",
+        answer: 'Vous pouvez consulter la documentation, rejoindre la discussion sur GitHub ou proposer des contributions directement sur le dépôt.',
+    },
+];
 
 export default function Home({ products }: { products: Product[] }) {
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
@@ -163,16 +155,17 @@ export default function Home({ products }: { products: Product[] }) {
     useEffect(() => {
         const errorMessage = Object.values(errors).flat().join(' ');
 
-        if (errorMessage) toast.error('Une erreur est survenue', {
-            description: errorMessage,
-        });
-    }, [errors])
+        if (errorMessage)
+            toast.error('Une erreur est survenue', {
+                description: errorMessage,
+            });
+    }, [errors]);
 
     return (
         <BaseLayout>
             <Head title="Accueil" />
 
-            <div className="absolute top-30 right-0 left-0 -z-10 h-250 w-full bg-[radial-gradient(#e5e7eb_1px,#ffffff_1px)] dark:bg-[radial-gradient(#262626FF_1px,#0A0A0AFF_1px)] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_100%_50%_at_50%_100%,#000_100%,transparent_220%)] after:absolute after:bottom-0 after:h-72 after:w-full after:bg-linear-to-t after:from-background after:to-transparent"></div>
+            <div className="absolute top-30 right-0 left-0 -z-10 h-250 w-full bg-[radial-gradient(#e5e7eb_1px,#ffffff_1px)] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_100%_50%_at_50%_100%,#000_100%,transparent_220%)] after:absolute after:bottom-0 after:h-72 after:w-full after:bg-linear-to-t after:from-background after:to-transparent dark:bg-[radial-gradient(#262626FF_1px,#0A0A0AFF_1px)]"></div>
 
             {/* Hero Section */}
             <section className="pt-10 sm:pt-20">
@@ -181,18 +174,14 @@ export default function Home({ products }: { products: Product[] }) {
                         <div className="mx-auto max-w-7xl text-center">
                             <h1 className="sm:leading-tighter mb-4 text-4xl leading-tight font-semibold tracking-tight text-black sm:mb-6 sm:text-5xl md:text-7xl dark:text-white">
                                 <BoxReveal boxColor="#3b82f6" duration={0.5}>
-                                    <span className="text-center">
-                                        Le starter-kit
-                                    </span>
+                                    <span className="text-center">Le starter-kit</span>
                                 </BoxReveal>
                                 <BoxReveal boxColor="#3b82f6" duration={0.5}>
                                     <span className="text-primary italic">
                                         — pour{' '}
                                         <span className="relative">
                                             vous lancer
-                                            <span
-                                                className="absolute w-full bottom-1 left-0 h-0.5 bg-primary"
-                                            />
+                                            <span className="absolute bottom-1 left-0 h-0.5 w-full bg-primary" />
                                         </span>
                                         .
                                     </span>
@@ -207,8 +196,7 @@ export default function Home({ products }: { products: Product[] }) {
                             >
                                 Pensé pour les développeurs : flexible, performant, scalable et prêt à l'emploi.
                             </TextAnimate>
-                            <div
-                                className="mt-6 flex flex-col items-center justify-center gap-3 px-4 sm:mt-8 sm:flex-row sm:px-0">
+                            <div className="mt-6 flex flex-col items-center justify-center gap-3 px-4 sm:mt-8 sm:flex-row sm:px-0">
                                 <PrimaryButton href="/products">Voir nos produits</PrimaryButton>
                                 <a
                                     href="https://swellkit.dev"
@@ -238,9 +226,7 @@ export default function Home({ products }: { products: Product[] }) {
                                     Une base technique solide, prête à utiliser pour vos projets.
                                 </TextAnimate>
 
-                                <div
-                                    className="grid grid-cols-1 gap-4 md:gap-8 md:grid-cols-2 lg:grid-cols-4"
-                                >
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
                                     {BENEFITS.map((benefit, index) => (
                                         <div
                                             key={index}
@@ -261,16 +247,16 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* Join Section */}
-            <section className="sm:mx-4 md:mx-6 rounded-xl bg-muted/90 py-24 dark:bg-muted/40">
+            <section className="rounded-xl bg-muted/90 py-24 sm:mx-4 md:mx-6 dark:bg-muted/40">
                 <div className="container mx-auto max-w-5xl px-4">
                     <div className="mx-auto mb-16 max-w-2xl text-center">
                         <h2 className="mb-3 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
-                            Conçevez des projets <span className="text-primary">ambitieux</span> avec <span
-                            className="font-bold italic underline">Swell</span>
+                            Conçevez des projets <span className="text-primary">ambitieux</span> avec{' '}
+                            <span className="font-bold italic underline">Swell</span>
                         </h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
-                            Un <span className="font-bold text-primary">starter-kit e-commerce</span> complet et évolutif,
-                            pensé pour accélérer vos projets et
+                            Un <span className="font-bold text-primary">starter-kit e-commerce</span> complet et évolutif, pensé pour accélérer vos
+                            projets et
                             <span className="text-3xl font-bold text-primary italic"> intégrer facilement vos produits.</span>
                         </p>
                     </div>
@@ -288,12 +274,8 @@ export default function Home({ products }: { products: Product[] }) {
                                 <p className="mb-4 text-sm tracking-tighter text-foreground/70">{category.description}</p>
                                 <ul className="grid grid-cols-1 gap-1.5 md:grid-cols-2">
                                     {category.items.map((item, itemIndex) => (
-                                        <li
-                                            key={itemIndex}
-                                            className="group rounded-md px-3 py-2 transition-all hover:bg-muted/50"
-                                        >
-                                            <span
-                                                className={cn('text-sm font-medium tracking-tighter text-foreground', item.className)}>
+                                        <li key={itemIndex} className="group rounded-md px-3 py-2 transition-all hover:bg-muted/50">
+                                            <span className={cn('text-sm font-medium tracking-tighter text-foreground', item.className)}>
                                                 {item.name}
                                             </span>
                                         </li>
@@ -308,13 +290,11 @@ export default function Home({ products }: { products: Product[] }) {
             {/* Top Products Section */}
             <section className="py-24">
                 <div className="container mx-auto px-4">
-                    <div className="mx-auto mt-3 mb-8 md:mb-12 max-w-2xl text-center">
-                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
-                            Exemples de produits
-                        </h2>
+                    <div className="mx-auto mt-3 mb-8 max-w-2xl text-center md:mb-12">
+                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Exemples de produits</h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
-                            Découvrez une sélection de produits <span
-                            className="font-bold text-primary">populaires</span> pour vous inspirer dans vos projets.
+                            Découvrez une sélection de produits <span className="font-bold text-primary">populaires</span> pour vous inspirer dans vos
+                            projets.
                         </p>
                     </div>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
@@ -330,14 +310,12 @@ export default function Home({ products }: { products: Product[] }) {
             {/* Last Review Section */}
             <section className="pt-24 pb-36">
                 <div className="container mx-auto px-4">
-                    <div className="mx-auto mb-8 md:mb-12 max-w-2xl text-center">
-                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Ce que
-                            nos clients disent</h2>
-                        <p className="text-sm tracking-tighter text-foreground/70 md:text-base">Des avis authentiques de
-                            joueurs satisfaits.</p>
+                    <div className="mx-auto mb-8 max-w-2xl text-center md:mb-12">
+                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Ce que nos clients disent</h2>
+                        <p className="text-sm tracking-tighter text-foreground/70 md:text-base">Des avis authentiques de joueurs satisfaits.</p>
                     </div>
 
-                    <Carousel className="mx-auto w-[calc(100%-48px)] sm:w-full max-w-3xl">
+                    <Carousel className="mx-auto w-[calc(100%-48px)] max-w-3xl sm:w-full">
                         <CarouselContent>
                             {REVIEWS.map((review) => (
                                 <CarouselItem key={review.id}>
@@ -355,17 +333,14 @@ export default function Home({ products }: { products: Product[] }) {
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <Avatar className="size-8 overflow-hidden rounded-full">
-                                                <AvatarImage src={getStorageUrl(review.user?.avatar)}
-                                                             alt={review.user?.name} />
-                                                <AvatarFallback
-                                                    className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                                <AvatarImage src={getStorageUrl(review.user?.avatar)} alt={review.user?.name} />
+                                                <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                                     {getInitials(review.user ? review.user.name : 'Anonyme')}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div className="grid flex-1 text-left text-sm leading-tight">
                                                 <span className="truncate font-medium">{review.user?.name}</span>
-                                                <span
-                                                    className="truncate text-xs text-muted-foreground">{review.product?.name}</span>
+                                                <span className="truncate text-xs text-muted-foreground">{review.product?.name}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -379,14 +354,15 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* CTA Section */}
-            <section className="relative md:mx-4 rounded-xl bg-muted/90 dark:bg-muted/40 py-10 md:py-20">
+            <section className="relative rounded-xl bg-muted/90 py-10 md:mx-4 md:py-20 dark:bg-muted/40">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-8 max-w-2xl text-center">
                         <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
                             Prêt à lancer votre projet grâce à Swell ?
                         </h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
-                            Lancez vous rapidement avec Swell, conçu pour simplifier le développement et vous permettre de vous concentrer sur l'essentiel.
+                            Lancez vous rapidement avec Swell, conçu pour simplifier le développement et vous permettre de vous concentrer sur
+                            l'essentiel.
                         </p>
                     </div>
                     <div className="flex justify-center">
@@ -396,30 +372,19 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* FAQ Section */}
-            <section className="sm:px-4 mt-12 py-24 max-w-6xl mx-auto">
-                <div className="mx-auto mb-8 md:mb-16 max-w-2xl text-center">
-                    <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
-                        Questions Fréquemment Posées
-                    </h2>
-                    <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
-                        Vous avez des questions ? Nous avons les réponses.
-                    </p>
+            <section className="mx-auto mt-12 max-w-6xl py-24 sm:px-4">
+                <div className="mx-auto mb-8 max-w-2xl text-center md:mb-16">
+                    <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Questions Fréquemment Posées</h2>
+                    <p className="text-sm tracking-tighter text-foreground/70 md:text-base">Vous avez des questions ? Nous avons les réponses.</p>
                 </div>
-                <Accordion
-                    type="single"
-                    collapsible
-                    className="w-full space-y-3"
-                    defaultValue="item-1"
-                >
+                <Accordion type="single" collapsible className="w-full space-y-3" defaultValue="item-1">
                     {FAQ.map((item, index) => (
                         <AccordionItem value={index.toString()} key={`item-${index.toString()}`} className="group">
-                            <div className="rounded-xl transition-all duration-200 cursor-pointer hover:bg-muted/30 dark:hover:bg-muted/10 hover:ring-1 hover:ring-border group-data-[state=open]:ring-border group-data-[state=open]:ring-1 dark:group-data-[state=open]:bg-muted/10 group-data-[state=open]:bg-muted/30">
+                            <div className="cursor-pointer rounded-xl transition-all duration-200 group-data-[state=open]:bg-muted/30 group-data-[state=open]:ring-1 group-data-[state=open]:ring-border hover:bg-muted/30 hover:ring-1 hover:ring-border dark:group-data-[state=open]:bg-muted/10 dark:hover:bg-muted/10">
                                 <AccordionTrigger>{item.question}</AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-4 text-balance px-6 pb-6">
-                                    <div className="text-[16px] text-foreground/70 tracking-tight leading-relaxed space-y-4">
-                                        <p>
-                                            {item.answer}
-                                        </p>
+                                <AccordionContent className="flex flex-col gap-4 px-6 pb-6 text-balance">
+                                    <div className="space-y-4 text-[16px] leading-relaxed tracking-tight text-foreground/70">
+                                        <p>{item.answer}</p>
                                     </div>
                                 </AccordionContent>
                             </div>
@@ -429,35 +394,81 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* Footer Section */}
-            <section className="sm:px-4 pb-8 max-w-6xl mx-auto mt-12">
-                <footer className="relative w-full overflow-hidden bg-black dark:bg-white rounded-2xl tracking-tighter">
-                    <div className="max-w-7xl mx-auto px-6 py-8 md:py-12">
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-4">
+            <section className="mx-auto mt-12 max-w-6xl pb-8 sm:px-4">
+                <footer className="relative w-full overflow-hidden rounded-2xl bg-black tracking-tighter dark:bg-white">
+                    <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+                        <div className="grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-4">
                             <div className="col-span-1 md:col-span-8">
                                 <Link href="/" className="text-lg font-bold text-secondary">
                                     Swell
                                 </Link>
-                                <p className="text-sm text-muted-foreground mb-6 max-w-xs">
+                                <p className="mb-6 max-w-xs text-sm text-muted-foreground">
                                     Un starter-kit simple et flexible pour démarrer vos projets e-commerce.
                                 </p>
-                                <span className="text-sm text-muted-foreground">
-                                    Free to contribute.
-                                </span>
+                                <span className="text-sm text-muted-foreground">Free to contribute.</span>
                             </div>
-                            <div className="flex flex-col col-span-1 md:col-span-2 items-start md:items-end">
-                                <h3 className="font-medium text-white dark:text-black mb-3">Boutique</h3>
-                                <ul className="space-y-2 w-full md:text-right">
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/promotions">Promotions</Link></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/brands">Marques</Link></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="/products?sort=news">Nouveautés</Link></li>
+                            <div className="col-span-1 flex flex-col items-start md:col-span-2 md:items-end">
+                                <h3 className="mb-3 font-medium text-white dark:text-black">Boutique</h3>
+                                <ul className="w-full space-y-2 md:text-right">
+                                    <li>
+                                        <Link
+                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
+                                            href="/promotions"
+                                        >
+                                            Promotions
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
+                                            href="/brands"
+                                        >
+                                            Marques
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
+                                            href="/products?sort=news"
+                                        >
+                                            Nouveautés
+                                        </Link>
+                                    </li>
                                 </ul>
                             </div>
-                            <div className="flex flex-col col-span-1 md:col-span-2 items-start md:items-end">
-                                <h3 className="font-medium text-white dark:text-black mb-3">Ressources</h3>
-                                <ul className="space-y-2 w-full md:text-right">
-                                    <li><a className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="https://swellkit.dev" target="_blank" rel="noopener noreferrer">Documentation</a></li>
-                                    <li><a className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="https://github.com/llayz46/swell" target="_blank" rel="noopener noreferrer">Discussion</a></li>
-                                    <li><Link className="text-sm text-secondary/70 hover:text-secondary transition-colors duration-200" href="https://github.com/llayz46/swell" target="_blank" rel="noopener noreferrer">Roadmap</Link></li>
+                            <div className="col-span-1 flex flex-col items-start md:col-span-2 md:items-end">
+                                <h3 className="mb-3 font-medium text-white dark:text-black">Ressources</h3>
+                                <ul className="w-full space-y-2 md:text-right">
+                                    <li>
+                                        <a
+                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
+                                            href="https://swellkit.dev"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Documentation
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
+                                            href="https://github.com/llayz46/swell"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Discussion
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
+                                            href="https://github.com/llayz46/swell"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Roadmap
+                                        </Link>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -468,7 +479,7 @@ export default function Home({ products }: { products: Product[] }) {
     );
 }
 
-const PrimaryButton = (props: { href: string, children: ReactNode }) => {
+const PrimaryButton = (props: { href: string; children: ReactNode }) => {
     const externalLink = props.href && props.href.startsWith('http');
 
     if (externalLink) {

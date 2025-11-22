@@ -1,39 +1,22 @@
-import { Head, usePage } from '@inertiajs/react';
-import AdminLayout from '@/layouts/admin-layout';
-import type { BreadcrumbItem, Category, SharedData } from '@/types';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
-import {
-    ChevronDown,
-    ChevronRight,
-    Plus,
-    Search,
-    Edit,
-    Trash2,
-    MoreHorizontal,
-    FolderOpen,
-    Folder,
-    Folders
-} from 'lucide-react';
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { CategoryDialog } from '@/components/swell/category-dialog';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AdminLayout from '@/layouts/admin-layout';
+import type { BreadcrumbItem, Category, SharedData } from '@/types';
+import { Head, usePage } from '@inertiajs/react';
+import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, Folders, MoreHorizontal, Plus, Search, Trash2 } from 'lucide-react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadcrumbs: BreadcrumbItem[] }) {
     const { categories } = usePage<SharedData>().props;
 
-    const [searchTerm, setSearchTerm] = useState("")
-    const [expandedCategories, setExpandedCategories] = useState<Set<number>>(new Set())
+    const [searchTerm, setSearchTerm] = useState('');
+    const [expandedCategories, setExpandedCategories] = useState<Set<number>>(new Set());
     const [deleteCategory, setDeleteCategory] = useState<Category | null>(null);
     const [openCategoryDialog, setOpenCategoryDialog] = useState<boolean>(false);
     const [editCategory, setEditCategory] = useState<Category | null>(null);
@@ -44,10 +27,8 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
             return [
                 ...initialBreadcrumbs,
                 {
-                    title: editCategory
-                        ? `Modifier : ${editCategory.name}`
-                        : 'Nouvelle catégorie',
-                    href: "#"
+                    title: editCategory ? `Modifier : ${editCategory.name}` : 'Nouvelle catégorie',
+                    href: '#',
                 },
             ];
         }
@@ -55,21 +36,21 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
     }, [initialBreadcrumbs, openCategoryDialog, editCategory]);
 
     const toggleExpanded = (categoryId: number) => {
-        const newExpanded = new Set(expandedCategories)
+        const newExpanded = new Set(expandedCategories);
         if (newExpanded.has(categoryId)) {
-            newExpanded.delete(categoryId)
+            newExpanded.delete(categoryId);
         } else {
-            newExpanded.add(categoryId)
+            newExpanded.add(categoryId);
         }
-        setExpandedCategories(newExpanded)
-    }
+        setExpandedCategories(newExpanded);
+    };
 
     const CategoryRow = (category: Category, level = 0, onCategoryDelete?: () => void): ReactNode => {
-        const hasChildren = category.children && category.children.length > 0
-        const isExpanded = expandedCategories.has(category.id)
-        const paddingLeft = level * 24
+        const hasChildren = category.children && category.children.length > 0;
+        const isExpanded = expandedCategories.has(category.id);
+        const paddingLeft = level * 24;
 
-        const rows = []
+        const rows = [];
 
         rows.push(
             <TableRow key={category.id} className="border-border hover:bg-muted/50">
@@ -136,7 +117,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                             <DropdownMenuItem
                                 className="cursor-pointer text-foreground hover:bg-muted"
                                 onClick={() => {
-                                    setParentIdForNewCategory(category.id)
+                                    setParentIdForNewCategory(category.id);
                                     setOpenCategoryDialog(true);
                                 }}
                             >
@@ -158,42 +139,40 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
         );
 
         if (hasChildren && isExpanded && category.children) {
-            category.children.forEach(child => {
-                rows.push(CategoryRow(child, level + 1, () => setDeleteCategory(child)))
-            })
+            category.children.forEach((child) => {
+                rows.push(CategoryRow(child, level + 1, () => setDeleteCategory(child)));
+            });
         }
 
-        return rows
-    }
+        return rows;
+    };
 
     const filterCategories = (categories: Category[], searchTerm: string): Category[] => {
         return categories
-            .map(category => {
+            .map((category) => {
                 const matches =
                     category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     category.description.toLowerCase().includes(searchTerm.toLowerCase());
 
-                const filteredChildren = category.children
-                    ? filterCategories(category.children, searchTerm)
-                    : [];
+                const filteredChildren = category.children ? filterCategories(category.children, searchTerm) : [];
 
                 if (matches || filteredChildren.length > 0) {
                     return {
                         ...category,
-                        children: filteredChildren
+                        children: filteredChildren,
                     };
                 }
 
                 return null;
             })
             .filter(Boolean) as Category[];
-    }
+    };
 
     const filteredCategories = filterCategories(categories, searchTerm);
 
     useEffect(() => {
-        if(searchTerm) setExpandedCategories(new Set(filteredCategories.map((c) => c.id)));
-        else setExpandedCategories(new Set())
+        if (searchTerm) setExpandedCategories(new Set(filteredCategories.map((c) => c.id)));
+        else setExpandedCategories(new Set());
     }, [searchTerm]);
 
     const countCategoriesWithFilter = (categories: Category[], filter?: ((cat: Category) => boolean) | keyof Category | null): number => {
@@ -206,46 +185,40 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                 passesFilter = cat[filter] === true || cat[filter] === 'active';
             }
 
-            return (
-                acc +
-                (passesFilter ? 1 : 0) +
-                (cat.children && cat.children.length > 0
-                    ? countCategoriesWithFilter(cat.children, filter)
-                    : 0)
-            );
+            return acc + (passesFilter ? 1 : 0) + (cat.children && cat.children.length > 0 ? countCategoriesWithFilter(cat.children, filter) : 0);
         }, 0);
-    }
+    };
 
     return (
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les catégories" />
 
-            <Card className="mt-4 py-3 sm:py-4 border-border bg-card">
+            <Card className="mt-4 border-border bg-card py-3 sm:py-4">
                 <CardContent className="px-3 sm:px-4">
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                         <div className="flex-1">
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
                                 <Input
                                     placeholder="Rechercher une catégorie..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="pl-10 bg-background border-border text-foreground placeholder:text-muted-foreground"
+                                    className="border-border bg-background pl-10 text-foreground placeholder:text-muted-foreground"
                                 />
                             </div>
                         </div>
-                        <div className="flex max-sm:flex-wrap gap-2">
+                        <div className="flex gap-2 max-sm:flex-wrap">
                             <Button
                                 variant="outline"
                                 onClick={() => setExpandedCategories(new Set(categories.map((c) => c.id)))}
-                                className="bg-background border-border text-foreground hover:bg-muted"
+                                className="border-border bg-background text-foreground hover:bg-muted"
                             >
                                 Tout développer
                             </Button>
                             <Button
                                 variant="outline"
                                 onClick={() => setExpandedCategories(new Set())}
-                                className="bg-background border-border text-foreground hover:bg-muted"
+                                className="border-border bg-background text-foreground hover:bg-muted"
                             >
                                 Tout réduire
                             </Button>
@@ -254,9 +227,9 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                 </CardContent>
             </Card>
 
-            <Card className="border-border bg-card pt-4 pb-0 gap-0">
-                <CardHeader className="px-4 pb-4 border-b border-border sm:flex-row justify-between">
-                    <CardTitle className="text-foreground text-lg">Liste des catégories ({countCategoriesWithFilter(filteredCategories)})</CardTitle>
+            <Card className="gap-0 border-border bg-card pt-4 pb-0">
+                <CardHeader className="justify-between border-b border-border px-4 pb-4 sm:flex-row">
+                    <CardTitle className="text-lg text-foreground">Liste des catégories ({countCategoriesWithFilter(filteredCategories)})</CardTitle>
 
                     <CategoryDialog
                         open={openCategoryDialog}
@@ -271,7 +244,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                 <CardContent className="p-0">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-border hover:bg-transparent *:text-muted-foreground *:font-medium">
+                            <TableRow className="border-border *:font-medium *:text-muted-foreground hover:bg-transparent">
                                 <TableHead className="min-w-64">Nom</TableHead>
                                 <TableHead>Description</TableHead>
                                 <TableHead>Slug</TableHead>
@@ -282,11 +255,11 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                         </TableHeader>
                         <TableBody>
                             {filteredCategories.length > 0 ? (
-                                filteredCategories.map(category => CategoryRow(category, 0, () => setDeleteCategory(category)))
+                                filteredCategories.map((category) => CategoryRow(category, 0, () => setDeleteCategory(category)))
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                                        {searchTerm ? "Aucune catégorie trouvée" : "Aucune catégorie disponible"}
+                                    <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
+                                        {searchTerm ? 'Aucune catégorie trouvée' : 'Aucune catégorie disponible'}
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -295,19 +268,17 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                 </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
+            <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-4">
                 <SwellCard>
                     <SwellCardContent>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-muted-foreground">Total catégories</p>
-                                <p className="text-2xl font-bold text-foreground">
-                                    {countCategoriesWithFilter(categories)}
-                                </p>
+                                <p className="text-2xl font-bold text-foreground">{countCategoriesWithFilter(categories)}</p>
                             </div>
                             <Badge
                                 variant="secondary"
-                                className="bg-muted text-muted-foreground size-8 rounded-full flex items-center justify-center"
+                                className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
                             >
                                 <FolderOpen />
                             </Badge>
@@ -324,7 +295,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                                     {countCategoriesWithFilter(categories, 'is_active')}
                                 </p>
                             </div>
-                            <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 h-8 w-8 rounded-full flex items-center justify-center">
+                            <Badge className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                                 ✓
                             </Badge>
                         </div>
@@ -342,7 +313,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                             </div>
                             <Badge
                                 variant="secondary"
-                                className="bg-muted text-muted-foreground h-8 w-8 rounded-full flex items-center justify-center"
+                                className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
                             >
                                 #
                             </Badge>
@@ -356,12 +327,10 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                             <div>
                                 <p className="text-sm text-muted-foreground">Catégories vides</p>
                                 <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                                    {countCategoriesWithFilter(categories, cat =>
-                                        !cat.total_products_count && !cat.products_count
-                                    )}
+                                    {countCategoriesWithFilter(categories, (cat) => !cat.total_products_count && !cat.products_count)}
                                 </p>
                             </div>
-                            <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 h-8 w-8 rounded-full flex items-center justify-center">
+                            <Badge className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
                                 !
                             </Badge>
                         </div>
@@ -380,5 +349,5 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                 prefix="La"
             />
         </AdminLayout>
-    )
+    );
 }

@@ -1,14 +1,14 @@
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { useCartContext } from '@/contexts/cart-context';
+import { useWishlistContext } from '@/contexts/wishlist-context';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type Product } from '@/types';
+import { getStorageUrl } from '@/utils/format-storage-url';
 import { Deferred, Head, Link } from '@inertiajs/react';
 import { LoaderCircle, Plus, ShoppingCart, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useCartContext } from '@/contexts/cart-context';
-import { useWishlistContext } from '@/contexts/wishlist-context';
-import { getStorageUrl } from '@/utils/format-storage-url';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -40,8 +40,8 @@ export default function Wishlist({ items }: { items: Product[] }) {
                 <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                     <div className="mb-2 flex items-center justify-between">
                         <h1 className="text-2xl font-bold">Ma liste de souhaits</h1>
-                        {(optimisticWishlist && optimisticWishlist.length > 0) && (
-                            <div className="flex justify-center items-center gap-2">
+                        {optimisticWishlist && optimisticWishlist.length > 0 && (
+                            <div className="flex items-center justify-center gap-2">
                                 <Button variant="outline" onClick={() => addItems(addToCart, optimisticWishlist)}>
                                     <ShoppingCart className="size-4" />
                                     Tout ajouter au panier
@@ -54,19 +54,26 @@ export default function Wishlist({ items }: { items: Product[] }) {
                         )}
                     </div>
 
-                    {(optimisticWishlist && optimisticWishlist.length > 0) ? (
+                    {optimisticWishlist && optimisticWishlist.length > 0 ? (
                         <div className="space-y-4">
                             {optimisticWishlist.map((product) => (
-                                <WishlistItem key={product.id} product={product} onRemove={() => removeItem(product, [optimisticWishlist, setOptimisticWishlist])} onAddToCart={() => addToCart(product)} />
+                                <WishlistItem
+                                    key={product.id}
+                                    product={product}
+                                    onRemove={() => removeItem(product, [optimisticWishlist, setOptimisticWishlist])}
+                                    onAddToCart={() => addToCart(product)}
+                                />
                             ))}
                         </div>
                     ) : (
-                        <div className="relative min-h-[50vh] flex-1 overflow-hidden rounded-xl border md:min-h-min border-sidebar-border">
+                        <div className="relative min-h-[50vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border md:min-h-min">
                             <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-100/20" />
-                            <div className="px-4 text-center absolute inset-0 flex flex-col items-center justify-center">
+                            <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
                                 <h3 className="mb-2 text-xl font-semibold">Votre liste de souhaits est vide</h3>
                                 <p className="mb-4 text-muted-foreground">Parcourez notre catalogue et ajoutez des produits à votre wishlist</p>
-                                <Link href={route('product.index')} className={buttonVariants()}>Découvrir nos produits</Link>
+                                <Link href={route('product.index')} className={buttonVariants()}>
+                                    Découvrir nos produits
+                                </Link>
                             </div>
                         </div>
                     )}
@@ -76,11 +83,15 @@ export default function Wishlist({ items }: { items: Product[] }) {
     );
 }
 
-function WishlistItem({ product, onRemove, onAddToCart }: { product: Product, onRemove: () => void, onAddToCart: () => void }) {
+function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; onRemove: () => void; onAddToCart: () => void }) {
     return (
         <div className="flex items-center gap-4 rounded-md border p-3">
             <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm bg-neutral-700">
-                <img src={product.featured_image && getStorageUrl(product.featured_image.url)} alt={product.featured_image ? product.featured_image.alt_text : product.name} className="size-full object-cover" />
+                <img
+                    src={product.featured_image && getStorageUrl(product.featured_image.url)}
+                    alt={product.featured_image ? product.featured_image.alt_text : product.name}
+                    className="size-full object-cover"
+                />
             </div>
 
             <div className="flex-grow">
@@ -91,7 +102,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product, on
                         </Link>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{product.short_description}</p>
                     </div>
-                    <div className="flex flex-col items-end min-w-32">
+                    <div className="flex min-w-32 flex-col items-end">
                         {product.discount_price ? (
                             <div className="flex items-center gap-2 *:text-nowrap">
                                 <span className="text-sm text-gray-400 line-through">{product.price.toFixed(2)} €</span>
@@ -114,7 +125,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product, on
 
                 <div className="mt-3 flex items-center justify-between">
                     {product.isNew && (
-                        <Badge variant="secondary" className="text-xs bg-yellow-900 text-yellow-200 rounded-sm">
+                        <Badge variant="secondary" className="rounded-sm bg-yellow-900 text-xs text-yellow-200">
                             NEW
                         </Badge>
                     )}
@@ -122,12 +133,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product, on
                         <Button variant="outline" size="sm" disabled={product.stock === 0} onClick={onAddToCart}>
                             <Plus className="size-3.5" /> Panier
                         </Button>
-                        <Button
-                            variant="destructive"
-                            size="icon"
-                            className="size-8"
-                            onClick={onRemove}
-                        >
+                        <Button variant="destructive" size="icon" className="size-8" onClick={onRemove}>
                             <Trash2 className="size-3.5" />
                         </Button>
                     </div>
@@ -143,7 +149,7 @@ function WishlistFallback() {
             <div className="mb-4 flex items-center justify-between">
                 <h1 className="text-2xl font-bold">Ma liste de souhaits</h1>
 
-                <div className="flex justify-center items-center gap-2">
+                <div className="flex items-center justify-center gap-2">
                     <Button variant="outline">
                         <ShoppingCart className="size-4" />
                         Tout ajouter au panier
@@ -157,5 +163,5 @@ function WishlistFallback() {
 
             <LoaderCircle className="mx-auto animate-spin" size={48} />
         </div>
-    )
+    );
 }

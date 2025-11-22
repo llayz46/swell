@@ -1,19 +1,19 @@
-import { Head, router, Deferred, Link } from '@inertiajs/react';
-import type { BreadcrumbItem, PaginatedResponse, Product } from '@/types';
-import AdminLayout from '@/layouts/admin-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Edit, Eye, Loader2, MoreHorizontal, MoveUp, Package, Plus, Search, Trash2 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { useEffect, useState, useRef, useMemo } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { PaginationComponent } from '@/components/swell/pagination-component';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
+import { PaginationComponent } from '@/components/swell/pagination-component';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AdminLayout from '@/layouts/admin-layout';
 import { cn } from '@/lib/utils';
+import type { BreadcrumbItem, PaginatedResponse, Product } from '@/types';
+import { Deferred, Head, Link, router } from '@inertiajs/react';
+import { Edit, Eye, Loader2, MoreHorizontal, MoveUp, Package, Plus, Search, Trash2 } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface ProductsType {
-    breadcrumbs: BreadcrumbItem[]
+    breadcrumbs: BreadcrumbItem[];
     products: PaginatedResponse<Product>;
     search?: string | null;
     collectionId?: number | null;
@@ -24,7 +24,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
     const [searchTerm, setSearchTerm] = useState<string>(search || '');
     const [sorting, setSorting] = useState<string | null>(sort || null);
     const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
-    const isFirstRender = useRef(true)
+    const isFirstRender = useRef(true);
 
     useEffect(() => {
         if (isFirstRender.current) {
@@ -33,26 +33,24 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
         }
 
         const delayDebounce = setTimeout(() => {
-            const params = searchTerm.trim() !== "" ? { search: searchTerm } : {};
+            const params = searchTerm.trim() !== '' ? { search: searchTerm } : {};
 
             router.get(route('admin.products.index'), params, {
                 preserveState: true,
                 replace: true,
-            })
-        }, 400)
+            });
+        }, 400);
 
-        return () => clearTimeout(delayDebounce)
-    }, [searchTerm])
+        return () => clearTimeout(delayDebounce);
+    }, [searchTerm]);
 
     const localBreadcrumbs = useMemo(() => {
         if (deleteProduct) {
             return [
                 ...initialBreadcrumbs,
                 {
-                    title: deleteProduct
-                        ? `Supprimer : ${deleteProduct.name}`
-                        : 'Nouvelle marque',
-                    href: "#"
+                    title: deleteProduct ? `Supprimer : ${deleteProduct.name}` : 'Nouvelle marque',
+                    href: '#',
                 },
             ];
         }
@@ -60,11 +58,15 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
     }, [initialBreadcrumbs, deleteProduct]);
 
     const handleCollectionProducts = (collection_id: number) => {
-        router.get(route('admin.products.index'), { collection_id }, {
-            preserveState: true,
-            replace: true,
-        });
-    }
+        router.get(
+            route('admin.products.index'),
+            { collection_id },
+            {
+                preserveState: true,
+                replace: true,
+            },
+        );
+    };
 
     const handleSort = (sort: string) => {
         let newSorting: string;
@@ -75,34 +77,35 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
 
         setSorting(newSorting);
 
-        router.get(route('admin.products.index'), { sort: newSorting }, {
-            preserveState: true,
-            replace: true,
-        });
-    }
+        router.get(
+            route('admin.products.index'),
+            { sort: newSorting },
+            {
+                preserveState: true,
+                replace: true,
+            },
+        );
+    };
 
     return (
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les produits" />
 
-            <Card className="mt-4 py-3 sm:py-4 border-border bg-card">
+            <Card className="mt-4 border-border bg-card py-3 sm:py-4">
                 <CardContent className="px-3 sm:px-4">
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        <div className="flex-1 flex gap-4">
-                            <form className="relative flex-1" onSubmit={e => e.preventDefault()}>
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                    <div className="flex flex-col gap-4 sm:flex-row">
+                        <div className="flex flex-1 gap-4">
+                            <form className="relative flex-1" onSubmit={(e) => e.preventDefault()}>
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
                                 <Input
                                     placeholder="Rechercher un produit..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="pl-10 bg-background border-border text-foreground placeholder:text-muted-foreground"
+                                    className="border-border bg-background pl-10 text-foreground placeholder:text-muted-foreground"
                                 />
                             </form>
                             {collectionId && (
-                                <Button
-                                    variant="outline"
-                                    onClick={() => router.get(route('admin.products.index'))}
-                                >
+                                <Button variant="outline" onClick={() => router.get(route('admin.products.index'))}>
                                     Voir tous les produits
                                 </Button>
                             )}
@@ -113,15 +116,10 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
 
             <Deferred data="products" fallback={<DeferredFallback />}>
                 <>
-                    <Card className="border-border bg-card pt-4 pb-0 gap-0">
-                        <CardHeader className="px-4 pb-4 border-b border-border flex-row justify-between">
-                            <CardTitle className="w-full flex max-sm:flex-col max-sm:gap-2 justify-between sm:items-center">
-                                <div className="text-foreground text-lg">
-                                    Liste des produits
-                                    ({products && products.meta && (
-                                        products.meta.total
-                                    )})
-                                </div>
+                    <Card className="gap-0 border-border bg-card pt-4 pb-0">
+                        <CardHeader className="flex-row justify-between border-b border-border px-4 pb-4">
+                            <CardTitle className="flex w-full justify-between max-sm:flex-col max-sm:gap-2 sm:items-center">
+                                <div className="text-lg text-foreground">Liste des produits ({products && products.meta && products.meta.total})</div>
 
                                 <Link
                                     href={route('admin.products.create', collectionId ? { collection_id: collectionId } : {})}
@@ -135,13 +133,16 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                         <CardContent className="p-0">
                             <Table>
                                 <TableHeader>
-                                    <TableRow className="border-border hover:bg-transparent *:text-muted-foreground *:font-medium">
-                                        <TableHead
-                                            onClick={() => handleSort('name')}
-                                            className="flex items-center gap-1 cursor-default group"
-                                        >
+                                    <TableRow className="border-border *:font-medium *:text-muted-foreground hover:bg-transparent">
+                                        <TableHead onClick={() => handleSort('name')} className="group flex cursor-default items-center gap-1">
                                             Nom
-                                            <MoveUp className={cn("opacity-0 group-hover:opacity-100 transition-opacity", sorting?.endsWith('_desc') && 'rotate-180')} size={14} />
+                                            <MoveUp
+                                                className={cn(
+                                                    'opacity-0 transition-opacity group-hover:opacity-100',
+                                                    sorting?.endsWith('_desc') && 'rotate-180',
+                                                )}
+                                                size={14}
+                                            />
                                         </TableHead>
                                         <TableHead>Slug</TableHead>
                                         <TableHead>Marque</TableHead>
@@ -153,14 +154,16 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                 </TableHeader>
                                 <TableBody>
                                     {products && products.data && products.data.length > 0 ? (
-                                        products.data.map(product => {
+                                        products.data.map((product) => {
                                             return (
                                                 <TableRow key={product.id} className="border-border hover:bg-muted/50">
-                                                    <TableCell className="font-medium max-w-64 truncate">
+                                                    <TableCell className="max-w-64 truncate font-medium">
                                                         <span className="text-foreground">{product.name}</span>
                                                     </TableCell>
                                                     <TableCell className="max-w-64 truncate">
-                                                        <code className="rounded bg-muted px-2 py-1 text-xs text-muted-foreground">{product.slug}</code>
+                                                        <code className="rounded bg-muted px-2 py-1 text-xs text-muted-foreground">
+                                                            {product.slug}
+                                                        </code>
                                                     </TableCell>
                                                     <TableCell>
                                                         <code className="text-foreground">{product.brand.name}</code>
@@ -172,11 +175,15 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                         <span className="text-foreground">{product.price.toFixed(2)}€</span>
                                                     </TableCell>
                                                     <TableCell>
-                                                        <span className={
-                                                            product.stock === 0 ? 'text-red-500'
-                                                                : product.stock < 10
-                                                                    ? 'text-orange-500'
-                                                                    : 'text-foreground'}>
+                                                        <span
+                                                            className={
+                                                                product.stock === 0
+                                                                    ? 'text-red-500'
+                                                                    : product.stock < 10
+                                                                      ? 'text-orange-500'
+                                                                      : 'text-foreground'
+                                                            }
+                                                        >
                                                             {product.stock}
                                                         </span>
                                                     </TableCell>
@@ -189,7 +196,10 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="end" className="border-border bg-popover">
                                                                 <DropdownMenuItem asChild>
-                                                                    <Link href={route('admin.products.show', product.slug)} className="cursor-pointer text-foreground hover:bg-muted">
+                                                                    <Link
+                                                                        href={route('admin.products.show', product.slug)}
+                                                                        className="cursor-pointer text-foreground hover:bg-muted"
+                                                                    >
                                                                         <Eye className="mr-1 h-4 w-4" />
                                                                         Voir détails
                                                                     </Link>
@@ -206,7 +216,10 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                                     </DropdownMenuItem>
                                                                 )}
                                                                 <DropdownMenuItem asChild>
-                                                                    <Link href={route('admin.products.edit', product.slug)} className="cursor-pointer text-foreground hover:bg-muted">
+                                                                    <Link
+                                                                        href={route('admin.products.edit', product.slug)}
+                                                                        className="cursor-pointer text-foreground hover:bg-muted"
+                                                                    >
                                                                         <Edit className="mr-1 h-4 w-4" />
                                                                         Modifier
                                                                     </Link>
@@ -223,12 +236,12 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                         </DropdownMenu>
                                                     </TableCell>
                                                 </TableRow>
-                                            )
+                                            );
                                         })
                                     ) : (
                                         <TableRow>
-                                            <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                                                {searchTerm ? "Aucun produit trouvé" : "Aucun produit disponible"}
+                                            <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
+                                                {searchTerm ? 'Aucun produit trouvé' : 'Aucun produit disponible'}
                                             </TableCell>
                                         </TableRow>
                                     )}
@@ -254,17 +267,15 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                 prefix="Le"
             />
         </AdminLayout>
-    )
+    );
 }
 
 function DeferredFallback() {
     return (
-        <Card className="border-border bg-card pt-4 pb-0 gap-0">
-            <CardHeader className="px-4 pb-4 border-b border-border flex-row justify-between">
-                <CardTitle className="w-full flex max-sm:flex-col max-sm:gap-2 justify-between sm:items-center">
-                    <div className="text-foreground text-lg">
-                        Liste des produits
-                    </div>
+        <Card className="gap-0 border-border bg-card pt-4 pb-0">
+            <CardHeader className="flex-row justify-between border-b border-border px-4 pb-4">
+                <CardTitle className="flex w-full justify-between max-sm:flex-col max-sm:gap-2 sm:items-center">
+                    <div className="text-lg text-foreground">Liste des produits</div>
 
                     <Link href={route('admin.products.create')} className={buttonVariants({ variant: 'outline' })}>
                         <Plus />
@@ -275,7 +286,7 @@ function DeferredFallback() {
             <CardContent className="p-0">
                 <Table>
                     <TableHeader>
-                        <TableRow className="border-border hover:bg-transparent *:text-muted-foreground *:font-medium">
+                        <TableRow className="border-border *:font-medium *:text-muted-foreground hover:bg-transparent">
                             <TableHead>Nom</TableHead>
                             <TableHead>Slug</TableHead>
                             <TableHead>Marque</TableHead>
@@ -298,5 +309,5 @@ function DeferredFallback() {
                 </Table>
             </CardContent>
         </Card>
-    )
+    );
 }

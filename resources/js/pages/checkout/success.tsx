@@ -1,10 +1,10 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { Order } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { CheckCircle, Package, Mail, ArrowRight, Home, Receipt } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
+import { ArrowRight, CheckCircle, Home, Mail, Package, Receipt } from 'lucide-react';
 
 export default function Success({ order }: { order: Order }) {
     return (
@@ -12,27 +12,22 @@ export default function Success({ order }: { order: Order }) {
             <Head title={`Confirmation de commande ${order.order_number}`} />
 
             <div className="container mx-auto px-4 py-16">
-                <div className="max-w-2xl mx-auto">
-                    <div className="text-center mb-8">
-                        <div className="flex justify-center mb-6">
-                            <div className="w-20 h-20 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
-                                <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-400" />
+                <div className="mx-auto max-w-2xl">
+                    <div className="mb-8 text-center">
+                        <div className="mb-6 flex justify-center">
+                            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/20">
+                                <CheckCircle className="h-12 w-12 text-green-600 dark:text-green-400" />
                             </div>
                         </div>
-                        <h1 className="text-3xl font-bold text-foreground mb-2">Commande confirmée !</h1>
-                        <p className="text-muted-foreground text-lg">
-                            Merci pour votre achat. Votre commande a été traitée avec succès.
-                        </p>
+                        <h1 className="mb-2 text-3xl font-bold text-foreground">Commande confirmée !</h1>
+                        <p className="text-lg text-muted-foreground">Merci pour votre achat. Votre commande a été traitée avec succès.</p>
                     </div>
 
-                    <Card className="border bg-card mb-6">
+                    <Card className="mb-6 border bg-card">
                         <CardContent>
-                            <div className="flex items-center justify-between mb-4">
+                            <div className="mb-4 flex items-center justify-between">
                                 <h2 className="text-xl font-semibold text-foreground">Détails de la commande</h2>
-                                <Badge
-                                    variant="secondary"
-                                    className="bg-green-500 text-white dark:bg-green-900 dark:text-green-200 rounded-sm"
-                                >
+                                <Badge variant="secondary" className="rounded-sm bg-green-500 text-white dark:bg-green-900 dark:text-green-200">
                                     Confirmée
                                 </Badge>
                             </div>
@@ -52,12 +47,10 @@ export default function Success({ order }: { order: Order }) {
 
                                 <div className="space-y-3">
                                     {order.items.map((item, index) => (
-                                        <div key={index} className="flex justify-between items-center">
+                                        <div key={index} className="flex items-center justify-between">
                                             <div>
                                                 <p className="font-medium text-foreground">{item.name}</p>
-                                                <p className="text-sm text-muted-foreground">
-                                                    Quantité: {item.quantity}
-                                                </p>
+                                                <p className="text-sm text-muted-foreground">Quantité: {item.quantity}</p>
                                             </div>
                                             <span className="font-semibold text-foreground">€{(item.price / 100).toFixed(2)}</span>
                                         </div>
@@ -66,17 +59,19 @@ export default function Success({ order }: { order: Order }) {
 
                                 <Separator />
 
-                                <div className="flex justify-between items-center text-sm">
+                                <div className="flex items-center justify-between text-sm">
                                     <span className="text-muted-foreground">Sous-total:</span>
                                     <span className="text-foreground">€{(order.amount_subtotal / 100).toFixed(2)}</span>
                                 </div>
                                 {order.amount_discount > 0 && (
-                                    <div className="flex justify-between items-center text-sm">
+                                    <div className="flex items-center justify-between text-sm">
                                         <span className="text-muted-foreground">Réductions:</span>
-                                        <span className="text-green-600 dark:text-green-400 font-medium">-€{(order.amount_discount / 100).toFixed(2)}</span>
+                                        <span className="font-medium text-green-600 dark:text-green-400">
+                                            -€{(order.amount_discount / 100).toFixed(2)}
+                                        </span>
                                     </div>
                                 )}
-                                <div className="flex justify-between items-center text-lg font-bold mt-2">
+                                <div className="mt-2 flex items-center justify-between text-lg font-bold">
                                     <span className="text-foreground">Total:</span>
                                     <span className="text-foreground">€{(order.amount_total / 100).toFixed(2)}</span>
                                 </div>
@@ -84,13 +79,13 @@ export default function Success({ order }: { order: Order }) {
                         </CardContent>
                     </Card>
 
-                    <Card className="border bg-card mb-6">
+                    <Card className="mb-6 border bg-card">
                         <CardContent>
-                            <h3 className="text-lg font-semibold text-foreground mb-4">Et maintenant ?</h3>
+                            <h3 className="mb-4 text-lg font-semibold text-foreground">Et maintenant ?</h3>
                             <div className="space-y-4">
                                 <div className="flex items-start gap-3">
-                                    <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <Mail className="w-4 h-4 text-primary" />
+                                    <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                                        <Mail className="h-4 w-4 text-primary" />
                                     </div>
                                     <div>
                                         <p className="font-medium text-foreground">Confirmation par email</p>
@@ -101,20 +96,18 @@ export default function Success({ order }: { order: Order }) {
                                 </div>
 
                                 <div className="flex items-start gap-3">
-                                    <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <Package className="w-4 h-4 text-primary" />
+                                    <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                                        <Package className="h-4 w-4 text-primary" />
                                     </div>
                                     <div>
                                         <p className="font-medium text-foreground">Préparation et expédition</p>
-                                        <p className="text-sm text-muted-foreground">
-                                            Votre commande sera expédiée sous 3-5 jours ouvrés
-                                        </p>
+                                        <p className="text-sm text-muted-foreground">Votre commande sera expédiée sous 3-5 jours ouvrés</p>
                                     </div>
                                 </div>
 
                                 <div className="flex items-start gap-3">
-                                    <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <Receipt className="w-4 h-4 text-primary" />
+                                    <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                                        <Receipt className="h-4 w-4 text-primary" />
                                     </div>
                                     <div>
                                         <p className="font-medium text-foreground">Suivi de commande</p>
@@ -129,26 +122,26 @@ export default function Success({ order }: { order: Order }) {
                         <Button asChild size="lg" className="w-full">
                             <Link href="/orders">
                                 Voir mes commandes
-                                <ArrowRight className="w-4 h-4" />
+                                <ArrowRight className="h-4 w-4" />
                             </Link>
                         </Button>
 
-                        <Button asChild variant="outline" size="lg" className="w-full bg-background text-foreground border">
+                        <Button asChild variant="outline" size="lg" className="w-full border bg-background text-foreground">
                             <Link prefetch="mount" href="/">
-                                <Home className="w-4 h-4" />
+                                <Home className="h-4 w-4" />
                                 Continuer mes achats
                             </Link>
                         </Button>
                     </div>
 
                     <div className="mt-8 text-center">
-                        <p className="text-sm text-muted-foreground mb-2">Une question sur votre commande ?</p>
-                        <Button variant="link" className="text-primary hover:text-primary/80 p-0">
+                        <p className="mb-2 text-sm text-muted-foreground">Une question sur votre commande ?</p>
+                        <Button variant="link" className="p-0 text-primary hover:text-primary/80">
                             Contactez notre support client
                         </Button>
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }

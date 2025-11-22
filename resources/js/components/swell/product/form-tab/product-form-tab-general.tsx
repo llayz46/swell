@@ -25,7 +25,9 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
     const [openCollectionDialog, setOpenCollectionDialog] = useState<boolean>(false);
     const [brandInputValue, setBrandInputValue] = useState<string>('');
     const [collectionInputValue, setCollectionInputValue] = useState<string>('');
-    const [finalizedOptionIds, setFinalizedOptionIds] = useState<number[]>(data.options?.filter(option => option.id !== null).map(option => option.id as number) || []);
+    const [finalizedOptionIds, setFinalizedOptionIds] = useState<number[]>(
+        data.options?.filter((option) => option.id !== null).map((option) => option.id as number) || [],
+    );
 
     const maxLength = 500;
     const { maxLength: limit } = useCharacterLimit({
@@ -222,7 +224,10 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
                                     </PopoverTrigger>
                                     <PopoverContent className="w-full min-w-[var(--radix-popper-anchor-width)] border-input p-0" align="start">
                                         <Command>
-                                            <CommandInput placeholder="Rechercher une collection..." onValueChange={(e) => setCollectionInputValue(e)} />
+                                            <CommandInput
+                                                placeholder="Rechercher une collection..."
+                                                onValueChange={(e) => setCollectionInputValue(e)}
+                                            />
                                             <CommandList>
                                                 <CommandEmpty>
                                                     <CollectionDialog
@@ -295,7 +300,7 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
                                     {finalizedOptionIds.includes(option.id as number) ? (
                                         <div className="relative space-y-2 p-4">
                                             <p>{option.name}</p>
-                                            <ul className="space-x-1 flex">
+                                            <ul className="flex space-x-1">
                                                 {option.values.map((v, index) => (
                                                     <li key={index} className="w-fit rounded bg-muted px-2 py-1 text-sm text-muted-foreground">
                                                         {v.value}

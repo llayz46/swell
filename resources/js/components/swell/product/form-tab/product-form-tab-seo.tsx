@@ -1,15 +1,15 @@
-import { TabsContent } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import InputError from '@/components/input-error';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { TabsContent } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { FormTabContentProps, ProductForm } from '@/types';
 
 export function SeoTabContent({ data, setData, processing, errors }: FormTabContentProps<ProductForm>) {
     return (
         <TabsContent value="seo" className="space-y-4">
-            <Card className="max-sm:py-4 border-border bg-card">
+            <Card className="border-border bg-card max-sm:py-4">
                 <CardHeader className="max-sm:px-4">
                     <CardTitle className="text-foreground">Optimisation SEO</CardTitle>
                 </CardHeader>
@@ -25,9 +25,7 @@ export function SeoTabContent({ data, setData, processing, errors }: FormTabCont
                             type="text"
                             placeholder="Titre pour les moteurs de recherche"
                         />
-                        <p className="text-xs text-muted-foreground">
-                            {data.meta_title ? data.meta_title.length : 0}/60 caractères recommandés
-                        </p>
+                        <p className="text-xs text-muted-foreground">{data.meta_title ? data.meta_title.length : 0}/60 caractères recommandés</p>
                         <InputError message={errors && errors.meta_title} />
                     </div>
                     <div className="*:not-first:mt-2">
@@ -61,5 +59,5 @@ export function SeoTabContent({ data, setData, processing, errors }: FormTabCont
                 </CardContent>
             </Card>
         </TabsContent>
-    )
+    );
 }

@@ -1,16 +1,10 @@
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle
-} from "@/components/ui/dialog"
-import { Product } from '@/types';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useCartContext } from '@/contexts/cart-context';
+import { Product } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
 
-export function ProductQuickViewDialog({ product, open, onClose }: { product: Product | null, open: boolean, onClose: () => void }) {
+export function ProductQuickViewDialog({ product, open, onClose }: { product: Product | null; open: boolean; onClose: () => void }) {
     const { addToCart } = useCartContext();
 
     if (!product) return null;

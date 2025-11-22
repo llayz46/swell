@@ -58,33 +58,32 @@ export default function Dashboard({
     const stats = [
         {
             title: "Chiffre d'affaires",
-            value: totalRevenue.toLocaleString("fr-FR", { style: "currency", currency: "EUR" }),
+            value: totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
             percentage: revenuePercentageChange,
             icon: <DollarSign className="size-4 text-muted-foreground" />,
             description: (val: number) => (val > 0 ? `+${val}% par rapport au mois dernier` : `${val}% par rapport au mois dernier`),
         },
         {
-            title: "Commandes",
+            title: 'Commandes',
             value: totalOrders,
             percentage: ordersPercentageChange,
             icon: <CreditCard className="size-4 text-muted-foreground" />,
             description: (val: number) => (val > 0 ? `+${val}% par rapport au mois dernier` : `${val}% par rapport au mois dernier`),
         },
         {
-            title: "Utilisateurs",
+            title: 'Utilisateurs',
             value: totalUsers,
             percentage: newUsers,
             icon: <Users className="size-4 text-muted-foreground" />,
             description: (val: number) => (val > 0 ? `+${val} nouveaux utilisateurs ce mois` : `${val} nouveaux utilisateurs ce mois`),
         },
         {
-            title: "Produits actifs",
+            title: 'Produits actifs',
             value: activeProducts,
             icon: <Activity className="size-4 text-muted-foreground" />,
-            description: () => "+7 nouveaux produits cette semaine",
+            description: () => '+7 nouveaux produits cette semaine',
         },
     ];
-
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
@@ -104,13 +103,9 @@ export default function Dashboard({
                             <SwellCardContent>
                                 <div className="text-2xl font-bold">{stat.value}</div>
                                 {stat.percentage !== undefined ? (
-                                    <p className="text-xs text-muted-foreground mt-1">
-                                        {stat.description(stat.percentage)}
-                                    </p>
+                                    <p className="mt-1 text-xs text-muted-foreground">{stat.description(stat.percentage)}</p>
                                 ) : (
-                                    <p className="text-xs text-muted-foreground mt-1">
-                                        {stat.description()}
-                                    </p>
+                                    <p className="mt-1 text-xs text-muted-foreground">{stat.description()}</p>
                                 )}
                             </SwellCardContent>
                         </SwellCard>

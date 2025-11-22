@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -8,24 +9,16 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-    HeartIcon,
-    LayoutGridIcon,
-    LogOutIcon,
-    ShieldCheckIcon,
-    UserIcon,
-    CalendarIcon, SettingsIcon
-} from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import type { SharedData, User } from '@/types';
-import { Link, router, usePage } from '@inertiajs/react';
 import { useInitials } from '@/hooks/use-initials';
+import type { SharedData, User } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
+import { Link, router, usePage } from '@inertiajs/react';
+import { CalendarIcon, HeartIcon, LayoutGridIcon, LogOutIcon, SettingsIcon, ShieldCheckIcon, UserIcon } from 'lucide-react';
 
 export function UserDropdown({ user }: { user: User }) {
-    const { swell } = usePage<SharedData>().props
+    const { swell } = usePage<SharedData>().props;
     const getInitials = useInitials();
-    const isAdmin = user.roles.some(role => role.name === 'admin');
+    const isAdmin = user.roles.some((role) => role.name === 'admin');
 
     return (
         <DropdownMenu>

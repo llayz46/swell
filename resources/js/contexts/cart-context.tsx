@@ -1,6 +1,6 @@
-import { createContext, useContext, ReactNode } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { Cart, Product } from '@/types';
+import { createContext, ReactNode, useContext } from 'react';
 
 type CartContextType = {
     optimisticCart: Cart | null;
@@ -8,7 +8,7 @@ type CartContextType = {
     addToCart: (product: Product, selectedOptions?: Record<number, number>, quantity?: number) => void;
     removeItemOfCart: (itemId: number) => void;
     clearCart: () => void;
-    handleQuantity : (type: "inc" | "dec", itemId: number) => void;
+    handleQuantity: (type: 'inc' | 'dec', itemId: number) => void;
     checkout: () => void;
     buyNow: (product: Product) => void;
 };
@@ -21,28 +21,21 @@ type CartProviderProps = {
 };
 
 export function CartProvider({ children, initialCart }: CartProviderProps) {
-    const {
-        optimisticCart,
-        loading,
-        addToCart,
-        removeItemOfCart,
-        clearCart,
-        handleQuantity,
-        checkout,
-        buyNow
-    } = useCart({ initialCart });
+    const { optimisticCart, loading, addToCart, removeItemOfCart, clearCart, handleQuantity, checkout, buyNow } = useCart({ initialCart });
 
     return (
-        <CartContext.Provider value={{
-            optimisticCart,
-            loading,
-            addToCart,
-            removeItemOfCart,
-            clearCart,
-            handleQuantity,
-            checkout,
-            buyNow
-        }}>
+        <CartContext.Provider
+            value={{
+                optimisticCart,
+                loading,
+                addToCart,
+                removeItemOfCart,
+                clearCart,
+                handleQuantity,
+                checkout,
+                buyNow,
+            }}
+        >
             {children}
         </CartContext.Provider>
     );

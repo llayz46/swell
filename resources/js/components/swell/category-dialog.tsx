@@ -1,31 +1,26 @@
+import InputError from '@/components/input-error';
+import { CategoryTree } from '@/components/swell/category-tree';
+import { Button } from '@/components/ui/button';
 import {
-    Dialog, DialogClose,
+    Dialog,
+    DialogClose,
     DialogContent,
-    DialogDescription, DialogFooter,
+    DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
+    DialogTrigger,
 } from '@/components/ui/dialog';
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Folders, LoaderCircle, Plus } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useCharacterLimit } from '@/hooks/use-character-limit';
-import { useForm } from '@inertiajs/react';
-import { FormEventHandler, useEffect } from 'react';
-import InputError from '@/components/input-error';
-import { toast } from 'sonner';
 import { Category } from '@/types';
-import { CategoryTree } from '@/components/swell/category-tree';
+import { useForm } from '@inertiajs/react';
+import { Folders, LoaderCircle, Plus } from 'lucide-react';
+import { FormEventHandler, useEffect } from 'react';
+import { toast } from 'sonner';
 
 type CategoryForm = {
     name: string;
@@ -43,13 +38,10 @@ interface CategoryDialogProps {
 }
 
 export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDialogProps) {
-    const maxLength = 500
-    const {
-        handleChange,
-        maxLength: limit,
-    } = useCharacterLimit({
-        maxLength
-    })
+    const maxLength = 500;
+    const { handleChange, maxLength: limit } = useCharacterLimit({
+        maxLength,
+    });
 
     const { data, setData, post, put, processing, errors, reset } = useForm<CategoryForm>({
         name: '',
@@ -67,9 +59,9 @@ export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDi
                 status: category.is_active ? 'active' : 'inactive',
             });
         } else if (parentId) {
-            setData(data => ({
+            setData((data) => ({
                 ...data,
-                parent_id: parentId
+                parent_id: parentId,
             }));
         } else {
             reset();
@@ -98,7 +90,7 @@ export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDi
                         icon: <Folders className="size-4" />,
                     });
                 },
-            })
+            });
         } else {
             put(route('admin.categories.update', category.id), {
                 preserveScroll: true,
@@ -118,7 +110,7 @@ export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDi
                         icon: <Folders className="size-4" />,
                     });
                 },
-            })
+            });
         }
     };
 
@@ -129,12 +121,16 @@ export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDi
                     <Plus /> Nouvelle catégorie
                 </Button>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-xl max-h-[calc(100vh-32px)] [&>button:last-child]:top-3.5 shadow-dialog border-transparent">
+            <DialogContent className="shadow-dialog flex max-h-[calc(100vh-32px)] flex-col gap-0 overflow-y-visible border-transparent p-0 sm:max-w-xl [&>button:last-child]:top-3.5">
                 <DialogHeader className="contents space-y-0 text-left">
-                    <DialogTitle className="border-b px-6 py-4 text-base">{category ? `Modifier la catégorie : ${category.name}` : 'Créer une nouvelle catégorie'}</DialogTitle>
+                    <DialogTitle className="border-b px-6 py-4 text-base">
+                        {category ? `Modifier la catégorie : ${category.name}` : 'Créer une nouvelle catégorie'}
+                    </DialogTitle>
                 </DialogHeader>
                 <DialogDescription className="sr-only">
-                    {category ? 'Modifier les détails de la catégorie' : 'Créer une nouvelle catégorie pour organiser vos produits. Remplissez les informations ci-dessous pour ajouter une nouvelle catégorie à votre boutique.'}
+                    {category
+                        ? 'Modifier les détails de la catégorie'
+                        : 'Créer une nouvelle catégorie pour organiser vos produits. Remplissez les informations ci-dessous pour ajouter une nouvelle catégorie à votre boutique.'}
                 </DialogDescription>
                 <div className="overflow-y-auto">
                     <div className="pt-4">
@@ -154,14 +150,9 @@ export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDi
                                 <InputError message={errors.name || errors.slug} />
                             </div>
                             <div className="*:not-first:mt-2">
-                                <div className="flex justify-between items-center">
+                                <div className="flex items-center justify-between">
                                     <Label htmlFor="description">Description</Label>
-                                    <p
-                                        id="description"
-                                        className="text-xs text-muted-foreground"
-                                        role="status"
-                                        aria-live="polite"
-                                    >
+                                    <p id="description" className="text-xs text-muted-foreground" role="status" aria-live="polite">
                                         <span className="tabular-nums">{limit - data.description.length}</span> caractères restants
                                     </p>
                                 </div>
@@ -181,10 +172,19 @@ export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDi
                                 />
                                 <InputError message={errors.description} />
                             </div>
-                            <CategoryTree label={{ htmlFor: 'parent', name: 'Catégorie parente' }} field="parent_id" setData={setData} initialSelectedItem={String(parentId)} />
+                            <CategoryTree
+                                label={{ htmlFor: 'parent', name: 'Catégorie parente' }}
+                                field="parent_id"
+                                setData={setData}
+                                initialSelectedItem={String(parentId)}
+                            />
                             <div className="*:not-first:mt-2">
                                 <Label htmlFor="status">Statut</Label>
-                                <Select defaultValue="inactive" value={data.status} onValueChange={(value) => setData('status', value as 'active' | 'inactive')}>
+                                <Select
+                                    defaultValue="inactive"
+                                    value={data.status}
+                                    onValueChange={(value) => setData('status', value as 'active' | 'inactive')}
+                                >
                                     <SelectTrigger className="w-full" tabIndex={3}>
                                         <SelectValue />
                                     </SelectTrigger>

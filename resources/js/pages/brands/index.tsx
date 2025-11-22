@@ -1,8 +1,8 @@
-import BaseLayout from '@/layouts/base-layout';
-import { Head, Link } from '@inertiajs/react';
-import { Brand, PaginatedResponse } from '@/types';
 import { PaginationComponent } from '@/components/swell/pagination-component';
+import BaseLayout from '@/layouts/base-layout';
+import { Brand, PaginatedResponse } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
+import { Head, Link } from '@inertiajs/react';
 
 interface IndexProps {
     brands: PaginatedResponse<Brand>;
@@ -14,35 +14,32 @@ export default function Index({ brands }: IndexProps) {
             <Head title="Marques" />
 
             <main className="layout-container">
-                <h1 className="text-2xl font-bold mb-6">Marques</h1>
+                <h1 className="mb-6 text-2xl font-bold">Marques</h1>
 
-                <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {brands.data.map(brand => (
-                        <div key={brand.id} className="border rounded-lg overflow-hidden">
-                            <div className="p-4 flex flex-col items-center">
-                                <div className="w-32 h-32 flex items-center justify-center mb-4">
+                <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    {brands.data.map((brand) => (
+                        <div key={brand.id} className="overflow-hidden rounded-lg border">
+                            <div className="flex flex-col items-center p-4">
+                                <div className="mb-4 flex h-32 w-32 items-center justify-center">
                                     {brand.logo_url ? (
                                         <img
                                             src={getStorageUrl(brand.logo_url)}
                                             alt={`Logo ${brand.name}`}
-                                            className="max-w-full max-h-full object-contain"
+                                            className="max-h-full max-w-full object-contain"
                                         />
                                     ) : (
-                                        <span>
-                                            {brand.name}
-                                        </span>
+                                        <span>{brand.name}</span>
                                     )}
                                 </div>
-                                <Link href={route('brand.show', brand.slug)} className="text-lg font-semibold text-center hover:underline">{brand.name}</Link>
+                                <Link href={route('brand.show', brand.slug)} className="text-center text-lg font-semibold hover:underline">
+                                    {brand.name}
+                                </Link>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <PaginationComponent
-                    pagination={{ links: brands.links, meta: brands.meta }}
-                    preserveQuery={['sort']}
-                />
+                <PaginationComponent pagination={{ links: brands.links, meta: brands.meta }} preserveQuery={['sort']} />
             </main>
         </BaseLayout>
     );

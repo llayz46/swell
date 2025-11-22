@@ -1,8 +1,8 @@
-import { type BreadcrumbItem, type NavItem, SharedData } from '@/types';
-import { type PropsWithChildren } from 'react';
-import { Boxes, Folders, LayoutGrid, Megaphone, Package, Tags } from 'lucide-react';
-import { usePage } from '@inertiajs/react';
 import AdminLayoutTemplate from '@/layouts/app/app-header-layout';
+import { type BreadcrumbItem, type NavItem, SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
+import { Boxes, Folders, LayoutGrid, Megaphone, Package, Tags } from 'lucide-react';
+import { type PropsWithChildren } from 'react';
 
 const mainNavItems: NavItem[] = [
     {
@@ -38,7 +38,7 @@ const mainNavItems: NavItem[] = [
 ];
 
 export default function AdminLayout({ children, breadcrumbs = [], ...props }: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[] }>) {
-    const { swell } = usePage<SharedData>().props
+    const { swell } = usePage<SharedData>().props;
 
     const filteredNavItems = mainNavItems.filter((item) => {
         return !(item.title === 'Bannière' && !swell.banner?.enabled);

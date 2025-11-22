@@ -1,48 +1,46 @@
-import { Card, CardContent } from '../../../ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '../../../ui/avatar';
-import { Star } from 'lucide-react';
+import { useInitials } from '@/hooks/use-initials';
 import type { Review as ReviewType } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
-import { useInitials } from '@/hooks/use-initials';
+import { Star } from 'lucide-react';
 import { useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '../../../ui/avatar';
+import { Card, CardContent } from '../../../ui/card';
 
 export function Review({ review }: { review: ReviewType }) {
-    const [expandedComments, setExpandedComments] = useState<Set<number>>(new Set())
-    const isExpanded = expandedComments.has(review.id)
-    const shouldTruncate = review.comment.length > 300
+    const [expandedComments, setExpandedComments] = useState<Set<number>>(new Set());
+    const isExpanded = expandedComments.has(review.id);
+    const shouldTruncate = review.comment.length > 300;
 
     const getInitials = useInitials();
 
     const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString("fr-FR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        })
-    }
+        return new Date(dateString).toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    };
 
     const toggleCommentExpansion = (reviewId: number) => {
         setExpandedComments((prev) => {
-            const newSet = new Set(prev)
+            const newSet = new Set(prev);
             if (newSet.has(reviewId)) {
-                newSet.delete(reviewId)
+                newSet.delete(reviewId);
             } else {
-                newSet.add(reviewId)
+                newSet.add(reviewId);
             }
-            return newSet
-        })
-    }
+            return newSet;
+        });
+    };
 
     return (
-        <Card className="max-sm:py-4 border bg-card">
-            <CardContent className="max-sm:px-4 px-6">
+        <Card className="border bg-card max-sm:py-4">
+            <CardContent className="px-6 max-sm:px-4">
                 <div className="space-y-4">
                     <div className="flex items-center gap-4">
                         <Avatar className="h-10 w-10">
                             <AvatarImage src={getStorageUrl(review.user?.avatar_url)} alt="User avatar" />
-                            <AvatarFallback className="bg-muted text-muted-foreground">
-                                {getInitials(review.user?.name || '')}
-                            </AvatarFallback>
+                            <AvatarFallback className="bg-muted text-muted-foreground">{getInitials(review.user?.name || '')}</AvatarFallback>
                         </Avatar>
                         <div>
                             <div className="mb-1 flex items-center gap-2">
@@ -53,9 +51,7 @@ export function Review({ review }: { review: ReviewType }) {
                                     {[1, 2, 3, 4, 5].map((star) => (
                                         <Star
                                             key={star}
-                                            className={`size-4 ${
-                                                star <= review.rating ? 'fill-primary text-primary' : 'text-muted-foreground'
-                                            }`}
+                                            className={`size-4 ${star <= review.rating ? 'fill-primary text-primary' : 'text-muted-foreground'}`}
                                         />
                                     ))}
                                 </div>
