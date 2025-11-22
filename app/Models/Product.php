@@ -46,6 +46,7 @@ class Product extends Model
         'price' => 'float',
         'discount_price' => 'float',
         'cost_price' => 'float',
+        'status' => 'boolean'
     ];
 
     public function options(): HasMany
@@ -65,8 +66,8 @@ class Product extends Model
     {
         $array = $this->toArray();
 
-        // Ajouter le prix effectif pour le filtrage Algolia
         $array['effective_price'] = $this->discount_price ?? $this->price;
+        $array['created_at'] = $this->created_at->timestamp;
 
         return $array;
     }

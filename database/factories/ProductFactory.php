@@ -20,14 +20,16 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+        $price = $this->faker->randomFloat(2, 10, 1000);
+
         return [
             'name' => $name = $this->faker->words(3, true),
             'slug' => Str::slug($name),
             'sku' => 'CAT-BRD-MDL-' . $this->faker->unique()->bothify('#####'),
             'description' => $this->faker->paragraph(),
             'short_description' => $this->faker->sentences(4, true),
-            'price' => $this->faker->randomFloat(2, 10, 1000),
-            'discount_price' => $this->faker->optional()->randomFloat(2, 5, 500),
+            'price' => $price,
+            'discount_price' => $this->faker->boolean(30) ? $this->faker->randomFloat(2, 5, $price - 1) : null,
             'cost_price' => $this->faker->randomFloat(2, 5, 500),
             'stock' => $this->faker->numberBetween(0, 100),
             'reorder_level' => $this->faker->numberBetween(1, 20),

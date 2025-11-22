@@ -120,7 +120,13 @@ return [
         'index-settings' => [
             Product::class => [
                 'searchableAttributes' => ['id', 'name', 'slug', 'description', 'short_description', 'meta_title', 'meta_description', 'meta_keywords'],
-            ]
+                'attributesForFaceting' => ['filterOnly(effective_price)'],
+                'replicas' => [
+                    'products_price_asc',
+                    'products_price_desc',
+                    'products_created_at_desc',
+                ],
+            ],
         ],
     ],
 

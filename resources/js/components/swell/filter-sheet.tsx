@@ -61,21 +61,17 @@ export function FilterSheet({ stock, price }: FilterSheetProps) {
     const applyPriceFilter = () => {
         const currentParams = new URLSearchParams(window.location.search);
 
-        // Supprimer les anciens paramètres de prix pour les ajouter dans le bon ordre
         currentParams.delete('min_price');
         currentParams.delete('max_price');
 
-        // Construire l'objet de paramètres dans le bon ordre
         const paramsObj: Record<string, string> = {};
 
-        // Ajouter les paramètres existants (sauf page)
         currentParams.forEach((value, key) => {
             if (key !== 'page') {
                 paramsObj[key] = value;
             }
         });
 
-        // Ajouter min_price et max_price dans le bon ordre
         if (priceRange[0] > 0) {
             paramsObj['min_price'] = priceRange[0].toString();
         }
@@ -84,7 +80,6 @@ export function FilterSheet({ stock, price }: FilterSheetProps) {
             paramsObj['max_price'] = priceRange[1].toString();
         }
 
-        // Ajouter page à la fin
         paramsObj['page'] = '1';
 
         router.get(window.location.pathname, paramsObj, {

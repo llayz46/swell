@@ -15,18 +15,14 @@ trait PriceFilterable
      */
     protected function applyPriceFilter(Builder|Relation $query, ?float $minPrice, ?float $maxPrice): Builder|Relation
     {
-        if ($minPrice !== null || $maxPrice !== null) {
-            $query->where(function ($q) use ($minPrice, $maxPrice) {
-                $priceColumn = 'COALESCE(discount_price, price)';
+        $priceColumn = 'COALESCE(NULLIF(discount_price, 0), price)';
 
-                if ($minPrice !== null) {
-                    $q->whereRaw("{$priceColumn} >= ?", [$minPrice]);
-                }
+        if ($minPrice !== null) {
+            $query->whereRaw("$priceColumn >= " . (float) $minPrice);
+        }
 
-                if ($maxPrice !== null) {
-                    $q->whereRaw("{$priceColumn} <= ?", [$maxPrice]);
-                }
-            });
+        if ($maxPrice !== null) {
+            $query->whereRaw("$priceColumn <= " . (float) $maxPrice);
         }
 
         return $query;

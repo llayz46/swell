@@ -11,6 +11,7 @@ use App\Traits\Sortable;
 use App\Traits\StockFilterable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -31,33 +32,51 @@ class ProductController extends Controller
         $minPrice = $request->has('min_price') ? (float) $request->input('min_price') : null;
         $maxPrice = $request->has('max_price') ? (float) $request->input('max_price') : null;
 
-        // Récupère le prix max pour le slider (en cache)
         $maxProductPrice = Cache::remember('products:max_price', now()->addHour(), function () {
             return Product::where('status', true)
-                ->selectRaw('MAX(COALESCE(discount_price, price)) as max_price')
+                ->selectRaw('MAX(COALESCE(NULLIF(discount_price, 0), price)) as max_price')
                 ->value('max_price') ?? 1000;
         });
 
         if ($search) {
-            $searchBuilder = Product::search($search);
+            $searchBuilder = Product::search($search, function ($algolia, $query, $options) use ($minPrice, $maxPrice, $sort) {
+                $numericFilters = [];
+                if ($minPrice !== null) {
+                    $numericFilters[] = "effective_price >= {$minPrice}";
+                }
+                if ($maxPrice !== null) {
+                    $numericFilters[] = "effective_price <= {$maxPrice}";
+                }
 
-            // Appliquer les filtres de prix via Algolia
-            if ($minPrice !== null && $maxPrice !== null) {
-                $searchBuilder->where('effective_price', '>=', $minPrice)
-                    ->where('effective_price', '<=', $maxPrice);
-            } elseif ($minPrice !== null) {
-                $searchBuilder->where('effective_price', '>=', $minPrice);
-            } elseif ($maxPrice !== null) {
-                $searchBuilder->where('effective_price', '<=', $maxPrice);
-            }
+                $options['numericFilters'] = array_merge(
+                    (array) ($options['numericFilters'] ?? []),
+                    $numericFilters
+                );
+
+                $indexName = match($sort) {
+                    'price_asc' => 'products_price_asc',
+                    'price_desc' => 'products_price_desc',
+                    'news' => 'products_created_at_desc',
+                    default => (new Product)->searchableAs(),
+                };
+
+                return $algolia->searchSingleIndex(
+                    $indexName,
+                    array_merge(['query' => $query], $options)
+                );
+
+//                return $algolia->searchSingleIndex(
+//                    (new Product)->searchableAs(),
+//                    array_merge(['query' => $query], $options)
+//                );
+            });
 
             $products = $searchBuilder->query(function ($query) use ($in, $out, $sort) {
-                    $query->where('status', true)
-                        ->with('featuredImage', 'brand');
+                $query->where('status', true)
+                    ->with('featuredImage', 'brand');
 
-                    $this->applyStockFilter($query, $in, $out);
-                    $this->applySort($query, $sort);
-                })->paginate(16)->withQueryString();
+                $this->applyStockFilter($query, $in, $out);
+            })->paginate(16)->withQueryString();
         } else {
             $query = Product::query()
                 ->where('status', true)
