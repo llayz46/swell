@@ -41,7 +41,8 @@ class ProductController extends Controller
             $products = Product::search($search)
                 ->query(function ($query) use ($collectionId) {
                     $query->where('status', true)
-                        ->with('brand', 'collection:id');
+                        ->with('brand', 'collection:id')
+                        ->orderBy('created_at', 'desc');
 
                     if ($collectionId) {
                         $query->where('collection_id', $collectionId);
@@ -50,7 +51,8 @@ class ProductController extends Controller
         } else {
             $products = Product::query()
                 ->where('status', true)
-                ->with('brand', 'collection:id');
+                ->with('brand', 'collection:id')
+                ->orderBy('created_at', 'desc');
 
             if ($collectionId) {
                 $products->where('collection_id', $collectionId);
@@ -89,7 +91,7 @@ class ProductController extends Controller
             'brands' => fn () => Brand::select('id', 'name')->orderBy('name')->get(),
             'collections' => fn () => Collection::select('id', 'title')->orderBy('title')->get()->load('products:id,name,collection_id'),
             'duplicate' => (bool)$product,
-            'product' => fn () => $product ? ProductResource::make($product->load(['images', 'brand:id,name', 'category:id,parent_id', 'collection:id,name', 'options.values'])) : null
+            'product' => fn () => $product ? ProductResource::make($product->load(['images', 'brand:id,name', 'category:id,parent_id', 'collection:id,title', 'options.values'])) : null
         ]);
     }
 
@@ -136,7 +138,7 @@ class ProductController extends Controller
                 ['title' => $product->name, 'href' => route('admin.products.show', $product)],
                 ['title' => 'Modifier', 'href' => route('admin.products.edit', $product)],
             ],
-            'product' => fn () => ProductResource::make($product->load(['images', 'brand:id,name', 'category:id,parent_id', 'collection:id,name', 'options.values'])),
+            'product' => fn () => ProductResource::make($product->load(['images', 'brand:id,name', 'category:id,parent_id', 'collection:id,title', 'options.values'])),
             'brands' => fn () => Brand::select('id', 'name')->orderBy('name')->get(),
             'collections' => fn () => Collection::select('id', 'title')->orderBy('title')->get()->load('products:id,name,collection_id'),
         ]);
