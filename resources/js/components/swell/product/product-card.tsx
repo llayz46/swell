@@ -6,13 +6,26 @@ import { cn } from '@/lib/utils';
 import { Product, type SharedData } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Link, usePage } from '@inertiajs/react';
-import { Eye, Heart, Star } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 import { useState } from 'react';
 
 export function ProductCard({ product, onQuickView }: { product: Product; onQuickView?: () => void }) {
     const [isHovered, setIsHovered] = useState(false);
+    const [, setIsClicked] = useState(false);
     const { addItem } = useWishlist();
     const { swell } = usePage<SharedData>().props;
+
+    const handleImageClick = () => {
+        if (!onQuickView) return;
+
+        setIsClicked(true);
+
+        setTimeout(() => {
+            setIsClicked(false);
+        }, 200);
+
+        onQuickView();
+    };
 
     return (
         <Card className="h-full gap-0 overflow-hidden rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
@@ -22,9 +35,10 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
                 onMouseLeave={() => setIsHovered(false)}
             >
                 <img
+                    onClick={handleImageClick}
                     src={getStorageUrl(product.featured_image?.url)}
                     alt={product.featured_image?.alt_text}
-                    className="size-full rounded-lg bg-muted object-cover"
+                    className="size-full rounded-lg bg-muted object-cover transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
 
@@ -44,16 +58,6 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
                             <span className="sr-only">Ajouter à la wishlist</span>
                         </Button>
                     )}
-
-                    <Button
-                        size="sm"
-                        variant="secondary"
-                        className="size-9 cursor-pointer rounded-md !bg-slate-light p-0 shadow-inner"
-                        onClick={onQuickView}
-                    >
-                        <Eye className="size-4 dark:text-background" />
-                        <span className="sr-only">Voir les détails</span>
-                    </Button>
                 </div>
             </div>
 
@@ -94,7 +98,7 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
                             className="flex w-fit items-center gap-1.5 rounded-md bg-muted px-1.5 py-0.75 text-[10px] font-semibold dark:text-white"
                         >
                             <Star size={16} className="fill-yellow-400 text-yellow-400" />
-                            NEW
+                            Nouveauté
                         </Badge>
                     )}
                 </div>
