@@ -5,12 +5,10 @@ namespace Database\Seeders;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductImage;
 use App\Models\User;
 use App\Modules\Banner\Models\BannerMessage;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
 
 class ProdSeeder extends Seeder
 {

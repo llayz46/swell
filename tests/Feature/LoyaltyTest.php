@@ -6,6 +6,7 @@ use App\Modules\Loyalty\Enums\TransactionType;
 use App\Modules\Loyalty\Models\LoyaltyAccount;
 use App\Modules\Loyalty\Models\LoyaltyTransaction;
 use App\Modules\Loyalty\Services\LoyaltyService;
+use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
     config(['swell.loyalty.enabled' => true]);
@@ -45,10 +46,8 @@ test('can award points to user', function () {
 });
 
 test('can spend points', function () {
-    // First award points
     $this->loyaltyService->awardPoints($this->user, 200, 'Test points');
 
-    // Then spend some
     $transaction = $this->loyaltyService->spendPoints($this->user, 50, 'Test redemption');
 
     expect($transaction)
@@ -71,18 +70,17 @@ test('cannot spend more points than available', function () {
 test('calculates points from order correctly', function () {
     $order = Order::factory()->create([
         'user_id' => $this->user->id,
-        'amount_total' => 10000, // 100€ in cents
+        'amount_total' => 10000, // 100€ (100,00)
     ]);
 
     $points = $this->loyaltyService->calculatePointsFromOrder($order);
 
-    expect($points)->toBe(1000); // 100€ * 10 points/€
+    expect($points)->toBe(1000); // 100 * 10 points/€
 });
 
 test('admin can adjust points', function () {
     $account = $this->loyaltyService->getOrCreateAccount($this->user);
 
-    // Add points
     $transaction = $this->loyaltyService->adminAdjustment($this->user, 50, 'Bonus');
     expect($transaction->type)->toBe(TransactionType::ADMIN_ADJUSTMENT)
         ->and($transaction->points)->toBe(50);
@@ -90,7 +88,6 @@ test('admin can adjust points', function () {
     $account->refresh();
     expect($account->points)->toBe(50);
 
-    // Subtract points
     $transaction = $this->loyaltyService->adminAdjustment($this->user, -20, 'Correction');
     expect($transaction->points)->toBe(-20);
 
@@ -120,13 +117,11 @@ test('can refund points from order', function () {
         'amount_total' => 10000,
     ]);
 
-    // Award points for order
     $this->loyaltyService->awardPoints($this->user, 100, 'Order points', $order);
 
     $account = LoyaltyAccount::where('user_id', $this->user->id)->first();
     expect($account->points)->toBe(100);
 
-    // Refund points
     $refundTransaction = $this->loyaltyService->refundPoints($order);
 
     expect($refundTransaction)
@@ -145,21 +140,22 @@ test('user can view loyalty page', function () {
 
     $response->assertStatus(200)
         ->assertInertia(fn ($page) => $page
-            ->component('Loyalty/Index')
+            ->component('loyalty/index')
             ->has('account')
             ->has('transactions')
         );
 });
 
 test('admin can view loyalty dashboard', function () {
-    $admin = User::factory()->create();
-    $admin->assignRole('admin');
+     Role::create(['name' => 'admin']);
+     
+    $admin = User::factory()->create()->assignRole('admin');
 
     $response = $this->actingAs($admin)->get(route('admin.loyalty.index'));
 
     $response->assertStatus(200)
         ->assertInertia(fn ($page) => $page
-            ->component('Admin/Loyalty/Index')
+            ->component('admin/loyalty/index')
             ->has('accounts')
             ->has('stats')
         );

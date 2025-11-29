@@ -77,10 +77,12 @@ export default function AdminLoyaltyShow({ account, transactions }: Props) {
 
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 <SwellCard>
-                    <SwellCardHeader>
-                        <CardTitle>{account.user.name}</CardTitle>
-                        <CardDescription>{account.user.email}</CardDescription>
-                    </SwellCardHeader>
+                    <SwellCardContent>
+                        <SwellCardHeader className="p-0">
+                            <CardTitle>{account.user.name}</CardTitle>
+                            <CardDescription>{account.user.email}</CardDescription>
+                        </SwellCardHeader>
+                    </SwellCardContent>
                 </SwellCard>
 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
