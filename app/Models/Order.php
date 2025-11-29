@@ -46,7 +46,7 @@ class Order extends Model
     {
         static::creating(function ($order) {
             $year = date('Y');
-            $order->order_number = config('swell.order_prefix') . $year . '-' . Str::upper(Str::random(8));
+            $order->order_number = config('swell.order_prefix') . '-' . $year . '-' . Str::upper(Str::random(8));
         });
     }
 }
