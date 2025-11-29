@@ -68,18 +68,15 @@ class AdminLoyaltyController extends Controller
                       ->with('order:id,order_number');
             }
         ]);
-        
-        $account = LoyaltyAccountResource::make($loyaltyAccount);
-        $transactions = LoyaltyTransactionResource::collection($loyaltyAccount->transactions);
 
         return Inertia::render('admin/loyalty/show', [
             'breadcrumbs' => [
                 ['title' => 'Admin', 'href' => route('admin.dashboard')],
                 ['title' => 'Points de fidélité', 'href' => route('admin.loyalty.index')],
-                ['title' => $account->user->name, 'href' => route('admin.loyalty.show', $account->id)],
+                ['title' => $loyaltyAccount->user->name, 'href' => route('admin.loyalty.show', $loyaltyAccount)],
             ],
-            'account' => $account,
-            'transactions' => $transactions,
+            'account' => LoyaltyAccountResource::make($loyaltyAccount),
+            'transactions' => LoyaltyTransactionResource::collection($loyaltyAccount->transactions),
         ]);
     }
 

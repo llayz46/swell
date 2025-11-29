@@ -3,6 +3,7 @@
 namespace App\Modules\Loyalty\Models;
 
 use App\Models\User;
+use App\Modules\Loyalty\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -36,7 +37,7 @@ class LoyaltyAccount extends Model
     public function getAvailablePointsAttribute(): int
     {
         return $this->transactions()
-            ->where('type', 'earned')
+            ->where('type', TransactionType::EARNED)
             ->where(function ($query) {
                 $query->whereNull('expires_at')
                     ->orWhere('expires_at', '>', now());
@@ -50,7 +51,7 @@ class LoyaltyAccount extends Model
     protected function getSpentPoints(): int
     {
         return abs($this->transactions()
-            ->whereIn('type', ['spent', 'expired'])
+            ->whereIn('type', [TransactionType::SPENT, TransactionType::EXPIRED])
             ->sum('points'));
     }
 
@@ -60,7 +61,7 @@ class LoyaltyAccount extends Model
     public function getExpiringPointsAttribute(): int
     {
         return $this->transactions()
-            ->where('type', 'earned')
+            ->where('type', TransactionType::EARNED)
             ->whereBetween('expires_at', [now(), now()->addDays(30)])
             ->sum('points');
     }

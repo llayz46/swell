@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Modules\Loyalty\Enums\TransactionType;
 use App\Modules\Loyalty\Models\LoyaltyAccount;
 use App\Modules\Loyalty\Models\LoyaltyTransaction;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class LoyaltyService
@@ -23,6 +24,14 @@ class LoyaltyService
     }
 
     /**
+     * Clear loyalty account cache for user
+     */
+    protected function clearAccountCache(User $user): void
+    {
+        Cache::forget("loyalty-account-{$user->id}");
+    }
+
+    /**
      * Award points to user
      */
     public function awardPoints(
@@ -32,7 +41,7 @@ class LoyaltyService
         ?Order $order = null,
         ?\DateTime $expiresAt = null
     ): LoyaltyTransaction {
-        return DB::transaction(function () use ($user, $points, $description, $order, $expiresAt) {
+        $transaction = DB::transaction(function () use ($user, $points, $description, $order, $expiresAt) {
             $account = $this->getOrCreateAccount($user);
 
             // Update account points
@@ -51,6 +60,10 @@ class LoyaltyService
                 'expires_at' => $expiresAt,
             ]);
         });
+
+        $this->clearAccountCache($user);
+
+        return $transaction;
     }
 
     /**
@@ -62,7 +75,7 @@ class LoyaltyService
         string $description,
         ?Order $order = null
     ): LoyaltyTransaction {
-        return DB::transaction(function () use ($user, $points, $description, $order) {
+        $transaction = DB::transaction(function () use ($user, $points, $description, $order) {
             $account = $this->getOrCreateAccount($user);
 
             // Check if user has enough points
@@ -84,6 +97,10 @@ class LoyaltyService
                 'order_id' => $order?->id,
             ]);
         });
+
+        $this->clearAccountCache($user);
+
+        return $transaction;
     }
 
     /**
@@ -115,7 +132,7 @@ class LoyaltyService
         int $points,
         string $reason
     ): LoyaltyTransaction {
-        return DB::transaction(function () use ($user, $points, $reason) {
+        $transaction = DB::transaction(function () use ($user, $points, $reason) {
             $account = $this->getOrCreateAccount($user);
 
             // Update points (can be negative)
@@ -134,6 +151,10 @@ class LoyaltyService
                 'description' => "Ajustement admin: $reason",
             ]);
         });
+
+        $this->clearAccountCache($user);
+
+        return $transaction;
     }
 
     /**
@@ -169,6 +190,9 @@ class LoyaltyService
 
                 $expiredCount++;
             });
+
+            // Clear cache for this account's user
+            $this->clearAccountCache($transaction->loyaltyAccount->user);
         }
 
         return $expiredCount;
@@ -188,7 +212,7 @@ class LoyaltyService
             return null;
         }
 
-        return DB::transaction(function () use ($originalTransaction, $order) {
+        $transaction = DB::transaction(function () use ($originalTransaction, $order) {
             $account = $originalTransaction->loyaltyAccount;
 
             // Deduct the refunded points
@@ -204,6 +228,10 @@ class LoyaltyService
                 'order_id' => $order->id,
             ]);
         });
+
+        $this->clearAccountCache($originalTransaction->loyaltyAccount->user);
+
+        return $transaction;
     }
 
     /**
