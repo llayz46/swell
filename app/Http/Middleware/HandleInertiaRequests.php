@@ -62,18 +62,6 @@ class HandleInertiaRequests extends Middleware
                     'minimum_redeem_points' => config('swell.loyalty.minimum_redeem_points', 100),
                 ]
             ],
-            'loyaltyAccount' => fn () => $request->user() && config('swell.loyalty.enabled', false)
-                ? Cache::remember("loyalty-account-" . $request->user()->id, 60, function () use ($request) {
-                    $loyaltyService = app(LoyaltyService::class);
-                    $account = $loyaltyService->getOrCreateAccount($request->user());
-                    return [
-                        'points' => $account->points,
-                        'lifetime_points' => $account->lifetime_points,
-                        'available_points' => $account->available_points,
-                        'expiring_points' => $account->expiring_points,
-                    ];
-                })
-                : null,
             'auth' => [
                 'user' => fn () => $request->user()?->load('roles'),
             ],
