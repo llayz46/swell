@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Modules\Loyalty\Models\LoyaltyAccount;
 use App\Modules\Loyalty\Services\LoyaltyService;
+use App\Modules\Loyalty\Http\Resources\LoyaltyAccountResource;
+use App\Modules\Loyalty\Http\Resources\LoyaltyTransactionResource;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -26,6 +28,12 @@ class AdminLoyaltyController extends Controller
             ->withCount('transactions')
             ->orderBy('points', 'desc')
             ->paginate(20);
+            
+        $stats = LoyaltyAccount::selectRaw('
+            COUNT(*) as total_accounts,
+            SUM(points) as total_points,
+            SUM(lifetime_points) as total_lifetime_points
+        ')->first();
 
         return Inertia::render('admin/loyalty/index', [
             'accounts' => $accounts->through(fn($account) => [
@@ -41,9 +49,9 @@ class AdminLoyaltyController extends Controller
                 'created_at' => $account->created_at->format('d/m/Y'),
             ]),
             'stats' => [
-                'total_accounts' => LoyaltyAccount::count(),
-                'total_points' => LoyaltyAccount::sum('points'),
-                'total_lifetime_points' => LoyaltyAccount::sum('lifetime_points'),
+                'total_accounts' => $stats->total_accounts,
+                'total_points' => $stats->total_points,
+                'total_lifetime_points' => $stats->total_lifetime_points,
             ],
         ]);
     }
@@ -53,35 +61,25 @@ class AdminLoyaltyController extends Controller
      */
     public function show(LoyaltyAccount $loyaltyAccount): Response
     {
-        $loyaltyAccount->load('user', 'transactions');
+        $loyaltyAccount->load([
+            'user:id,name,email',
+            'transactions' => function ($query) {
+                $query->orderBy('created_at', 'desc')
+                      ->with('order:id,order_number');
+            }
+        ]);
+        
+        $account = LoyaltyAccountResource::make($loyaltyAccount);
+        $transactions = LoyaltyTransactionResource::collection($loyaltyAccount->transactions);
 
         return Inertia::render('admin/loyalty/show', [
-            'account' => [
-                'id' => $loyaltyAccount->id,
-                'user' => [
-                    'id' => $loyaltyAccount->user->id,
-                    'name' => $loyaltyAccount->user->name,
-                    'email' => $loyaltyAccount->user->email,
-                ],
-                'points' => $loyaltyAccount->points,
-                'lifetime_points' => $loyaltyAccount->lifetime_points,
-                'available_points' => $loyaltyAccount->available_points,
-                'expiring_points' => $loyaltyAccount->expiring_points,
+            'breadcrumbs' => [
+                ['title' => 'Admin', 'href' => route('admin.dashboard')],
+                ['title' => 'Points de fidélité', 'href' => route('admin.loyalty.index')],
+                ['title' => $account->user->name, 'href' => route('admin.loyalty.show', $account->id)],
             ],
-            'transactions' => $loyaltyAccount->transactions()
-                ->orderBy('created_at', 'desc')
-                ->get()
-                ->map(fn($transaction) => [
-                    'id' => $transaction->id,
-                    'type' => $transaction->type->value,
-                    'type_label' => $transaction->type->label(),
-                    'points' => $transaction->points,
-                    'balance_after' => $transaction->balance_after,
-                    'description' => $transaction->description,
-                    'order_number' => $transaction->order?->order_number,
-                    'expires_at' => $transaction->expires_at?->format('d/m/Y'),
-                    'created_at' => $transaction->created_at->format('d/m/Y H:i'),
-                ]),
+            'account' => $account,
+            'transactions' => $transactions,
         ]);
     }
 

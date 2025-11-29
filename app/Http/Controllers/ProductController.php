@@ -11,7 +11,6 @@ use App\Traits\Sortable;
 use App\Traits\StockFilterable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -64,14 +63,9 @@ class ProductController extends Controller
                     $indexName,
                     array_merge(['query' => $query], $options)
                 );
-
-//                return $algolia->searchSingleIndex(
-//                    (new Product)->searchableAs(),
-//                    array_merge(['query' => $query], $options)
-//                );
             });
 
-            $products = $searchBuilder->query(function ($query) use ($in, $out, $sort) {
+            $products = $searchBuilder->query(function ($query) use ($in, $out) {
                 $query->where('status', true)
                     ->with('featuredImage', 'brand');
 

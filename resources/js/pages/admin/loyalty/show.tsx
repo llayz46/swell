@@ -37,26 +37,12 @@ interface Transaction {
 }
 
 interface Props {
+    breadcrumbs: BreadcrumbItem[];
     account: Account;
     transactions: Transaction[];
 }
 
-export default function AdminLoyaltyShow({ account, transactions }: Props) {
-    const breadcrumbs: BreadcrumbItem[] = [
-        {
-            title: 'Admin',
-            href: '/admin',
-        },
-        {
-            title: 'Points de fidélité',
-            href: '/admin/loyalty',
-        },
-        {
-            title: account.user.name,
-            href: route('admin.loyalty.show', account.id),
-        },
-    ];
-
+export default function AdminLoyaltyShow({ breadcrumbs, account, transactions }: Props) {
     const { data, setData, post, processing, errors, reset } = useForm({
         points: 0,
         reason: '',
@@ -75,7 +61,7 @@ export default function AdminLoyaltyShow({ account, transactions }: Props) {
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title={`Points de fidélité - ${account.user.name}`} />
 
-            <div className="flex h-full flex-1 flex-col gap-6 p-4">
+            <div className="flex h-full flex-1 flex-col gap-6 mt-4">
                 <SwellCard>
                     <SwellCardContent>
                         <SwellCardHeader className="p-0">
@@ -88,7 +74,7 @@ export default function AdminLoyaltyShow({ account, transactions }: Props) {
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <SwellCard>
                         <SwellCardHeader>
-                            <CardTitle className="text-sm font-medium">Points actuels</CardTitle>
+                            <CardTitle className="text-sm font-medium">Solde actuel</CardTitle>
                             <Award className="size-4 text-muted-foreground" />
                         </SwellCardHeader>
                         <SwellCardContent>
@@ -98,7 +84,7 @@ export default function AdminLoyaltyShow({ account, transactions }: Props) {
 
                     <SwellCard>
                         <SwellCardHeader>
-                            <CardTitle className="text-sm font-medium">Points à vie</CardTitle>
+                            <CardTitle className="text-sm font-medium">Points accumulés</CardTitle>
                             <TrendingUp className="size-4 text-muted-foreground" />
                         </SwellCardHeader>
                         <SwellCardContent>
@@ -118,7 +104,7 @@ export default function AdminLoyaltyShow({ account, transactions }: Props) {
 
                     <SwellCard>
                         <SwellCardHeader>
-                            <CardTitle className="text-sm font-medium">Expirant bientôt</CardTitle>
+                            <CardTitle className="text-sm font-medium">Points expirant bientôt</CardTitle>
                             <Clock className="size-4 text-muted-foreground" />
                         </SwellCardHeader>
                         <SwellCardContent>

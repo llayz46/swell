@@ -11,7 +11,6 @@ use App\Models\Product;
 use App\Models\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class ProductController extends Controller

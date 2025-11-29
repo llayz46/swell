@@ -4,7 +4,8 @@ namespace App\Modules\Loyalty\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Loyalty\Services\LoyaltyService;
-use Illuminate\Http\Request;
+use App\Modules\Loyalty\Http\Resources\LoyaltyAccountResource;
+use App\Modules\Loyalty\Http\Resources\LoyaltyTransactionResource;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -17,30 +18,22 @@ class LoyaltyController extends Controller
     /**
      * Display user's loyalty points and transaction history
      */
-    public function index(Request $request): Response
+    public function index(): Response
     {
-        $user = $request->user();
-        $account = $this->loyaltyService->getOrCreateAccount($user);
-        $transactions = $this->loyaltyService->getTransactionHistory($user, 50);
+        $user = auth()->user();
 
+        $loyaltyAccount = $this->loyaltyService->getOrCreateAccount($user);
+        $loyaltyAccount->load([
+            'user:id,name,email',
+            'transactions' => function ($query) {
+                $query->orderBy('created_at', 'desc')
+                      ->with('order:id,order_number');
+            }
+        ]);
+        
         return Inertia::render('loyalty/index', [
-            'account' => [
-                'points' => $account->points,
-                'lifetime_points' => $account->lifetime_points,
-                'available_points' => $account->available_points,
-                'expiring_points' => $account->expiring_points,
-            ],
-            'transactions' => $transactions->map(fn($transaction) => [
-                'id' => $transaction->id,
-                'type' => $transaction->type->value,
-                'type_label' => $transaction->type->label(),
-                'points' => $transaction->points,
-                'balance_after' => $transaction->balance_after,
-                'description' => $transaction->description,
-                'order_number' => $transaction->order?->order_number,
-                'expires_at' => $transaction->expires_at?->format('d/m/Y'),
-                'created_at' => $transaction->created_at->format('d/m/Y H:i'),
-            ]),
+            'account' => LoyaltyAccountResource::make($loyaltyAccount),
+            'transactions' => LoyaltyTransactionResource::collection($loyaltyAccount->transactions),
             'config' => [
                 'points_per_euro' => config('swell.loyalty.points_per_euro'),
                 'minimum_redeem_points' => config('swell.loyalty.minimum_redeem_points'),

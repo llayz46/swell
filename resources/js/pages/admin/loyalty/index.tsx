@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { CardDescription, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AdminLayout from '@/layouts/admin-layout';
@@ -149,15 +149,9 @@ export default function AdminLoyaltyIndex({ accounts, stats }: Props) {
                                                 {account.created_at}
                                             </TableCell>
                                             <TableCell className="text-right">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    asChild
-                                                >
-                                                    <Link href={route('admin.loyalty.show', account.id)}>
-                                                        Voir détails
-                                                    </Link>
-                                                </Button>
+                                                <Link className={buttonVariants({ variant: 'link', size: 'sm' })} href={route('admin.loyalty.show', account.id)}>
+                                                    Voir détails
+                                                </Link>
                                             </TableCell>
                                         </TableRow>
                                     ))}
