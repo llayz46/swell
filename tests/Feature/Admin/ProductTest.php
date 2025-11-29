@@ -11,6 +11,14 @@ use Illuminate\Http\UploadedFile;
 use Spatie\Permission\Models\Role;
 use Inertia\Testing\AssertableInertia as Assert;
 
+beforeEach(function () {
+    Storage::fake('public');
+
+    config([
+        'filesystems.disks.public.root' => Storage::disk('public')->path(''),
+    ]);
+});
+
 test('not admin user cannot access products pages', function () {
     $user = User::factory()->create();
 
@@ -301,7 +309,9 @@ it('create a product with images', function () {
     $product = $handleProduct->create($data);
 
     expect($product->images)->toHaveCount(1);
-    
+
+    dump($product->images->first()->image_url);
+
     $imagePath = str_replace('storage/', '', $product->images->first()->image_url);
     Storage::disk('public')->assertExists($imagePath);
     
