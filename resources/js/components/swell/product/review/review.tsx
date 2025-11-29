@@ -1,6 +1,7 @@
 import { useInitials } from '@/hooks/use-initials';
 import type { Review as ReviewType } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
+import { formatDate } from '@/utils/format-date';
 import { Star } from 'lucide-react';
 import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../../../ui/avatar';
@@ -12,14 +13,6 @@ export function Review({ review }: { review: ReviewType }) {
     const shouldTruncate = review.comment.length > 300;
 
     const getInitials = useInitials();
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('fr-FR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    };
 
     const toggleCommentExpansion = (reviewId: number) => {
         setExpandedComments((prev) => {

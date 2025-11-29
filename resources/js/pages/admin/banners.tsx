@@ -11,6 +11,7 @@ import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { formatDate } from '@/utils/format-date';
 import { Transition } from '@headlessui/react';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { AlertCircle, CheckCircle, Edit, Eye, EyeOff, Info, Megaphone, MoreHorizontal, Trash2 } from 'lucide-react';
@@ -284,16 +285,6 @@ interface SortableBannerItemProps {
 }
 
 function SortableBannerItem({ item, setEditBanner, setOpenBannerDialog, onDelete, onToggleActive }: SortableBannerItemProps) {
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('fr-FR', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-        });
-    };
-
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: item.id,
         transition: {

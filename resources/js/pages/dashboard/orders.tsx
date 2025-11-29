@@ -1,10 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, Order } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
+import { formatDate } from '@/utils/format-date';
 import { Head, Link } from '@inertiajs/react';
 import { RotateCcw, Search } from 'lucide-react';
 import { useState } from 'react';
@@ -23,14 +24,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Orders({ orders }: { orders: Order[] }) {
     const [searchTerm, setSearchTerm] = useState<string>('');
 
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('fr-FR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    };
-
     const filteredOrders = orders.filter((order) => {
         if (!searchTerm) return true;
 
@@ -47,7 +40,7 @@ export default function Orders({ orders }: { orders: Order[] }) {
                     <p className="text-muted-foreground">Consultez l'historique de vos commandes et leur statut</p>
                 </div>
 
-                <Card className="mb-2 border bg-card py-3 sm:mb-4 sm:py-4">
+                <Card className="border bg-card py-3 sm:py-4">
                     <CardContent className="px-3 sm:px-4">
                         <div className="relative">
                             <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
@@ -63,18 +56,16 @@ export default function Orders({ orders }: { orders: Order[] }) {
 
                 <div className="space-y-4">
                     {filteredOrders.map((order) => (
-                        <Card key={order.id} className="border bg-card max-sm:py-4">
-                            <CardHeader className="max-sm:px-4">
-                                <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                                    <div>
-                                        <CardTitle className="text-lg font-semibold text-foreground">Commande {order.order_number}</CardTitle>
-                                        <p className="mt-1 text-sm text-muted-foreground">Passée le {formatDate(order.created_at)}</p>
-                                    </div>
-                                    <span className="text-lg font-semibold text-foreground">€{(order.amount_total / 100).toFixed(2)}</span>
+                        <SwellCard key={order.id}>
+                            <SwellCardHeader>
+                                <div>
+                                    <CardTitle className="text-lg font-semibold text-foreground">Commande {order.order_number}</CardTitle>
+                                    <p className="mt-1 text-sm text-muted-foreground">Passée le {order.created_at}</p>
                                 </div>
-                            </CardHeader>
+                                <span className="text-lg font-semibold text-foreground">€{(order.amount_total / 100).toFixed(2)}</span>
+                            </SwellCardHeader>
 
-                            <CardContent className="pt-0 max-sm:px-4">
+                            <SwellCardContent>
                                 <div className="mb-4 space-y-3">
                                     {order.items.map((item) => (
                                         <div key={item.id} className="flex items-center gap-4">
@@ -115,8 +106,8 @@ export default function Orders({ orders }: { orders: Order[] }) {
                                         <RotateCcw /> Commander à nouveau
                                     </Button>
                                 </div>
-                            </CardContent>
-                        </Card>
+                            </SwellCardContent>
+                        </SwellCard>
                     ))}
                 </div>
             </div>
