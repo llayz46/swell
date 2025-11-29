@@ -11,7 +11,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Cashier\Checkout;
 
 
-('users can view their cart', function () {
+test('users can view their cart', function () {
     $user = User::factory()->create();
     $product = Product::factory()->create();
 
