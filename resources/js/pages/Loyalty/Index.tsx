@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
+import { CardDescription, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
@@ -58,27 +58,23 @@ export default function LoyaltyIndex({ account, transactions, config }: Props) {
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <SwellCard>
                         <SwellCardHeader>
-                            <CardTitle className="text-sm font-medium">Points disponibles</CardTitle>
+                            <CardTitle className="text-sm font-medium">Solde actuel</CardTitle>
                             <Award className="size-4 text-muted-foreground" />
                         </SwellCardHeader>
                         <SwellCardContent>
                             <div className="text-2xl font-bold">{account.points.toLocaleString()}</div>
-                            <p className="text-xs text-muted-foreground">
-                                ≈ {(account.points / config.points_per_euro).toFixed(2)} €
-                            </p>
+                            <p className="text-xs text-muted-foreground">≈ {(account.points / config.points_per_euro).toFixed(2)} €</p>
                         </SwellCardContent>
                     </SwellCard>
 
                     <SwellCard>
                         <SwellCardHeader>
-                            <CardTitle className="text-sm font-medium">Points à vie</CardTitle>
+                            <CardTitle className="text-sm font-medium">Points accumulés</CardTitle>
                             <TrendingUp className="size-4 text-muted-foreground" />
                         </SwellCardHeader>
                         <SwellCardContent>
                             <div className="text-2xl font-bold">{account.lifetime_points.toLocaleString()}</div>
-                            <p className="text-xs text-muted-foreground">
-                                Total gagné depuis l'inscription
-                            </p>
+                            <p className="text-xs text-muted-foreground">Total gagné depuis l'inscription</p>
                         </SwellCardContent>
                     </SwellCard>
 
@@ -89,9 +85,7 @@ export default function LoyaltyIndex({ account, transactions, config }: Props) {
                         </SwellCardHeader>
                         <SwellCardContent>
                             <div className="text-2xl font-bold">{account.available_points.toLocaleString()}</div>
-                            <p className="text-xs text-muted-foreground">
-                                Utilisables immédiatement
-                            </p>
+                            <p className="text-xs text-muted-foreground">Utilisables immédiatement</p>
                         </SwellCardContent>
                     </SwellCard>
 
@@ -102,9 +96,7 @@ export default function LoyaltyIndex({ account, transactions, config }: Props) {
                         </SwellCardHeader>
                         <SwellCardContent>
                             <div className="text-2xl font-bold">{account.expiring_points.toLocaleString()}</div>
-                            <p className="text-xs text-muted-foreground">
-                                Dans les 30 prochains jours
-                            </p>
+                            <p className="text-xs text-muted-foreground">Dans les 30 prochains jours</p>
                         </SwellCardContent>
                     </SwellCard>
                 </div>
@@ -112,9 +104,7 @@ export default function LoyaltyIndex({ account, transactions, config }: Props) {
                 <SwellCard>
                     <SwellCardHeader>
                         <CardTitle>Comment ça marche ?</CardTitle>
-                        <CardDescription>
-                            Gagnez des points à chaque achat et utilisez-les pour obtenir des réductions
-                        </CardDescription>
+                        <CardDescription>Gagnez des points à chaque achat et utilisez-les pour obtenir des réductions</CardDescription>
                     </SwellCardHeader>
                     <SwellCardContent className="space-y-2">
                         <div className="flex items-center gap-2">
@@ -130,8 +120,7 @@ export default function LoyaltyIndex({ account, transactions, config }: Props) {
                                 <span className="text-sm font-semibold text-primary">2</span>
                             </div>
                             <p className="text-sm">
-                                Utilisez vos points dès que vous avez{' '}
-                                <strong>{config.minimum_redeem_points} points</strong>
+                                Utilisez vos points dès que vous avez au moins <strong>{config.minimum_redeem_points} points</strong>
                             </p>
                         </div>
                         <div className="flex items-center gap-2">
@@ -148,17 +137,13 @@ export default function LoyaltyIndex({ account, transactions, config }: Props) {
                 <SwellCard>
                     <SwellCardHeader>
                         <CardTitle>Historique des transactions</CardTitle>
-                        <CardDescription>
-                            Suivez l'évolution de vos points de fidélité
-                        </CardDescription>
+                        <CardDescription>Suivez l'évolution de vos points de fidélité</CardDescription>
                     </SwellCardHeader>
                     <SwellCardContent>
                         {transactions.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-12 text-center">
                                 <Award className="mb-4 size-12 text-muted-foreground" />
-                                <p className="text-sm text-muted-foreground">
-                                    Aucune transaction pour le moment
-                                </p>
+                                <p className="text-sm text-muted-foreground">Aucune transaction pour le moment</p>
                             </div>
                         ) : (
                             <div className="overflow-x-auto">
@@ -176,9 +161,7 @@ export default function LoyaltyIndex({ account, transactions, config }: Props) {
                                     <TableBody>
                                         {transactions.map((transaction) => (
                                             <TableRow key={transaction.id}>
-                                                <TableCell className="font-medium">
-                                                    {transaction.created_at}
-                                                </TableCell>
+                                                <TableCell className="font-medium">{transaction.created_at}</TableCell>
                                                 <TableCell>
                                                     <Badge
                                                         variant={
@@ -195,9 +178,7 @@ export default function LoyaltyIndex({ account, transactions, config }: Props) {
                                                 <TableCell>
                                                     {transaction.description}
                                                     {transaction.order_number && (
-                                                        <span className="ml-2 text-xs text-muted-foreground">
-                                                            ({transaction.order_number})
-                                                        </span>
+                                                        <span className="ml-2 text-xs text-muted-foreground">({transaction.order_number})</span>
                                                     )}
                                                 </TableCell>
                                                 <TableCell
@@ -211,12 +192,8 @@ export default function LoyaltyIndex({ account, transactions, config }: Props) {
                                                     {transaction.points > 0 ? '+' : ''}
                                                     {transaction.points.toLocaleString()}
                                                 </TableCell>
-                                                <TableCell className="text-right">
-                                                    {transaction.balance_after.toLocaleString()}
-                                                </TableCell>
-                                                <TableCell className="text-sm text-muted-foreground">
-                                                    {transaction.expires_at || '—'}
-                                                </TableCell>
+                                                <TableCell className="text-right">{transaction.balance_after.toLocaleString()}</TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">{transaction.expires_at || '—'}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>

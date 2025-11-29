@@ -23,7 +23,7 @@ class LoyaltyController extends Controller
         $account = $this->loyaltyService->getOrCreateAccount($user);
         $transactions = $this->loyaltyService->getTransactionHistory($user, 50);
 
-        return Inertia::render('Loyalty/Index', [
+        return Inertia::render('loyalty/index', [
             'account' => [
                 'points' => $account->points,
                 'lifetime_points' => $account->lifetime_points,

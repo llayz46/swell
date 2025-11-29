@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
+import { CardDescription, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -128,9 +128,7 @@ export default function AdminLoyaltyShow({ account, transactions }: Props) {
                 <SwellCard>
                     <SwellCardHeader>
                         <CardTitle>Ajuster les points</CardTitle>
-                        <CardDescription>
-                            Ajouter ou retirer des points manuellement (utilisez des nombres négatifs pour retirer)
-                        </CardDescription>
+                        <CardDescription>Ajouter ou retirer des points manuellement (utilisez des nombres négatifs pour retirer)</CardDescription>
                     </SwellCardHeader>
                     <SwellCardContent>
                         <form onSubmit={handleAdjust} className="space-y-4">
@@ -145,9 +143,7 @@ export default function AdminLoyaltyShow({ account, transactions }: Props) {
                                         placeholder="Ex: 100 ou -50"
                                         required
                                     />
-                                    {errors.points && (
-                                        <p className="text-sm text-destructive">{errors.points}</p>
-                                    )}
+                                    {errors.points && <p className="text-sm text-destructive">{errors.points}</p>}
                                 </div>
 
                                 <div className="space-y-2">
@@ -159,9 +155,7 @@ export default function AdminLoyaltyShow({ account, transactions }: Props) {
                                         placeholder="Ex: Compensation pour erreur"
                                         required
                                     />
-                                    {errors.reason && (
-                                        <p className="text-sm text-destructive">{errors.reason}</p>
-                                    )}
+                                    {errors.reason && <p className="text-sm text-destructive">{errors.reason}</p>}
                                 </div>
                             </div>
 
@@ -193,9 +187,7 @@ export default function AdminLoyaltyShow({ account, transactions }: Props) {
                                 <TableBody>
                                     {transactions.map((transaction) => (
                                         <TableRow key={transaction.id}>
-                                            <TableCell className="font-medium">
-                                                {transaction.created_at}
-                                            </TableCell>
+                                            <TableCell className="font-medium">{transaction.created_at}</TableCell>
                                             <TableCell>
                                                 <Badge
                                                     variant={
@@ -212,28 +204,20 @@ export default function AdminLoyaltyShow({ account, transactions }: Props) {
                                             <TableCell>
                                                 {transaction.description}
                                                 {transaction.order_number && (
-                                                    <span className="ml-2 text-xs text-muted-foreground">
-                                                        ({transaction.order_number})
-                                                    </span>
+                                                    <span className="ml-2 text-xs text-muted-foreground">({transaction.order_number})</span>
                                                 )}
                                             </TableCell>
                                             <TableCell
                                                 className={cn(
                                                     'text-right font-semibold',
-                                                    transaction.points > 0
-                                                        ? 'text-green-600 dark:text-green-400'
-                                                        : 'text-red-600 dark:text-red-400',
+                                                    transaction.points > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400',
                                                 )}
                                             >
                                                 {transaction.points > 0 ? '+' : ''}
                                                 {transaction.points.toLocaleString()}
                                             </TableCell>
-                                            <TableCell className="text-right">
-                                                {transaction.balance_after.toLocaleString()}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-muted-foreground">
-                                                {transaction.expires_at || '—'}
-                                            </TableCell>
+                                            <TableCell className="text-right">{transaction.balance_after.toLocaleString()}</TableCell>
+                                            <TableCell className="text-sm text-muted-foreground">{transaction.expires_at || '—'}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
