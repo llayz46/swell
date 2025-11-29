@@ -10,6 +10,11 @@ use Spatie\Permission\Models\Role;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
+    if (!config('swell.loyalty.enabled')) {
+        $this->markTestSkipped('La fonctionnalité fidélité est désactivée.');
+        return;
+    }
+
     config(['swell.loyalty.enabled' => true]);
     config(['swell.loyalty.points_per_euro' => 10]);
     config(['swell.loyalty.points_expiration_days' => 365]);

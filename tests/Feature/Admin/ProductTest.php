@@ -302,8 +302,6 @@ it('create a product with images', function () {
 
     expect($product->images)->toHaveCount(1);
 
-    dump($product->images->first()->image_url);
-
     $imagePath = str_replace('storage/', '', $product->images->first()->image_url);
     Storage::disk('public')->assertExists($imagePath);
 
