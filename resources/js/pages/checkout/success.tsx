@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Order } from '@/types';
 import { Head, Link } from '@inertiajs/react';
@@ -23,15 +23,15 @@ export default function Success({ order }: { order: Order }) {
                         <p className="text-lg text-muted-foreground">Merci pour votre achat. Votre commande a été traitée avec succès.</p>
                     </div>
 
-                    <Card className="mb-6 border bg-card">
-                        <CardContent>
-                            <div className="mb-4 flex items-center justify-between">
-                                <h2 className="text-xl font-semibold text-foreground">Détails de la commande</h2>
-                                <Badge variant="secondary" className="rounded-sm bg-green-500 text-white dark:bg-green-900 dark:text-green-200">
-                                    Confirmée
-                                </Badge>
-                            </div>
-
+                    <SwellCard className="mb-6">
+                        <SwellCardHeader>
+                            <h2 className="text-xl font-semibold text-foreground">Détails de la commande</h2>
+                            <Badge variant="secondary" className="rounded-sm bg-green-500 text-white dark:bg-green-900 dark:text-green-200">
+                                Confirmée
+                            </Badge>
+                        </SwellCardHeader>
+                        
+                        <SwellCardContent>
                             <div className="space-y-4">
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted-foreground">Numéro de commande:</span>
@@ -76,28 +76,31 @@ export default function Success({ order }: { order: Order }) {
                                     <span className="text-foreground">€{(order.amount_total / 100).toFixed(2)}</span>
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
+                        </SwellCardContent>
+                    </SwellCard>
 
-                    <Card className="mb-6 border bg-card">
-                        <CardContent>
-                            <h3 className="mb-4 text-lg font-semibold text-foreground">Et maintenant ?</h3>
+                    <SwellCard className="mb-6">
+                        <SwellCardHeader>
+                            <h3 className="text-lg font-semibold text-foreground">Et maintenant ?</h3>
+                        </SwellCardHeader>
+                        
+                        <SwellCardContent>
                             <div className="space-y-4">
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-center gap-3">
                                     <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
-                                        <Mail className="h-4 w-4 text-primary" />
+                                        <Mail className="size-4 text-primary" />
                                     </div>
                                     <div>
                                         <p className="font-medium text-foreground">Confirmation par email</p>
                                         <p className="text-sm text-muted-foreground">
-                                            Un email de confirmation a été envoyé à {order.billing_address.email}
+                                            Un email de confirmation a été envoyé à <b>{order.billing_address.email}</b>
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-center gap-3">
                                     <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
-                                        <Package className="h-4 w-4 text-primary" />
+                                        <Package className="size-4 text-primary" />
                                     </div>
                                     <div>
                                         <p className="font-medium text-foreground">Préparation et expédition</p>
@@ -105,9 +108,9 @@ export default function Success({ order }: { order: Order }) {
                                     </div>
                                 </div>
 
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-center gap-3">
                                     <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
-                                        <Receipt className="h-4 w-4 text-primary" />
+                                        <Receipt className="size-4 text-primary" />
                                     </div>
                                     <div>
                                         <p className="font-medium text-foreground">Suivi de commande</p>
@@ -115,20 +118,20 @@ export default function Success({ order }: { order: Order }) {
                                     </div>
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
+                        </SwellCardContent>
+                    </SwellCard>
 
                     <div className="space-y-3">
                         <Button asChild size="lg" className="w-full">
                             <Link href="/orders">
                                 Voir mes commandes
-                                <ArrowRight className="h-4 w-4" />
+                                <ArrowRight className="size-4" />
                             </Link>
                         </Button>
 
                         <Button asChild variant="outline" size="lg" className="w-full border bg-background text-foreground">
                             <Link prefetch="mount" href="/">
-                                <Home className="h-4 w-4" />
+                                <Home className="size-4" />
                                 Continuer mes achats
                             </Link>
                         </Button>
