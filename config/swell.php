@@ -2,6 +2,12 @@
 
 return [
     /*
+     * Order prefix for orders.
+     * This can be controlled via the SWELL_ORDER_PREFIX environment variable.
+     */
+    'order_prefix' => env('SWELL_ORDER_PREFIX', 'ORD'),
+
+    /*
      * Enable or disable the wishlist feature.
      * This can be controlled via the SWELL_WISHLIST_ENABLED environment variable.
      */
