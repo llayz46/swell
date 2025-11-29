@@ -7,6 +7,7 @@ use App\Modules\Loyalty\Models\LoyaltyAccount;
 use App\Modules\Loyalty\Models\LoyaltyTransaction;
 use App\Modules\Loyalty\Services\LoyaltyService;
 use Spatie\Permission\Models\Role;
+use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     config(['swell.loyalty.enabled' => true]);
@@ -136,10 +137,10 @@ test('can refund points from order', function () {
 test('user can view loyalty page', function () {
     $this->loyaltyService->awardPoints($this->user, 100, 'Test points');
 
-    $response = $this->actingAs($this->user)->get(route('loyalty.index'));
-
-    $response->assertStatus(200)
-        ->assertInertia(fn ($page) => $page
+    $this->actingAs($this->user)
+        ->get(route('loyalty.index'))
+        ->assertStatus(200)
+        ->assertInertia(fn (Assert $page) => $page
             ->component('loyalty/index')
             ->has('account')
             ->has('transactions')
@@ -148,7 +149,7 @@ test('user can view loyalty page', function () {
 
 test('admin can view loyalty dashboard', function () {
      Role::create(['name' => 'admin']);
-     
+
     $admin = User::factory()->create()->assignRole('admin');
 
     $response = $this->actingAs($admin)->get(route('admin.loyalty.index'));
