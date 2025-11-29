@@ -49,7 +49,7 @@ interface Props {
     config: Config;
 }
 
-export default function LoyaltyIndex({ account, transactions, config }: Props) {
+export default function Index({ account, transactions, config }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Points de fidélité" />

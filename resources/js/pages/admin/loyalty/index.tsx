@@ -55,7 +55,7 @@ interface Props {
     stats: Stats;
 }
 
-export default function AdminLoyaltyIndex({ accounts, stats }: Props) {
+export default function Index({ accounts, stats }: Props) {
     const handleExpirePoints = () => {
         if (confirm('Êtes-vous sûr de vouloir expirer les points obsolètes ?')) {
             router.post(route('admin.loyalty.expire'));

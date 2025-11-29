@@ -42,7 +42,7 @@ interface Props {
     transactions: Transaction[];
 }
 
-export default function AdminLoyaltyShow({ breadcrumbs, account, transactions }: Props) {
+export default function Show({ breadcrumbs, account, transactions }: Props) {
     const { data, setData, post, processing, errors, reset } = useForm({
         points: 0,
         reason: '',
