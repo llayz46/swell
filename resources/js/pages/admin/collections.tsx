@@ -186,7 +186,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                             ) : (
                                 <TableRow>
                                     <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
-                                        {searchTerm ? 'Aucune marque trouvée' : 'Aucune marque disponible'}
+                                        {searchTerm ? 'Aucune collection trouvée' : 'Aucune collection disponible'}
                                     </TableCell>
                                 </TableRow>
                             )}
