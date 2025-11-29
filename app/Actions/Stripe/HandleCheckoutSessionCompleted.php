@@ -5,6 +5,7 @@ namespace App\Actions\Stripe;
 use App\Models\Cart;
 use App\Models\OrderItem;
 use App\Models\User;
+use App\Modules\Loyalty\Services\LoyaltyService;
 use Illuminate\Support\Facades\DB;
 use Laravel\Cashier\Cashier;
 use Stripe\LineItem;
@@ -66,6 +67,25 @@ class HandleCheckoutSessionCompleted
             if ($cart) {
                 $cart->items()->delete();
                 $cart->delete();
+            }
+
+            // Award loyalty points if feature is enabled
+            if (config('swell.loyalty.enabled', false)) {
+                $loyaltyService = app(LoyaltyService::class);
+                $points = $loyaltyService->calculatePointsFromOrder($order);
+
+                if ($points > 0) {
+                    $expirationDays = config('swell.loyalty.points_expiration_days');
+                    $expiresAt = $expirationDays ? now()->addDays((int) $expirationDays) : null;
+
+                    $loyaltyService->awardPoints(
+                        $user,
+                        $points,
+                        "Points gagnés pour la commande #{$order->order_number}",
+                        $order,
+                        $expiresAt
+                    );
+                }
             }
         });
     }

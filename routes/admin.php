@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Banner\Http\Controllers\BannerController;
+use App\Modules\Loyalty\Http\Controllers\Admin\AdminLoyaltyController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CollectionController;
@@ -33,5 +34,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::put('/{bannerMessage}', [BannerController::class, 'update'])->name('update');
         Route::post('/', [BannerController::class, 'store'])->name('store');
         Route::delete('/{banner}', [BannerController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::middleware('feature:loyalty')->prefix('loyalty')->name('loyalty.')->group(function () {
+        Route::get('/', [AdminLoyaltyController::class, 'index'])->name('index');
+        Route::get('/{loyaltyAccount}', [AdminLoyaltyController::class, 'show'])->name('show');
+        Route::post('/{user}/adjust', [AdminLoyaltyController::class, 'adjust'])->name('adjust');
+        Route::post('/expire-points', [AdminLoyaltyController::class, 'expirePoints'])->name('expire');
     });
 });

@@ -44,6 +44,11 @@ export interface SharedData {
         review: {
             enabled: boolean;
         };
+        loyalty: {
+            enabled: boolean;
+            points_per_euro: number;
+            minimum_redeem_points: number;
+        };
     };
     auth: Auth;
     ziggy: Config & { location: string };

@@ -6,6 +6,7 @@ use App\Factories\CartFactory;
 use App\Http\Resources\CartResource;
 use App\Http\Resources\CategoryResource;
 use App\Modules\Banner\Models\BannerMessage;
+use App\Modules\Loyalty\Services\LoyaltyService;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -54,8 +55,25 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'review' => [
                     'enabled' => config('swell.review.enabled', true),
+                ],
+                'loyalty' => [
+                    'enabled' => config('swell.loyalty.enabled', false),
+                    'points_per_euro' => config('swell.loyalty.points_per_euro', 10),
+                    'minimum_redeem_points' => config('swell.loyalty.minimum_redeem_points', 100),
                 ]
             ],
+            'loyaltyAccount' => fn () => $request->user() && config('swell.loyalty.enabled', false)
+                ? Cache::remember("loyalty-account-" . $request->user()->id, 60, function () use ($request) {
+                    $loyaltyService = app(LoyaltyService::class);
+                    $account = $loyaltyService->getOrCreateAccount($request->user());
+                    return [
+                        'points' => $account->points,
+                        'lifetime_points' => $account->lifetime_points,
+                        'available_points' => $account->available_points,
+                        'expiring_points' => $account->expiring_points,
+                    ];
+                })
+                : null,
             'auth' => [
                 'user' => fn () => $request->user()?->load('roles'),
             ],

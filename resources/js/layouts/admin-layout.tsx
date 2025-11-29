@@ -1,7 +1,7 @@
 import AdminLayoutTemplate from '@/layouts/app/app-header-layout';
 import { type BreadcrumbItem, type NavItem, SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
-import { Boxes, Folders, LayoutGrid, Megaphone, Package, Tags } from 'lucide-react';
+import { Boxes, Folders, Gift, LayoutGrid, Megaphone, Package, Tags } from 'lucide-react';
 import { type PropsWithChildren } from 'react';
 
 const mainNavItems: NavItem[] = [
@@ -34,6 +34,11 @@ const mainNavItems: NavItem[] = [
         title: 'Produits',
         href: '/admin/products',
         icon: Package,
+    },
+    {
+        title: 'Fidélité',
+        href: '/admin/loyalty',
+        icon: Gift,
     },
 ];
 

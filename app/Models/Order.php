@@ -46,7 +46,7 @@ class Order extends Model
     {
         static::creating(function ($order) {
             $year = date('Y');
-            $order->order_number = 'LE-' . $year . '-' . Str::upper(Str::random(8));
+            $order->order_number = config('SWELL_ORDER_PREFIX') . $year . '-' . Str::upper(Str::random(8));
         });
     }
 }

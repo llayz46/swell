@@ -4,10 +4,10 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PromotionController;
+use App\Modules\Loyalty\Http\Controllers\LoyaltyController;
 use App\Modules\Review\Http\Controllers\ReviewController;
 use App\Modules\Wishlist\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +40,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('feature:review')->prefix('reviews')->group(function () {
         Route::post('/', [ReviewController::class, 'store'])->name('reviews.store');
         Route::put('/{Review}', [ReviewController::class, 'update'])->name('reviews.update');
+    });
+
+    Route::middleware('feature:loyalty')->prefix('loyalty')->group(function () {
+        Route::get('/', [LoyaltyController::class, 'index'])->name('loyalty.index');
     });
 });
 

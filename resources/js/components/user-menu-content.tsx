@@ -1,9 +1,10 @@
 import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
-import { type User } from '@/types';
+import { type User, type SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
 import { Link, router } from '@inertiajs/react';
-import { House, LayoutGrid, LogOut, Settings, ShieldCheckIcon } from 'lucide-react';
+import { Calendar, Gift, House, LayoutGrid, LogOut, Settings, ShieldCheckIcon } from 'lucide-react';
 
 interface UserMenuContentProps {
     user: User;
@@ -11,6 +12,7 @@ interface UserMenuContentProps {
 }
 
 export function UserMenuContent({ user, page }: UserMenuContentProps) {
+    const { swell } = usePage<SharedData>().props;
     const cleanup = useMobileNavigation();
     const isAdmin = user.roles.some((role) => role.name === 'admin');
 
@@ -34,20 +36,25 @@ export function UserMenuContent({ user, page }: UserMenuContentProps) {
                         Accueil
                     </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link className="block w-full" href={route('orders.index')} as="button" onClick={cleanup}>
+                        <Calendar className="mr-2" />
+                        Commandes
+                    </Link>
+                </DropdownMenuItem>
+                {swell.loyalty.enabled && (
+                    <DropdownMenuItem asChild>
+                        <Link className="block w-full" href={route('loyalty.index')} as="button" onClick={cleanup}>
+                            <Gift className="mr-2" />
+                            Fidélité
+                        </Link>
+                    </DropdownMenuItem>
+                )}
                 {page && page.url.startsWith('/admin') && (
                     <DropdownMenuItem asChild>
                         <Link className="block w-full" href={route('dashboard')} as="button" prefetch onClick={cleanup}>
                             <LayoutGrid className="mr-2" />
                             Dashboard
-                        </Link>
-                    </DropdownMenuItem>
-                )}
-
-                {isAdmin && page && page.url !== '/admin' && (
-                    <DropdownMenuItem asChild>
-                        <Link className="block w-full" href={route('admin.dashboard')} as="button" prefetch onClick={cleanup}>
-                            <ShieldCheckIcon className="mr-2" />
-                            Admin Dashboard
                         </Link>
                     </DropdownMenuItem>
                 )}
@@ -61,6 +68,19 @@ export function UserMenuContent({ user, page }: UserMenuContentProps) {
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>
+            {isAdmin && page && page.url !== '/admin' && (
+                <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem asChild>
+                            <Link className="block w-full" href={route('admin.dashboard')} as="button" prefetch onClick={cleanup}>
+                                <ShieldCheckIcon className="mr-2" />
+                                Admin Dashboard
+                            </Link>
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                </>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
                 <Link className="block w-full" method="post" href={route('logout')} as="button" onClick={handleLogout}>

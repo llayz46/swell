@@ -13,7 +13,7 @@ import { useInitials } from '@/hooks/use-initials';
 import type { SharedData, User } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Link, router, usePage } from '@inertiajs/react';
-import { CalendarIcon, HeartIcon, LayoutGridIcon, LogOutIcon, SettingsIcon, ShieldCheckIcon, UserIcon } from 'lucide-react';
+import { CalendarIcon, GiftIcon, HeartIcon, LayoutGridIcon, LogOutIcon, SettingsIcon, ShieldCheckIcon, UserIcon } from 'lucide-react';
 
 export function UserDropdown({ user }: { user: User }) {
     const { swell } = usePage<SharedData>().props;
@@ -49,6 +49,12 @@ export function UserDropdown({ user }: { user: User }) {
                             <span>Dashboard</span>
                         </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/orders" className="flex items-center gap-2">
+                            <CalendarIcon size={16} className="opacity-60" aria-hidden="true" />
+                            <span>Commandes</span>
+                        </Link>
+                    </DropdownMenuItem>
                     {swell.wishlist.enabled && (
                         <DropdownMenuItem asChild>
                             <Link href="/wishlist" className="flex items-center gap-2">
@@ -57,12 +63,17 @@ export function UserDropdown({ user }: { user: User }) {
                             </Link>
                         </DropdownMenuItem>
                     )}
-                    <DropdownMenuItem asChild>
-                        <Link href="/orders" className="flex items-center gap-2">
-                            <CalendarIcon size={16} className="opacity-60" aria-hidden="true" />
-                            <span>Commandes</span>
-                        </Link>
-                    </DropdownMenuItem>
+                    {swell.loyalty.enabled && (
+                        <DropdownMenuItem asChild>
+                            <Link href="/loyalty" className="flex items-center gap-2">
+                                <GiftIcon size={16} className="opacity-60" aria-hidden="true" />
+                                <span>Fidélité</span>
+                            </Link>
+                        </DropdownMenuItem>
+                    )}
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
                         <Link href="/settings" className="flex items-center gap-2">
                             <SettingsIcon size={16} className="opacity-60" aria-hidden="true" />

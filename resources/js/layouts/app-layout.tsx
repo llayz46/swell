@@ -1,7 +1,7 @@
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import { type BreadcrumbItem, type NavItem, SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
-import { Calendar, Heart, LayoutGrid } from 'lucide-react';
+import { Calendar, Gift, Heart, LayoutGrid } from 'lucide-react';
 import { type ReactNode } from 'react';
 
 const mainNavItems: NavItem[] = [
@@ -19,6 +19,11 @@ const mainNavItems: NavItem[] = [
         title: 'Commandes',
         href: '/orders',
         icon: Calendar,
+    },
+    {
+        title: 'Fidélité',
+        href: '/loyalty',
+        icon: Gift,
     },
 ];
 
