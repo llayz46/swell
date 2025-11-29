@@ -10,7 +10,8 @@ use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Cashier\Checkout;
 
-test('users can view their cart', function () {
+
+('users can view their cart', function () {
     $user = User::factory()->create();
     $product = Product::factory()->create();
 

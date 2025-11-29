@@ -301,7 +301,10 @@ it('create a product with images', function () {
     $product = $handleProduct->create($data);
 
     expect($product->images)->toHaveCount(1);
-    Storage::disk('public')->assertExists($product->images->first()->image_url);
+    
+    $imagePath = str_replace('storage/', '', $product->images->first()->image_url);
+    Storage::disk('public')->assertExists($imagePath);
+    
     expect($product->images->first()->alt_text)->toBe('Image 1')
         ->and($product->images->first()->is_featured)->toBe(1);
 });
@@ -309,6 +312,9 @@ it('create a product with images', function () {
 it('update images of product', function () {
     Storage::fake('public');
     $handleProduct = new HandleProduct();
+
+    Storage::disk('public')->put('img1.jpg', 'fake content');
+    Storage::disk('public')->put('img2.jpg', 'fake content');
 
     $product = Product::factory()->create();
     $img1 = $product->images()->create([
@@ -323,8 +329,6 @@ it('update images of product', function () {
         'is_featured' => false,
         'order' => 2,
     ]);
-    Storage::disk('public')->put('img1.jpg', 'fake');
-    Storage::disk('public')->put('img2.jpg', 'fake');
 
     $images = [
         [
@@ -351,9 +355,12 @@ it('update images of product', function () {
         'reorder_level' => 2,
         'status' => true,
     ]);
+    
+    $product->refresh();
 
     Storage::disk('public')->assertMissing('img1.jpg');
     Storage::disk('public')->assertMissing('img2.jpg');
+    
     $this->assertDatabaseMissing('product_images', [
         'id' => $img1->id,
     ]);
