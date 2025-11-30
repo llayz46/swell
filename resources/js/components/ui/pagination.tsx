@@ -46,10 +46,27 @@ function PaginationLink({
   className,
   isActive,
   size = "icon",
+  href,
   ...props
 }: PaginationLinkProps) {
+    if (!href) {
+        return (
+            <Button
+                disabled
+                aria-current={isActive ? "page" : undefined}
+                data-slot="pagination-link"
+                data-active={isActive}
+                variant={isActive ? "outline" : "ghost"}
+                size={size}
+                className={cn(className, "cursor-not-allowed opacity-50")}
+                {...props}
+            />
+        );
+    }
+
     return (
     <Link
+      href={href}
       aria-current={isActive ? "page" : undefined}
       data-slot="pagination-link"
       data-active={isActive}
