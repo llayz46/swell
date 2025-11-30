@@ -131,7 +131,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
     };
 
     return (
-        <form className="space-y-6 py-6" onSubmit={submit}>
+        <form className="space-y-6 pb-6" onSubmit={submit}>
             <div className="flex justify-between max-sm:flex-col max-sm:gap-4 sm:items-center">
                 <div className="flex flex-col gap-2 sm:gap-4">
                     <h1 className="text-3xl font-bold text-foreground">

@@ -89,7 +89,7 @@ export default function Dashboard({
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard Administrateur" />
 
-            <div className="mt-12 flex flex-col gap-6">
+            <div className="flex flex-col gap-6">
                 <h1 className="text-3xl font-bold tracking-tight">Dashboard Administrateur</h1>
 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

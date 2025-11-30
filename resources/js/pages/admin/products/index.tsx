@@ -91,7 +91,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les produits" />
 
-            <Card className="mt-4 border-border bg-card py-3 sm:py-4">
+            <Card className="border-border bg-card py-3 sm:py-4">
                 <CardContent className="px-3 sm:px-4">
                     <div className="flex flex-col gap-4 sm:flex-row">
                         <div className="flex flex-1 gap-4">

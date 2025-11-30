@@ -125,7 +125,7 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Gérer la bannière" />
 
-            <SwellCard className="mt-4">
+            <SwellCard>
                 <SwellCardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
                         <Eye className="size-4" />

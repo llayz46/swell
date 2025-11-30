@@ -72,7 +72,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les collections" />
 
-            <Card className="mt-4 border-border bg-card py-3 sm:py-4">
+            <Card className="border-border bg-card py-3 sm:py-4">
                 <CardContent className="px-3 sm:px-4">
                     <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                         <div className="flex-1">

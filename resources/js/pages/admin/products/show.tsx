@@ -25,7 +25,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title={`Gérer : ${product.name}`} />
 
-            <div className="space-y-6 py-6">
+            <div className="space-y-6 pb-6">
                 <div className="flex justify-between max-sm:flex-col-reverse sm:items-center">
                     <div className="flex flex-col gap-4">
                         <h1 className="text-3xl font-bold text-foreground">{product.name}</h1>

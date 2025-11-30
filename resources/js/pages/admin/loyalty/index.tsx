@@ -66,7 +66,7 @@ export default function Index({ accounts, stats }: Props) {
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Points de fidélité" />
 
-            <div className="flex h-full flex-1 flex-col gap-6 mt-4">
+            <div className="flex h-full flex-1 flex-col gap-6">
                 <div className="grid gap-4 md:grid-cols-3">
                     <SwellCard>
                         <SwellCardHeader>
