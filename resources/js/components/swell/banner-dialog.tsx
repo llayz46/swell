@@ -108,7 +108,7 @@ export function BannerDialog({ open, setOpen, banner, onCreated }: BannerDialogP
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button>
+                <Button className="max-sm:w-full">
                     <Plus size={16} /> Ajouter un message
                 </Button>
             </DialogTrigger>

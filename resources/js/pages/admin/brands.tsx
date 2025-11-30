@@ -199,7 +199,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                 </CardContent>
             </Card>
 
-            <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <SwellCard>
                     <SwellCardContent>
                         <div className="flex items-center justify-between">

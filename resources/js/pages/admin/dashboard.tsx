@@ -119,7 +119,7 @@ export default function Dashboard({
                         <TabsTrigger value="products">Produits</TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value="overview" className="space-y-4">
+                    <TabsContent value="overview" className="mb-0 space-y-4">
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                             {/* Graphique du chiffre d'affaires - 4 colonnes */}
                             <SwellCard className="lg:col-span-4">
@@ -183,7 +183,7 @@ export default function Dashboard({
                         </div>
                     </TabsContent>
 
-                    <TabsContent value="orders" className="space-y-4">
+                    <TabsContent value="orders" className="mb-0 space-y-4">
                         <SwellCard>
                             <SwellCardHeader variant="column">
                                 <CardTitle>Dernières commandes</CardTitle>

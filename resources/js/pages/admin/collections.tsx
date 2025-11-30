@@ -195,7 +195,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                 </CardContent>
             </Card>
 
-            <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <SwellCard>
                     <SwellCardContent>
                         <div className="flex items-center justify-between">
@@ -224,7 +224,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                             </div>
                             <Badge
                                 variant="secondary"
-                                className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
+                                className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
                             >
                                 #
                             </Badge>
@@ -241,7 +241,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                     {countCollectionsWithFilter(collections, (collection) => !collection.products_count)}
                                 </p>
                             </div>
-                            <Badge className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                            <Badge className="flex size-8 items-center justify-center rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
                                 !
                             </Badge>
                         </div>

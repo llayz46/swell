@@ -57,25 +57,66 @@ export function PaginationComponent({ pagination, preserveQuery = [], only }: Pa
         return urlObj.toString();
     };
 
+    const getVisiblePages = () => {
+        const currentPage = pagination.meta.current_page;
+        const lastPage = pagination.meta.last_page;
+        const delta = 1;
+
+        if (lastPage <= 7) {
+            return pageLinks;
+        }
+
+        const visiblePages: (MetaLink | 'ellipsis-start' | 'ellipsis-end')[] = [];
+
+        visiblePages.push(pageLinks[0]);
+
+        const rangeStart = Math.max(2, currentPage - delta);
+        const rangeEnd = Math.min(lastPage - 1, currentPage + delta);
+
+        if (rangeStart > 2) {
+            visiblePages.push('ellipsis-start');
+        }
+
+        for (let i = rangeStart; i <= rangeEnd; i++) {
+            visiblePages.push(pageLinks[i - 1]);
+        }
+
+        if (rangeEnd < lastPage - 1) {
+            visiblePages.push('ellipsis-end');
+        }
+
+        visiblePages.push(pageLinks[lastPage - 1]);
+
+        return visiblePages;
+    };
+
     if (!pagination.links.prev && !pagination.links.next) return;
 
+    const visiblePages = getVisiblePages();
+
     return (
-        <Pagination className="mb-8">
-            <PaginationContent>
+        <Pagination>
+            <PaginationContent className="max-sm:w-full max-sm:justify-between">
                 <PaginationItem>
                     <PaginationPrevious href={getUrlWithPreservedQuery(pagination.links.prev)} />
                 </PaginationItem>
-                {pageLinks.map((link) => (
-                    <PaginationItem key={link.label}>
-                        {link.url ? (
-                            <PaginationLink href={getUrlWithPreservedQuery(link.url)} isActive={link.active}>
-                                {link.label}
-                            </PaginationLink>
-                        ) : (
-                            <PaginationEllipsis />
-                        )}
-                    </PaginationItem>
-                ))}
+                {visiblePages.map((item, index) => {
+                        if (item === 'ellipsis-start' || item === 'ellipsis-end') {
+                            return (
+                                <PaginationItem key={`ellipsis-${index}`} className="max-[350px]:hidden">
+                                    <PaginationEllipsis />
+                                </PaginationItem>
+                            );
+                        }
+                        const link = item as MetaLink;
+                        return (
+                            <PaginationItem key={link.label} className="max-[350px]:hidden">
+                                <PaginationLink href={getUrlWithPreservedQuery(link.url)} isActive={link.active}>
+                                    {link.label}
+                                </PaginationLink>
+                            </PaginationItem>
+                        );
+                    })}
                 <PaginationItem>
                     <PaginationNext href={getUrlWithPreservedQuery(pagination.links.next)} />
                 </PaginationItem>

@@ -102,7 +102,7 @@ export default function Index({ account, transactions, config }: Props) {
                 </div>
 
                 <SwellCard>
-                    <SwellCardHeader>
+                    <SwellCardHeader className="max-sm:flex-col max-sm:gap-2 max-sm:text-center">
                         <CardTitle>Comment ça marche ?</CardTitle>
                         <CardDescription>Gagnez des points à chaque achat et utilisez-les pour obtenir des réductions</CardDescription>
                     </SwellCardHeader>
@@ -137,7 +137,7 @@ export default function Index({ account, transactions, config }: Props) {
                 <SwellCard>
                     <SwellCardHeader>
                         <CardTitle>Historique des transactions</CardTitle>
-                        <CardDescription>Suivez l'évolution de vos points de fidélité</CardDescription>
+                        <CardDescription className="max-sm:text-right">Suivez l'évolution de vos points de fidélité</CardDescription>
                     </SwellCardHeader>
                     <SwellCardContent>
                         {transactions.length === 0 ? (

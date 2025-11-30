@@ -203,13 +203,13 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
             </Transition>
 
             <SwellCard>
-                <SwellCardHeader>
-                    <div className="space-y-2">
+                <SwellCardHeader className="max-sm:flex-col max-sm:gap-2">
+                    <div className="space-y-2 max-sm:text-center">
                         <CardTitle className="text-foreground">Liste des messages de bannières</CardTitle>
                         <p className="text-sm text-muted-foreground">Glissez-déposez les bannières pour changer leur ordre d'affichage</p>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 max-sm:w-full">
                         {isDirty && (
                             <Button disabled={processing} onClick={handleOrdering}>
                                 Enregistrer
