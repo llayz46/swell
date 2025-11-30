@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useCartContext } from '@/contexts/cart-context';
@@ -23,8 +24,10 @@ export function ProductQuickViewDialog({ product, open, onClose }: { product: Pr
                 )}
 
                 <DialogHeader className="gap-2 sm:gap-4">
-                    <DialogTitle className="max-sm:text-left mr-4">
-                        {product.brand.name} {product.name}
+                    <DialogTitle className="max-sm:text-left mr-4 hover:underline">
+                        <Link href={route('product.show', product.slug)}>
+                            {product.brand.name} {product.name}
+                        </Link>
                     </DialogTitle>
 
                     {product.discount_price != null ? (

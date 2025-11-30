@@ -22,15 +22,15 @@ export function ReviewForm() {
     const { productId, reviews } = useReview();
     const { auth } = usePage<SharedData>().props;
 
-    const review = reviews.find((review) => review.user_id === auth.user.id && review.product_id === productId);
-
+    const review = auth.user ? reviews.find((review) => review.user_id === auth.user.id && review.product_id === productId) : null;
+    
     const { data, setData, errors, processing, post, put } = useForm<ReviewForm>({
         product_id: productId,
         title: review ? review.title : '',
         comment: review ? review.comment : '',
         rating: review ? review.rating : 0,
     });
-
+    
     if (!auth.user) {
         return (
             <Card className="max-sm:py-4">

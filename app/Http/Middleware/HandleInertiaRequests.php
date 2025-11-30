@@ -6,7 +6,6 @@ use App\Factories\CartFactory;
 use App\Http\Resources\CartResource;
 use App\Http\Resources\CategoryResource;
 use App\Modules\Banner\Models\BannerMessage;
-use App\Modules\Loyalty\Services\LoyaltyService;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

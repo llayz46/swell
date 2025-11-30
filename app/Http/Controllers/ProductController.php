@@ -103,38 +103,32 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        if (! $product->status) {
-            abort(404);
-        }
+        if (! $product->status) abort(404);
 
         $cacheKey = "product:{$product->id}:details";
 
-        $productResource = Cache::remember($cacheKey, now()->addHour(), function () use ($product) {
-            return ProductResource::make(
-                $product->load([
-                    'brand',
-                    'collection.products.featuredImage',
-                    'images' => function ($query) {
-                        $query->orderBy('order');
-                    },
-                    'category',
-                    'options.values',
-                ])
-            );
-        });
+        $productResource = Cache::remember($cacheKey, now()->addHour(), fn () => ProductResource::make(
+            $product->load([
+                'brand',
+                'collection.products.featuredImage',
+                'images' => function ($query) {
+                    $query->orderBy('order');
+                },
+                'category',
+                'options.values',
+            ])
+        ));
 
-        $similarProducts = Cache::remember("product:{$product->id}:similar", now()->addHour(), function () use ($product) {
-            return ProductResource::collection(
-                Category::find($product->category->pluck('id'))
-                    ->load(['products' => function ($query) use ($product) {
-                        $query->where('id', '!=', $product->id)
-                            ->orderBy('created_at', 'desc')
-                            ->with('brand', 'featuredImage')
-                            ->take(4);
-                    }])
-                    ->flatten()
-            );
-        });
+        $similarProducts = Cache::remember("product:{$product->id}:similar", now()->addHour(), fn () => ProductResource::collection(
+            Category::find($product->category->pluck('id')->toArray())
+                ->load(['products' => function ($query) use ($product) {
+                    $query->where('id', '!=', $product->id)
+                        ->orderBy('created_at', 'desc')
+                        ->with('brand', 'featuredImage')
+                        ->take(4);
+                }])
+                ->flatten()
+        ));
 
         return Inertia::render('products/show', [
             'product' => fn () => $productResource,
