@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { ChevronDown, ChevronRight, Menu, X } from 'lucide-react';
+import { ChevronRight, Menu, X } from 'lucide-react';
 import { ComponentPropsWithoutRef, useEffect, useState } from 'react';
 
 export function NavCategories() {
@@ -98,27 +98,27 @@ export function NavCategories() {
                     </div>
 
                     {/* Categories List */}
-                    <div className="overflow-y-auto h-[calc(100%-4rem)] p-4">
+                    <div className="h-[calc(100%-4rem)] overflow-y-auto p-4">
                         <ul className="flex flex-col space-y-1">
                             {categoriesToRender.map((mainCategory) => (
                                 <li key={mainCategory.id} className="w-full">
                                     {mainCategory.children && mainCategory.children.length > 0 ? (
                                         <details className="group w-full">
-                                            <summary className="flex cursor-pointer items-center justify-between rounded-lg p-3 font-medium transition-colors hover:bg-accent list-none">
+                                            <summary className="flex cursor-pointer list-none items-center justify-between rounded-lg p-3 font-medium transition-colors hover:bg-accent">
                                                 <span>{mainCategory.name}</span>
                                                 <ChevronRight className="h-4 w-4 transition-transform group-open:rotate-90" />
                                             </summary>
-                                            <ul className="mt-1 space-y-1 pl-2 pr-2 pb-2">
+                                            <ul className="mt-1 space-y-1 pr-2 pb-2 pl-2">
                                                 {mainCategory.children.map((category) => (
                                                     <li key={category.id}>
                                                         <Link
                                                             href={`/categories/${category.slug}`}
-                                                            className="block rounded-lg p-3 transition-colors hover:bg-accent border border-transparent hover:border-border"
+                                                            className="block rounded-lg border border-transparent p-3 transition-colors hover:border-border hover:bg-accent"
                                                             onClick={() => setIsMobileMenuOpen(false)}
                                                         >
-                                                            <div className="font-medium text-sm">{category.name}</div>
+                                                            <div className="text-sm font-medium">{category.name}</div>
                                                             {category.description && (
-                                                                <p className="line-clamp-2 text-xs text-muted-foreground mt-1">
+                                                                <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
                                                                     {category.description}
                                                                 </p>
                                                             )}
