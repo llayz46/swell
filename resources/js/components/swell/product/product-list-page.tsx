@@ -29,7 +29,6 @@ export function ProductListPage({ title, products, sort = 'news', stock, price }
     const handleSortChange = (value: SortType) => {
         setSelectedSort(value);
 
-        // Préserver tous les paramètres de requête existants
         const currentParams = new URLSearchParams(window.location.search);
         const paramsObj: Record<string, string> = {};
 
@@ -37,7 +36,6 @@ export function ProductListPage({ title, products, sort = 'news', stock, price }
             paramsObj[key] = paramValue;
         });
 
-        // Mettre à jour le tri
         paramsObj['sort'] = value;
         paramsObj['page'] = products.meta.current_page.toString();
 

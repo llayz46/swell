@@ -153,7 +153,10 @@ export default function Home({ products }: { products: Product[] }) {
     const getInitials = useInitials();
 
     useEffect(() => {
-        const errorMessage = Object.values(errors).flat().join(' ');
+        const filteredErrors = { ...errors };
+        delete filteredErrors.product_id;
+
+        const errorMessage = Object.values(filteredErrors).flat().join(' ');
 
         if (errorMessage)
             toast.error('Une erreur est survenue', {
