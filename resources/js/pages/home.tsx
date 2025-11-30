@@ -149,20 +149,7 @@ const FAQ = [
 
 export default function Home({ products }: { products: Product[] }) {
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-    const { errors } = usePage<SharedData>().props;
     const getInitials = useInitials();
-
-    useEffect(() => {
-        const filteredErrors = { ...errors };
-        delete filteredErrors.product_id;
-
-        const errorMessage = Object.values(filteredErrors).flat().join(' ');
-
-        if (errorMessage)
-            toast.error('Une erreur est survenue', {
-                description: errorMessage,
-            });
-    }, [errors]);
 
     return (
         <BaseLayout>
