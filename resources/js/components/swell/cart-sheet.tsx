@@ -25,13 +25,24 @@ export function CartSheet() {
                     <SheetDescription>Gérer les articles dans votre panier, modifier les quantités ou supprimer des articles.</SheetDescription>
                 </SheetHeader>
 
-                <div className="grid flex-1 auto-rows-min gap-4 px-4">
-                    {optimisticCart && optimisticCart.items?.length > 0 && (
-                        <Button variant="destructive" className="cursor-pointer" onClick={() => setClearConfirmationModal(true)}>
-                            Vider le panier
+                {optimisticCart && optimisticCart.items?.length > 0 && (
+                    <div className="flex items-center justify-between border-b px-4 pb-3">
+                        <span className="text-sm text-muted-foreground">
+                            {optimisticCart.items.length} {optimisticCart.items.length > 1 ? 'articles' : 'article'}
+                        </span>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 gap-2 text-muted-foreground hover:text-destructive"
+                            onClick={() => setClearConfirmationModal(true)}
+                        >
+                            <Trash2 className="h-4 w-4" />
+                            <span>Vider le panier</span>
                         </Button>
-                    )}
+                    </div>
+                )}
 
+                <div className="grid flex-1 auto-rows-min gap-4 px-4">
                     {!optimisticCart?.items.length ? (
                         <div className="text-center text-muted-foreground">Votre panier est vide.</div>
                     ) : (
@@ -41,7 +52,7 @@ export function CartSheet() {
                     )}
                 </div>
 
-                <div className="flex justify-between px-4 font-medium">
+                <div className="flex justify-between border-t px-4 pt-4 font-medium">
                     <span>Total</span>
                     <span>{optimisticCart?.total.toFixed(2)} €</span>
                 </div>
