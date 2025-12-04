@@ -5,7 +5,7 @@ import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { Award, Clock, Gift, TrendingUp } from 'lucide-react';
+import { Award, Clock, TrendingUp } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,7 +33,6 @@ interface Transaction {
 interface Account {
     points: number;
     lifetime_points: number;
-    available_points: number;
     expiring_points: number;
 }
 
@@ -55,7 +54,7 @@ export default function Index({ account, transactions, config }: Props) {
             <Head title="Points de fidélité" />
 
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-4 md:grid-cols-3">
                     <SwellCard>
                         <SwellCardHeader>
                             <CardTitle className="text-sm font-medium">Solde actuel</CardTitle>
@@ -75,17 +74,6 @@ export default function Index({ account, transactions, config }: Props) {
                         <SwellCardContent>
                             <div className="text-2xl font-bold">{account.lifetime_points.toLocaleString()}</div>
                             <p className="text-xs text-muted-foreground">Total gagné depuis l'inscription</p>
-                        </SwellCardContent>
-                    </SwellCard>
-
-                    <SwellCard>
-                        <SwellCardHeader>
-                            <CardTitle className="text-sm font-medium">Points disponibles</CardTitle>
-                            <Gift className="size-4 text-muted-foreground" />
-                        </SwellCardHeader>
-                        <SwellCardContent>
-                            <div className="text-2xl font-bold">{account.available_points.toLocaleString()}</div>
-                            <p className="text-xs text-muted-foreground">Utilisables immédiatement</p>
                         </SwellCardContent>
                     </SwellCard>
 

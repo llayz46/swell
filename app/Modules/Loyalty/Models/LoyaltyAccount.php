@@ -32,30 +32,6 @@ class LoyaltyAccount extends Model
     }
 
     /**
-     * Get available (non-expired) points
-     */
-    public function getAvailablePointsAttribute(): int
-    {
-        return $this->transactions()
-            ->where('type', TransactionType::EARNED)
-            ->where(function ($query) {
-                $query->whereNull('expires_at')
-                    ->orWhere('expires_at', '>', now());
-            })
-            ->sum('points') - $this->getSpentPoints();
-    }
-
-    /**
-     * Get total spent points
-     */
-    protected function getSpentPoints(): int
-    {
-        return abs($this->transactions()
-            ->whereIn('type', [TransactionType::SPENT, TransactionType::EXPIRED])
-            ->sum('points'));
-    }
-
-    /**
      * Get points expiring soon (within 30 days)
      */
     public function getExpiringPointsAttribute(): int
