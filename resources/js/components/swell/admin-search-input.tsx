@@ -5,27 +5,24 @@ import { type ComponentPropsWithoutRef } from 'react';
 
 interface AdminSearchInputProps extends Omit<ComponentPropsWithoutRef<typeof Input>, 'className'> {
     children?: React.ReactNode;
-    inputClassName?: string;
-    cardClassName?: string;
+    placeholder?: string;
 }
 
 export default function AdminSearchInput({
     children,
-    inputClassName,
-    cardClassName,
     placeholder = "Rechercher...",
     ...inputProps
 }: AdminSearchInputProps) {
     return (
-        <Card className={cardClassName ?? "border-border bg-card py-3 sm:py-4"}>
-            <CardContent className="px-3 sm:px-4">
+        <Card className="p-1">
+            <CardContent className="p-0">
                 <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                     <div className="flex-1">
                         <div className="relative">
-                            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
+                            <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 transform text-muted-foreground" />
                             <Input
                                 placeholder={placeholder}
-                                className={inputClassName ?? "border-border bg-background pl-10 text-foreground placeholder:text-muted-foreground"}
+                                className="border-border bg-background pl-8 text-foreground placeholder:text-muted-foreground"
                                 {...inputProps}
                             />
                         </div>
