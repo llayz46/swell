@@ -49,26 +49,20 @@ class CartController extends Controller
     /**
      * Add item to the cart.
      *
-     * @param Request $request
+     * @param AddItemRequest $request
      * @param HandleProductCart $handleProductCart
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function addItem(Request $request)
+    public function addItem(AddItemRequest $request)
     {
-        $data = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'integer|min:1',
-            'options' => 'array|nullable',
-            'options.*.option_id' => 'required_with:options|integer',
-            'options.*.option_value_id' => 'required_with:options|integer',
-        ]);
+        $request->validated();
 
         try {
             $this->handleProductCart->add(
-                $data['product_id'],
-                $data['quantity'] ?? 1,
+                $request->product_id,
+                $request->quantity ?? 1,
                 $request->user()?->cart,
-                $data['options'] ?? null,
+                $request->options ?? null,
             );
         } catch (\Exception $e) {
             return redirect()->back()->withErrors([
@@ -89,15 +83,13 @@ class CartController extends Controller
     /**
      * Remove an item from the cart.
      *
-     * @param Request $request
+     * @param RemoveItemRequest $request
      * @param HandleProductCart $handleProductCart
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function removeItem(Request $request)
+    public function removeItem(RemoveItemRequest $request)
     {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-        ]);
+        $request->validated();
 
         $this->handleProductCart->remove(
             $request->product_id,
@@ -116,16 +108,14 @@ class CartController extends Controller
     /**
      * Remove an item from the cart by cart_item_id.
      *
-     * @param Request $request
+     * @param RemoveItemByIdRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function removeItemById(Request $request)
+    public function removeItemById(RemoveItemByIdRequest $request)
     {
-        $data = $request->validate([
-            'item_id' => 'required|integer',
-        ]);
+        $request->validated();
 
-        $this->handleProductCart->removeByItemId($data['item_id'], $request->user()?->cart);
+        $this->handleProductCart->removeByItemId($request->item_id, $request->user()?->cart);
 
         return redirect()->back();
     }
@@ -153,15 +143,12 @@ class CartController extends Controller
     /**
      * Handle item quantity increase or decrease.
      *
-     * @param Request $request
+     * @param HandleItemQuantityRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function handleItemQuantity(Request $request)
+    public function handleItemQuantity(HandleItemQuantityRequest $request)
     {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'action' => 'required|in:increase,decrease',
-        ]);
+        $request->validated();
 
         $cart = $request->user()?->cart;
 
@@ -183,20 +170,17 @@ class CartController extends Controller
     /**
      * Handle item quantity increase or decrease by cart_item_id.
      *
-     * @param Request $request
+     * @param HandleItemQuantityByIdRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function handleItemQuantityById(Request $request)
+    public function handleItemQuantityById(HandleItemQuantityByIdRequest $request)
     {
-        $data = $request->validate([
-            'item_id' => 'required|integer',
-            'action' => 'required|in:increase,decrease',
-        ]);
+        $request->validated();
 
-        if ($data['action'] === 'increase') {
-            $this->handleProductCart->increaseByItemId($data['item_id'], $request->user()?->cart);
+        if ($request->action === 'increase') {
+            $this->handleProductCart->increaseByItemId($request->item_id, $request->user()?->cart);
         } else {
-            $this->handleProductCart->decreaseByItemId($data['item_id'], $request->user()?->cart);
+            $this->handleProductCart->decreaseByItemId($request->item_id, $request->user()?->cart);
         }
 
         return redirect()->back();
