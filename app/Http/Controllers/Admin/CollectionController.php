@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CollectionRequest;
+use App\Http\Requests\Collection\StoreCollectionRequest;
+use App\Http\Requests\Collection\UpdateCollectionRequest;
+use App\Http\Requests\Collection\DeleteCollectionRequest;
 use App\Http\Resources\CollectionResource;
 use App\Models\Collection;
 use Illuminate\Http\Request;
@@ -22,7 +24,7 @@ class CollectionController extends Controller
         ]);
     }
 
-    public function store(CollectionRequest $request)
+    public function store(StoreCollectionRequest $request)
     {
         $data = $request->validated();
 
@@ -31,7 +33,7 @@ class CollectionController extends Controller
         return redirect()->back()->with('success', 'Collection créé avec succès.');
     }
 
-    public function update(CollectionRequest $request, Collection $collection)
+    public function update(UpdateCollectionRequest $request, Collection $collection)
     {
         $data = $request->validated();
 
@@ -40,15 +42,9 @@ class CollectionController extends Controller
         return redirect()->route('admin.collections.index');
     }
 
-    public function destroy(Request $request, Collection $collection)
+    public function destroy(DeleteCollectionRequest $request, Collection $collection)
     {
-        $request->validate(
-            ['name' => 'required|in:' . $collection->title],
-            [
-                'name.required' => 'Le nom de la collection est requis.',
-                'name.in' => 'Le nom saisi ne correspond pas au nom de la collection à supprimer.',
-            ]
-        );
+        $request->validated();
 
         try {
             $collection->delete();
