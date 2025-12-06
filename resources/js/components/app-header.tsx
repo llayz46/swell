@@ -7,6 +7,7 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuT
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { UserMenuContent } from '@/components/user-menu-content';
+import { useActiveNav } from '@/hooks/use-active-nav';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
@@ -85,33 +86,14 @@ export function AppHeader({ breadcrumbs = [], mainNavItems }: AppHeaderProps) {
                     <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
                         <NavigationMenu className="flex h-full items-stretch">
                             <NavigationMenuList className="flex h-full items-stretch space-x-2">
-                                {mainNavItems.map((item, index) => (
-                                    <NavigationMenuItem key={index} className="relative flex h-full items-center">
-                                        <Link
-                                            href={item.href}
-                                            className={cn(
-                                                navigationMenuTriggerStyle(),
-                                                ((item.href !== '/admin' &&
-                                                    (page.url === item.href ||
-                                                        page.url.startsWith(item.href + '/') ||
-                                                        page.url.startsWith(item.href + '?'))) ||
-                                                    (item.href === '/admin' && page.url === '/admin')) &&
-                                                    activeItemStyles,
-                                                'h-9 cursor-pointer px-3',
-                                            )}
-                                        >
-                                            {item.icon && <Icon iconNode={item.icon} className="mr-2 h-4 w-4" />}
-                                            {item.title}
-                                        </Link>
-                                        {((item.href !== '/admin' &&
-                                            (page.url === item.href ||
-                                                page.url.startsWith(item.href + '/') ||
-                                                page.url.startsWith(item.href + '?'))) ||
-                                            (item.href === '/admin' && page.url === '/admin')) && (
-                                            <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>
-                                        )}
-                                    </NavigationMenuItem>
-                                ))}
+                                {mainNavItems.map((item, index) => {
+                                    return (
+                                        <NavigationMenuItemWithActive 
+                                            key={index} 
+                                            item={item}
+                                        />
+                                    );
+                                })}
                             </NavigationMenuList>
                         </NavigationMenu>
                     </div>
@@ -167,5 +149,28 @@ export function AppHeader({ breadcrumbs = [], mainNavItems }: AppHeaderProps) {
                 </div>
             )}
         </>
+    );
+}
+
+const NavigationMenuItemWithActive = ({ item }: { item: NavItem }) => {
+    const isActive = useActiveNav(item.href);
+
+    return (
+        <NavigationMenuItem className="relative flex h-full items-center">
+            <Link
+                href={item.href}
+                className={cn(
+                    navigationMenuTriggerStyle(),
+                    isActive && activeItemStyles,
+                    'h-9 cursor-pointer px-3',
+                )}
+            >
+                {item.icon && <Icon iconNode={item.icon} className="mr-2 h-4 w-4" />}
+                {item.title}
+            </Link>
+            {isActive && (
+                <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>
+            )}
+        </NavigationMenuItem>
     );
 }

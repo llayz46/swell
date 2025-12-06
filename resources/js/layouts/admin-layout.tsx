@@ -1,4 +1,4 @@
-import AdminLayoutTemplate from '@/layouts/app/app-header-layout';
+import AdminLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import { type BreadcrumbItem, type NavItem, SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { Boxes, Folders, Gift, LayoutGrid, Megaphone, Package, Tags } from 'lucide-react';
@@ -46,7 +46,10 @@ export default function AdminLayout({ children, breadcrumbs = [], ...props }: Pr
     const { swell } = usePage<SharedData>().props;
 
     const filteredNavItems = mainNavItems.filter((item) => {
-        return !(item.title === 'Bannière' && !swell.banner?.enabled);
+        if (item.title === 'Bannières' && !swell.banner?.enabled) return false;
+        if (item.title === 'Fidélité' && !swell.loyalty?.enabled) return false;
+
+        return true;
     });
 
     return (
