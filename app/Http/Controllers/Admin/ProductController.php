@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Actions\Product\HandleProduct;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
+use App\Http\Requests\Product\DeleteProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Brand;
 use App\Models\Product;
@@ -114,7 +116,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function store(ProductRequest $request)
+    public function store(StoreProductRequest $request)
     {
         $data = $request->validated();
 
@@ -143,7 +145,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(ProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
         $data = $request->validated();
 
@@ -157,7 +159,7 @@ class ProductController extends Controller
         return redirect()->route('admin.products.edit', $product);
     }
 
-    public function destroy(Request $request, Product $product)
+    public function destroy(DeleteProductRequest $request, Product $product)
     {
         $request->validate(
             ['name' => 'required|in:' . $product->name],
