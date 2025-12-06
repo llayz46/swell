@@ -9,6 +9,11 @@ use App\Http\Resources\CartResource;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Requests\Cart\AddItemRequest;
+use App\Http\Requests\Cart\HandleItemQuantityRequest;
+use App\Http\Requests\Cart\HandleItemQuantityByIdRequest;
+use App\Http\Requests\Cart\RemoveItemRequest;
+use App\Http\Requests\Cart\RemoveItemByIdRequest;
 use Inertia\Inertia;
 
 class CartController extends Controller
