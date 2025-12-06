@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BrandRequest;
+use App\Http\Requests\Brand\StoreBrandRequest;
+use App\Http\Requests\Brand\UpdateBrandRequest;
+use App\Http\Requests\Brand\DeleteBrandRequest;
 use App\Http\Resources\BrandResource;
 use App\Models\Brand;
 use Illuminate\Http\Request;
@@ -22,7 +24,7 @@ class BrandController extends Controller
         ]);
     }
 
-    public function store(BrandRequest $request)
+    public function store(StoreBrandRequest $request)
     {
         $brand = Brand::create($request->validated());
 
@@ -33,15 +35,15 @@ class BrandController extends Controller
         return redirect()->back();
     }
 
-    public function update(BrandRequest $request, Brand $brand)
+    public function update(UpdateBrandRequest $request, Brand $brand)
     {
         $data = $request->validated();
 
-        if (!$request->hasFile('logo_url')) {
-            unset($data['logo_url']);
+        if ($request->hasFile('logo_url')) {
+            $brand->update($data);
+        } else {
+             $brand->update(collect($data)->except('logo_url')->toArray());
         }
-
-        $brand->update($data);
 
         if ($request->hasFile('logo_url')) {
             if ($brand->logo_url) {
@@ -56,15 +58,9 @@ class BrandController extends Controller
         return redirect()->route('admin.brands.index');
     }
 
-    public function destroy(Request $request, Brand $brand)
+    public function destroy(DeleteBrandRequest $request, Brand $brand)
     {
-        $request->validate(
-            ['name' => 'required|in:' . $brand->name],
-            [
-                'name.required' => 'Le nom de la marque est requis.',
-                'name.in' => 'Le nom saisi ne correspond pas au nom de la marque à supprimer.',
-            ]
-        );
+        $request->validated();
 
         try {
             $brand->delete();
