@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Cart;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class HandleItemQuantityRequest extends FormRequest
+class HandleItemQuantityRequest extends BaseCartRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -16,16 +14,6 @@ class HandleItemQuantityRequest extends FormRequest
         return [
             'product_id' => 'required|exists:products,id',
             'action' => 'required|in:increase,decrease',
-        ];
-    }
-    
-    public function messages(): array
-    {
-        return [
-            'product_id.required' => "L'identifiant du produit est requis",
-            'product_id.integer' => "L'identifiant du produit doit être un nombre entier",
-            'action.required' => "L'action est requise",
-            'action.in' => "L'action doit être 'increase' ou 'decrease'",
         ];
     }
 }

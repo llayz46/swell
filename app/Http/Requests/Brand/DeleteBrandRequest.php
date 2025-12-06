@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Brand;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class DeleteBrandRequest extends FormRequest
+class DeleteBrandRequest extends BaseBrandRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,12 +12,12 @@ class DeleteBrandRequest extends FormRequest
     public function rules(): array
     {
         $brand = $this->route('brand');
-        
+
         return [
             'name' => ['required', 'in:' . $brand->name],
         ];
     }
- 
+
     public function messages(): array
     {
         return [

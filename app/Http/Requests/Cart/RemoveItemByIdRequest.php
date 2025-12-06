@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Cart;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class RemoveItemByIdRequest extends FormRequest
+class RemoveItemByIdRequest extends BaseCartRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -15,14 +13,6 @@ class RemoveItemByIdRequest extends FormRequest
     {
         return [
             'item_id' => 'required|integer',
-        ];
-    }
-    
-    public function messages(): array
-    {
-        return [
-            'item_id.required' => "L'identifiant de l'élément est requis",
-            'item_id.integer' => "L'identifiant de l'élément doit être un nombre entier",
         ];
     }
 }
