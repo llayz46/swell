@@ -161,13 +161,7 @@ class ProductController extends Controller
 
     public function destroy(DeleteProductRequest $request, Product $product)
     {
-        $request->validate(
-            ['name' => 'required|in:' . $product->name],
-            [
-                'name.required' => 'Le nom du produit est requis.',
-                'name.in' => 'Le nom saisi ne correspond pas au nom du produit à supprimer.',
-            ]
-        );
+        $request->validated();
 
         try {
             $product->delete();
