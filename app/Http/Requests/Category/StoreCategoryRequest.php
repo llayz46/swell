@@ -29,7 +29,7 @@ class StoreCategoryRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:1000'],
             'parent_id' => ['nullable', 'exists:categories,id'],
             'image_url' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png,svg,gif,webp'],
-            'is_active' => ['boolean'],
+            'status' => ['boolean'],
         ];
     }
 
@@ -54,7 +54,7 @@ class StoreCategoryRequest extends FormRequest
             'image_url.max' => 'L\'image ne peut pas dépasser 2 Mo.',
             'image_url.mimes' => 'L\'image doit être au format jpg, jpeg, png, svg, gif ou webp.',
 
-            'is_active.boolean' => 'Le statut actif doit être vrai ou faux.',
+            'status.boolean' => 'Le statut doit être vrai ou faux.',
         ];
     }
 }

@@ -48,7 +48,7 @@ test('users has one wishlist', function () {
     $user = User::factory()->create();
     $wishlist = $user->wishlist()->create();
 
-    $this->assertInstanceOf(\App\Models\Wishlist::class, $wishlist);
+    $this->assertInstanceOf(\App\Modules\Wishlist\Models\Wishlist::class, $wishlist);
     $this->assertEquals($user->id, $wishlist->user_id);
 });
 

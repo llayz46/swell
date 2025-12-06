@@ -36,7 +36,7 @@ class UpdateCategoryRequest extends FormRequest
                 Rule::notIn([$categoryId]),
             ],
             'image_url' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png,svg,gif,webp'],
-            'is_active' => ['boolean'],
+            'status' => ['boolean'],
         ];
     }
 
