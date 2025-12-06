@@ -3,13 +3,13 @@ import { PaginationComponent } from '@/components/swell/pagination-component';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AdminSearchInput from '@/components/swell/admin-search-input';
 import AdminLayout from '@/layouts/admin-layout';
 import { cn } from '@/lib/utils';
 import type { BreadcrumbItem, PaginatedResponse, Product } from '@/types';
 import { Deferred, Head, Link, router } from '@inertiajs/react';
-import { Edit, Eye, Loader2, MoreHorizontal, MoveUp, Package, Plus, Search, Trash2 } from 'lucide-react';
+import { Edit, Eye, Loader2, MoreHorizontal, MoveUp, Package, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface ProductsType {
@@ -91,28 +91,11 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les produits" />
 
-            <Card className="border-border bg-card py-3 sm:py-4">
-                <CardContent className="px-3 sm:px-4">
-                    <div className="flex flex-col gap-4 sm:flex-row">
-                        <div className="flex flex-1 gap-4">
-                            <form className="relative flex-1" onSubmit={(e) => e.preventDefault()}>
-                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
-                                <Input
-                                    placeholder="Rechercher un produit..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="border-border bg-background pl-10 text-foreground placeholder:text-muted-foreground"
-                                />
-                            </form>
-                            {collectionId && (
-                                <Button variant="outline" onClick={() => router.get(route('admin.products.index'))}>
-                                    Voir tous les produits
-                                </Button>
-                            )}
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
+            <AdminSearchInput
+                placeholder="Rechercher un produit..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
 
             <Deferred data="products" fallback={<DeferredFallback />}>
                 <>

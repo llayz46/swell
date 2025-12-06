@@ -4,13 +4,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
+import AdminSearchInput from '@/components/swell/admin-search-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, Collection } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Box, Boxes, Edit, Eye, MoreHorizontal, Search, Trash2 } from 'lucide-react';
+import { Box, Boxes, Edit, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 export default function Categories({ breadcrumbs: initialBreadcrumbs, collections }: { breadcrumbs: BreadcrumbItem[]; collections: Collection[] }) {
@@ -72,32 +72,21 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les collections" />
 
-            <Card className="border-border bg-card py-3 sm:py-4">
-                <CardContent className="px-3 sm:px-4">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
-                        <div className="flex-1">
-                            <div className="relative">
-                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
-                                <Input
-                                    placeholder="Rechercher une collection..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="border-border bg-background pl-10 text-foreground placeholder:text-muted-foreground"
-                                />
-                            </div>
-                        </div>
-                        <Select value={sortBy} onValueChange={setSortBy}>
-                            <SelectTrigger className="border-border bg-background text-foreground sm:w-40">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent className="border-border bg-popover">
-                                <SelectItem value="title">Nom A-Z</SelectItem>
-                                <SelectItem value="date">Date création</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </CardContent>
-            </Card>
+            <AdminSearchInput
+                placeholder="Rechercher une collection..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            >
+                <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="border-border bg-background text-foreground sm:w-40">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="border-border bg-popover">
+                        <SelectItem value="title">Nom A-Z</SelectItem>
+                        <SelectItem value="date">Date création</SelectItem>
+                    </SelectContent>
+                </Select>
+            </AdminSearchInput>
 
             <Card className="gap-0 border-border bg-card pt-4 pb-0">
                 <CardHeader className="justify-between border-b border-border px-4 pb-4 sm:flex-row">

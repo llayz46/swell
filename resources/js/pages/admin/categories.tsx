@@ -4,12 +4,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AdminLayout from '@/layouts/admin-layout';
+import AdminSearchInput from '@/components/swell/admin-search-input';
 import type { BreadcrumbItem, Category, SharedData } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
-import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, Folders, MoreHorizontal, Plus, Search, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, Folders, MoreHorizontal, Plus, Trash2 } from 'lucide-react';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadcrumbs: BreadcrumbItem[] }) {
@@ -193,39 +193,28 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les catégories" />
 
-            <Card className="border-border bg-card py-3 sm:py-4">
-                <CardContent className="px-3 sm:px-4">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
-                        <div className="flex-1">
-                            <div className="relative">
-                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
-                                <Input
-                                    placeholder="Rechercher une catégorie..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="border-border bg-background pl-10 text-foreground placeholder:text-muted-foreground"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex gap-2 max-sm:flex-wrap">
-                            <Button
-                                variant="outline"
-                                onClick={() => setExpandedCategories(new Set(categories.map((c) => c.id)))}
-                                className="border-border bg-background text-foreground hover:bg-muted"
-                            >
-                                Tout développer
-                            </Button>
-                            <Button
-                                variant="outline"
-                                onClick={() => setExpandedCategories(new Set())}
-                                className="border-border bg-background text-foreground hover:bg-muted"
-                            >
-                                Tout réduire
-                            </Button>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
+            <AdminSearchInput
+                placeholder="Rechercher une catégorie..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            >
+                <div className="flex gap-2 max-sm:flex-wrap">
+                    <Button
+                        variant="outline"
+                        onClick={() => setExpandedCategories(new Set(categories.map((c) => c.id)))}
+                        className="border-border bg-background text-foreground hover:bg-muted"
+                    >
+                        Tout développer
+                    </Button>
+                    <Button
+                        variant="outline"
+                        onClick={() => setExpandedCategories(new Set())}
+                        className="border-border bg-background text-foreground hover:bg-muted"
+                    >
+                        Tout réduire
+                    </Button>
+                </div>
+            </AdminSearchInput>
 
             <Card className="gap-0 border-border bg-card pt-4 pb-0">
                 <CardHeader className="justify-between border-b border-border px-4 pb-4 sm:flex-row">
