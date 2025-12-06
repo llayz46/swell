@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import AdminSearchInput from '@/components/swell/admin-search-input';
+import SearchInput from '@/components/swell/search-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AdminLayout from '@/layouts/admin-layout';
@@ -72,7 +72,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les collections" />
 
-            <AdminSearchInput
+            <SearchInput
                 placeholder="Rechercher une collection..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -86,7 +86,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                         <SelectItem value="date">Date création</SelectItem>
                     </SelectContent>
                 </Select>
-            </AdminSearchInput>
+            </SearchInput>
 
             <Card className="gap-0 border-border bg-card pt-4 pb-0">
                 <CardHeader className="justify-between border-b border-border px-4 pb-4 sm:flex-row">

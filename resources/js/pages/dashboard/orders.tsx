@@ -1,12 +1,12 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import SearchInput from '@/components/swell/search-input';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, Order } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Head, Link } from '@inertiajs/react';
-import { RotateCcw, Search } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -39,19 +39,11 @@ export default function Orders({ orders }: { orders: Order[] }) {
                     <p className="text-muted-foreground">Consultez l'historique de vos commandes et leur statut</p>
                 </div>
 
-                <Card className="border bg-card py-3 sm:py-4">
-                    <CardContent className="px-3 sm:px-4">
-                        <div className="relative">
-                            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
-                            <Input
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                placeholder="Rechercher par numéro de commande..."
-                                className="border bg-background pl-10"
-                            />
-                        </div>
-                    </CardContent>
-                </Card>
+                <SearchInput 
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Rechercher par numéro de commande..."
+                />
 
                 <div className="space-y-4">
                     {filteredOrders.map((order) => (

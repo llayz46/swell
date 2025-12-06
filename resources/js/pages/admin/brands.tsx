@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AdminLayout from '@/layouts/admin-layout';
-import AdminSearchInput from '@/components/swell/admin-search-input';
+import SearchInput from '@/components/swell/search-input';
 import type { Brand, BreadcrumbItem } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Head } from '@inertiajs/react';
@@ -75,7 +75,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les marques" />
 
-            <AdminSearchInput 
+            <SearchInput 
                 placeholder="Rechercher une marque..." 
                 value={searchTerm} 
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -90,7 +90,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                         <SelectItem value="date">Date création</SelectItem>
                     </SelectContent>
                 </Select>
-            </AdminSearchInput>
+            </SearchInput>
 
             <Card className="gap-0 border-border bg-card pt-4 pb-0">
                 <CardHeader className="justify-between border-b border-border px-4 pb-4 sm:flex-row">

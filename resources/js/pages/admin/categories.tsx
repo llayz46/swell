@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent }
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AdminLayout from '@/layouts/admin-layout';
-import AdminSearchInput from '@/components/swell/admin-search-input';
+import SearchInput from '@/components/swell/search-input';
 import type { BreadcrumbItem, Category, SharedData } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, Folders, MoreHorizontal, Plus, Trash2 } from 'lucide-react';
@@ -193,7 +193,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les catégories" />
 
-            <AdminSearchInput
+            <SearchInput
                 placeholder="Rechercher une catégorie..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -214,7 +214,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                         Tout réduire
                     </Button>
                 </div>
-            </AdminSearchInput>
+            </SearchInput>
 
             <Card className="gap-0 border-border bg-card pt-4 pb-0">
                 <CardHeader className="justify-between border-b border-border px-4 pb-4 sm:flex-row">

@@ -3,16 +3,16 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { type ComponentPropsWithoutRef } from 'react';
 
-interface AdminSearchInputProps extends Omit<ComponentPropsWithoutRef<typeof Input>, 'className'> {
+interface SearchInputProps extends Omit<ComponentPropsWithoutRef<typeof Input>, 'className'> {
     children?: React.ReactNode;
     placeholder?: string;
 }
 
-export default function AdminSearchInput({
+export default function SearchInput({
     children,
     placeholder = "Rechercher...",
     ...inputProps
-}: AdminSearchInputProps) {
+}: SearchInputProps) {
     return (
         <Card className="p-1">
             <CardContent className="p-0">
