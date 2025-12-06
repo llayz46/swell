@@ -76,7 +76,7 @@ export function ConfirmDeleteDialog<T extends { id: number | string } & Record<K
 
     return (
         <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent>
+            <DialogContent className="shadow-dialog rounded-2xl border-transparent">
                 <div className="flex flex-col items-center gap-2">
                     <div className="flex size-9 shrink-0 items-center justify-center rounded-full border" aria-hidden="true">
                         <CircleAlertIcon className="opacity-80" size={16} />
