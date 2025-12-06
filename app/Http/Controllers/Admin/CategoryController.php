@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Actions\Category\HandleCategory;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Category\UpdateCategoryRequest;
+use App\Http\Requests\Category\DeleteCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -36,29 +38,23 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function store(CategoryRequest $request)
+    public function store(StoreCategoryRequest $request)
     {
         $this->handleCategory->create($request->validated());
 
         return redirect()->route('admin.categories.index');
     }
 
-    public function update(CategoryRequest $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
         $this->handleCategory->update($category, $request->validated());
 
         return redirect()->route('admin.categories.index');
     }
 
-    public function destroy(Request $request, Category $category)
+    public function destroy(DeleteCategoryRequest $request, Category $category)
     {
-        $request->validate(
-            ['name' => 'required|in:' . $category->name],
-            [
-                'name.required' => 'Le nom de la catégorie est requis.',
-                'name.in' => 'Le nom saisi ne correspond pas au nom de la catégorie à supprimer.',
-            ]
-        );
+        $request->validated();
 
         $this->handleCategory->delete($category);
 
