@@ -6,6 +6,7 @@ import AppLayout from '@/layouts/app-layout';
 import { ProductQuickViewDialog } from '@/components/swell/product/product-quick-view-dialog';
 import type { BreadcrumbItem, Order, Product } from '@/types';
 import { useCartContext } from '@/contexts/cart-context';
+import { useConfirmContext } from '@/contexts/confirm-context';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Head } from '@inertiajs/react';
 import { RotateCcw } from 'lucide-react';
@@ -23,6 +24,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Orders({ orders }: { orders: Order[] }) {
+    const { confirm } = useConfirmContext();
     const { buyNow } = useCartContext();
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
@@ -33,6 +35,25 @@ export default function Orders({ orders }: { orders: Order[] }) {
         return order.order_number.toLowerCase().includes(searchTerm.toLowerCase());
     });
     
+    const handleReOrder = async (order: Order) => {
+        const itemCount = order.items.reduce((total, item) => total + item.quantity, 0);
+        const totalAmount = (order.amount_total / 100).toFixed(2);
+
+        const confirmed = await confirm({
+            title: `Commander à nouveau (${order.order_number})`,
+            description: `Vous allez commander à nouveau ${itemCount} article${itemCount > 1 ? 's' : ''} pour un montant de €${totalAmount}. Voulez-vous continuer ?`,
+            confirmText: 'Commander',
+            cancelText: 'Annuler',
+            variant: 'default',
+            icon: <RotateCcw className="size-4" />,
+        });
+
+        if (confirmed) {
+            const itemsOrProduct = order.items.length > 1 ? order.items : order.items[0].product;
+            if (itemsOrProduct) buyNow(itemsOrProduct);
+        }
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Mes commandes" />
@@ -92,10 +113,7 @@ export default function Orders({ orders }: { orders: Order[] }) {
                                 <Separator className="my-4" />
 
                                 <div className="flex flex-wrap gap-2">
-                                    <Button variant="outline" size="sm" onClick={() => {
-                                        const itemsOrProduct = order.items.length > 1 ? order.items : order.items[0].product;
-                                        if (itemsOrProduct) buyNow(itemsOrProduct);
-                                    }}>
+                                    <Button variant="outline" size="sm" onClick={() => handleReOrder(order)}>
                                         <RotateCcw /> Commander à nouveau
                                     </Button>
                                 </div>

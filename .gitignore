@@ -24,6 +24,7 @@ yarn-error.log
 /.zed
 roadmap.md
 docs
+doc
 CLAUDE.md
 .claude
 /database/migrations/2025_07_09_100742_create_banner_messages_table.php

@@ -1,4 +1,5 @@
 import { CartProvider } from '@/contexts/cart-context';
+import { ConfirmProvider } from '@/contexts/confirm-context';
 import { WishlistProvider } from '@/contexts/wishlist-context';
 import { Cart } from '@/types';
 import { createInertiaApp } from '@inertiajs/react';
@@ -19,15 +20,17 @@ createInertiaApp({
         const wishlistEnabled = (props.initialPage.props as unknown as { swell: { wishlist: { enabled: boolean } } }).swell.wishlist.enabled;
 
         root.render(
-            <CartProvider initialCart={cart}>
-                {wishlistEnabled ? (
-                    <WishlistProvider enabled={wishlistEnabled}>
+            <ConfirmProvider>
+                <CartProvider initialCart={cart}>
+                    {wishlistEnabled ? (
+                        <WishlistProvider enabled={wishlistEnabled}>
+                            <App {...props} />
+                        </WishlistProvider>
+                    ) : (
                         <App {...props} />
-                    </WishlistProvider>
-                ) : (
-                    <App {...props} />
-                )}
-            </CartProvider>,
+                    )}
+                </CartProvider>
+            </ConfirmProvider>,
         );
     },
     progress: {
