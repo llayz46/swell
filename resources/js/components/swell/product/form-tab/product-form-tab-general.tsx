@@ -163,7 +163,7 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
                                             <ChevronDownIcon size={16} className="shrink-0 text-muted-foreground/80" aria-hidden="true" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-full min-w-[var(--radix-popper-anchor-width)] border-input p-0" align="start">
+                                    <PopoverContent className="w-full min-w-[--radix-popper-anchor-width] border-input p-0" align="start">
                                         <Command>
                                             <CommandInput placeholder="Rechercher une marque..." onValueChange={(e) => setBrandInputValue(e)} />
                                             <CommandList>
@@ -222,7 +222,7 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
                                             <ChevronDownIcon size={16} className="shrink-0 text-muted-foreground/80" aria-hidden="true" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-full min-w-[var(--radix-popper-anchor-width)] border-input p-0" align="start">
+                                    <PopoverContent className="w-full min-w-[--radix-popper-anchor-width] border-input p-0" align="start">
                                         <Command>
                                             <CommandInput
                                                 placeholder="Rechercher une collection..."
@@ -307,7 +307,7 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
                                                     </li>
                                                 ))}
                                             </ul>
-                                            <div className="absolute top-4 right-4 flex gap-2 *:rounded *:border *:border-transparent *:p-0.25 *:transition *:hover:border-border">
+                                            <div className="absolute top-4 right-4 flex gap-2 *:rounded *:border *:border-transparent *:p-px *:transition *:hover:border-border">
                                                 <button type="button" onClick={() => toggleFinalizeOption(option)}>
                                                     <PenLine size={16} />
                                                 </button>

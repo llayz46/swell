@@ -107,7 +107,7 @@ export function ImagesTabContent({ data, setData, processing }: FormTabContentPr
                             onDrop={handleDrop}
                             data-dragging={isDragging || undefined}
                             data-files={files.length > 0 || undefined}
-                            className="relative flex min-h-52 flex-col items-center overflow-hidden rounded-xl border border-dashed border-input p-4 transition-colors not-data-[files]:justify-center has-[input:focus]:border-ring has-[input:focus]:ring-[3px] has-[input:focus]:ring-ring/50 data-[dragging=true]:bg-accent/50"
+                            className="relative flex min-h-52 flex-col items-center overflow-hidden rounded-xl border border-dashed border-input p-4 transition-colors not-data-files:justify-center has-[input:focus]:border-ring has-[input:focus]:ring-[3px] has-[input:focus]:ring-ring/50 data-[dragging=true]:bg-accent/50"
                         >
                             <input {...getInputProps()} className="sr-only" aria-label="Upload image file" />
                             <div className="flex flex-col items-center justify-center px-4 py-3 text-center">
