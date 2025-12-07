@@ -1,5 +1,5 @@
 import InputError from '@/components/input-error';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { TabsContent } from '@/components/ui/tabs';
@@ -10,11 +10,11 @@ import { Button as AriaButton, Input as AriaInput, Label as AriaLabel, Group, Nu
 export function InventoryTabContent({ data, setData, errors, processing }: FormTabContentProps<ProductForm>) {
     return (
         <TabsContent value="inventory" className="space-y-4">
-            <Card className="border-border bg-card max-sm:py-4">
-                <CardHeader className="max-sm:px-4">
+            <SwellCard>
+                <SwellCardHeader>
                     <CardTitle className="text-foreground">Gestion des stocks</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 max-sm:px-4">
+                </SwellCardHeader>
+                <SwellCardContent className="space-y-4">
                     <div className="grid gap-4 md:grid-cols-2">
                         <NumberField defaultValue={data.stock} onChange={(value) => setData('stock', value)}>
                             <div className="*:not-first:mt-2">
@@ -75,12 +75,11 @@ export function InventoryTabContent({ data, setData, errors, processing }: FormT
                         />
                         <p className="text-xs text-muted-foreground">
                             Le SKU est un identifiant unique pour chaque produit, utilisé pour la gestion des stocks. <br />
-                            Exemple : TEE-NIKE-DRF-MBLK pour un <b>t-shirt</b> de marque <b>Nike</b>,{' '}
-                            <b>Dri-FIT, M Noir</b>.
+                            Exemple : TEE-NIKE-DRF-MBLK pour un <b>t-shirt</b> de marque <b>Nike</b>, <b>Dri-FIT, M Noir</b>.
                         </p>
                     </div>
-                </CardContent>
-            </Card>
+                </SwellCardContent>
+            </SwellCard>
         </TabsContent>
     );
 }

@@ -6,7 +6,7 @@ import { SeoTabContent } from '@/components/swell/product/form-tab/product-form-
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SwellCard, SwellCardHeader, SwellCardContent, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
@@ -157,7 +157,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                 leaveTo="opacity-0 scale-95"
             >
                 <Alert className="border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950">
-                    <AlertCircle className="!dark:text-orange-400 size-4 !text-orange-600" />
+                    <AlertCircle className="dark:text-orange-400! size-4 text-orange-600!" />
                     <AlertDescription className="text-orange-800 dark:text-orange-200">
                         Vous avez des modifications non enregistrées. N'oubliez pas de sauvegarder vos changements.
                     </AlertDescription>
@@ -210,11 +210,11 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                 </div>
 
                 <div className="space-y-4 lg:col-span-1">
-                    <Card className="border-border bg-card max-sm:py-4">
-                        <CardHeader className="max-sm:px-4">
+                    <SwellCard>
+                        <SwellCardHeader>
                             <CardTitle className="text-foreground">Statut du produit</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4 max-sm:px-4">
+                        </SwellCardHeader>
+                        <SwellCardContent className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <Label htmlFor="status">Produit actif</Label>
                                 <Switch
@@ -237,14 +237,14 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                                     <Label>{!isDuplicate && product ? product.sku : 'N/A'}</Label>
                                 </div>
                             )}
-                        </CardContent>
-                    </Card>
+                        </SwellCardContent>
+                    </SwellCard>
 
-                    <Card className="border-border bg-card max-sm:py-4">
-                        <CardHeader className="max-sm:px-4">
+                    <SwellCard>
+                        <SwellCardHeader>
                             <CardTitle className="text-foreground">Aperçu rapide</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-3 max-sm:px-4">
+                        </SwellCardHeader>
+                        <SwellCardContent className="space-y-4">
                             <div className="flex justify-between">
                                 <span className="text-muted-foreground">Prix de vente:</span>
                                 <span className="font-semibold text-foreground">€{data.price.toFixed(2)}</span>
@@ -280,15 +280,15 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                                     {!isDuplicate && product && product.isNew && <Badge className="bg-blue-900 text-blue-200">Nouveau</Badge>}
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
+                        </SwellCardContent>
+                    </SwellCard>
 
                     {!isDuplicate && product && (
-                        <Card className="border-border bg-card">
-                            <CardHeader>
+                        <SwellCard>
+                            <SwellCardHeader>
                                 <CardTitle className="text-foreground">Actions</CardTitle>
-                            </CardHeader>
-                            <CardContent className="flex flex-col gap-2">
+                            </SwellCardHeader>
+                            <SwellCardContent className="flex flex-col gap-2">
                                 <Link
                                     className={`${buttonVariants({ variant: 'outline' })} justify-start`}
                                     href={route('admin.products.show', product.slug)}
@@ -315,8 +315,8 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                                         Supprimer le produit
                                     </Button>
                                 )}
-                            </CardContent>
-                        </Card>
+                            </SwellCardContent>
+                        </SwellCard>
                     )}
                 </div>
             </div>

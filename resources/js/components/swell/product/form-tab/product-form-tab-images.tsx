@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { TabsContent } from '@/components/ui/tabs';
@@ -90,17 +90,15 @@ export function ImagesTabContent({ data, setData, processing }: FormTabContentPr
 
     return (
         <TabsContent value="images" className="space-y-4">
-            <Card className="border-border bg-card max-sm:py-4">
-                <CardHeader className="max-sm:px-4">
-                    <div className="flex items-center justify-between">
-                        <CardTitle className="text-foreground">Images du produit</CardTitle>
-                        <Button variant="outline" onClick={openFileDialog} type="button" tabIndex={1} disabled={processing}>
-                            <Upload />
-                            Ajouter des images
-                        </Button>
-                    </div>
-                </CardHeader>
-                <CardContent className="space-y-4 max-sm:px-4">
+            <SwellCard>
+                <SwellCardHeader>
+                    <CardTitle className="text-foreground">Images du produit</CardTitle>
+                    <Button variant="outline" onClick={openFileDialog} type="button" tabIndex={1} disabled={processing}>
+                        <Upload />
+                        Ajouter des images
+                    </Button>
+                </SwellCardHeader>
+                <SwellCardContent className="space-y-4">
                     <div className="flex flex-col gap-2">
                         <div
                             onDragEnter={handleDragEnter}
@@ -192,8 +190,8 @@ export function ImagesTabContent({ data, setData, processing }: FormTabContentPr
                             </ul>
                         </div>
                     )}
-                </CardContent>
-            </Card>
+                </SwellCardContent>
+            </SwellCard>
         </TabsContent>
     );
 }

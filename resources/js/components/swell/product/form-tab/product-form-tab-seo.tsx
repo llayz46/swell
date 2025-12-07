@@ -1,5 +1,5 @@
 import InputError from '@/components/input-error';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SwellCard, SwellCardHeader, SwellCardContent, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { TabsContent } from '@/components/ui/tabs';
@@ -9,11 +9,11 @@ import { FormTabContentProps, ProductForm } from '@/types';
 export function SeoTabContent({ data, setData, processing, errors }: FormTabContentProps<ProductForm>) {
     return (
         <TabsContent value="seo" className="space-y-4">
-            <Card className="border-border bg-card max-sm:py-4">
-                <CardHeader className="max-sm:px-4">
+            <SwellCard>
+                <SwellCardHeader>
                     <CardTitle className="text-foreground">Optimisation SEO</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 max-sm:px-4">
+                </SwellCardHeader>
+                <SwellCardContent className="space-y-4">
                     <div className="*:not-first:mt-2">
                         <Label htmlFor="meta_title">Titre Meta</Label>
                         <Input
@@ -56,8 +56,8 @@ export function SeoTabContent({ data, setData, processing, errors }: FormTabCont
                         />
                         <InputError message={errors && errors.meta_keywords} />
                     </div>
-                </CardContent>
-            </Card>
+                </SwellCardContent>
+            </SwellCard>
         </TabsContent>
     );
 }

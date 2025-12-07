@@ -3,7 +3,7 @@ import { BrandDialog } from '@/components/swell/brand-dialog';
 import { CategoryTree } from '@/components/swell/category-tree';
 import { CollectionDialog } from '@/components/swell/product/collection-dialog';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { SwellCard, SwellCardHeader, SwellCardContent, Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -69,11 +69,11 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
 
     return (
         <TabsContent value="general" className="space-y-4">
-            <Card className="border-border bg-card max-sm:py-4">
-                <CardHeader className="max-sm:px-4">
+            <SwellCard>
+                <SwellCardHeader>
                     <CardTitle className="text-foreground">Informations de base</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 max-sm:px-4">
+                </SwellCardHeader>
+                <SwellCardContent className="space-y-4">
                     <div className="grid gap-4 md:grid-cols-2">
                         <div className="*:not-first:mt-2">
                             <Label htmlFor="name">Nom du produit *</Label>
@@ -135,14 +135,14 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
                         </p>
                         <InputError message={errors?.description} />
                     </div>
-                </CardContent>
-            </Card>
+                </SwellCardContent>
+            </SwellCard>
 
-            <Card className="border-border bg-card max-sm:py-4">
-                <CardHeader className="max-sm:px-4">
+            <SwellCard>
+                <SwellCardHeader>
                     <CardTitle className="text-foreground">Organisation</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 max-sm:px-4">
+                </SwellCardHeader>
+                <SwellCardContent className="space-y-4">
                     <div className="grid gap-4 md:grid-cols-2">
                         <div className="flex flex-col gap-4">
                             <div className="*:not-first:mt-2">
@@ -281,14 +281,14 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
                             />
                         </div>
                     </div>
-                </CardContent>
-            </Card>
+                </SwellCardContent>
+            </SwellCard>
 
-            <Card className="border-border bg-card max-sm:py-4">
-                <CardHeader className="max-sm:px-4">
+            <SwellCard>
+                <SwellCardHeader>
                     <CardTitle className="text-foreground">Variantes</CardTitle>
-                </CardHeader>
-                <CardContent className="max-sm:px-4">
+                </SwellCardHeader>
+                <SwellCardContent>
                     <Button size="sm" variant="outline" type="button" onClick={addNewOption} className={cn(data.options.length > 0 && 'hidden')}>
                         <CirclePlus />
                         Ajouter des options comme la taille, la couleur, etc.
@@ -451,8 +451,8 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
                             </button>
                         </CardFooter>
                     </Card>
-                </CardContent>
-            </Card>
+                </SwellCardContent>
+            </SwellCard>
         </TabsContent>
     );
 }

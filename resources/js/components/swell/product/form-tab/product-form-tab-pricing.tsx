@@ -1,5 +1,5 @@
 import InputError from '@/components/input-error';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { TabsContent } from '@/components/ui/tabs';
 import { FormTabContentProps, ProductForm } from '@/types';
@@ -10,11 +10,11 @@ import { Button as AriaButton, Input as AriaInput, Label as AriaLabel, Group, Nu
 export function PricingTabContent({ data, setData, errors }: FormTabContentProps<ProductForm>) {
     return (
         <TabsContent value="pricing" className="space-y-4">
-            <Card className="border-border bg-card max-sm:py-4">
-                <CardHeader className="max-sm:px-4">
+            <SwellCard>
+                <SwellCardHeader>
                     <CardTitle className="text-foreground">Tarification</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 max-sm:px-4">
+                </SwellCardHeader>
+                <SwellCardContent className="space-y-4">
                     <div className="grid gap-4 md:grid-cols-2">
                         <NumberField
                             defaultValue={data.price}
@@ -130,8 +130,8 @@ export function PricingTabContent({ data, setData, errors }: FormTabContentProps
                             </div>
                         </div>
                     </div>
-                </CardContent>
-            </Card>
+                </SwellCardContent>
+            </SwellCard>
         </TabsContent>
     );
 }
