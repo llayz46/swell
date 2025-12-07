@@ -1,4 +1,4 @@
-import { Cart, CartItem, Product, ProductOption, ProductOptionValue } from '@/types';
+import { Cart, CartItem, OrderItems, Product, ProductOption, ProductOptionValue } from '@/types';
 import { Page } from '@inertiajs/core';
 import { router } from '@inertiajs/react';
 import axios from 'axios';
@@ -6,13 +6,13 @@ import { ShoppingCart } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-function optionsKey(options?: CartItem['options'] | undefined) {
+const optionsKey = (options?: CartItem['options'] | undefined) => {
     if (!options || options.length === 0) return '';
     const pairs = options.map((o) => [o.option_id, o.option_value_id] as const).sort((a, b) => a[0] - b[0]);
     return pairs.map(([k, v]) => `${k}:${v}`).join('|');
 }
 
-function fillOptionLabels(items: CartItem[]): CartItem[] {
+const fillOptionLabels = (items: CartItem[]): CartItem[] => {
     return (items || []).map((item) => {
         if (!item.options || item.options.length === 0) return item;
         const productOptions: ProductOption[] = item.product.options || [];
@@ -248,10 +248,26 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
         );
     };
 
-    const buyNow = (product: Product) => {
-        router.get(
-            route('cart.buy', product.id),
-            {},
+    const buyNow = (products: Product | OrderItems[]) => {
+        const productArray = Array.isArray(products) ? products : [products];
+
+        router.post(
+            route('cart.buy'),
+            {
+                products: productArray.map(item => {
+                    if ('product' in item) {
+                        return {
+                            id: item.product?.id,
+                            quantity: item.quantity
+                        };
+                    }
+
+                    return {
+                        id: item.id,
+                        quantity: 1
+                    };
+                })
+            },
             {
                 preserveScroll: true,
             },

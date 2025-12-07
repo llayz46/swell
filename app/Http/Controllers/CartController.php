@@ -10,6 +10,7 @@ use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\Cart\AddItemRequest;
+use App\Http\Requests\Cart\BuyRequest;
 use App\Http\Requests\Cart\HandleItemQuantityRequest;
 use App\Http\Requests\Cart\HandleItemQuantityByIdRequest;
 use App\Http\Requests\Cart\RemoveItemRequest;
@@ -205,15 +206,22 @@ class CartController extends Controller
     }
 
     /**
-     * Redirect to Stripe checkout session for a single product.
+     * Redirect to Stripe checkout session for one or multiple products.
      *
-     * @param Product $product
+     * @param BuyRequest $request
      * @param CreateStripeCheckoutSession $createStripeCheckoutSession
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function buy(Product $product, CreateStripeCheckoutSession $createStripeCheckoutSession)
+    public function buy(BuyRequest $request, CreateStripeCheckoutSession $createStripeCheckoutSession)
     {
-        $session = $createStripeCheckoutSession->createSessionFromSingleItem($product);
+        $productsData = collect($request->getProducts())->map(function ($item) {
+            return [
+                'product' => Product::findOrFail($item['id']),
+                'quantity' => $item['quantity'],
+            ];
+        });
+
+        $session = $createStripeCheckoutSession->createSessionFromItems($productsData);
 
         return Inertia::location($session->url);
     }

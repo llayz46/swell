@@ -82,7 +82,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                             {product.images?.map((image) => (
                                 <div
                                     key={image.id}
-                                    className="flex aspect-[16/11] items-center justify-center overflow-hidden rounded-md border bg-card"
+                                    className="flex aspect-16/11 items-center justify-center overflow-hidden rounded-md border bg-card"
                                 >
                                     <img
                                         src={getStorageUrl(image.url)}

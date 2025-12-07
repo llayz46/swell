@@ -1,5 +1,5 @@
 import { useCart } from '@/hooks/use-cart';
-import { Cart, Product } from '@/types';
+import { Cart, Product, OrderItems } from '@/types';
 import { createContext, ReactNode, useContext } from 'react';
 
 type CartContextType = {
@@ -10,7 +10,7 @@ type CartContextType = {
     clearCart: () => void;
     handleQuantity: (type: 'inc' | 'dec', itemId: number) => void;
     checkout: () => void;
-    buyNow: (product: Product) => void;
+    buyNow: (products: Product | OrderItems[]) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);

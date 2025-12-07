@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator';
 import SearchInput from '@/components/swell/search-input';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, Order } from '@/types';
+import { useCartContext } from '@/contexts/cart-context';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Head, Link } from '@inertiajs/react';
 import { RotateCcw } from 'lucide-react';
@@ -21,6 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Orders({ orders }: { orders: Order[] }) {
+    const { buyNow } = useCartContext();
     const [searchTerm, setSearchTerm] = useState<string>('');
 
     const filteredOrders = orders.filter((order) => {
@@ -28,7 +30,7 @@ export default function Orders({ orders }: { orders: Order[] }) {
 
         return order.order_number.toLowerCase().includes(searchTerm.toLowerCase());
     });
-
+    
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Mes commandes" />
@@ -60,7 +62,7 @@ export default function Orders({ orders }: { orders: Order[] }) {
                                 <div className="mb-4 space-y-3">
                                     {order.items.map((item) => (
                                         <div key={item.id} className="flex items-center gap-4">
-                                            <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md bg-muted">
+                                            <div className="size-16 shrink-0 overflow-hidden rounded-md border border-slate-light-alpha bg-slate-light">
                                                 {item.product?.featured_image ? (
                                                     <img
                                                         src={getStorageUrl(item.product.featured_image.url)}
@@ -68,9 +70,7 @@ export default function Orders({ orders }: { orders: Order[] }) {
                                                         className="size-full object-cover"
                                                     />
                                                 ) : (
-                                                    <span className="block flex size-full items-center justify-center bg-muted text-muted-foreground">
-                                                        Image indisponible
-                                                    </span>
+                                                    <span className="flex size-full items-center justify-center text-muted-foreground"></span>
                                                 )}
                                             </div>
                                             <div className="min-w-0 flex-1">
@@ -93,7 +93,10 @@ export default function Orders({ orders }: { orders: Order[] }) {
                                 <Separator className="my-4" />
 
                                 <div className="flex flex-wrap gap-2">
-                                    <Button variant="outline" size="sm">
+                                    <Button variant="outline" size="sm" onClick={() => {
+                                        const itemsOrProduct = order.items.length > 1 ? order.items : order.items[0].product;
+                                        if (itemsOrProduct) buyNow(itemsOrProduct);
+                                    }}>
                                         <RotateCcw /> Commander à nouveau
                                     </Button>
                                 </div>

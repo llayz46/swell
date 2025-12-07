@@ -68,31 +68,36 @@ class CreateStripeCheckoutSession
     }
 
     /**
-     * Create a Stripe Checkout session for a single product.
+     * Create a Stripe Checkout session for multiple products.
      *
-     * @param Product $product
+     * @param \Illuminate\Support\Collection $productsData
      */
-    public function createSessionFromSingleItem(Product $product)
+    public function createSessionFromItems($productsData)
     {
+        $lineItems = $productsData->map(function ($item) {
+            $product = $item['product'];
+            $quantity = $item['quantity'];
+            
+            return [
+                'price_data' => [
+                    'currency' => 'EUR',
+                    'unit_amount' => (int) ($product->getPrice * 100),
+                    'product_data' => [
+                        'name' => $product->brand->name . ' ' . $product->name,
+                        'description' => $product->short_description,
+                        'metadata' => [
+                            'product_id' => $product->id,
+                        ],
+                    ],
+                ],
+                'quantity' => $quantity,
+            ];
+        })->toArray();
+    
         return auth()->user()
             ->allowPromotionCodes()
             ->checkout(
-                [
-                    [
-                        'price_data' => [
-                            'currency' => 'EUR',
-                            'unit_amount' => (int) ($product->getPrice * 100),
-                            'product_data' => [
-                                'name' => $product->brand->name . ' ' . $product->name,
-                                'description' => $product->short_description,
-                                'metadata' => [
-                                    'product_id' => $product->id,
-                                ],
-                            ],
-                        ],
-                        'quantity' => 1,
-                    ]
-                ],
+                $lineItems,
                 [
                     'customer_update' => [
                         'shipping' => 'auto',

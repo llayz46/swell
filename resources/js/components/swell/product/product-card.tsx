@@ -30,7 +30,7 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
     return (
         <Card className="h-full gap-0 overflow-hidden rounded-xl border-transparent bg-slate-light p-1 shadow-inner">
             <div
-                className="shadow-xs-with-border relative aspect-[4/3] overflow-hidden rounded-lg"
+                className="shadow-xs-with-border relative aspect-4/3 overflow-hidden rounded-lg"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >

@@ -27,7 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('checkout')->group(function () {
         Route::get('/', [CartController::class, 'checkout'])->name('cart.checkout');
         Route::get('/success', [CartController::class, 'success'])->name('checkout.success');
-        Route::get('/{product}', [CartController::class, 'buy'])->name('cart.buy');
+        Route::post('/', [CartController::class, 'buy'])->name('cart.buy');
     });
 
     Route::middleware('feature:wishlist')->prefix('wishlist')->group(function () {

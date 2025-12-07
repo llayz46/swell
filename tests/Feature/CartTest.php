@@ -427,14 +427,45 @@ test('buy single item redirects to stripe checkout url', function () {
     $mockSession->url = 'https://stripe.test/session';
 
     $mockStripe = \Mockery::mock(CreateStripeCheckoutSession::class);
-    $mockStripe->shouldReceive('createSessionFromSingleItem')
+    $mockStripe->shouldReceive('createSessionFromItems')
         ->once()
         ->andReturn($mockSession);
 
     $this->app->instance(CreateStripeCheckoutSession::class, $mockStripe);
 
+    $product = Product::factory()->create();
+
     $response = $this->actingAs(User::factory()->create())
-        ->get(route('cart.buy', Product::factory()->create()));
+        ->post(route('cart.buy'), [
+            'products' => [
+                ['id' => $product->id, 'quantity' => 1]
+            ]
+        ]);
+
+    $response->assertRedirect('https://stripe.test/session');
+});
+
+test('buy multiple items redirects to stripe checkout url', function () {
+    $mockSession = \Mockery::mock(Checkout::class);
+    $mockSession->url = 'https://stripe.test/session';
+
+    $mockStripe = \Mockery::mock(CreateStripeCheckoutSession::class);
+    $mockStripe->shouldReceive('createSessionFromItems')
+        ->once()
+        ->andReturn($mockSession);
+
+    $this->app->instance(CreateStripeCheckoutSession::class, $mockStripe);
+
+    $product1 = Product::factory()->create();
+    $product2 = Product::factory()->create();
+
+    $response = $this->actingAs(User::factory()->create())
+        ->post(route('cart.buy'), [
+            'products' => [
+                ['id' => $product1->id, 'quantity' => 2],
+                ['id' => $product2->id, 'quantity' => 1]
+            ]
+        ]);
 
     $response->assertRedirect('https://stripe.test/session');
 });

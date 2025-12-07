@@ -36,7 +36,7 @@ export function CartSheet() {
                             className="h-8 gap-2 text-muted-foreground hover:text-destructive"
                             onClick={() => setClearConfirmationModal(true)}
                         >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="size-4" />
                             <span>Vider le panier</span>
                         </Button>
                     </div>
@@ -94,7 +94,7 @@ function CardItem({
                 </Button>
 
                 <div className="relative flex items-start gap-4 pr-8">
-                    <div className="relative size-18 flex-shrink-0 overflow-hidden rounded-sm bg-muted">
+                    <div className="relative size-18 shrink-0 overflow-hidden rounded-sm border border-slate-light-alpha bg-slate-light">
                         {item.product.image && (
                             <img src={getStorageUrl(item.product.image.url)} alt={item.product.image.alt_text} className="size-full object-cover" />
                         )}
