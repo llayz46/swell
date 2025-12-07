@@ -3,10 +3,11 @@ import { CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/compo
 import { Separator } from '@/components/ui/separator';
 import SearchInput from '@/components/swell/search-input';
 import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem, Order } from '@/types';
+import { ProductQuickViewDialog } from '@/components/swell/product/product-quick-view-dialog';
+import type { BreadcrumbItem, Order, Product } from '@/types';
 import { useCartContext } from '@/contexts/cart-context';
 import { getStorageUrl } from '@/utils/format-storage-url';
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 
@@ -24,6 +25,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Orders({ orders }: { orders: Order[] }) {
     const { buyNow } = useCartContext();
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
     const filteredOrders = orders.filter((order) => {
         if (!searchTerm) return true;
@@ -74,12 +76,9 @@ export default function Orders({ orders }: { orders: Order[] }) {
                                                 )}
                                             </div>
                                             <div className="min-w-0 flex-1">
-                                                <Link
-                                                    href={route('product.show', item.product?.slug)}
-                                                    className="truncate font-medium text-foreground hover:underline"
-                                                >
+                                                <h3 className="truncate font-medium text-foreground cursor-pointer w-fit hover:underline" onClick={() => item.product && setQuickViewProduct(item.product)}>
                                                     {item.name}
-                                                </Link>
+                                                </h3>
                                                 <p className="text-sm text-muted-foreground">Quantité: {item.quantity}</p>
                                                 <p className="block font-semibold text-foreground sm:hidden">€{(item.price / 100).toFixed(2)}</p>
                                             </div>
@@ -105,6 +104,8 @@ export default function Orders({ orders }: { orders: Order[] }) {
                     ))}
                 </div>
             </div>
+            
+            <ProductQuickViewDialog product={quickViewProduct} open={!!quickViewProduct} onClose={() => setQuickViewProduct(null)} />
         </AppLayout>
     );
 }

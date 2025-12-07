@@ -12,7 +12,7 @@ class OrderController extends Controller
     public function index()
     {
         return Inertia::render('dashboard/orders', [
-            'orders' => fn () => OrderResource::collection(auth()->user()->orders->load('items.product.featuredImage')),
+        'orders' => fn () => OrderResource::collection(auth()->user()->orders->load('items.product.featuredImage', 'items.product.brand')),
         ]);
     }
 }
