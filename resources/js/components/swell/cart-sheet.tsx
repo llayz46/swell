@@ -1,4 +1,4 @@
-import { CartClearConfirmationDialog } from '@/components/swell/cart-clear-confirmation-dialog';
+import { useConfirmContext } from '@/contexts/confirm-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -6,11 +6,25 @@ import { useCartContext } from '@/contexts/cart-context';
 import { CartItem } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
-import { useState } from 'react';
 
 export function CartSheet() {
     const { handleQuantity, clearCart, optimisticCart, removeItemOfCart, checkout } = useCartContext();
-    const [clearConfirmationModal, setClearConfirmationModal] = useState<boolean>(false);
+    const { confirm } = useConfirmContext();
+
+    const handleClearCart = async () => {
+        const confirmed = await confirm({
+            title: 'Confirmation de la suppression du panier',
+            description: 'Êtes-vous sûr de vouloir vider votre panier ? Cette action est irréversible et supprimera tous les articles de votre panier.',
+            confirmText: 'Vider le panier',
+            cancelText: 'Annuler',
+            variant: 'destructive',
+            icon: <Trash2 className="size-4" />,
+        });
+
+        if (confirmed) {
+            clearCart();
+        }
+    };
 
     return (
         <Sheet>
@@ -34,7 +48,7 @@ export function CartSheet() {
                             variant="ghost"
                             size="sm"
                             className="h-8 gap-2 text-muted-foreground hover:text-destructive"
-                            onClick={() => setClearConfirmationModal(true)}
+                            onClick={handleClearCart}
                         >
                             <Trash2 className="size-4" />
                             <span>Vider le panier</span>
@@ -66,8 +80,6 @@ export function CartSheet() {
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>
-
-            <CartClearConfirmationDialog open={clearConfirmationModal} onClose={() => setClearConfirmationModal(false)} clearCart={clearCart} />
         </Sheet>
     );
 }
