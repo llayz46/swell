@@ -41,7 +41,7 @@ export default function Orders({ orders }: { orders: Order[] }) {
 
         const confirmed = await confirm({
             title: `Commander à nouveau (${order.order_number})`,
-            description: `Vous allez commander à nouveau ${itemCount} article${itemCount > 1 ? 's' : ''} pour un montant de €${totalAmount}. Voulez-vous continuer ?`,
+            description: `Vous allez être redirigé vers la page de paiement pour commander à nouveau ${itemCount} article${itemCount > 1 ? 's' : ''} pour un montant de €${totalAmount}. Voulez-vous continuer ?`,
             confirmText: 'Commander',
             cancelText: 'Annuler',
             variant: 'default',
