@@ -32,7 +32,7 @@ class AdminController extends Controller
             $endOfMonth = now()->subMonths($monthsAgo)->endOfMonth();
 
             return [
-                'month' => $startOfMonth->format('F'),
+                'month' => ucfirst($startOfMonth->locale('fr')->translatedFormat('F')),
                 'revenue' => Order::whereBetween('created_at', [$startOfMonth, $endOfMonth])
                     ->sum('amount_total')
             ];

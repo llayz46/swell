@@ -52,13 +52,13 @@ export default function Dashboard({
 
     const chartData = monthlyRevenue.map((data) => ({
         month: data.month,
-        Revenu: data.revenue,
+        Revenu: data.revenue / 100,
     }));
 
     const stats = [
         {
             title: "Chiffre d'affaires",
-            value: totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
+            value: (totalRevenue / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
             percentage: revenuePercentageChange,
             icon: <DollarSign className="size-4 text-muted-foreground" />,
             description: (val: number) => (val > 0 ? `+${val}% par rapport au mois dernier` : `${val}% par rapport au mois dernier`),
@@ -145,7 +145,15 @@ export default function Dashboard({
                                                 tickMargin={8}
                                                 tickFormatter={(value) => value.slice(0, 3)}
                                             />
-                                            <ChartTooltip cursor={false} content={<ChartTooltipContent hideIndicator />} />
+                                            <ChartTooltip
+                                                cursor={false}
+                                                content={
+                                                    <ChartTooltipContent
+                                                        hideIndicator
+                                                        formatter={(value) => `${Number(value).toLocaleString('fr-FR')} €`}
+                                                    />
+                                                }
+                                            />
                                             <Area
                                                 dataKey="Revenu"
                                                 type="linear"
