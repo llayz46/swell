@@ -11,7 +11,8 @@ import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { formatDate } from '@/utils/format-date';
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { Transition } from '@headlessui/react';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { AlertCircle, CheckCircle, Edit, Eye, EyeOff, Info, Megaphone, MoreHorizontal, Trash2 } from 'lucide-react';
@@ -195,7 +196,7 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
                 leaveTo="opacity-0 scale-95"
             >
                 <Alert className="border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950">
-                    <AlertCircle className="!dark:text-orange-400 size-4 !text-orange-600" />
+                    <AlertCircle className="!dark:text-orange-400 size-4 text-orange-600!" />
                     <AlertDescription className="text-orange-800 dark:text-orange-200">
                         Vous avez des modifications non enregistrées. N'oubliez pas de sauvegarder vos changements.
                     </AlertDescription>
@@ -320,8 +321,8 @@ function SortableBannerItem({ item, setEditBanner, setOpenBannerDialog, onDelete
                             </div>
 
                             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                                <span>Créé le {formatDate(item.created_at)}</span>
-                                {item.updated_at !== item.created_at && <span>Modifié le {formatDate(item.updated_at)}</span>}
+                                <span>Créé le {format(item.created_at, 'dd MMMM yyyy', { locale: fr })}</span>
+                                {item.updated_at !== item.created_at && <span>Modifié le {format(item.updated_at, 'dd MMMM yyyy', { locale: fr })}</span>}
                             </div>
                         </div>
 

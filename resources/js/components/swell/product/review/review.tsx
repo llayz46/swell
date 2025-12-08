@@ -1,9 +1,10 @@
 import { useInitials } from '@/hooks/use-initials';
 import type { Review as ReviewType } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
-import { formatDate } from '@/utils/format-date';
 import { Star } from 'lucide-react';
 import { useState } from 'react';
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { Avatar, AvatarFallback, AvatarImage } from '../../../ui/avatar';
 import { Card, CardContent } from '../../../ui/card';
 
@@ -48,7 +49,7 @@ export function Review({ review }: { review: ReviewType }) {
                                         />
                                     ))}
                                 </div>
-                                <span className="text-sm text-muted-foreground">{formatDate(review.created_at)}</span>
+                                <span className="text-sm text-muted-foreground">{format(review.created_at, 'dd MMMM yyyy', { locale: fr })}</span>
                             </div>
                         </div>
                     </div>
