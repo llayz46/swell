@@ -26,6 +26,11 @@ const mainNavItems: NavItem[] = [
         icon: Boxes,
     },
     {
+        title: 'Fidélité',
+        href: '/admin/loyalty',
+        icon: Gift,
+    },
+    {
         title: 'Marques',
         href: '/admin/brands',
         icon: Tags,
@@ -34,11 +39,6 @@ const mainNavItems: NavItem[] = [
         title: 'Produits',
         href: '/admin/products',
         icon: Package,
-    },
-    {
-        title: 'Fidélité',
-        href: '/admin/loyalty',
-        icon: Gift,
     },
 ];
 
