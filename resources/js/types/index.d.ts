@@ -344,3 +344,15 @@ type ProductForm = {
     category_id: string;
     collection_id: string;
 };
+
+export interface LoyaltyTransaction {
+    id: number;
+    type: string;
+    type_label: string;
+    points: number;
+    balance_after: number;
+    description: string;
+    order_number?: string;
+    expires_at?: string;
+    created_at: string;
+}

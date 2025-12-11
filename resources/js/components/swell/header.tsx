@@ -39,10 +39,10 @@ export function Header() {
             <div className="inline-flex w-full items-center gap-4 lg:gap-8">
                 <Link prefetch href="/">
                     <div className="group flex items-center gap-2">
-                        <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground transition duration-300 group-hover:invert">
+                        <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-primary text-sidebar-primary-foreground transition duration-300 group-hover:invert">
                             <AppLogoIcon className="size-5 fill-current text-white dark:text-black" />
                         </div>
-                        <div className="ml-1 grid hidden flex-1 text-left text-2xl lg:block">
+                        <div className="ml-1 hidden flex-1 text-left text-2xl lg:block">
                             <span className="mb-0.5 leading-tight font-semibold">Swell</span>
                         </div>
                     </div>

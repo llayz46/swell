@@ -106,7 +106,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
 
                                 <Link
                                     href={route('admin.products.create', collectionId ? { collection_id: collectionId } : {})}
-                                    className={buttonVariants({ variant: 'outline' })}
+                                    className={buttonVariants({ size: 'sm' })}
                                 >
                                     <Plus />
                                     Ajouter un produit
@@ -260,7 +260,7 @@ function DeferredFallback() {
                 <CardTitle className="flex w-full justify-between max-sm:flex-col max-sm:gap-2 sm:items-center">
                     <div className="text-lg text-foreground">Liste des produits</div>
 
-                    <Link href={route('admin.products.create')} className={buttonVariants({ variant: 'outline' })}>
+                    <Link href={route('admin.products.create')} className={buttonVariants({ size: 'sm' })}>
                         <Plus />
                         Ajouter un produit
                     </Link>

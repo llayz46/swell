@@ -3,7 +3,7 @@ import { CardDescription, CardTitle, SwellCard, SwellCardContent, SwellCardHeade
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
-import { type BreadcrumbItem } from '@/types';
+import type { BreadcrumbItem, LoyaltyTransaction } from '@/types';
 import { Head } from '@inertiajs/react';
 import { Award, Clock, TrendingUp } from 'lucide-react';
 
@@ -17,18 +17,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/loyalty',
     },
 ];
-
-interface Transaction {
-    id: number;
-    type: string;
-    type_label: string;
-    points: number;
-    balance_after: number;
-    description: string;
-    order_number?: string;
-    expires_at?: string;
-    created_at: string;
-}
 
 interface Account {
     points: number;
@@ -44,7 +32,7 @@ interface Config {
 
 interface Props {
     account: Account;
-    transactions: Transaction[];
+    transactions: LoyaltyTransaction[];
     config: Config;
 }
 

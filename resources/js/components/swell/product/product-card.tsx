@@ -54,7 +54,7 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
                             className="size-9 cursor-pointer rounded-md bg-slate-light! p-0 shadow-inner"
                             onClick={() => addItem(product)}
                         >
-                            <Heart className="size-4 dark:text-background" />
+                            <Heart className="size-4" />
                             <span className="sr-only">Ajouter à la wishlist</span>
                         </Button>
                     )}
