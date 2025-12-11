@@ -1,6 +1,6 @@
 <?php
 
-use App\Actions\Cart\HandleProductCart;
+use App\Services\CartService;
 use App\Actions\Stripe\CreateStripeCheckoutSession;
 use App\Factories\CartFactory;
 use App\Models\Cart;
@@ -70,17 +70,14 @@ test('guest can add products to cart', function () {
 });
 
 it('throws exception if product is out of stock', function () {
+
     $product = Product::factory()->create(['stock' => 0]);
 
-    $cart = CartFactory::make();
+    $service = app(App\Services\CartService::class);
 
-    $service = new HandleProductCart();
+    $service->addProduct($product->id, 1);
 
-    $this->expectException(\Exception::class);
-    $this->expectExceptionMessage('Produit en rupture de stock.');
-
-    $service->add($product->id, 1, $cart);
-});
+})->throws(Exception::class, 'Produit en rupture de stock.');
 
 test('addItem redirects back with error if product is out of stock', function () {
     $product = Product::factory()->create(['stock' => 0]);

@@ -2,37 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Cart\HandleProductCart;
 use App\Actions\Stripe\CreateStripeCheckoutSession;
 use App\Factories\CartFactory;
-use App\Http\Resources\CartResource;
-use App\Models\Cart;
-use App\Models\Product;
-use Illuminate\Http\Request;
 use App\Http\Requests\Cart\AddItemRequest;
 use App\Http\Requests\Cart\BuyRequest;
-use App\Http\Requests\Cart\HandleItemQuantityRequest;
 use App\Http\Requests\Cart\HandleItemQuantityByIdRequest;
-use App\Http\Requests\Cart\RemoveItemRequest;
+use App\Http\Requests\Cart\HandleItemQuantityRequest;
 use App\Http\Requests\Cart\RemoveItemByIdRequest;
+use App\Http\Requests\Cart\RemoveItemRequest;
+use App\Http\Resources\CartResource;
+use App\Models\Product;
+use App\Services\CartService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CartController extends Controller
 {
     /**
-     * @var HandleProductCart
-     */
-    protected HandleProductCart $handleProductCart;
-
-    /**
      * CartController constructor.
      *
-     * @param HandleProductCart $handleProductCart
+     * @param CartService $cartService
      */
-    public function __construct(HandleProductCart $handleProductCart)
-    {
-        $this->handleProductCart = $handleProductCart;
-    }
+    public function __construct(
+        private CartService $cartService
+    ) {}
 
     /**
      * Display the cart.
@@ -42,13 +35,7 @@ class CartController extends Controller
     public function index()
     {
         return response()->json([
-            'cart' => CartResource::make(
-                CartFactory::make()->load(
-                    'items.product.images',
-                    'items.product.brand',
-                    'items.product.options.values'
-                )
-            ),
+            'cart' => $this->cartService->getCart()->toResource(),
         ]);
     }
 
@@ -56,30 +43,23 @@ class CartController extends Controller
      * Add item to the cart.
      *
      * @param AddItemRequest $request
-     * @param HandleProductCart $handleProductCart
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function addItem(AddItemRequest $request)
     {
-        $request->validated();
-
         try {
-            $this->handleProductCart->add(
-                $request->product_id,
-                $request->quantity ?? 1,
-                $request->user()?->cart,
-                $request->options ?? null,
+            $this->cartService->addProduct(
+                productId: $request->validated('product_id'),
+                quantity: $request->validated('quantity', 1),
+                options: $request->validated('options')
             );
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors([
-                'product_id' => $e->getMessage()
-            ]);
+            return redirect()->back()->withErrors(['product_id' => $e->getMessage()]);
         }
 
-        // Retour JSON pour resync côté front
         if ($request->wantsJson()) {
             return response()->json([
-                'cart' => CartResource::make(CartFactory::make()->load('items.product')),
+                'cart' => $this->cartService->getCart()->toResource(),
             ]);
         }
 
@@ -87,24 +67,18 @@ class CartController extends Controller
     }
 
     /**
-     * Remove an item from the cart.
+     * Remove an item from the cart by product ID.
      *
      * @param RemoveItemRequest $request
-     * @param HandleProductCart $handleProductCart
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function removeItem(RemoveItemRequest $request)
     {
-        $request->validated();
-
-        $this->handleProductCart->remove(
-            $request->product_id,
-            $request->user()?->cart
-        );
+        $this->cartService->removeProduct($request->validated('product_id'));
 
         if ($request->wantsJson()) {
             return response()->json([
-                'cart' => CartResource::make(CartFactory::make()->load('items.product')),
+                'cart' => $this->cartService->getCart()->toResource(),
             ]);
         }
 
@@ -115,13 +89,11 @@ class CartController extends Controller
      * Remove an item from the cart by cart_item_id.
      *
      * @param RemoveItemByIdRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function removeItemById(RemoveItemByIdRequest $request)
     {
-        $request->validated();
-
-        $this->handleProductCart->removeByItemId($request->item_id, $request->user()?->cart);
+        $this->cartService->removeItem($request->validated('item_id'));
 
         return redirect()->back();
     }
@@ -129,17 +101,16 @@ class CartController extends Controller
     /**
      * Clear the cart.
      *
-     * @param Cart $cart
-     * @param HandleProductCart $handleProductCart
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function clear(Request $request)
     {
-        $this->handleProductCart->clear($request->user()?->cart);
+        $this->cartService->clearCart();
 
         if ($request->wantsJson()) {
             return response()->json([
-                'cart' => CartResource::make(CartFactory::make()->load('items.product')),
+                'cart' => $this->cartService->getCart()->toResource(),
             ]);
         }
 
@@ -147,26 +118,24 @@ class CartController extends Controller
     }
 
     /**
-     * Handle item quantity increase or decrease.
+     * Handle item quantity increase or decrease by product ID.
      *
      * @param HandleItemQuantityRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function handleItemQuantity(HandleItemQuantityRequest $request)
     {
-        $request->validated();
+        $productId = $request->validated('product_id');
 
-        $cart = $request->user()?->cart;
-
-        if ($request->action === 'increase') {
-            $this->handleProductCart->increase($request->product_id, $cart);
-        } elseif ($request->action === 'decrease') {
-            $this->handleProductCart->decrease($request->product_id, $cart);
+        if ($request->validated('action') === 'increase') {
+            $this->cartService->increaseQuantityByProduct($productId);
+        } elseif ($request->validated('action') === 'decrease') {
+            $this->cartService->decreaseQuantityByProduct($productId);
         }
 
         if ($request->wantsJson()) {
             return response()->json([
-                'cart' => CartResource::make(CartFactory::make()->load('items.product')),
+                'cart' => $this->cartService->getCart()->toResource(),
             ]);
         }
 
@@ -177,16 +146,16 @@ class CartController extends Controller
      * Handle item quantity increase or decrease by cart_item_id.
      *
      * @param HandleItemQuantityByIdRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function handleItemQuantityById(HandleItemQuantityByIdRequest $request)
     {
-        $request->validated();
+        $itemId = $request->validated('item_id');
 
-        if ($request->action === 'increase') {
-            $this->handleProductCart->increaseByItemId($request->item_id, $request->user()?->cart);
+        if ($request->validated('action') === 'increase') {
+            $this->cartService->increaseQuantity($itemId);
         } else {
-            $this->handleProductCart->decreaseByItemId($request->item_id, $request->user()?->cart);
+            $this->cartService->decreaseQuantity($itemId);
         }
 
         return redirect()->back();
@@ -237,11 +206,17 @@ class CartController extends Controller
         $sessionId = $request->get('session_id');
 
         if (!$sessionId) {
-            return redirect()->route('home')->withErrors(['session_id' => "L'id de session n'est pas fourni."]);
+            return redirect()->route('home')->withErrors([
+                'session_id' => "L'id de session n'est pas fourni.",
+            ]);
         }
 
         return Inertia::render('checkout/success', [
-            'order' => auth()->user()->orders()->where('stripe_checkout_session_id', $sessionId)->with('items')->firstOrFail(),
+            'order' => auth()->user()
+                ->orders()
+                ->where('stripe_checkout_session_id', $sessionId)
+                ->with('items')
+                ->firstOrFail(),
         ]);
     }
 }
