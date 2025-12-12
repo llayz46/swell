@@ -31,3 +31,4 @@ CLAUDE.md
 /database/migrations/2025_07_12_154708_create_reviews_table.php
 /database/migrations/2025_06_23_071253_create_wishlists_table.php
 /database/migrations/2025_06_23_071318_create_wishlist_items.php
+exemple-data-structure

@@ -59,6 +59,9 @@ class HandleInertiaRequests extends Middleware
                     'enabled' => config('swell.loyalty.enabled', false),
                     'points_per_euro' => config('swell.loyalty.points_per_euro', 10),
                     'minimum_redeem_points' => config('swell.loyalty.minimum_redeem_points', 100),
+                ],
+                'workspace' => [
+                    'enabled' => config('swell.workspace.enabled', true),
                 ]
             ],
             'auth' => [

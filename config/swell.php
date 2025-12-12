@@ -50,4 +50,13 @@ return [
         // Maximum discount percentage using points
         'max_discount_percentage' => env('SWELL_LOYALTY_MAX_DISCOUNT', 50),
     ],
+    
+    /*
+     * Enable or disable the workspace feature.
+     * This can be controlled via the SWELL_WORKSPACE_ENABLED environment variable.
+     */
+    'workspace' => [
+        'enabled' => env('SWELL_WORKSPACE_ENABLED', true),
+        'identifier_prefix' => env('SWELL_WORKSPACE_IDENTIFIER_PREFIX', 'WS'),
+    ]
 ];
