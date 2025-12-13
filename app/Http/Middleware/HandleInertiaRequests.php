@@ -45,25 +45,27 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'swell' => [
-                'wishlist' => [
-                    'enabled' => config('swell.wishlist.enabled', true),
-                ],
-                'banner' => [
-                    'enabled' => config('swell.banner.enabled', true),
-                ],
-                'review' => [
-                    'enabled' => config('swell.review.enabled', true),
-                ],
-                'loyalty' => [
-                    'enabled' => config('swell.loyalty.enabled', false),
-                    'points_per_euro' => config('swell.loyalty.points_per_euro', 10),
-                    'minimum_redeem_points' => config('swell.loyalty.minimum_redeem_points', 100),
-                ],
-                'workspace' => [
-                    'enabled' => config('swell.workspace.enabled', true),
-                ]
-            ],
+            'swell' => fn () => Cache::rememberForever('swell_config', function () {
+                return [
+                    'wishlist' => [
+                        'enabled' => config('swell.wishlist.enabled', true),
+                    ],
+                    'banner' => [
+                        'enabled' => config('swell.banner.enabled', true),
+                    ],
+                    'review' => [
+                        'enabled' => config('swell.review.enabled', true),
+                    ],
+                    'loyalty' => [
+                        'enabled' => config('swell.loyalty.enabled', false),
+                        'points_per_euro' => config('swell.loyalty.points_per_euro', 10),
+                        'minimum_redeem_points' => config('swell.loyalty.minimum_redeem_points', 100),
+                    ],
+                    'workspace' => [
+                        'enabled' => config('swell.workspace.enabled', true),
+                    ]
+                ];
+            }),
             'auth' => [
                 'user' => fn () => $request->user()?->load('roles'),
             ],
