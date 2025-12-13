@@ -8,12 +8,11 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { useInitials } from '@/hooks/use-initials';
 import BaseLayout from '@/layouts/base-layout';
 import { cn } from '@/lib/utils';
-import type { Product, SharedData } from '@/types';
+import type { Product } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ArrowRight, BookOpenText, Monitor, Package, Puzzle, ShoppingCartIcon, Star } from 'lucide-react';
-import { ReactNode, useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { ReactNode, useState } from 'react';
 
 const BENEFITS = [
     {
@@ -155,7 +154,7 @@ export default function Home({ products }: { products: Product[] }) {
         <BaseLayout>
             <Head title="Accueil" />
 
-            <div className="absolute top-30 right-0 left-0 -z-10 h-250 w-full bg-[radial-gradient(#e5e7eb_1px,#ffffff_1px)] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_100%_50%_at_50%_100%,#000_100%,transparent_220%)] after:absolute after:bottom-0 after:h-72 after:w-full after:bg-linear-to-t after:from-background after:to-transparent dark:bg-[radial-gradient(#262626FF_1px,#0A0A0AFF_1px)]"></div>
+            <div className="absolute top-30 right-0 left-0 -z-10 h-250 w-full bg-[radial-gradient(#e5e7eb_1px,#ffffff_1px)] bg-size-[20px_20px] mask-[radial-gradient(ellipse_100%_50%_at_50%_100%,#000_100%,transparent_220%)] after:absolute after:bottom-0 after:h-72 after:w-full after:bg-linear-to-t after:from-background after:to-transparent dark:bg-[radial-gradient(#262626FF_1px,#0A0A0AFF_1px)]"></div>
 
             {/* Hero Section */}
             <section className="pt-10 sm:pt-20">
