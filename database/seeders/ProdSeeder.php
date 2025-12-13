@@ -119,5 +119,9 @@ class ProdSeeder extends Seeder
         }
 
         $this->call(ProdDashboardAdminSeeder::class);
+        
+        if (config('swell.workspace.enabled', false)) {
+            $this->call(\App\Modules\Workspace\Database\Seeders\WorkspaceModuleSeeder::class);
+        }
     }
 }

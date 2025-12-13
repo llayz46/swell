@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Modules\Workspace\Models\IssueAssignment;
+use App\Modules\Workspace\Models\Issue;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +12,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class IssueAssignmentFactory extends Factory
 {
+    protected $model = IssueAssignment::class;
+
     /**
      * Define the model's default state.
      *
@@ -17,7 +22,9 @@ class IssueAssignmentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'issue_id' => Issue::inRandomOrder()->first()?->id ?? Issue::factory(),
+            'user_id' => $this->faker->optional(0.9)->randomElement(User::pluck('id')->toArray()),
+            'assigned_by' => User::inRandomOrder()->first()?->id ?? User::factory(),
         ];
     }
 }
