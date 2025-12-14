@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace App\Modules\Workspace\database\factories;
 
 use App\Modules\Workspace\Models\IssueLabel;
 use Illuminate\Database\Eloquent\Factories\Factory;

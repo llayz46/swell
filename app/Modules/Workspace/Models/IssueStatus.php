@@ -8,8 +8,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class IssueStatus extends Model
 {
-    /** @use HasFactory<\Database\Factories\IssueStatusFactory> */
     use HasFactory;
+    
+    protected static function newFactory()
+    {
+        return \App\Modules\Workspace\database\factories\IssueStatusFactory::new();
+    }
 
     protected $fillable = [
         'slug',

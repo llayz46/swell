@@ -8,8 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class IssueLabel extends Model
 {
-    /** @use HasFactory<\Database\Factories\IssueLabelFactory> */
     use HasFactory;
+    
+    protected static function newFactory()
+    {
+        return \App\Modules\Workspace\database\factories\IssueLabelFactory::new();
+    }
 
     protected $fillable = [
         'slug',

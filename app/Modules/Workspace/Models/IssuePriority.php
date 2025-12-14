@@ -8,8 +8,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class IssuePriority extends Model
 {
-    /** @use HasFactory<\Database\Factories\IssuePriorityFactory> */
     use HasFactory;
+    
+    protected static function newFactory()
+    {
+        return \App\Modules\Workspace\database\factories\IssuePriorityFactory::new();
+    }
 
     protected $fillable = [
         'slug',

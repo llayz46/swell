@@ -10,6 +10,7 @@ use App\Http\Controllers\PromotionController;
 use App\Modules\Loyalty\Http\Controllers\LoyaltyController;
 use App\Modules\Review\Http\Controllers\ReviewController;
 use App\Modules\Wishlist\Http\Controllers\WishlistController;
+use App\Modules\Workspace\Http\Controllers\WorkspaceDashboardController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -44,6 +45,65 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware('feature:loyalty')->prefix('loyalty')->group(function () {
         Route::get('/', [LoyaltyController::class, 'index'])->name('loyalty.index');
+    });
+    
+    Route::middleware(['role:workspace-admin|team-lead|team-member', 'feature:workspace'])
+          ->prefix('workspace')->name('workspace.')->group(function () {
+        Route::get('/', WorkspaceDashboardController::class)->name('index');
+
+    //     Route::prefix('inbox')->name('inbox.')->group(function () {
+    //         Route::get('/', [WorkspaceInboxController::class, 'index'])->name('index');
+    //         Route::put('/{inboxItem}', [WorkspaceInboxController::class, 'markAsRead'])->name('read');
+    //         Route::post('/read-all', [WorkspaceInboxController::class, 'markAllAsRead'])->name('read-all');
+    //     });
+
+    //     Route::get('/my-issues', WorkspaceMyIssuesController::class)->name('my-issues');
+
+    //     Route::get('/members', WorkspaceMembersController::class)->name('members');
+
+    //     Route::prefix('teams')->name('teams.')->group(function () {
+    //         Route::get('/', [WorkspaceTeamController::class, 'index'])->name('index');
+    //         Route::post('/', [WorkspaceTeamController::class, 'store'])
+    //             ->middleware('permission:workspace.teams.create')
+    //             ->name('store');
+
+    //         Route::get('/{team}/issues', [WorkspaceTeamController::class, 'issues'])->name('issues');
+    //         Route::get('/{team}/members', [WorkspaceTeamController::class, 'members'])->name('members');
+    //         Route::put('/{team}', [WorkspaceTeamController::class, 'update'])->name('update');
+    //         Route::delete('/{team}', [WorkspaceTeamController::class, 'destroy'])->name('destroy');
+    //         Route::post('/{team}/invite', [WorkspaceTeamController::class, 'invite'])->name('invite');
+    //         Route::post('/{team}/leave', [WorkspaceTeamController::class, 'leave'])->name('leave');
+    //         Route::delete('/{team}/remove/{user}', [WorkspaceTeamController::class, 'removeMember'])->name('remove-member');
+    //         Route::post('/{team}/join', [WorkspaceTeamController::class, 'join'])->name('join');
+
+    //         // Transfert de lead (team-lead uniquement)
+    //         Route::post('/{team}/transfer-lead', [WorkspaceTeamController::class, 'transferLead'])
+    //             ->middleware('permission:workspace.teams.transfer-lead')
+    //             ->name('transfer-lead');
+
+    //         // Routes admin uniquement (workspace-admin)
+    //         Route::middleware('role:workspace-admin')->group(function () {
+    //             Route::post('/{team}/promote/{user}', [WorkspaceTeamController::class, 'promoteMember'])
+    //                 ->name('promote-member');
+    //             Route::post('/{team}/demote/{user}', [WorkspaceTeamController::class, 'demoteMember'])
+    //                 ->name('demote-member');
+    //             Route::post('/{team}/add-member', [WorkspaceTeamController::class, 'addMemberAsAdmin'])
+    //                 ->name('add-member-admin');
+    //         });
+    //     });
+
+    //     // Issues routes
+    //     Route::prefix('issues')->name('issues.')->group(function () {
+    //         Route::get('/{issue}', [WorkspaceIssueController::class, 'show'])->name('show');
+    //         Route::post('/', [WorkspaceIssueController::class, 'store'])->name('store');
+    //         Route::put('/{issue}', [WorkspaceIssueController::class, 'update'])->name('update');
+    //         Route::delete('/{issue}', [WorkspaceIssueController::class, 'destroy'])->name('destroy');
+
+    //         // Assigner une issue (team-lead ou workspace-admin)
+    //         Route::post('/{issue}/assign', [WorkspaceIssueController::class, 'assign'])
+    //             ->middleware('permission:workspace.issues.assign')
+    //             ->name('assign');
+    //     });
     });
 });
 

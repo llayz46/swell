@@ -10,9 +10,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Team extends Model
 {
-    /** @use HasFactory<\Database\Factories\TeamFactory> */
     use HasFactory;
     
+    protected static function newFactory()
+    {
+        return \App\Modules\Workspace\database\factories\TeamFactory::new();
+    }
+
     protected $fillable = [
         'identifier',
         'name',
@@ -65,5 +69,60 @@ class Team extends Model
         return $this->members()
             ->wherePivot('user_id', $user->id)
             ->exists();
+    }
+
+    /**
+     * Transférer le rôle de lead d'un utilisateur à un autre
+     * Utilisé par un team lead pour transférer son rôle
+     */
+    public function transferLead(User $fromUser, User $toUser): void
+    {
+        // Vérifier que fromUser est bien lead
+        if (!$this->isLead($fromUser)) {
+            throw new \Exception("L'utilisateur source n'est pas lead de cette team");
+        }
+
+        // Vérifier que toUser est membre
+        if (!$this->isMember($toUser)) {
+            throw new \Exception("L'utilisateur cible n'est pas membre de cette team");
+        }
+
+        // Rétrograder le lead actuel en membre
+        $this->members()->updateExistingPivot($fromUser->id, [
+            'role' => 'member',
+        ]);
+
+        // Promouvoir le nouveau lead
+        $this->members()->updateExistingPivot($toUser->id, [
+            'role' => 'lead',
+        ]);
+    }
+
+    /**
+     * Promouvoir un membre en lead (utilisé par workspace-admin)
+     */
+    public function promoteMember(User $user): void
+    {
+        if (!$this->isMember($user)) {
+            throw new \Exception("L'utilisateur n'est pas membre de cette team");
+        }
+
+        $this->members()->updateExistingPivot($user->id, [
+            'role' => 'lead',
+        ]);
+    }
+
+    /**
+     * Rétrograder un lead en membre (utilisé par workspace-admin)
+     */
+    public function demoteLead(User $user): void
+    {
+        if (!$this->isLead($user)) {
+            throw new \Exception("L'utilisateur n'est pas lead de cette team");
+        }
+
+        $this->members()->updateExistingPivot($user->id, [
+            'role' => 'member',
+        ]);
     }
 }

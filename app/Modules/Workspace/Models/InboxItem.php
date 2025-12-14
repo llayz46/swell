@@ -9,8 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InboxItem extends Model
 {
-    /** @use HasFactory<\Database\Factories\InboxItemFactory> */
     use HasFactory;
+    
+    protected static function newFactory()
+    {
+        return \App\Modules\Workspace\database\factories\InboxItemFactory::new();
+    }
     
     protected $fillable = [
         'user_id',

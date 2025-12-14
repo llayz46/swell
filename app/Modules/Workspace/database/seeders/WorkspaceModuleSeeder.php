@@ -53,13 +53,19 @@ class WorkspaceModuleSeeder extends Seeder
     {
         $this->command->info('Creating roles and permissions...');
 
-        $permissions = [
+        // Toutes les permissions possibles
+        $allPermissions = [
             'workspace.access',
+            'workspace.admin.manage',           // Admin global
             'workspace.teams.view',
             'workspace.teams.create',
             'workspace.teams.update',
             'workspace.teams.delete',
+            'workspace.teams.manage-all',       // Gérer toutes les teams
+            'workspace.teams.manage-own',       // Gérer ses propres teams
             'workspace.teams.manage-members',
+            'workspace.teams.assign-leads',     // Promouvoir/rétrograder leads
+            'workspace.teams.transfer-lead',    // Transférer son lead
             'workspace.issues.view',
             'workspace.issues.create',
             'workspace.issues.update',
@@ -68,21 +74,39 @@ class WorkspaceModuleSeeder extends Seeder
             'workspace.inbox.view',
         ];
 
-        foreach ($permissions as $permission) {
+        foreach ($allPermissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-        $teamLead = Role::firstOrCreate(['name' => 'team-lead']);
-        $teamLead->syncPermissions($permissions);
+        // Workspace Admin - Toutes les permissions
+        $workspaceAdmin = Role::firstOrCreate(['name' => 'workspace-admin']);
+        $workspaceAdmin->syncPermissions($allPermissions);
 
-        $member = Role::firstOrCreate(['name' => 'member']);
-        $member->syncPermissions([
+        // Team Lead - Gérer ses propres teams
+        $teamLead = Role::firstOrCreate(['name' => 'team-lead']);
+        $teamLead->syncPermissions([
+            'workspace.access',
+            'workspace.teams.view',
+            'workspace.teams.create',
+            'workspace.teams.manage-own',
+            'workspace.teams.manage-members',
+            'workspace.teams.transfer-lead',
+            'workspace.issues.view',
+            'workspace.issues.create',
+            'workspace.issues.update',
+            'workspace.issues.delete',
+            'workspace.issues.assign',
+            'workspace.inbox.view',
+        ]);
+
+        // Team Member - Participation
+        $teamMember = Role::firstOrCreate(['name' => 'team-member']);
+        $teamMember->syncPermissions([
             'workspace.access',
             'workspace.teams.view',
             'workspace.issues.view',
             'workspace.issues.create',
             'workspace.issues.update',
-            'workspace.issues.assign',
             'workspace.inbox.view',
         ]);
     }
@@ -137,42 +161,52 @@ class WorkspaceModuleSeeder extends Seeder
         $this->command->info('Creating users...');
 
         $existingUsers = User::whereIn('email', [
+            'workspace-admin@example.com',
             'lead@example.com',
             'member1@example.com',
             'member2@example.com',
             'member3@example.com',
         ])->get();
 
-        if ($existingUsers->count() >= 4) {
+        if ($existingUsers->count() >= 5) {
             $this->command->info('Using existing users...');
             return $existingUsers;
         }
 
+        // Workspace Admin
+        $workspaceAdmin = User::factory()->create([
+            'name' => 'Workspace Admin',
+            'email' => 'workspace-admin@example.com',
+        ]);
+        $workspaceAdmin->assignRole('workspace-admin');
+
+        // Team Lead
         $teamLead = User::factory()->create([
             'name' => 'Team Lead',
             'email' => 'lead@example.com',
         ]);
         $teamLead->assignRole('team-lead');
 
+        // Team Members
         $member1 = User::factory()->create([
             'name' => 'John Developer',
             'email' => 'member1@example.com',
         ]);
-        $member1->assignRole('member');
+        $member1->assignRole('team-member');
 
         $member2 = User::factory()->create([
             'name' => 'Jane Designer',
             'email' => 'member2@example.com',
         ]);
-        $member2->assignRole('member');
+        $member2->assignRole('team-member');
 
         $member3 = User::factory()->create([
             'name' => 'Bob Tester',
             'email' => 'member3@example.com',
         ]);
-        $member3->assignRole('member');
+        $member3->assignRole('team-member');
 
-        return collect([$teamLead, $member1, $member2, $member3]);
+        return collect([$workspaceAdmin, $teamLead, $member1, $member2, $member3]);
     }
 
     private function createTeams($users)
@@ -202,7 +236,7 @@ class WorkspaceModuleSeeder extends Seeder
             'description' => 'UI/UX and design system team',
         ]);
         $designTeam->addMember($teamLead, 'lead');
-        $designTeam->addMember($members->get(1), 'member');
+        $designTeam->addMember($members->values()[1], 'member');
 
         $perfTeam = Team::create([
             'identifier' => 'PERF',
@@ -212,7 +246,7 @@ class WorkspaceModuleSeeder extends Seeder
             'description' => 'Performance optimization and monitoring',
         ]);
         $perfTeam->addMember($teamLead, 'lead');
-        $perfTeam->addMember($members->get(2), 'member');
+        $perfTeam->addMember($members->values()[2], 'member');
 
         return collect([$coreTeam, $designTeam, $perfTeam]);
     }

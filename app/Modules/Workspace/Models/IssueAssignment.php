@@ -9,8 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class IssueAssignment extends Model
 {
-    /** @use HasFactory<\Database\Factories\IssueAssignmentFactory> */
     use HasFactory;
+    
+    protected static function newFactory()
+    {
+        return \App\Modules\Workspace\database\factories\IssueAssignmentFactory::new();
+    }
 
     protected $table = 'issue_assignments';
 

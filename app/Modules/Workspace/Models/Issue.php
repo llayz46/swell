@@ -11,8 +11,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Issue extends Model
 {
-    /** @use HasFactory<\Database\Factories\IssueFactory> */
     use HasFactory;
+    
+    protected static function newFactory()
+    {
+        return \App\Modules\Workspace\database\factories\IssueFactory::new();
+    }
     
     protected $fillable = [
         'identifier',
