@@ -56,16 +56,16 @@ class WorkspaceModuleSeeder extends Seeder
         // Toutes les permissions possibles
         $allPermissions = [
             'workspace.access',
-            'workspace.admin.manage',           // Admin global
+            'workspace.admin.manage',
             'workspace.teams.view',
             'workspace.teams.create',
             'workspace.teams.update',
             'workspace.teams.delete',
-            'workspace.teams.manage-all',       // Gérer toutes les teams
-            'workspace.teams.manage-own',       // Gérer ses propres teams
+            'workspace.teams.manage-all',
+            'workspace.teams.manage-own',
             'workspace.teams.manage-members',
-            'workspace.teams.assign-leads',     // Promouvoir/rétrograder leads
-            'workspace.teams.transfer-lead',    // Transférer son lead
+            'workspace.teams.assign-leads',
+            'workspace.teams.transfer-lead',
             'workspace.issues.view',
             'workspace.issues.create',
             'workspace.issues.update',
@@ -78,11 +78,11 @@ class WorkspaceModuleSeeder extends Seeder
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-        // Workspace Admin - Toutes les permissions
+        // Workspace Admin
         $workspaceAdmin = Role::firstOrCreate(['name' => 'workspace-admin']);
         $workspaceAdmin->syncPermissions($allPermissions);
 
-        // Team Lead - Gérer ses propres teams
+        // Team Lead
         $teamLead = Role::firstOrCreate(['name' => 'team-lead']);
         $teamLead->syncPermissions([
             'workspace.access',
@@ -99,7 +99,7 @@ class WorkspaceModuleSeeder extends Seeder
             'workspace.inbox.view',
         ]);
 
-        // Team Member - Participation
+        // Team Member
         $teamMember = Role::firstOrCreate(['name' => 'team-member']);
         $teamMember->syncPermissions([
             'workspace.access',
