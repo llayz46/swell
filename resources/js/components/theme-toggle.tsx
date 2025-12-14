@@ -29,7 +29,7 @@ export default function ThemeToggle() {
             <DropdownMenuContent align="end">
                 {items.map(({ value, icon: Icon, label }) => {
                     return (
-                        <DropdownMenuItem key={value} onClick={() => updateAppearance(value)}>
+                        <DropdownMenuItem key={value} onClick={() => updateAppearance(value)} data-state={value === appearance ? 'active' : 'inactive'} className="data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
                             <Icon className="mr-2 size-4" />
                             <span>{label}</span>
                         </DropdownMenuItem>

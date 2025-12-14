@@ -5,6 +5,7 @@ import WorkspaceNewIssueDialog from '@/components/swell/workspace/workspace-new-
 import ThemeToggle from '@/components/theme-toggle';
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { workspaceSidebarConfig } from '@/config/sidebar';
 import { SharedData, type NavItem } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { BookOpen, ChevronsUpDown } from 'lucide-react';
@@ -22,7 +23,11 @@ export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: { mainNavI
     const { name } = usePage<SharedData>().props;
 
     return (
-        <Sidebar collapsible="offcanvas" variant="inset" className="p-0">
+        <Sidebar
+            collapsible={workspaceSidebarConfig.collapsible}
+            variant={workspaceSidebarConfig.variant}
+            className="**:data-[sidebar='sidebar']:bg-background p-0"
+        >
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
