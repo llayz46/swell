@@ -6,9 +6,9 @@ import ThemeToggle from '@/components/theme-toggle';
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { workspaceSidebarConfig } from '@/config/sidebar';
-import { SharedData, type NavItem } from '@/types';
+import type { SharedData, NavItem, NavItemWithChildren } from '@/types';
 import { usePage } from '@inertiajs/react';
-import { BookOpen, ChevronsUpDown } from 'lucide-react';
+import { BookOpen, ChevronsUpDown, FolderMinus, Users } from 'lucide-react';
 import { WorkspaceNavGroup } from './workspace-nav-group';
 
 const footerNavItems: NavItem[] = [
@@ -19,8 +19,30 @@ const footerNavItems: NavItem[] = [
     },
 ];
 
-export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: { mainNavItems: NavItem[]; workspaceNavItems: NavItem[] }) {
-    const { name } = usePage<SharedData>().props;
+interface SidebarProps {
+    mainNavItems: NavItem[];
+    workspaceNavItems: NavItem[];
+}
+
+export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: SidebarProps) {
+    const { name, auth } = usePage<SharedData>().props;
+
+    const teamsNavItems: NavItemWithChildren[] = (auth.teams ?? []).map(team => ({
+        title: team.name,
+        icon: team.icon,
+        childrens: [
+            {
+                title: 'Tâches',
+                href: `/workspace/${team.id}/issues`,
+                icon: FolderMinus,
+            },
+            {
+                title: 'Membres',
+                href: `/workspace/${team.id}/members`,
+                icon: Users,
+            },
+        ]
+    }));
 
     return (
         <Sidebar
@@ -60,6 +82,9 @@ export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: { mainNavI
             <SidebarContent>
                 <WorkspaceNavGroup items={mainNavItems} />
                 <WorkspaceNavGroup items={workspaceNavItems} label="Workspace" />
+                {teamsNavItems.length > 0 && (
+                    <WorkspaceNavGroup items={teamsNavItems} label="Mes teams" />
+                )}
             </SidebarContent>
 
             <SidebarFooter>

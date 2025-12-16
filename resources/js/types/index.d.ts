@@ -5,6 +5,7 @@ import { Team } from './workspace';
 
 export interface Auth {
     user: User;
+    teams: Team[];
 }
 
 export interface BreadcrumbItem {
@@ -22,6 +23,12 @@ export interface NavItem {
     href: string;
     icon?: LucideIcon | null;
     isActive?: boolean;
+}
+
+export interface NavItemWithChildren {
+    title: string;
+    icon?: LucideIcon | string | undefined;
+    childrens: NavItem[];
 }
 
 export type BannerItem = {

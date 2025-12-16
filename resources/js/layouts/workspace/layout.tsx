@@ -6,12 +6,18 @@ import { WorkspaceSidebar } from '@/components/swell/workspace/workspace-sidebar
 import type { NavItem } from '@/types';
 import { type PropsWithChildren } from 'react';
 
+interface SidebarProps {
+    mainNavItems: NavItem[];
+    workspaceNavItems: NavItem[];
+    header: React.ReactNode;
+}
+
 export default function AppSidebarLayout({
     children,
     header,
     mainNavItems,
     workspaceNavItems,
-}: PropsWithChildren<{ mainNavItems: NavItem[]; workspaceNavItems: NavItem[], header: React.ReactNode }>) {
+}: PropsWithChildren<SidebarProps>) {
     return (
         <WorkspaceShell variant="sidebar">
             <WorkspaceSidebar mainNavItems={mainNavItems} workspaceNavItems={workspaceNavItems} />
