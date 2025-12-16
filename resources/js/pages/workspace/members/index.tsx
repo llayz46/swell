@@ -10,9 +10,9 @@ import { Head } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 
 const TABLE_COLUMNS = [
-    { label: 'Nom', className: 'w-[70%] md:w-[60%] lg:w-[55%]' },
-    { label: 'Rôle', className: 'w-[30%] md:w-[20%] lg:w-[15%]' },
-    { label: 'Teams', className: 'hidden md:block md:w-[20%] lg:w-[30%]' },
+    { label: 'Nom', className: 'w-[85%] md:w-[70%]' },
+    { label: 'Rôle', className: 'w-[15%]' },
+    { label: 'Teams', className: 'hidden md:block md:w-[15%]' },
 ];
 
 export default function Index({ members }: { members: User[] }) {
@@ -50,7 +50,7 @@ export default function Index({ members }: { members: User[] }) {
 function MemberRow({ user }: { user: User }) {
     return (
         <div className="flex w-full items-center border-b border-muted-foreground/5 px-6 py-3 text-sm hover:bg-sidebar/50">
-            <div className="flex w-[70%] items-center gap-2 md:w-[60%] lg:w-[55%]">
+            <div className="flex w-[85%] md:w-[70%] items-center gap-2">
                 <Avatar className="size-8 shrink-0">
                     <AvatarImage src={user.avatarUrl} alt={user.name} />
                     <AvatarFallback>{user.name[0]}</AvatarFallback>
@@ -62,11 +62,11 @@ function MemberRow({ user }: { user: User }) {
                 </div>
             </div>
 
-            <div className="w-[30%] text-xs text-muted-foreground md:w-[20%] lg:w-[15%]">
+            <div className="w-[15%] text-xs text-muted-foreground">
                 <Badge variant="secondary">{formatWorkspaceRole(user.roles)}</Badge>
             </div>
 
-            <div className="hidden w-[30%] text-xs text-muted-foreground md:flex md:w-[20%] lg:w-[30%]">
+            <div className="hidden w-[30%] text-xs text-muted-foreground md:flex md:w-[15%]">
                 {user.teams && <TeamsBadgeGroup teams={user.teams} />}
             </div>
         </div>
