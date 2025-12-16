@@ -71,6 +71,13 @@ class Team extends Model
             ->exists();
     }
 
+    public function getRoleForUser(User $user): ?string
+    {
+        return $this->members()
+            ->wherePivot('user_id', $user->id)
+            ->value('role');
+    }
+
     /**
      * Transférer le rôle de lead d'un utilisateur à un autre
      * Utilisé par un team lead pour transférer son rôle

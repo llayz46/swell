@@ -1,6 +1,7 @@
 import { LucideIcon } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
 import type { Config } from 'ziggy-js';
+import { Team } from './workspace';
 
 export interface Auth {
     user: User;
@@ -65,7 +66,8 @@ export interface User {
     email: string;
     avatar?: string;
     avatar_url?: string;
-    roles: {
+    avatarUrl?: string; // API Resource format
+    roles: string[] | {
         id: number;
         name: string;
         guard_name: string;
@@ -77,9 +79,12 @@ export interface User {
             role_id: number;
         };
     }[];
-    email_verified_at: string | null;
-    created_at: string;
-    updated_at: string;
+    teams?: Team[];
+    email_verified_at?: string | null;
+    created_at?: string;
+    createdAt?: string; // API Resource format
+    updated_at?: string;
+    updatedAt?: string; // API Resource format
     [key: string]: unknown; // This allows for additional properties...
 }
 

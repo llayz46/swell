@@ -11,6 +11,8 @@ use App\Modules\Loyalty\Http\Controllers\LoyaltyController;
 use App\Modules\Review\Http\Controllers\ReviewController;
 use App\Modules\Wishlist\Http\Controllers\WishlistController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceDashboardController;
+use App\Modules\Workspace\Http\Controllers\WorkspaceTeamController;
+use App\Modules\Workspace\Http\Controllers\WorkspaceMembersController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -59,10 +61,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //     Route::get('/my-issues', WorkspaceMyIssuesController::class)->name('my-issues');
 
-    //     Route::get('/members', WorkspaceMembersController::class)->name('members');
+        Route::get('/members', WorkspaceMembersController::class)->name('members');
 
-    //     Route::prefix('teams')->name('teams.')->group(function () {
-    //         Route::get('/', [WorkspaceTeamController::class, 'index'])->name('index');
+        Route::prefix('teams')->name('teams.')->group(function () {
+            Route::get('/', [WorkspaceTeamController::class, 'index'])->name('index');
     //         Route::post('/', [WorkspaceTeamController::class, 'store'])
     //             ->middleware('permission:workspace.teams.create')
     //             ->name('store');
@@ -90,7 +92,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //             Route::post('/{team}/add-member', [WorkspaceTeamController::class, 'addMemberAsAdmin'])
     //                 ->name('add-member-admin');
     //         });
-    //     });
+        });
 
     //     // Issues routes
     //     Route::prefix('issues')->name('issues.')->group(function () {

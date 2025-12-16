@@ -4,10 +4,12 @@ namespace App\Models;
 
  use App\Modules\Review\Models\Review;
  use App\Modules\Wishlist\Models\Wishlist;
+ use App\Modules\Workspace\Models\Team;
  use Illuminate\Contracts\Auth\MustVerifyEmail;
  use Illuminate\Database\Eloquent\Factories\HasFactory;
  use Illuminate\Database\Eloquent\Relations\HasMany;
  use Illuminate\Database\Eloquent\Relations\HasOne;
+ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  use Illuminate\Foundation\Auth\User as Authenticatable;
  use Illuminate\Notifications\Notifiable;
  use Illuminate\Support\Facades\Storage;
@@ -91,5 +93,11 @@ namespace App\Models;
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+    
+    public function teams(): BelongsToMany
+    {
+        return $this->belongsToMany(Team::class)
+                    ->withPivot(['role', 'joined_at']);
     }
  }

@@ -1,5 +1,5 @@
 import WorkspaceLayoutTemplate from '@/layouts/workspace/layout';
-import { type PropsWithChildren } from 'react';
+import { type PropsWithChildren, type ReactNode } from 'react';
 import { NavItem } from '@/types';
 import { Inbox, FolderKanban, User, Contact, ChartColumn } from 'lucide-react';
 
@@ -34,11 +34,16 @@ const workspaceNavItems: NavItem[] = [
     },
 ];
 
-export default function WorkspaceLayout({ children }: PropsWithChildren) {
+interface WorkspaceLayoutProps extends PropsWithChildren {
+    header?: ReactNode;
+}
+
+export default function WorkspaceLayout({ children, header }: WorkspaceLayoutProps) {
     return (
-        <WorkspaceLayoutTemplate 
-            mainNavItems={mainNavItems} 
+        <WorkspaceLayoutTemplate
+            mainNavItems={mainNavItems}
             workspaceNavItems={workspaceNavItems}
+            header={header}
         >
             {children}
         </WorkspaceLayoutTemplate>
