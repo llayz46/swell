@@ -4,6 +4,7 @@ namespace App\Modules\Workspace\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Workspace\Models\Team;
+use App\Modules\Workspace\Models\Issue;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -28,7 +29,42 @@ class WorkspaceTeamController extends Controller
             'teams' => $teams->toResourceCollection()
         ]);
     }
+    
+    public function issues(Team $team, Request $request): Response
+    {
+        auth()->user()->can('view', $team);
+        
+        $query = Issue::query()
+            ->with(['status', 'priority', 'assignee', 'labels', 'creator'])
+            ->where('team_id', $team->id);
 
+        // Filtres
+        if ($request->has('status')) {
+            $query->whereHas('status', fn($q) => $q->where('slug', $request->status));
+        }
+
+        if ($request->has('priority')) {
+            $query->whereHas('priority', fn($q) => $q->where('slug', $request->priority));
+        }
+
+        $issues = $query
+            ->orderBy('rank')
+            ->paginate(50);
+
+        return Inertia::render('workspace/teams/issues', [
+            'team' => $team->load('members', 'leads')->toResource(),
+            'issues' => $issues->toResourceCollection(),
+            'filters' => $request->only(['status', 'priority']),
+            'isLead' => $team->isLead(auth()->user()),
+            'isMember' => $team->isMember(auth()->user()),
+        ]);        
+    }
+    
+    public function members(Team $team): Response
+    {
+        
+    }
+    
     /**
      * Show the form for creating a new resource.
      */

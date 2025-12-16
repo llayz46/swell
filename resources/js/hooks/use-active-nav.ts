@@ -22,6 +22,11 @@ export function useActiveNav(href: string): boolean {
     if (href === '/workspace') {
         return currentUrl === '/workspace';
     }
+    
+    // Special case for /workspace route - only active when URL is exactly /workspace
+    if (href === '/workspace/teams') {
+        return currentUrl === '/workspace/teams';
+    }
 
     // For other routes, check if:
     // 1. URL matches exactly

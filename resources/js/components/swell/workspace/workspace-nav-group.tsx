@@ -29,7 +29,7 @@ import { useActiveNav } from '@/hooks/use-active-nav';
 import { NavItemWithChildren, type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 
-function isNavItemWithChildren(item: NavItem | NavItemWithChildren): item is NavItemWithChildren {
+const isNavItemWithChildren = (item: NavItem | NavItemWithChildren): item is NavItemWithChildren => {
     return 'childrens' in item && Array.isArray(item.childrens);
 }
 
@@ -61,9 +61,22 @@ export function WorkspaceNavGroup({ items = [], label }: { items: (NavItem | Nav
     );
 }
 
-const SidebarMenuItemWithActive = ({ item }: { item: NavItem }) => {
+const SidebarMenuItemWithActive = ({ child = false, item }: { child?: boolean, item: NavItem }) => {
     const isActive = useActiveNav(item.href);
-
+    
+    if (child) {
+        return (
+            <SidebarMenuSubItem>
+                <SidebarMenuSubButton asChild isActive={isActive}>
+                    <Link href={item.href}>
+                        {item.icon && <item.icon size={14} />}
+                        <span>{item.title}</span>
+                    </Link>
+                </SidebarMenuSubButton>
+            </SidebarMenuSubItem>
+        );   
+    }
+    
     return (
         <SidebarMenuItem>
             <SidebarMenuButton asChild isActive={isActive} tooltip={{ children: item.title }}>
@@ -129,14 +142,7 @@ const CollapsibleNavItem = ({ item, defaultOpen }: { item: NavItemWithChildren; 
                 <CollapsibleContent>
                     <SidebarMenuSub>
                         {item.childrens.map((child) => (
-                            <SidebarMenuSubItem key={child.title}>
-                                <SidebarMenuSubButton asChild>
-                                    <Link href={child.href}>
-                                        {child.icon && <child.icon size={14} />}
-                                        <span>{child.title}</span>
-                                    </Link>
-                                </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
+                            <SidebarMenuItemWithActive key={child.title} child item={child} />
                         ))}
                     </SidebarMenuSub>
                 </CollapsibleContent>
