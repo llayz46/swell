@@ -48,7 +48,6 @@ export default function Index({ members }: { members: User[] }) {
 }
 
 function MemberRow({ user }: { user: User }) {
-    console.log(user)
     return (
         <div className="flex w-full items-center border-b border-muted-foreground/5 px-6 py-3 text-sm hover:bg-sidebar/50">
             <div className="flex w-[70%] items-center gap-2 md:w-[60%] lg:w-[55%]">
