@@ -33,12 +33,12 @@ export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: SidebarPro
         childrens: [
             {
                 title: 'Tâches',
-                href: `/workspace/teams/${team.id}/issues`,
+                href: `/workspace/teams/${team.identifier}/issues`,
                 icon: FolderMinus,
             },
             {
                 title: 'Membres',
-                href: `/workspace/teams/${team.id}/members`,
+                href: `/workspace/teams/${team.identifier}/members`,
                 icon: Users,
             },
         ]

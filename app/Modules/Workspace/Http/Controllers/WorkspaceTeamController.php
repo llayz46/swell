@@ -38,7 +38,6 @@ class WorkspaceTeamController extends Controller
             ->with(['status', 'priority', 'assignee', 'labels', 'creator'])
             ->where('team_id', $team->id);
 
-        // Filtres
         if ($request->has('status')) {
             $query->whereHas('status', fn($q) => $q->where('slug', $request->status));
         }
