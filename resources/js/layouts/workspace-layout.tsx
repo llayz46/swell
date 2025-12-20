@@ -36,14 +36,16 @@ const workspaceNavItems: NavItem[] = [
 
 interface WorkspaceLayoutProps extends PropsWithChildren {
     header?: ReactNode;
+    headersNumber?: 1 | 2;
 }
 
-export default function WorkspaceLayout({ children, header }: WorkspaceLayoutProps) {
+export default function WorkspaceLayout({ children, header, headersNumber = 2 }: WorkspaceLayoutProps) {   
     return (
         <WorkspaceLayoutTemplate
             mainNavItems={mainNavItems}
             workspaceNavItems={workspaceNavItems}
             header={header}
+            headersNumber={headersNumber}
         >
             {children}
         </WorkspaceLayoutTemplate>

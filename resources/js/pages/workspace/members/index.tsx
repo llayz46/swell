@@ -1,13 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { TeamsBadgeGroup } from '@/components/swell/workspace/teams-badge-group';
 import { WorkspaceTableHeader } from '@/components/swell/workspace/workspace-table-header';
 import WorkspaceLayout from '@/layouts/workspace-layout';
-import { User } from '@/types';
+import Header from '@/components/swell/workspace/layout/headers/members/header';
+import { TeamMember } from '@/types/workspace';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { Head } from '@inertiajs/react';
-import { Plus } from 'lucide-react';
 
 const TABLE_COLUMNS = [
     { label: 'Nom', className: 'w-[85%] md:w-[70%]' },
@@ -15,22 +14,10 @@ const TABLE_COLUMNS = [
     { label: 'Teams', className: 'hidden md:block md:w-[15%]' },
 ];
 
-export default function Index({ members }: { members: User[] }) {
+export default function Index({ members }: { members: TeamMember[] }) {
     return (
         <WorkspaceLayout
-            header={
-                <div className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-1">
-                        <span className="text-sm font-semibold">Membres</span>
-                        <Badge variant="secondary">{members.length}</Badge>
-                    </div>
-
-                    <Button variant="secondary" size="xs">
-                        <Plus />
-                        Inviter
-                    </Button>
-                </div>
-            }
+            header={<Header members={members} />}
         >
             <Head title="Membres - Workspace" />
 

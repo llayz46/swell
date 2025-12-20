@@ -1,12 +1,12 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { MembersAvatarGroup } from '@/components/swell/workspace/members-avatar-group';
 import { WorkspaceTableHeader } from '@/components/swell/workspace/workspace-table-header';
 import WorkspaceLayout from '@/layouts/workspace-layout';
 import { Team } from '@/types/workspace';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { Head } from '@inertiajs/react';
-import { CircleDashed, Check, Plus } from 'lucide-react';
+import { CircleDashed, Check } from 'lucide-react';
+import Header from '@/components/swell/workspace/layout/headers/teams/header';
 
 const TABLE_COLUMNS = [
     { label: 'Nom', className: 'w-[70%] sm:w-[50%] md:w-[45%] lg:w-[40%]' },
@@ -18,21 +18,7 @@ const TABLE_COLUMNS = [
 
 export default function Index({ teams }: { teams: Team[] }) {
     return (
-        <WorkspaceLayout
-            header={
-                <div className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-1">
-                        <span className="text-sm font-semibold">Teams</span>
-                        <Badge variant="secondary">{teams.length}</Badge>
-                    </div>
-
-                    <Button variant="secondary" size="xs">
-                        <Plus />
-                        Ajouter une team
-                    </Button>
-                </div>
-            }
-        >
+        <WorkspaceLayout header={<Header teams={teams} />}>
             <Head title="Teams - Workspace" />
 
             <div className="w-full">
