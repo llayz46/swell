@@ -94,7 +94,7 @@ export interface Team {
   membersCount?: number
   issuesCount?: number
   joined?: boolean
-  role?: string;
+  role?: string
   createdAt: string
   updatedAt: string
 }
