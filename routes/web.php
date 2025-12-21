@@ -95,7 +95,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //         });
         });
 
-        // Issues routes
         Route::prefix('issues')->name('issues.')->group(function () {
             Route::patch('/{issue}/priority', [IssueController::class, 'updatePriority'])
                 ->name('update-priority');
