@@ -13,6 +13,7 @@ use App\Modules\Wishlist\Http\Controllers\WishlistController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceDashboardController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceTeamController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceMembersController;
+use App\Modules\Workspace\Http\Controllers\IssueController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -94,18 +95,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //         });
         });
 
-    //     // Issues routes
-    //     Route::prefix('issues')->name('issues.')->group(function () {
-    //         Route::get('/{issue}', [WorkspaceIssueController::class, 'show'])->name('show');
-    //         Route::post('/', [WorkspaceIssueController::class, 'store'])->name('store');
-    //         Route::put('/{issue}', [WorkspaceIssueController::class, 'update'])->name('update');
-    //         Route::delete('/{issue}', [WorkspaceIssueController::class, 'destroy'])->name('destroy');
-
-    //         // Assigner une issue (team-lead ou workspace-admin)
-    //         Route::post('/{issue}/assign', [WorkspaceIssueController::class, 'assign'])
-    //             ->middleware('permission:workspace.issues.assign')
-    //             ->name('assign');
-    //     });
+        // Issues routes
+        Route::prefix('issues')->name('issues.')->group(function () {
+            Route::patch('/{issue}/priority', [IssueController::class, 'updatePriority'])
+                ->name('update-priority');
+        });
     });
 });
 

@@ -2,6 +2,8 @@
 
 namespace App\Modules\Workspace\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use App\Modules\Workspace\Http\Requests\Issue\UpdateIssuePriorityRequest;
 use App\Modules\Workspace\Models\Issue;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -64,5 +66,19 @@ class IssueController extends Controller
     public function destroy(Issue $issue)
     {
         //
+    }
+
+    /**
+     * Update the priority of the specified issue.
+     */
+    public function updatePriority(UpdateIssuePriorityRequest $request, Issue $issue)
+    {
+        $validated = $request->validated();
+
+        $issue->update([
+            'priority_id' => $validated['priority_id'],
+        ]);
+
+        return back();
     }
 }

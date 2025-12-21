@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { UserAssignee } from './user-assignee';
 import { PrioritySelector } from './priority-selector';
 import { StatusSelector } from './status-selector';
+import { IssueContextMenu } from './issue-context-menu';
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
@@ -47,17 +48,18 @@ export function IssueLine({ issue }: { issue: Issue }) {
                                     {l.name}
                                 </Badge>
                             ))}
-                            {/*{issue.project && <ProjectBadge project={issue.project} />}*/}
                         </div>
                         
                         <span className="hidden shrink-0 text-xs text-muted-foreground sm:inline-block">
                             {format(issue.createdAt, 'dd MMM', { locale: fr })}
                         </span>
+                        
                         <UserAssignee user={issue.assignee} />
                     </div>
                 </div>
             </ContextMenuTrigger>
-            {/*<IssueContextMenu issueId={issue.id} />*/}
+            
+            <IssueContextMenu issueId={issue.id} />
         </ContextMenu>
     );
 }

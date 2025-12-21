@@ -41,7 +41,7 @@ type WorkspaceIssuesStore = {
 
     // Actions de manipulation d'issues
     updateIssue: (issue: Issue) => void;
-    updateIssuePriority: (issueId: number, priority: IssuePriority) => void;                                                                                                                                                                           
+    updateIssuePriority: (issueId: number, priority: IssuePriority) => void;
     removeIssue: (issueId: number) => void;
     addIssue: (issue: Issue) => void;
 
@@ -100,18 +100,17 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
     setIsLead: (isLead) => set({ isLead }),
     setIsMember: (isMember) => set({ isMember }),
 
-    // Actions de manipulation d'issues
     updateIssue: (issue) =>
         set((state) => ({
             issues: state.issues.map((i) => (i.id === issue.id ? issue : i)),
         })),
         
-        updateIssuePriority: (issueId, priority) =>                                                                                                                                                                                                       
-            set((state) => ({                                                                                                                                                                                                                             
-                issues: state.issues.map((i) =>                                                                                                                                                                                                           
-                    i.id === issueId ? { ...i, priority } : i                                                                                                                                                                                             
-                ),                                                                                                                                                                                                                                        
-            })),  
+    updateIssuePriority: (issueId, priority) =>
+        set((state) => ({
+            issues: state.issues.map((i) =>
+                i.id === issueId ? { ...i, priority } : i
+            ),
+        })),  
 
     removeIssue: (issueId) =>
         set((state) => ({

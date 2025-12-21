@@ -54,7 +54,7 @@ class IssueStatusFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'slug' => 'in-progress',
-            'name' => 'In Progress',
+            'name' => 'En cours',
             'color' => '#f59e0b',
             'icon_type' => 'clock',
             'order' => 3,
@@ -65,7 +65,7 @@ class IssueStatusFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'slug' => 'technical-review',
-            'name' => 'Technical Review',
+            'name' => 'Revue Technique',
             'color' => '#8b5cf6',
             'icon_type' => 'square',
             'order' => 4,
@@ -76,7 +76,7 @@ class IssueStatusFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'slug' => 'paused',
-            'name' => 'Paused',
+            'name' => 'En pause',
             'color' => '#ef4444',
             'icon_type' => 'pause',
             'order' => 5,
@@ -87,7 +87,7 @@ class IssueStatusFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'slug' => 'completed',
-            'name' => 'Completed',
+            'name' => 'Terminé',
             'color' => '#10b981',
             'icon_type' => 'check',
             'order' => 6,

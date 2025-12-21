@@ -4,8 +4,10 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import type { IssuePriority } from '@/types/workspace';
+import { router } from '@inertiajs/react';
 import { CheckIcon } from 'lucide-react';
 import { useEffect, useId, useState } from 'react';
+import { toast } from "sonner";
 
 interface PrioritySelectorProps {
     priority: IssuePriority;
@@ -15,28 +17,49 @@ interface PrioritySelectorProps {
 export function PrioritySelector({ priority, issueId }: PrioritySelectorProps) {
     const id = useId();
     const [open, setOpen] = useState<boolean>(false);
-    const [value, setValue] = useState<string>(priority.id);
+    const [value, setValue] = useState<string>(priority.slug);
+    const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
     const priorities = useWorkspaceIssuesStore((state) => state.priorities || []);
-    
-    // Récupérer les fonctions du store
     const filterByPriority = useWorkspaceIssuesStore((state) => state.filterByPriority);
     const updateIssuePriority = useWorkspaceIssuesStore((state) => state.updateIssuePriority);
 
     useEffect(() => {
-        setValue(priority.id);
-    }, [priority.id]);
+        setValue(priority.slug);
+    }, [priority.slug]);
 
-    const handlePriorityChange = (priorityId: string) => {
-        setValue(priorityId);
+    const handlePriorityChange = (prioritySlug: string) => {
+        setValue(prioritySlug);
         setOpen(false);
 
-        if (issueId && updateIssuePriority) {
-            const newPriority = priorities.find((p) => p.id === priorityId);
-            if (newPriority) {
-                updateIssuePriority(issueId, newPriority);
+        if (!issueId) return;
+
+        const newPriority = priorities.find((p) => p.slug === prioritySlug);
+        if (!newPriority) return;
+
+        updateIssuePriority(issueId, newPriority);
+
+        setIsUpdating(true);
+
+        router.patch(
+            route('workspace.issues.update-priority', { issue: issueId }),
+            { priority_id: newPriority.id },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onError: (errors) => {
+                    updateIssuePriority(issueId, priority);
+                    setIsUpdating(false);
+                
+                    toast.error(errors.priority_id);
+                },
+                onSuccess: () => {
+                    setIsUpdating(false);
+                    
+                    toast.success('Priorité mise à jour avec succès');
+                }
             }
-        }
+        );
     };
 
     return (
@@ -50,6 +73,7 @@ export function PrioritySelector({ priority, issueId }: PrioritySelectorProps) {
                         variant="ghost"
                         role="combobox"
                         aria-expanded={open}
+                        disabled={isUpdating}
                     >
                         {(() => {
                             const selectedItem = priorities.find((item) => item.slug === value);
@@ -76,7 +100,8 @@ export function PrioritySelector({ priority, issueId }: PrioritySelectorProps) {
                                 {priorities.map((item) => (
                                     <CommandItem
                                         key={item.id}
-                                        value={item.id}
+                                        value={item.slug}
+                                        keywords={[item.name, item.slug]}
                                         onSelect={handlePriorityChange}
                                         className="flex items-center justify-between"
                                     >
@@ -84,9 +109,9 @@ export function PrioritySelector({ priority, issueId }: PrioritySelectorProps) {
                                             <PriorityIcon iconType={item.icon_type} color={item.color} width={14} height={14} className="shrink-0" />
                                             {item.name}
                                         </div>
-                                        {value === item.id && <CheckIcon size={16} className="ml-auto" />}
+                                        {value === item.slug && <CheckIcon size={16} className="ml-auto" />}
                                         {filterByPriority && (
-                                            <span className="text-xs text-muted-foreground">{filterByPriority(item.id).length}</span>
+                                            <span className="text-xs text-muted-foreground">{filterByPriority(item.slug).length}</span>
                                         )}
                                     </CommandItem>
                                 ))}
