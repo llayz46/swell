@@ -1,22 +1,44 @@
 import WorkspaceLayout from '@/layouts/workspace-layout';
 import Header from '@/components/swell/workspace/layout/headers/issues/header';
+import { GroupIssues } from '@/components/swell/workspace/issues/group-issues';
 import { Head } from '@inertiajs/react';
+import { Issue, IssueStatus, IssuePriority, Team } from '@/types/workspace';
+import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 
-export default function Issues({ team, issues, filters, isLead, isMember }) {
-    console.log([
-        'team', team,
-        'issues', issues,
-        'filters', filters,
-        'isLead', isLead,
-        'isMember', isMember
-    ])
-    
+interface IssuesPageProps {
+    team: Team;
+    issues: Issue[];
+    statuses: IssueStatus[];
+    priorities: IssuePriority[];
+    filters: {
+        status?: string;
+        priority?: string;
+    };
+    isLead: boolean;
+    isMember: boolean;
+}
+
+export default function Issues({ team, issues, statuses, priorities, filters, isLead, isMember }: IssuesPageProps) {
+    useWorkspaceIssuesStore.getState().initialize({
+        team,
+        issues,
+        statuses,
+        priorities,
+        filters,
+        isLead,
+        isMember,
+    });
+
+    const storeStatuses = useWorkspaceIssuesStore((state) => state.statuses);
+
     return (
         <WorkspaceLayout header={<Header />}>
             <Head title="Teams - Workspace" />
 
-            <div className="w-full">
-                content
+            <div>
+                {storeStatuses.map((status) => (
+                    <GroupIssues key={status.id} statusId={status.id} />
+                ))}
             </div>
         </WorkspaceLayout>
     );

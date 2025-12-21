@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\Workspace\Http\Controllers;
 
-use App\Models\Issue;
+use App\Modules\Workspace\Models\Issue;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

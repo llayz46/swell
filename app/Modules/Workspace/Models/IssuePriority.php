@@ -19,6 +19,7 @@ class IssuePriority extends Model
         'slug',
         'name',
         'color',
+        'icon_type',
         'order',
     ];
 

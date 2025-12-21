@@ -5,6 +5,8 @@ namespace App\Modules\Workspace\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Workspace\Models\Team;
 use App\Modules\Workspace\Models\Issue;
+use App\Modules\Workspace\Models\IssueStatus;
+use App\Modules\Workspace\Models\IssuePriority;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -35,8 +37,9 @@ class WorkspaceTeamController extends Controller
         auth()->user()->can('view', $team);
         
         $query = Issue::query()
-            ->with(['status', 'priority', 'assignee', 'labels', 'creator'])
-            ->where('team_id', $team->id);
+            ->with(['status', 'priority', 'assignee', 'labels', 'creator', 'priority'])
+            ->where('team_id', $team->id)
+            ->orderBy('rank');
 
         if ($request->has('status')) {
             $query->whereHas('status', fn($q) => $q->where('slug', $request->status));
@@ -45,14 +48,14 @@ class WorkspaceTeamController extends Controller
         if ($request->has('priority')) {
             $query->whereHas('priority', fn($q) => $q->where('slug', $request->priority));
         }
-
-        $issues = $query
-            ->orderBy('rank')
-            ->paginate(50);
+        
+        $issues = $query->get();
 
         return Inertia::render('workspace/teams/issues', [
             'team' => $team->load('members', 'leads')->toResource(),
             'issues' => $issues->toResourceCollection(),
+            'statuses' => IssueStatus::orderBy('position')->get()->toResourceCollection(),
+            'priorities' => IssuePriority::orderBy('order')->get()->toResourceCollection(),
             'filters' => $request->only(['status', 'priority']),
             'isLead' => $team->isLead(auth()->user()),
             'isMember' => $team->isMember(auth()->user()),

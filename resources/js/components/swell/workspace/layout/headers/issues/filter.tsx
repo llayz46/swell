@@ -9,13 +9,8 @@ import {
    CommandSeparator,
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-// import { useIssuesStore } from '@/store/issues-store';
-// import { useFilterStore } from '@/store/filter-store';
-// import { status as allStatus } from '@/mock-data/status';
-// import { priorities } from '@/mock-data/priorities';
-// import { labels } from '@/mock-data/labels';
-// import { projects } from '@/mock-data/projects';
-// import { users } from '@/mock-data/users';
+import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
+import { StatusIcon } from '@/components/swell/workspace/icons';
 import {
    CheckIcon,
    ChevronRight,
@@ -36,10 +31,8 @@ export function Filter() {
    const [open, setOpen] = useState<boolean>(false);
    const [activeFilter, setActiveFilter] = useState<FilterType | null>(null);
 
-   // const { filters, toggleFilter, clearFilters, getActiveFiltersCount } = useFilterStore();
-
-   // const { filterByStatus, filterByAssignee, filterByPriority, filterByLabel, filterByProject } =
-   //    useIssuesStore();
+   const { statuses, filters, toggleFilter, clearFilters, getActiveFiltersCount, filterByStatus } =
+      useWorkspaceIssuesStore();
 
    return (
       <Popover open={open} onOpenChange={setOpen}>
@@ -47,11 +40,11 @@ export function Filter() {
             <Button size="xs" variant="ghost" className="relative">
                <ListFilter className="size-4 mr-1" />
                Filter
-               {/*{getActiveFiltersCount() > 0 && (
+               {getActiveFiltersCount() > 0 && (
                   <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full size-4 flex items-center justify-center">
                      {getActiveFiltersCount()}
                   </span>
-               )}*/}
+               )}
             </Button>
          </PopoverTrigger>
          <PopoverContent className="p-0 w-60" align="start">
@@ -68,11 +61,11 @@ export function Filter() {
                               Status
                            </span>
                            <div className="flex items-center">
-                              {/*{filters.status.length > 0 && (
+                              {filters.status.length > 0 && (
                                  <span className="text-xs text-muted-foreground mr-1">
                                     {filters.status.length}
                                  </span>
-                              )}*/}
+                              )}
                               <ChevronRight className="size-4" />
                            </div>
                         </CommandItem>
@@ -145,7 +138,7 @@ export function Filter() {
                            </div>
                         </CommandItem>
                      </CommandGroup>
-                     {/*{getActiveFiltersCount() > 0 && (
+                     {getActiveFiltersCount() > 0 && (
                         <>
                            <CommandSeparator />
                            <CommandGroup>
@@ -157,7 +150,7 @@ export function Filter() {
                               </CommandItem>
                            </CommandGroup>
                         </>
-                     )}*/}
+                     )}
                   </CommandList>
                </Command>
             ) : activeFilter === 'status' ? (
@@ -177,7 +170,7 @@ export function Filter() {
                   <CommandList>
                      <CommandEmpty>No status found.</CommandEmpty>
                      <CommandGroup>
-                        {/*{allStatus.map((item) => (
+                        {statuses.map((item) => (
                            <CommandItem
                               key={item.id}
                               value={item.id}
@@ -185,7 +178,7 @@ export function Filter() {
                               className="flex items-center justify-between"
                            >
                               <div className="flex items-center gap-2">
-                                 <item.icon />
+                                 <StatusIcon iconType={item.icon_type} color={item.color} size={14} />
                                  {item.name}
                               </div>
                               {filters.status.includes(item.id) && (
@@ -195,7 +188,7 @@ export function Filter() {
                                  {filterByStatus(item.id).length}
                               </span>
                            </CommandItem>
-                        ))}*/}
+                        ))}
                      </CommandGroup>
                   </CommandList>
                </Command>

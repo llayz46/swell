@@ -116,12 +116,12 @@ class WorkspaceModuleSeeder extends Seeder
         $this->command->info('Creating issue statuses...');
 
         return collect([
-            IssueStatus::factory()->backlog()->create(),
-            IssueStatus::factory()->todo()->create(),
-            IssueStatus::factory()->inProgress()->create(),
-            IssueStatus::factory()->technicalReview()->create(),
-            IssueStatus::factory()->paused()->create(),
-            IssueStatus::factory()->completed()->create(),
+            IssueStatus::factory()->backlog()->create(['color' => '#ec4899', 'icon_type' => 'BacklogIcon']),
+            IssueStatus::factory()->todo()->create(['color' => '#f97316', 'icon_type' => 'ToDoIcon']),
+            IssueStatus::factory()->inProgress()->create(['color' => '#facc15', 'icon_type' => 'InProgressIcon']),
+            IssueStatus::factory()->technicalReview()->create(['color' => '#22c55e', 'icon_type' => 'TechnicalReviewIcon']),
+            IssueStatus::factory()->paused()->create(['color' => '#0ea5e9', 'icon_type' => 'PausedIcon']),
+            IssueStatus::factory()->completed()->create(['color' => '#8b5cf6', 'icon_type' => 'CompletedIcon']),
         ]);
     }
 
@@ -134,6 +134,7 @@ class WorkspaceModuleSeeder extends Seeder
             IssuePriority::factory()->high()->create(),
             IssuePriority::factory()->medium()->create(),
             IssuePriority::factory()->low()->create(),
+            IssuePriority::factory()->none()->create(),
         ]);
     }
 
@@ -269,7 +270,7 @@ class WorkspaceModuleSeeder extends Seeder
                     'priority_id' => $priorities->random()->id,
                 ]);
 
-                $issue->labels()->attach(
+                $issue->labels()->syncWithoutDetaching(
                     $labels->random(rand(1, 3))->pluck('id')->toArray()
                 );
 

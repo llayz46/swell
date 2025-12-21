@@ -23,6 +23,7 @@ class IssuePriorityFactory extends Factory
             'slug' => $this->faker->unique()->slug(),
             'name' => $this->faker->word(),
             'color' => $this->faker->hexColor(),
+            'icon_type' => $this->faker->word(),
             'order' => $this->faker->numberBetween(1, 100),
         ];
     }
@@ -33,7 +34,8 @@ class IssuePriorityFactory extends Factory
             'slug' => 'urgent',
             'name' => 'Urgent',
             'color' => '#dc2626',
-            'order' => 1,
+            'icon_type' => 'UrgentPriorityIcon',
+            'order' => 4,
         ]);
     }
 
@@ -41,9 +43,10 @@ class IssuePriorityFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'slug' => 'high',
-            'name' => 'High',
+            'name' => 'Haute',
             'color' => '#f97316',
-            'order' => 2,
+            'icon_type' => 'HighPriorityIcon',
+            'order' => 3,
         ]);
     }
 
@@ -51,9 +54,10 @@ class IssuePriorityFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'slug' => 'medium',
-            'name' => 'Medium',
+            'name' => 'Moyenne',
             'color' => '#eab308',
-            'order' => 3,
+            'icon_type' => 'MediumPriorityIcon',
+            'order' => 2,
         ]);
     }
 
@@ -61,9 +65,21 @@ class IssuePriorityFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'slug' => 'low',
-            'name' => 'Low',
+            'name' => 'Faible',
             'color' => '#64748b',
-            'order' => 4,
+            'icon_type' => 'LowPriorityIcon',
+            'order' => 1,
+        ]);
+    }
+    
+    public function none(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'slug' => 'none',
+            'name' => 'Pas prioritaire',
+            'color' => '#94a3b8',
+            'icon_type' => 'NoPriorityIcon',
+            'order' => 0,
         ]);
     }
 }

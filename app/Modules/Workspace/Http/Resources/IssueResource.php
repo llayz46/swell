@@ -20,15 +20,19 @@ class IssueResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'status' => $this->whenLoaded('status', fn () => [
-                'id' => $this->status->slug,
+                'id' => $this->status->id,
+                'slug' => $this->status->slug,
                 'name' => $this->status->name,
                 'color' => $this->status->color,
-                'iconType' => $this->status->icon_type,
+                'icon_type' => $this->status->icon_type,
             ]),
             'priority' => $this->whenLoaded('priority', fn () => [
                 'id' => $this->priority->slug,
+                'slug' => $this->priority->slug,
                 'name' => $this->priority->name,
                 'color' => $this->priority->color,
+                'iconType' => $this->priority->icon_type,
+                'order' => $this->priority->order,
             ]),
             'assignee' => $this->whenLoaded('assignee', fn () => $this->assignee ? [
                 'id' => $this->assignee->id,

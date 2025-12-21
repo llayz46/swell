@@ -28,10 +28,10 @@ export default function AppSidebarLayout({
     return (
         <WorkspaceShell variant="sidebar">
             <WorkspaceSidebar mainNavItems={mainNavItems} workspaceNavItems={workspaceNavItems} />
-            <AppContent variant="sidebar" className="dark:bg-sidebar overflow-x-hidden md:border lg:peer-data-[variant=inset]:rounded-md md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 lg:peer-data-[variant=inset]:peer-data-[state=expanded]:m-2 md:peer-data-[variant=inset]:shadow-none">
+            <AppContent variant="sidebar" className="bg-workspace overflow-x-hidden md:border lg:peer-data-[variant=inset]:rounded-md md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 lg:peer-data-[variant=inset]:peer-data-[state=expanded]:m-2 md:peer-data-[variant=inset]:shadow-none">
                 {header}
                 
-                <div className={cn('flex flex-col gap-4', height[headersNumber])}>
+                <div className={cn('flex flex-col gap-4 size-full', height[headersNumber])}>
                     {children}
                 </div>
                 
