@@ -4,11 +4,12 @@ namespace App\Modules\Workspace\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssuePriorityRequest;
+use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueStatusRequest;
 use App\Modules\Workspace\Models\Issue;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class IssueController extends Controller
+class WorkspaceIssueController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -77,6 +78,20 @@ class IssueController extends Controller
 
         $issue->update([
             'priority_id' => $validated['priority_id'],
+        ]);
+
+        return back();
+    }
+
+    /**
+     * Update the status of the specified issue.
+     */
+    public function updateStatus(UpdateIssueStatusRequest $request, Issue $issue)
+    {
+        $validated = $request->validated();
+
+        $issue->update([
+            'status_id' => $validated['status_id'],
         ]);
 
         return back();

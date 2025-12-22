@@ -14,9 +14,14 @@ export function GroupIssues({ statusId }: GroupIssuesProps) {
         state.statuses.find((s) => s.id === statusId)
     );
 
-    const filterByStatus = useWorkspaceIssuesStore((state) => state.filterByStatus);
+    // Récupérer les issues directement du store pour que Zustand déclenche les re-renders
+    const allIssues = useWorkspaceIssuesStore((state) => state.issues);
 
-    const issues = useMemo(() => filterByStatus(statusId), [filterByStatus, statusId]);
+    // Filtrer les issues par status
+    const issues = useMemo(
+        () => allIssues.filter((issue) => issue.status.id === statusId),
+        [allIssues, statusId]
+    );
 
     const count = issues.length;
 

@@ -5,35 +5,65 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { IssueStatus } from '@/types/workspace';
 import { CheckIcon } from 'lucide-react';
+import { router } from "@inertiajs/react";
+import { toast } from "sonner";
 import { useEffect, useId, useState } from 'react';
 
 interface StatusSelectorProps {
     status: IssueStatus;
-    issueId: string;
+    issueId: number;
 }
 
 export function StatusSelector({ status, issueId }: StatusSelectorProps) {
     const id = useId();
     const [open, setOpen] = useState<boolean>(false);
-    const [value, setValue] = useState<string>(status.id);
+    const [value, setValue] = useState<string>(status.slug);
+    const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
     const statuses = useWorkspaceIssuesStore((state) => state.statuses || []);
     const filterByStatus = useWorkspaceIssuesStore((state) => state.filterByStatus);
+    const updateIssueStatus = useWorkspaceIssuesStore((state) => state.updateIssueStatus);
+
 
     useEffect(() => {
-        setValue(status.id);
-    }, [status.id]);
+        setValue(status.slug);
+    }, [status.slug]);
 
-    const handleStatusChange = (statusId: string) => {
-        setValue(statusId);
+    const handleStatusChange = (statusSlug: string) => {
+        setValue(statusSlug);
         setOpen(false);
 
-        // if (issueId) {
-        //    const newStatus = allStatus.find((s) => s.id === statusId);
-        //    if (newStatus) {
-        //       updateIssueStatus(issueId, newStatus);
-        //    }
-        // }
+        if (!issueId) return;
+
+        const newStatus = statuses.find((s) => s.slug === statusSlug);
+
+        if (!newStatus) return;
+
+        // Optimistic update avec le NOUVEAU statut
+        updateIssueStatus(issueId, newStatus);
+
+        setIsUpdating(true);
+
+        router.patch(
+            route('workspace.issues.update-status', { issue: issueId }),
+            { status_id: newStatus.id },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onError: (errors) => {
+                    // Rollback vers l'ancien statut en cas d'erreur
+                    updateIssueStatus(issueId, status);
+                    setIsUpdating(false);
+
+                    toast.error(errors.status_id || 'Erreur lors de la mise à jour du statut');
+                },
+                onSuccess: () => {
+                    setIsUpdating(false);
+
+                    toast.success('Statut mis à jour avec succès');
+                }
+            }
+        );
     };
 
     return (
@@ -47,8 +77,15 @@ export function StatusSelector({ status, issueId }: StatusSelectorProps) {
                         variant="ghost"
                         role="combobox"
                         aria-expanded={open}
+                        disabled={isUpdating}
                     >
-                        <StatusIcon iconType={status.icon_type} color={status.color} size={14} />
+                        {(() => {
+                            const selectedItem = statuses.find((item) => item.slug === value);
+                            if (selectedItem) {
+                                return <StatusIcon iconType={selectedItem.icon_type} color={selectedItem.color} size={14} />;
+                            }
+                            return null;
+                        })()}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-full min-w-(--radix-popper-anchor-width) border-input p-0" align="start">
@@ -57,19 +94,22 @@ export function StatusSelector({ status, issueId }: StatusSelectorProps) {
                         <CommandList>
                             <CommandEmpty>Aucun statut trouvé.</CommandEmpty>
                             <CommandGroup>
-                                {statuses.map((status) => (
+                                {statuses.map((item) => (
                                     <CommandItem
-                                        key={status.id}
-                                        value={status.id}
+                                        key={item.id}
+                                        value={item.slug}
+                                        keywords={[item.name, item.slug]}
                                         onSelect={handleStatusChange}
                                         className="flex items-center justify-between"
                                     >
                                         <div className="flex items-center gap-2">
-                                            <StatusIcon iconType={status.icon_type} color={status.color} size={14} />
-                                            {status.name}
+                                            <StatusIcon iconType={item.icon_type} color={item.color} size={14} />
+                                            {item.name}
                                         </div>
-                                        {value === status.id && <CheckIcon size={16} className="ml-auto" />}
-                                        <span className="text-xs text-muted-foreground">{filterByStatus(status.id).length}</span>
+                                        {value === item.slug && <CheckIcon size={16} className="ml-auto" />}
+                                        {filterByStatus && (
+                                            <span className="text-xs text-muted-foreground">{filterByStatus(item.id).length}</span>
+                                        )}
                                     </CommandItem>
                                 ))}
                             </CommandGroup>

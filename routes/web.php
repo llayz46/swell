@@ -13,7 +13,7 @@ use App\Modules\Wishlist\Http\Controllers\WishlistController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceDashboardController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceTeamController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceMembersController;
-use App\Modules\Workspace\Http\Controllers\IssueController;
+use App\Modules\Workspace\Http\Controllers\WorkspaceIssueController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -96,8 +96,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
         Route::prefix('issues')->name('issues.')->group(function () {
-            Route::patch('/{issue}/priority', [IssueController::class, 'updatePriority'])
+            Route::patch('/{issue}/priority', [WorkspaceIssueController::class, 'updatePriority'])
                 ->name('update-priority');
+            Route::patch('/{issue}/status', [WorkspaceIssueController::class, 'updateStatus'])
+                ->name('update-status');
         });
     });
 });
