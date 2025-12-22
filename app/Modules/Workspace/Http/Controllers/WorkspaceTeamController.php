@@ -7,6 +7,7 @@ use App\Modules\Workspace\Models\Team;
 use App\Modules\Workspace\Models\Issue;
 use App\Modules\Workspace\Models\IssueStatus;
 use App\Modules\Workspace\Models\IssuePriority;
+use App\Modules\Workspace\Models\IssueLabel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -50,12 +51,13 @@ class WorkspaceTeamController extends Controller
         }
         
         $issues = $query->get();
-
+        
         return Inertia::render('workspace/teams/issues', [
             'team' => $team->load('members', 'leads')->toResource(),
             'issues' => $issues->toResourceCollection(),
             'statuses' => IssueStatus::orderBy('position')->get()->toResourceCollection(),
             'priorities' => IssuePriority::orderBy('order')->get()->toResourceCollection(),
+            'labels' => IssueLabel::all()->toResourceCollection(),
             'filters' => $request->only(['status', 'priority']),
             'isLead' => $team->isLead(auth()->user()),
             'isMember' => $team->isMember(auth()->user()),

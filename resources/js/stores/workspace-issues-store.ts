@@ -1,12 +1,11 @@
 import { create } from 'zustand';
-import type { Issue, IssueStatus, IssuePriority, Team } from '@/types/workspace';
+import type { Issue, IssueStatus, IssuePriority, IssueLabel, Team } from '@/types/workspace';
 
 type Filters = {
     status: string[];
     assignee: string[];
     priority: string[];
     labels: string[];
-    project: string[];
 };
 
 type InitializeData = {
@@ -14,6 +13,7 @@ type InitializeData = {
     issues: Issue[];
     statuses: IssueStatus[];
     priorities: IssuePriority[];
+    labels: IssueLabel[];
     filters?: Partial<Filters>;
     isLead: boolean;
     isMember: boolean;
@@ -25,6 +25,7 @@ type WorkspaceIssuesStore = {
     issues: Issue[];
     statuses: IssueStatus[];
     priorities: IssuePriority[];
+    labels: IssueLabel[];
     filters: Filters;
     isLead: boolean;
     isMember: boolean;
@@ -35,6 +36,7 @@ type WorkspaceIssuesStore = {
     setIssues: (issues: Issue[]) => void;
     setStatuses: (statuses: IssueStatus[]) => void;
     setPriorities: (priorities: IssuePriority[]) => void;
+    setLabels: (labels: IssueLabel[]) => void;
     setFilters: (filters: Partial<Filters>) => void;
     setIsLead: (isLead: boolean) => void;
     setIsMember: (isMember: boolean) => void;
@@ -67,23 +69,24 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
     issues: [],
     statuses: [],
     priorities: [],
+    labels: [],
     filters: {
         status: [],
         assignee: [],
         priority: [],
         labels: [],
-        project: [],
     },
     isLead: false,
     isMember: false,
 
     // Actions d'initialisation
-    initialize: ({ team, issues, statuses, priorities, filters, isLead, isMember }) =>
+    initialize: ({ team, issues, statuses, priorities, labels, filters, isLead, isMember }) =>
         set((state) => ({
             team,
             issues,
             statuses,
             priorities,
+            labels,
             filters: { ...state.filters, ...filters },
             isLead,
             isMember,
@@ -93,6 +96,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
     setIssues: (issues) => set({ issues }),
     setStatuses: (statuses) => set({ statuses }),
     setPriorities: (priorities) => set({ priorities }),
+    setLabels: (labels) => set({ labels }),
     setFilters: (filters) =>
         set((state) => ({
             filters: { ...state.filters, ...filters },
@@ -145,7 +149,6 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                 assignee: [],
                 priority: [],
                 labels: [],
-                project: [],
             },
         }),
 

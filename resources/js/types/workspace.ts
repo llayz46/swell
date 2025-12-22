@@ -19,6 +19,7 @@ export interface IssuePriority {
 export interface IssueLabel {
   id: string
   name: string
+  slug: string
   color: string
 }
 

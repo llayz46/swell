@@ -150,7 +150,7 @@ export function IssueContextMenu({ issueId }: IssueContextMenuProps) {
          <ContextMenuGroup>
             <ContextMenuSub>
                <ContextMenuSubTrigger>
-                  <CircleCheck className="mr-2 size-4" /> Statuts
+                  <CircleCheck className="mr-2 size-4" /> Statut
                </ContextMenuSubTrigger>
                <ContextMenuSubContent className="w-48">
                   {/*{status.map((s) => {

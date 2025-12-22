@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
+import { PriorityIcon } from '@/components/swell/workspace/icons';
 import { StatusIcon } from '@/components/swell/workspace/icons';
 import {
    CheckIcon,
@@ -19,27 +20,37 @@ import {
    CircleCheck,
    BarChart3,
    Tag,
-   Folder,
 } from 'lucide-react';
 import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-// Define filter types
-type FilterType = 'status' | 'assignee' | 'priority' | 'labels' | 'project';
+type FilterType = 'status' | 'assignee' | 'priority' | 'labels';
 
 export function Filter() {
    const [open, setOpen] = useState<boolean>(false);
    const [activeFilter, setActiveFilter] = useState<FilterType | null>(null);
 
-   const { statuses, filters, toggleFilter, clearFilters, getActiveFiltersCount, filterByStatus } =
-      useWorkspaceIssuesStore();
-
+   const { 
+       team,
+       statuses,
+       priorities,
+       labels,
+       filters,
+       toggleFilter,
+       clearFilters,
+       getActiveFiltersCount,
+       filterByStatus,
+       filterByAssignee,
+       filterByPriority,
+       filterByLabel
+   } = useWorkspaceIssuesStore();
+      
    return (
       <Popover open={open} onOpenChange={setOpen}>
          <PopoverTrigger asChild>
             <Button size="xs" variant="ghost" className="relative">
                <ListFilter className="size-4 mr-1" />
-               Filter
+               Filtrer
                {getActiveFiltersCount() > 0 && (
                   <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full size-4 flex items-center justify-center">
                      {getActiveFiltersCount()}
@@ -58,7 +69,7 @@ export function Filter() {
                         >
                            <span className="flex items-center gap-2">
                               <CircleCheck className="size-4 text-muted-foreground" />
-                              Status
+                              Statut
                            </span>
                            <div className="flex items-center">
                               {filters.status.length > 0 && (
@@ -75,14 +86,14 @@ export function Filter() {
                         >
                            <span className="flex items-center gap-2">
                               <User className="size-4 text-muted-foreground" />
-                              Assignee
+                              Attribution
                            </span>
                            <div className="flex items-center">
-                              {/*{filters.assignee.length > 0 && (
+                              {filters.assignee.length > 0 && (
                                  <span className="text-xs text-muted-foreground mr-1">
                                     {filters.assignee.length}
                                  </span>
-                              )}*/}
+                              )}
                               <ChevronRight className="size-4" />
                            </div>
                         </CommandItem>
@@ -92,14 +103,14 @@ export function Filter() {
                         >
                            <span className="flex items-center gap-2">
                               <BarChart3 className="size-4 text-muted-foreground" />
-                              Priority
+                              Priorité
                            </span>
                            <div className="flex items-center">
-                              {/*{filters.priority.length > 0 && (
+                              {filters.priority.length > 0 && (
                                  <span className="text-xs text-muted-foreground mr-1">
                                     {filters.priority.length}
                                  </span>
-                              )}*/}
+                              )}
                               <ChevronRight className="size-4" />
                            </div>
                         </CommandItem>
@@ -109,31 +120,14 @@ export function Filter() {
                         >
                            <span className="flex items-center gap-2">
                               <Tag className="size-4 text-muted-foreground" />
-                              Labels
+                              Étiquette
                            </span>
                            <div className="flex items-center">
-                              {/*{filters.labels.length > 0 && (
+                              {filters.labels.length > 0 && (
                                  <span className="text-xs text-muted-foreground mr-1">
                                     {filters.labels.length}
                                  </span>
-                              )}*/}
-                              <ChevronRight className="size-4" />
-                           </div>
-                        </CommandItem>
-                        <CommandItem
-                           onSelect={() => setActiveFilter('project')}
-                           className="flex items-center justify-between cursor-pointer"
-                        >
-                           <span className="flex items-center gap-2">
-                              <Folder className="size-4 text-muted-foreground" />
-                              Project
-                           </span>
-                           <div className="flex items-center">
-                              {/*{filters.project.length > 0 && (
-                                 <span className="text-xs text-muted-foreground mr-1">
-                                    {filters.project.length}
-                                 </span>
-                              )}*/}
+                              )}
                               <ChevronRight className="size-4" />
                            </div>
                         </CommandItem>
@@ -144,9 +138,9 @@ export function Filter() {
                            <CommandGroup>
                               <CommandItem
                                  onSelect={() => clearFilters()}
-                                 className="text-destructive"
+                                 className="text-destructive data-[selected=true]:text-destructive! data-[selected=true]:bg-destructive/15 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
                               >
-                                 Clear all filters
+                                 Effacer tous les filtres
                               </CommandItem>
                            </CommandGroup>
                         </>
@@ -164,11 +158,11 @@ export function Filter() {
                      >
                         <ChevronRight className="size-4 rotate-180" />
                      </Button>
-                     <span className="ml-2 font-medium">Status</span>
+                     <span className="ml-2 font-medium">Statut</span>
                   </div>
-                  <CommandInput placeholder="Search status..." />
+                  <CommandInput placeholder="Rechercher un statut..." />
                   <CommandList>
-                     <CommandEmpty>No status found.</CommandEmpty>
+                     <CommandEmpty>Aucun statut trouvé.</CommandEmpty>
                      <CommandGroup>
                         {statuses.map((item) => (
                            <CommandItem
@@ -203,20 +197,20 @@ export function Filter() {
                      >
                         <ChevronRight className="size-4 rotate-180" />
                      </Button>
-                     <span className="ml-2 font-medium">Assignee</span>
+                     <span className="ml-2 font-medium">Attribution</span>
                   </div>
-                  <CommandInput placeholder="Search assignee..." />
+                  <CommandInput placeholder="Rechercher un utilisateur..." />
                   <CommandList>
-                     <CommandEmpty>No assignees found.</CommandEmpty>
+                     <CommandEmpty>Aucun utilisateur trouvé.</CommandEmpty>
                      <CommandGroup>
-                        {/*<CommandItem
+                        <CommandItem
                            value="unassigned"
                            onSelect={() => toggleFilter('assignee', 'unassigned')}
                            className="flex items-center justify-between"
                         >
                            <div className="flex items-center gap-2">
                               <User className="size-5" />
-                              Unassigned
+                              Non assigné
                            </div>
                            {filters.assignee.includes('unassigned') && (
                               <CheckIcon size={16} className="ml-auto" />
@@ -224,29 +218,30 @@ export function Filter() {
                            <span className="text-muted-foreground text-xs">
                               {filterByAssignee(null).length}
                            </span>
-                        </CommandItem>*/}
-                        {/*{users.map((user) => (
+                        </CommandItem>
+                        
+                        {team?.members?.map((member) => (
                            <CommandItem
-                              key={user.id}
-                              value={user.id}
-                              onSelect={() => toggleFilter('assignee', user.id)}
+                              key={member.id}
+                              value={member.name}
+                              onSelect={() => toggleFilter('assignee', member.name)}
                               className="flex items-center justify-between"
                            >
                               <div className="flex items-center gap-2">
                                  <Avatar className="size-5">
-                                    <AvatarImage src={user.avatarUrl} alt={user.name} />
-                                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                                    <AvatarImage src={member.avatarUrl} alt={member.name} />
+                                    <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                                  </Avatar>
-                                 {user.name}
+                                 {member.name}
                               </div>
-                              {filters.assignee.includes(user.id) && (
+                              {filters.assignee.includes(member.name) && (
                                  <CheckIcon size={16} className="ml-auto" />
                               )}
                               <span className="text-muted-foreground text-xs">
-                                 {filterByAssignee(user.id).length}
+                                 {filterByAssignee(member.id.toString()).length}
                               </span>
                            </CommandItem>
-                        ))}*/}
+                        ))}
                      </CommandGroup>
                   </CommandList>
                </Command>
@@ -261,31 +256,31 @@ export function Filter() {
                      >
                         <ChevronRight className="size-4 rotate-180" />
                      </Button>
-                     <span className="ml-2 font-medium">Priority</span>
+                     <span className="ml-2 font-medium">Priorité</span>
                   </div>
-                  <CommandInput placeholder="Search priority..." />
+                  <CommandInput placeholder="Rechercher une priorité..." />
                   <CommandList>
-                     <CommandEmpty>No priorities found.</CommandEmpty>
+                     <CommandEmpty>Aucune priorité trouvée.</CommandEmpty>
                      <CommandGroup>
-                        {/*{priorities.map((item) => (
+                        {priorities.map((priority) => (
                            <CommandItem
-                              key={item.id}
-                              value={item.id}
-                              onSelect={() => toggleFilter('priority', item.id)}
+                              key={priority.id}
+                              value={priority.id}
+                              onSelect={() => toggleFilter('priority', priority.id)}
                               className="flex items-center justify-between"
                            >
                               <div className="flex items-center gap-2">
-                                 <item.icon className="text-muted-foreground size-4" />
-                                 {item.name}
+                                 <PriorityIcon iconType={priority.icon_type} color={priority.color} />
+                                 {priority.name}
                               </div>
-                              {filters.priority.includes(item.id) && (
+                              {filters.priority.includes(priority.id) && (
                                  <CheckIcon size={16} className="ml-auto" />
                               )}
                               <span className="text-muted-foreground text-xs">
-                                 {filterByPriority(item.id).length}
+                                 {filterByPriority(priority.slug).length}
                               </span>
                            </CommandItem>
-                        ))}*/}
+                        ))}
                      </CommandGroup>
                   </CommandList>
                </Command>
@@ -300,13 +295,13 @@ export function Filter() {
                      >
                         <ChevronRight className="size-4 rotate-180" />
                      </Button>
-                     <span className="ml-2 font-medium">Labels</span>
+                     <span className="ml-2 font-medium">Étiquettes</span>
                   </div>
-                  <CommandInput placeholder="Search labels..." />
+                  <CommandInput placeholder="Rechercher des étiquettes..." />
                   <CommandList>
-                     <CommandEmpty>No labels found.</CommandEmpty>
+                     <CommandEmpty>Aucune étiquette trouvée.</CommandEmpty>
                      <CommandGroup>
-                        {/*{labels.map((label) => (
+                        {labels.map((label) => (
                            <CommandItem
                               key={label.id}
                               value={label.id}
@@ -324,49 +319,10 @@ export function Filter() {
                                  <CheckIcon size={16} className="ml-auto" />
                               )}
                               <span className="text-muted-foreground text-xs">
-                                 {filterByLabel(label.id).length}
+                                 {filterByLabel(label.slug).length}
                               </span>
                            </CommandItem>
-                        ))}*/}
-                     </CommandGroup>
-                  </CommandList>
-               </Command>
-            ) : activeFilter === 'project' ? (
-               <Command>
-                  <div className="flex items-center border-b p-2">
-                     <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-6"
-                        onClick={() => setActiveFilter(null)}
-                     >
-                        <ChevronRight className="size-4 rotate-180" />
-                     </Button>
-                     <span className="ml-2 font-medium">Project</span>
-                  </div>
-                  <CommandInput placeholder="Search projects..." />
-                  <CommandList>
-                     <CommandEmpty>No projects found.</CommandEmpty>
-                     <CommandGroup>
-                        {/*{projects.map((project) => (
-                           <CommandItem
-                              key={project.id}
-                              value={project.id}
-                              onSelect={() => toggleFilter('project', project.id)}
-                              className="flex items-center justify-between"
-                           >
-                              <div className="flex items-center gap-2">
-                                 <project.icon className="size-4" />
-                                 {project.name}
-                              </div>
-                              {filters.project.includes(project.id) && (
-                                 <CheckIcon size={16} className="ml-auto" />
-                              )}
-                              <span className="text-muted-foreground text-xs">
-                                 {filterByProject(project.id).length}
-                              </span>
-                           </CommandItem>
-                        ))}*/}
+                        ))}
                      </CommandGroup>
                   </CommandList>
                </Command>
