@@ -20,10 +20,7 @@ export function StatusSelector({ status, issueId }: StatusSelectorProps) {
     const [value, setValue] = useState<string>(status.slug);
     const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-    const statuses = useWorkspaceIssuesStore((state) => state.statuses || []);
-    const filterByStatus = useWorkspaceIssuesStore((state) => state.filterByStatus);
-    const updateIssueStatus = useWorkspaceIssuesStore((state) => state.updateIssueStatus);
-
+    const { statuses, filterByStatus, updateIssueStatus } = useWorkspaceIssuesStore();
 
     useEffect(() => {
         setValue(status.slug);

@@ -5,6 +5,7 @@ namespace App\Modules\Workspace\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssuePriorityRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueStatusRequest;
+use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueAssigneeRequest;
 use App\Modules\Workspace\Models\Issue;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -92,6 +93,20 @@ class WorkspaceIssueController extends Controller
 
         $issue->update([
             'status_id' => $validated['status_id'],
+        ]);
+
+        return back();
+    }
+
+    /**
+     * Update the assignee of the specified issue.
+     */
+    public function updateAssignee(UpdateIssueAssigneeRequest $request, Issue $issue)
+    {
+        $validated = $request->validated();
+
+        $issue->update([
+            'assignee_id' => $validated['assignee_id'],
         ]);
 
         return back();

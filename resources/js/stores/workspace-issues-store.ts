@@ -45,6 +45,7 @@ type WorkspaceIssuesStore = {
     updateIssue: (issue: Issue) => void;
     updateIssuePriority: (issueId: number, priority: IssuePriority) => void;
     updateIssueStatus: (issueId: number, status: IssueStatus) => void;
+    updateIssueAssignee: (issueId: number, assignee: IssueAssignee | null) => void;
     removeIssue: (issueId: number) => void;
     addIssue: (issue: Issue) => void;
 
@@ -121,6 +122,13 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         set((state) => ({
             issues: state.issues.map((i) =>
                 i.id === issueId ? { ...i, status } : i
+            ),
+        })),  
+
+    updateIssueAssignee: (issueId, assignee) =>
+        set((state) => ({
+            issues: state.issues.map((i) =>
+                i.id === issueId ? { ...i, assignee } : i
             ),
         })),  
 

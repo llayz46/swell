@@ -20,9 +20,7 @@ export function PrioritySelector({ priority, issueId }: PrioritySelectorProps) {
     const [value, setValue] = useState<string>(priority.slug);
     const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-    const priorities = useWorkspaceIssuesStore((state) => state.priorities || []);
-    const filterByPriority = useWorkspaceIssuesStore((state) => state.filterByPriority);
-    const updateIssuePriority = useWorkspaceIssuesStore((state) => state.updateIssuePriority);
+    const { priorities, filterByPriority, updateIssuePriority } = useWorkspaceIssuesStore();
 
     useEffect(() => {
         setValue(priority.slug);

@@ -100,6 +100,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->name('update-priority');
             Route::patch('/{issue}/status', [WorkspaceIssueController::class, 'updateStatus'])
                 ->name('update-status');
+            Route::patch('/{issue}/assignee', [WorkspaceIssueController::class, 'updateAssignee'])
+                ->name('update-assignee');
         });
     });
 });

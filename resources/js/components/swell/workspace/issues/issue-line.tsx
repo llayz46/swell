@@ -53,8 +53,8 @@ export function IssueLine({ issue }: { issue: Issue }) {
                         <span className="hidden shrink-0 text-xs text-muted-foreground sm:inline-block">
                             {format(issue.createdAt, 'dd MMM', { locale: fr })}
                         </span>
-                        
-                        <UserAssignee user={issue.assignee} />
+
+                        <UserAssignee user={issue.assignee} issueId={issue.id} />
                     </div>
                 </div>
             </ContextMenuTrigger>
