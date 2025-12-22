@@ -35,6 +35,8 @@ export function PrioritySelector({ priority, issueId }: PrioritySelectorProps) {
         const newPriority = priorities.find((p) => p.slug === prioritySlug);
         if (!newPriority) return;
 
+        if (newPriority.slug === priority.slug) return;
+
         updateIssuePriority(issueId, newPriority);
 
         setIsUpdating(true);

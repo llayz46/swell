@@ -36,7 +36,8 @@ export function StatusSelector({ status, issueId }: StatusSelectorProps) {
 
         if (!newStatus) return;
 
-        // Optimistic update avec le NOUVEAU statut
+        if (newStatus.id === status.id) return;
+
         updateIssueStatus(issueId, newStatus);
 
         setIsUpdating(true);
@@ -48,7 +49,6 @@ export function StatusSelector({ status, issueId }: StatusSelectorProps) {
                 preserveScroll: true,
                 preserveState: true,
                 onError: (errors) => {
-                    // Rollback vers l'ancien statut en cas d'erreur
                     updateIssueStatus(issueId, status);
                     setIsUpdating(false);
 

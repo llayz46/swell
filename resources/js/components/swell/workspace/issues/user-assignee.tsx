@@ -34,6 +34,8 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
     const handleAssigneeChange = (newAssignee: IssueAssignee | null) => {
         setOpen(false);
 
+        if (newAssignee?.id === user?.id) return;
+
         setCurrentAssignee(newAssignee);
         updateIssueAssignee(issueId, newAssignee);
 

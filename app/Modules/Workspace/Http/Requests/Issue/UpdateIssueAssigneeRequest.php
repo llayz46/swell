@@ -14,7 +14,7 @@ class UpdateIssueAssigneeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'assignee_id' => ['required', 'integer', 'exists:issue_assignees,id'],
+            'assignee_id' => ['required', 'integer', 'exists:users,id'],
         ];
     }
 
