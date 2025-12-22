@@ -20,8 +20,6 @@ export function GroupIssues({ status }: GroupIssuesProps) {
 
     const count = issues.length;
 
-    if (!status) return null;
-
     return (
         <div className="bg-workspace">
             <div className="bg-workspace sticky top-0 z-10 w-full h-10">
