@@ -1,23 +1,21 @@
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { IssueLine } from './issue-line';
 import { StatusIcon } from '@/components/swell/workspace/icons';
+import { IssueStatus, Issue } from '@/types/workspace';
 import { useMemo } from 'react';
-import { IssueStatus } from '@/types/workspace';
 
 interface GroupIssuesProps {
     status: IssueStatus;
+    allIssues: Issue[];
 }
 
-export function GroupIssues({ status }: GroupIssuesProps) {
-    const allIssues = useWorkspaceIssuesStore((state) => state.issues);
-
+export function GroupIssues({ status, allIssues }: GroupIssuesProps) {
     const issues = useMemo(
         () => allIssues.filter((issue) => issue.status.id === status.id),
         [allIssues, status]
     );
-
+    
     const count = issues.length;
 
     return (

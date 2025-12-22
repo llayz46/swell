@@ -46,13 +46,14 @@ export default function Issues({ team, issues, statuses, priorities, labels, fil
         });
     }, [team, issues, statuses, labels, priorities, normalizedFilters, isLead, isMember]);
 
-    const { statuses: storeStatuses, filters: storeFilters } = useWorkspaceIssuesStore(
+    const { statuses: storeStatuses, filters: storeFilters, issues: allIssues } = useWorkspaceIssuesStore(
         useShallow((state) => ({
             statuses: state.statuses,
             filters: state.filters,
+            issues: state.issues,
         }))
     );
-
+    
     const isFiltering = Object.values(storeFilters).some((f) => f.length > 0);
 
     return (
@@ -67,6 +68,7 @@ export default function Issues({ team, issues, statuses, priorities, labels, fil
                         <GroupIssues
                             key={status.id}
                             status={status}
+                            allIssues={allIssues}
                         />
                     )
                 ))}
