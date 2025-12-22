@@ -224,7 +224,7 @@ export function Filter() {
                            <CommandItem
                               key={member.id}
                               value={member.name}
-                              onSelect={() => toggleFilter('assignee', member.name)}
+                              onSelect={() => toggleFilter('assignee', member.id.toString())}
                               className="flex items-center justify-between"
                            >
                               <div className="flex items-center gap-2">
@@ -234,7 +234,7 @@ export function Filter() {
                                  </Avatar>
                                  {member.name}
                               </div>
-                              {filters.assignee.includes(member.name) && (
+                              {filters.assignee.includes(member.id.toString()) && (
                                  <CheckIcon size={16} className="ml-auto" />
                               )}
                               <span className="text-muted-foreground text-xs">
@@ -266,14 +266,14 @@ export function Filter() {
                            <CommandItem
                               key={priority.id}
                               value={priority.id}
-                              onSelect={() => toggleFilter('priority', priority.id)}
+                              onSelect={() => toggleFilter('priority', priority.slug)}
                               className="flex items-center justify-between"
                            >
                               <div className="flex items-center gap-2">
                                  <PriorityIcon iconType={priority.icon_type} color={priority.color} />
                                  {priority.name}
                               </div>
-                              {filters.priority.includes(priority.id) && (
+                              {filters.priority.includes(priority.slug) && (
                                  <CheckIcon size={16} className="ml-auto" />
                               )}
                               <span className="text-muted-foreground text-xs">
@@ -305,7 +305,7 @@ export function Filter() {
                            <CommandItem
                               key={label.id}
                               value={label.id}
-                              onSelect={() => toggleFilter('labels', label.id)}
+                              onSelect={() => toggleFilter('labels', label.slug)}
                               className="flex items-center justify-between"
                            >
                               <div className="flex items-center gap-2">
@@ -315,7 +315,7 @@ export function Filter() {
                                  ></span>
                                  {label.name}
                               </div>
-                              {filters.labels.includes(label.id) && (
+                              {filters.labels.includes(label.slug) && (
                                  <CheckIcon size={16} className="ml-auto" />
                               )}
                               <span className="text-muted-foreground text-xs">

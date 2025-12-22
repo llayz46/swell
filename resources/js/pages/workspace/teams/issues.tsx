@@ -1,6 +1,7 @@
 import WorkspaceLayout from '@/layouts/workspace-layout';
 import Header from '@/components/swell/workspace/layout/headers/issues/header';
 import { GroupIssues } from '@/components/swell/workspace/issues/group-issues';
+import { FilteredGroupIssues } from '@/components/swell/workspace/issues/filtered-group-issues';
 import { Head } from '@inertiajs/react';
 import { Issue, IssueStatus, IssuePriority, IssueLabel, Team } from '@/types/workspace';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
@@ -53,8 +54,16 @@ export default function Issues({ team, issues, statuses, priorities, labels, fil
             issues: state.issues,
         }))
     );
-    
+
     const isFiltering = Object.values(storeFilters).some((f) => f.length > 0);
+
+    const filteredIssues = useMemo(() => {
+        if (!isFiltering) return allIssues;
+
+        const filtered = useWorkspaceIssuesStore.getState().getFilteredIssues();
+
+        return filtered;
+    }, [allIssues, storeFilters, isFiltering]);
 
     return (
         <WorkspaceLayout header={<Header />}>
@@ -63,7 +72,11 @@ export default function Issues({ team, issues, statuses, priorities, labels, fil
             <div>
                 {storeStatuses.map((status) => (
                     isFiltering ? (
-                        <span>filtering</span>
+                        <FilteredGroupIssues
+                            key={status.id}
+                            status={status}
+                            allIssues={filteredIssues}
+                        />
                     ) : (
                         <GroupIssues
                             key={status.id}

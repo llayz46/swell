@@ -265,7 +265,7 @@ class WorkspaceModuleSeeder extends Seeder
                 $issue = Issue::factory()->create([
                     'team_id' => $team->id,
                     'creator_id' => $users->random()->id,
-                    'assignee_id' => $users->random()->id,
+                    'assignee_id' => $team->members->random()->id,
                     'status_id' => $statuses->random()->id,
                     'priority_id' => $priorities->random()->id,
                 ]);
