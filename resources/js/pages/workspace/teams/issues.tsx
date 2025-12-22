@@ -4,7 +4,8 @@ import { GroupIssues } from '@/components/swell/workspace/issues/group-issues';
 import { Head } from '@inertiajs/react';
 import { Issue, IssueStatus, IssuePriority, IssueLabel, Team } from '@/types/workspace';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
 interface IssuesPageProps {
     team: Team;
@@ -15,21 +16,24 @@ interface IssuesPageProps {
     filters: {
         status?: string;
         priority?: string;
+        assignee?: string[];
+        labels?: string[];
     };
     isLead: boolean;
     isMember: boolean;
 }
 
+const normalizeFilters = (serverFilters: { status?: string; priority?: string }) => ({
+    status: serverFilters.status ? [serverFilters.status] : [],
+    priority: serverFilters.priority ? [serverFilters.priority] : [],
+    assignee: [],
+    labels: [],
+});
+
 export default function Issues({ team, issues, statuses, priorities, labels, filters, isLead, isMember }: IssuesPageProps) {
-    console.log(filters)
+    const normalizedFilters = useMemo(() => normalizeFilters(filters), [filters]);
+
     useEffect(() => {
-        const normalizedFilters = {
-            status: filters.status ? [filters.status] : [],
-            priority: filters.priority ? [filters.priority] : [],
-            assignee: [],
-            labels: [],
-        };
-        
         useWorkspaceIssuesStore.getState().initialize({
             team,
             issues,
@@ -40,12 +44,16 @@ export default function Issues({ team, issues, statuses, priorities, labels, fil
             isLead,
             isMember,
         });
-    }, [team, issues, statuses, labels, priorities, filters, isLead, isMember]);
+    }, [team, issues, statuses, labels, priorities, normalizedFilters, isLead, isMember]);
 
-    const storeStatuses = useWorkspaceIssuesStore((state) => state.statuses);
-    const isFiltering = useWorkspaceIssuesStore((state) =>
-        Object.values(state.filters).some(f => f.length > 0)
+    const { statuses: storeStatuses, filters: storeFilters } = useWorkspaceIssuesStore(
+        useShallow((state) => ({
+            statuses: state.statuses,
+            filters: state.filters,
+        }))
     );
+
+    const isFiltering = Object.values(storeFilters).some((f) => f.length > 0);
 
     return (
         <WorkspaceLayout header={<Header />}>
