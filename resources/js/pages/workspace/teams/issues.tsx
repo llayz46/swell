@@ -21,21 +21,31 @@ interface IssuesPageProps {
 }
 
 export default function Issues({ team, issues, statuses, priorities, labels, filters, isLead, isMember }: IssuesPageProps) {
-    // Initialiser le store dans un useEffect pour éviter les updates pendant le render
+    console.log(filters)
     useEffect(() => {
+        const normalizedFilters = {
+            status: filters.status ? [filters.status] : [],
+            priority: filters.priority ? [filters.priority] : [],
+            assignee: [],
+            labels: [],
+        };
+        
         useWorkspaceIssuesStore.getState().initialize({
             team,
             issues,
             statuses,
             labels,
             priorities,
-            filters,
+            filters: normalizedFilters,
             isLead,
             isMember,
         });
     }, [team, issues, statuses, labels, priorities, filters, isLead, isMember]);
 
     const storeStatuses = useWorkspaceIssuesStore((state) => state.statuses);
+    const isFiltering = useWorkspaceIssuesStore((state) =>
+        Object.values(state.filters).some(f => f.length > 0)
+    );
 
     return (
         <WorkspaceLayout header={<Header />}>
@@ -43,7 +53,11 @@ export default function Issues({ team, issues, statuses, priorities, labels, fil
 
             <div>
                 {storeStatuses.map((status) => (
-                    <GroupIssues key={status.id} statusId={status.id} />
+                    isFiltering ? (
+                        <span>filtering</span>
+                    ) : (
+                        <GroupIssues key={status.id} statusId={status.id} />
+                    )
                 ))}
             </div>
         </WorkspaceLayout>

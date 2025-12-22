@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Issue, IssueStatus, IssuePriority, IssueLabel, Team } from '@/types/workspace';
+import type { Issue, IssueStatus, IssuePriority, IssueLabel, IssueAssignee, Team } from '@/types/workspace';
 
 type Filters = {
     status: string[];
@@ -59,6 +59,7 @@ type WorkspaceIssuesStore = {
     filterByAssignee: (assigneeId: string | null) => Issue[];
     filterByPriority: (priorityId: string) => Issue[];
     filterByLabel: (labelId: string) => Issue[];
+    hasActiveFilters: () => boolean;
     getFilteredIssues: () => Issue[];
 
     // Helper pour grouper les issues par statut
@@ -195,6 +196,11 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
     filterByLabel: (labelId) => {
         const { issues } = get();
         return issues.filter((issue) => issue.labels.some((label) => label.id === labelId));
+    },
+    
+    hasActiveFilters: () => {
+        const { filters } = get();
+        return Object.values(filters).some((filterArray) => filterArray.length > 0);
     },
 
     getFilteredIssues: () => {
