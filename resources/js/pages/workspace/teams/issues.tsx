@@ -64,7 +64,10 @@ export default function Issues({ team, issues, statuses, priorities, labels, fil
                     isFiltering ? (
                         <span>filtering</span>
                     ) : (
-                        <GroupIssues key={status.id} statusId={status.id} />
+                        <GroupIssues
+                            key={status.id}
+                            status={status}
+                        />
                     )
                 ))}
             </div>

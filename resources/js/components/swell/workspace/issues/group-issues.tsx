@@ -4,23 +4,18 @@ import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { IssueLine } from './issue-line';
 import { StatusIcon } from '@/components/swell/workspace/icons';
 import { useMemo } from 'react';
+import { IssueStatus } from '@/types/workspace';
 
 interface GroupIssuesProps {
-    statusId: string;
+    status: IssueStatus;
 }
 
-export function GroupIssues({ statusId }: GroupIssuesProps) {
-    const status = useWorkspaceIssuesStore((state) =>
-        state.statuses.find((s) => s.id === statusId)
-    );
-
-    // Récupérer les issues directement du store pour que Zustand déclenche les re-renders
+export function GroupIssues({ status }: GroupIssuesProps) {
     const allIssues = useWorkspaceIssuesStore((state) => state.issues);
 
-    // Filtrer les issues par status
     const issues = useMemo(
-        () => allIssues.filter((issue) => issue.status.id === statusId),
-        [allIssues, statusId]
+        () => allIssues.filter((issue) => issue.status.id === status.id),
+        [allIssues, status]
     );
 
     const count = issues.length;
