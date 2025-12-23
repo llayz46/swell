@@ -29,6 +29,8 @@ type WorkspaceIssuesStore = {
     filters: Filters;
     isLead: boolean;
     isMember: boolean;
+    createIssueDialogOpen: boolean;
+    createIssueDialogStatusId: string | null;
 
     // Actions d'initialisation
     initialize: (data: InitializeData) => void;
@@ -40,6 +42,10 @@ type WorkspaceIssuesStore = {
     setFilters: (filters: Partial<Filters>) => void;
     setIsLead: (isLead: boolean) => void;
     setIsMember: (isMember: boolean) => void;
+
+    // Actions du dialog de création
+    openCreateIssueDialog: (statusId?: string) => void;
+    closeCreateIssueDialog: () => void;
 
     // Actions de manipulation d'issues
     updateIssue: (issue: Issue) => void;
@@ -81,6 +87,8 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
     },
     isLead: false,
     isMember: false,
+    createIssueDialogOpen: false,
+    createIssueDialogStatusId: null,
 
     // Actions d'initialisation
     initialize: ({ team, issues, statuses, priorities, labels, filters, isLead, isMember }) =>
@@ -106,6 +114,18 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         })),
     setIsLead: (isLead) => set({ isLead }),
     setIsMember: (isMember) => set({ isMember }),
+
+    // Actions du dialog de création
+    openCreateIssueDialog: (statusId) =>
+        set({
+            createIssueDialogOpen: true,
+            createIssueDialogStatusId: statusId || null,
+        }),
+    closeCreateIssueDialog: () =>
+        set({
+            createIssueDialogOpen: false,
+            createIssueDialogStatusId: null,
+        }),
 
     updateIssue: (issue) =>
         set((state) => ({

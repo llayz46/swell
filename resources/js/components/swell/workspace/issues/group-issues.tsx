@@ -1,7 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
 import { IssueLine } from './issue-line';
 import { StatusIcon } from '@/components/swell/workspace/icons';
+import { CreateIssueButton } from '@/components/swell/workspace/issues/create-issue-button';
 import { IssueStatus, Issue } from '@/types/workspace';
 import { useMemo } from 'react';
 
@@ -15,9 +14,9 @@ export function GroupIssues({ status, allIssues }: GroupIssuesProps) {
         () => allIssues.filter((issue) => issue.status.id === status.id),
         [allIssues, status]
     );
-    
+        
     const count = issues.length;
-
+        
     return (
         <div className="bg-workspace">
             <div className="bg-workspace sticky top-0 z-10 w-full h-10">
@@ -33,17 +32,9 @@ export function GroupIssues({ status, allIssues }: GroupIssuesProps) {
                         <span className="text-sm text-muted-foreground">{count}</span>
                     </div>
 
-                    <Button
-                        className="size-6"
-                        size="icon"
-                        variant="ghost"
-                        // onClick={(e) => {
-                        //     e.stopPropagation();
-                        //     openModal(status);
-                        // }}
-                    >
-                        <Plus className="size-4" />
-                    </Button>
+                    <CreateIssueButton 
+                        statusId={status.id}
+                    />
                 </div>
             </div>
 

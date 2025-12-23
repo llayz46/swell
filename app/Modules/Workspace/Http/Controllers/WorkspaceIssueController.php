@@ -3,9 +3,10 @@
 namespace App\Modules\Workspace\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Workspace\Http\Requests\Issue\StoreIssueRequest;
+use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueAssigneeRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssuePriorityRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueStatusRequest;
-use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueAssigneeRequest;
 use App\Modules\Workspace\Models\Issue;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -33,9 +34,22 @@ class WorkspaceIssueController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreIssueRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $issue = Issue::create([
+            ...$validated,
+            'identifier' => Issue::generateIdentifier(),
+            'creator_id' => auth()->id(),
+            'rank' => $this->generateNextRank(),
+        ]);
+
+        if (!empty($validated['label_ids'])) {
+            $issue->labels()->attach($validated['label_ids']);
+        }
+
+        return back();
     }
 
     /**
@@ -110,5 +124,13 @@ class WorkspaceIssueController extends Controller
         ]);
 
         return back();
+    }
+
+    private function generateNextRank(): string
+    {
+        // Implémentation simplifiée, à remplacer par LexoRank si nécessaire
+        $maxRank = Issue::max('rank');
+
+        return (string) ((int) $maxRank + 1);
     }
 }
