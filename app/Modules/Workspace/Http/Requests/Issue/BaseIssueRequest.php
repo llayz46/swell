@@ -2,6 +2,9 @@
 
 namespace App\Modules\Workspace\Http\Requests\Issue;
 
+use App\Models\User;
+use App\Modules\Workspace\Models\Team;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class BaseIssueRequest extends FormRequest
@@ -53,7 +56,21 @@ abstract class BaseIssueRequest extends FormRequest
             'description' => ['nullable', 'string', 'min:5', 'max:1000'],
             'status_id' => ['required', 'integer', 'exists:issue_statuses,id'],
             'priority_id' => ['required', 'integer', 'exists:issue_priorities,id'],
-            'assignee_id' => ['nullable', 'integer', 'exists:users,id'],
+            'assignee_id' => [
+                'nullable',
+                'integer',
+                'exists:users,id',
+                function (string $attribute, mixed $value, Closure $fail) {
+                    if ($value && $this->team_id) {
+                        $team = Team::find($this->team_id);
+                        $user = User::find($value);
+
+                        if ($team && $user && ! $team->isMember($user)) {
+                            $fail('Désolé, cet utilisateur n\'est pas membre de l\'équipe sélectionnée.');
+                        }
+                    }
+                },
+            ],
             'team_id' => ['required', 'integer', 'exists:teams,id'],
             'label_ids' => ['nullable', 'array'],
             'label_ids.*' => ['exists:issue_labels,id'],
