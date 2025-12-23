@@ -23,8 +23,8 @@ class DeleteCategoryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom de la catégorie est requis.',
-            'name.in' => 'Le nom saisi ne correspond pas au nom de la catégorie à supprimer.',
+            'name.required' => 'Oups ! Veuillez saisir le nom de la catégorie pour confirmer.',
+            'name.in' => 'Hmm, le nom saisi ne correspond pas. Veuillez réessayer.',
         ];
     }
 }

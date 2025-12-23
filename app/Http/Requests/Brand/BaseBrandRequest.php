@@ -22,18 +22,18 @@ abstract class BaseBrandRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom de la marque est obligatoire.',
-            'name.string' => 'Le nom de la marque doit être une chaîne de caractères.',
-            'name.max' => 'Le nom de la marque ne peut pas dépasser 255 caractères.',
+            'name.required' => 'Oups ! N\'oubliez pas de donner un nom à la marque.',
+            'name.string' => 'Hmm, le nom doit être du texte.',
+            'name.max' => 'Désolé, le nom est trop long (255 caractères maximum).',
 
-            'slug.required' => 'Le slug de la marque est obligatoire.',
-            'slug.string' => 'Le slug de la marque doit être une chaîne de caractères.',
-            'slug.max' => 'Le slug de la marque ne peut pas dépasser 255 caractères.',
-            'slug.unique' => 'Ce slug est déjà utilisé par une autre marque.',
+            'slug.required' => 'Oups ! Le slug est requis.',
+            'slug.string' => 'Hmm, le slug doit être du texte.',
+            'slug.max' => 'Désolé, le slug est trop long (255 caractères maximum).',
+            'slug.unique' => 'Oups ! Ce slug est déjà utilisé par une autre marque.',
 
-            'logo_url.image' => 'Le logo doit être une image.',
-            'logo_url.max' => 'Le logo ne peut pas dépasser 2 Mo.',
-            'logo_url.mimes' => 'Le logo doit être au format jpg, jpeg, png, svg, gif ou webp.',
+            'logo_url.image' => 'Oups ! Le fichier doit être une image.',
+            'logo_url.max' => 'Hmm, le logo est trop lourd ! Il ne doit pas dépasser 2 Mo.',
+            'logo_url.mimes' => 'Désolé, seuls les formats jpg, jpeg, png, svg, gif et webp sont acceptés.',
         ];
     }
 

@@ -31,25 +31,25 @@ class StoreCategoryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom de la catégorie est obligatoire.',
-            'name.string' => 'Le nom de la catégorie doit être une chaîne de caractères.',
-            'name.max' => 'Le nom de la catégorie ne peut pas dépasser 255 caractères.',
+            'name.required' => 'Oups ! N\'oubliez pas de donner un nom à la catégorie.',
+            'name.string' => 'Hmm, le nom doit être du texte.',
+            'name.max' => 'Désolé, le nom est trop long (255 caractères maximum).',
 
-            'slug.required' => 'Le slug de la catégorie est obligatoire.',
-            'slug.string' => 'Le slug de la catégorie doit être une chaîne de caractères.',
-            'slug.max' => 'Le slug de la catégorie ne peut pas dépasser 255 caractères.',
-            'slug.unique' => 'Ce slug est déjà utilisé par une autre catégorie.',
+            'slug.required' => 'Oups ! Le slug est requis.',
+            'slug.string' => 'Hmm, le slug doit être du texte.',
+            'slug.max' => 'Désolé, le slug est trop long (255 caractères maximum).',
+            'slug.unique' => 'Oups ! Ce slug est déjà utilisé par une autre catégorie.',
 
-            'description.string' => 'La description doit être une chaîne de caractères.',
-            'description.max' => 'La description ne peut pas dépasser 1000 caractères.',
+            'description.string' => 'Hmm, la description doit être du texte.',
+            'description.max' => 'Désolé, la description est trop longue (1000 caractères maximum).',
 
-            'parent_id.exists' => 'La catégorie parente sélectionnée n\'existe pas.',
+            'parent_id.exists' => 'Désolé, la catégorie parente sélectionnée est introuvable.',
 
-            'image_url.image' => 'L\'image doit être un fichier image valide.',
-            'image_url.max' => 'L\'image ne peut pas dépasser 2 Mo.',
-            'image_url.mimes' => 'L\'image doit être au format jpg, jpeg, png, svg, gif ou webp.',
+            'image_url.image' => 'Oups ! Le fichier doit être une image.',
+            'image_url.max' => 'Hmm, l\'image est trop lourde ! Elle ne doit pas dépasser 2 Mo.',
+            'image_url.mimes' => 'Désolé, seuls les formats jpg, jpeg, png, svg, gif et webp sont acceptés.',
 
-            'status.boolean' => 'Le statut doit être vrai ou faux.',
+            'status.boolean' => 'Hmm, le statut doit être vrai ou faux.',
         ];
     }
 }

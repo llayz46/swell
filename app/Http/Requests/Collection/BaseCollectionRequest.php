@@ -22,19 +22,19 @@ abstract class BaseCollectionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'Le nom de la collection est obligatoire.',
-            'title.string' => 'Le nom de la collection doit être une chaîne de caractères.',
-            'title.max' => 'Le nom de la collection ne peut pas dépasser 255 caractères.',
+            'title.required' => 'Oups ! N\'oubliez pas de donner un nom à la collection.',
+            'title.string' => 'Hmm, le nom doit être du texte.',
+            'title.max' => 'Désolé, le nom est trop long (255 caractères maximum).',
 
-            'slug.required' => 'Le slug de la collection est obligatoire.',
-            'slug.string' => 'Le slug de la collection doit être une chaîne de caractères.',
-            'slug.max' => 'Le slug de la collection ne peut pas dépasser 255 caractères.',
-            'slug.unique' => 'Ce slug est déjà utilisé par une autre collection.',
+            'slug.required' => 'Oups ! Le slug est requis.',
+            'slug.string' => 'Hmm, le slug doit être du texte.',
+            'slug.max' => 'Désolé, le slug est trop long (255 caractères maximum).',
+            'slug.unique' => 'Oups ! Ce slug est déjà utilisé par une autre collection.',
 
-            'description.string' => 'La description doit être une chaîne de caractères.',
-            'description.max' => 'La description ne peut pas dépasser 1000 caractères.',
+            'description.string' => 'Hmm, la description doit être du texte.',
+            'description.max' => 'Désolé, la description est trop longue (1000 caractères maximum).',
 
-            'is_active.boolean' => 'Le statut actif doit être vrai ou faux.',
+            'is_active.boolean' => 'Hmm, le statut actif doit être vrai ou faux.',
         ];
     }
 
