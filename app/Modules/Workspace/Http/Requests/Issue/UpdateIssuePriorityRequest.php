@@ -21,9 +21,9 @@ class UpdateIssuePriorityRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'priority_id.required' => 'La priorité est requise.',
-            'priority_id.integer' => 'La priorité doit être un entier.',
-            'priority_id.exists' => 'La priorité spécifiée n\'existe pas.',
+            'priority_id.required' => 'Oups ! Veuillez sélectionner une priorité.',
+            'priority_id.integer' => 'Hmm, quelque chose ne va pas avec la priorité sélectionnée.',
+            'priority_id.exists' => 'Désolé, cette priorité est introuvable. Veuillez en choisir une autre.',
         ];
     }
 }

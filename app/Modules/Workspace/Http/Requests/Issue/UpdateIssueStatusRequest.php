@@ -21,9 +21,9 @@ class UpdateIssueStatusRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'status_id.required' => 'Le statut est requis.',
-            'status_id.integer' => 'Le statut doit être un entier.',
-            'status_id.exists' => 'Le statut spécifié n\'existe pas.',
+            'status_id.required' => 'Oups ! Veuillez sélectionner un statut.',
+            'status_id.integer' => 'Hmm, quelque chose ne va pas avec le statut sélectionné.',
+            'status_id.exists' => 'Désolé, ce statut est introuvable. Veuillez en choisir un autre.',
         ];
     }
 }

@@ -14,16 +14,15 @@ class UpdateIssueAssigneeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'assignee_id' => ['required', 'integer', 'exists:users,id'],
+            'assignee_id' => ['nullable', 'integer', 'exists:users,id'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'assignee_id.required' => 'L\'assigné est requis.',
-            'assignee_id.integer' => 'L\'assigné doit être un entier.',
-            'assignee_id.exists' => 'L\'assigné spécifié n\'existe pas.',
+            'assignee_id.integer' => "Hmm, quelque chose ne va pas avec l'utilisateur sélectionné.",
+            'assignee_id.exists' => "Désolé, cet utilisateur est introuvable. Veuillez en choisir un autre.",
         ];
     }
 }
