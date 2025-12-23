@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import type { Issue, IssueStatus, IssuePriority, IssueLabel, IssueAssignee, Team } from '@/types/workspace';
+import { router } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 type Filters = {
     status: string[];
@@ -31,6 +33,7 @@ type WorkspaceIssuesStore = {
     isMember: boolean;
     createIssueDialogOpen: boolean;
     createIssueDialogStatusId: string | null;
+    updatingIssues: Set<number>;
 
     // Actions d'initialisation
     initialize: (data: InitializeData) => void;
@@ -47,13 +50,22 @@ type WorkspaceIssuesStore = {
     openCreateIssueDialog: (statusId?: string) => void;
     closeCreateIssueDialog: () => void;
 
-    // Actions de manipulation d'issues
+    // Actions de manipulation d'issues (état local uniquement)
     updateIssue: (issue: Issue) => void;
     updateIssuePriority: (issueId: number, priority: IssuePriority) => void;
     updateIssueStatus: (issueId: number, status: IssueStatus) => void;
     updateIssueAssignee: (issueId: number, assignee: IssueAssignee | null) => void;
     removeIssue: (issueId: number) => void;
     addIssue: (issue: Issue) => void;
+
+    // Actions avec appels serveur
+    performUpdateStatus: (issueId: number, statusIdOrSlug: number | string, currentStatus: IssueStatus) => void;
+    performUpdatePriority: (issueId: number, priorityId: number, currentPriority: IssuePriority) => void;
+    performUpdateAssignee: (issueId: number, assigneeId: number | null, currentAssignee: IssueAssignee | null) => void;
+    performDeleteIssue: (issueId: number, onSuccess?: () => void) => void;
+
+    // Helper pour vérifier si une issue est en cours de mise à jour
+    isIssueUpdating: (issueId: number) => boolean;
 
     // Actions de filtrage
     toggleFilter: (filterType: keyof Filters, value: string) => void;
@@ -89,6 +101,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
     isMember: false,
     createIssueDialogOpen: false,
     createIssueDialogStatusId: null,
+    updatingIssues: new Set<number>(),
 
     // Actions d'initialisation
     initialize: ({ team, issues, statuses, priorities, labels, filters, isLead, isMember }) =>
@@ -162,6 +175,173 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         set((state) => ({
             issues: [...state.issues, issue],
         })),
+
+    // Actions avec appels serveur
+    performUpdateStatus: (issueId, statusIdOrSlug, currentStatus) => {
+        if (!issueId) return;
+
+        const { statuses, updateIssueStatus, updatingIssues } = get();
+
+        const newStatus =
+            typeof statusIdOrSlug === 'number'
+            ? statuses.find((s) => s.id === String(statusIdOrSlug))
+                : statuses.find((s) => s.slug === statusIdOrSlug);
+
+        if (!newStatus) {
+            toast.error('Statut invalide');
+            return;
+        }
+
+        if (newStatus.id === currentStatus.id) return;
+
+        updateIssueStatus(issueId, newStatus);
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.patch(
+            route('workspace.issues.update-status', { issue: issueId }),
+            { status_id: newStatus.id },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+                    toast.success('Statut mis à jour avec succès');
+                },
+                onError: (errors) => {
+                    updateIssueStatus(issueId, currentStatus);
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+
+                    const errorMessage = (errors as Record<string, string>).status_id || 'Erreur lors de la mise à jour du statut';
+                    toast.error(errorMessage);
+                },
+            },
+        );
+    },
+
+    performUpdatePriority: (issueId, priorityId, currentPriority) => {
+        if (!issueId) return;
+
+        const { priorities, updateIssuePriority, updatingIssues } = get();
+
+        const newPriority = priorities.find((p) => Number(p.id) === priorityId);
+
+        if (!newPriority) {
+            toast.error('Priorité invalide');
+            return;
+        }
+
+        if (newPriority.id === currentPriority.id) return;
+
+        updateIssuePriority(issueId, newPriority);
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.patch(
+            route('workspace.issues.update-priority', { issue: issueId }),
+            { priority_id: newPriority.id },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+                    toast.success('Priorité mise à jour avec succès');
+                },
+                onError: (errors) => {
+                    updateIssuePriority(issueId, currentPriority);
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+
+                    const errorMessage = (errors as Record<string, string>).priority_id || 'Erreur lors de la mise à jour de la priorité';
+                    toast.error(errorMessage);
+                },
+            },
+        );
+    },
+
+    performUpdateAssignee: (issueId, assigneeId, currentAssignee) => {
+        if (!issueId) return;
+
+        const { updateIssueAssignee, updatingIssues } = get();
+
+        const newAssignee = assigneeId ? ({ id: assigneeId } as IssueAssignee) : null;
+
+        updateIssueAssignee(issueId, newAssignee);
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.patch(
+            route('workspace.issues.update-assignee', { issue: issueId }),
+            { assignee_id: assigneeId },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+                    toast.success('Assigné mis à jour avec succès');
+                },
+                onError: (errors) => {
+                    updateIssueAssignee(issueId, currentAssignee);
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+
+                    const errorMessage = (errors as Record<string, string>).assignee_id || "Erreur lors de la mise à jour de l'assigné";
+                    toast.error(errorMessage);
+                },
+            },
+        );
+    },
+
+    performDeleteIssue: (issueId, onSuccess) => {
+        if (!issueId) return;
+
+        const { updatingIssues } = get();
+
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.delete(route('workspace.issues.destroy', { issue: issueId }), {
+            preserveScroll: true,
+            onSuccess: () => {
+                const { updatingIssues } = get();
+                const newSet = new Set(updatingIssues);
+                newSet.delete(issueId);
+                set({ updatingIssues: newSet });
+                toast.success('Issue supprimée avec succès');
+
+                if (onSuccess) {
+                    onSuccess();
+                }
+            },
+            onError: (errors) => {
+                const { updatingIssues } = get();
+                const newSet = new Set(updatingIssues);
+                newSet.delete(issueId);
+                set({ updatingIssues: newSet });
+
+                const errorMessage = (errors as Record<string, string>).message || "Erreur lors de la suppression de l'issue";
+                toast.error(errorMessage);
+            },
+        });
+    },
+
+    // Helper pour vérifier si une issue est en cours de mise à jour
+    isIssueUpdating: (issueId) => {
+        const { updatingIssues } = get();
+        return updatingIssues.has(issueId);
+    },
 
     // Actions de filtrage
     toggleFilter: (filterType, value) =>

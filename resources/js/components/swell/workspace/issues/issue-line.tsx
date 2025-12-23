@@ -59,7 +59,7 @@ export function IssueLine({ issue }: { issue: Issue }) {
                 </div>
             </ContextMenuTrigger>
             
-            <IssueContextMenu issueId={issue.id} />
+            <IssueContextMenu issue={issue} />
         </ContextMenu>
     );
 }

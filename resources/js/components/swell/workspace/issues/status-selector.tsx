@@ -5,8 +5,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { IssueStatus } from '@/types/workspace';
 import { CheckIcon } from 'lucide-react';
-import { router } from "@inertiajs/react";
-import { toast } from "sonner";
 import { useEffect, useId, useState } from 'react';
 
 interface StatusSelectorProps {
@@ -18,9 +16,10 @@ export function StatusSelector({ status, issueId }: StatusSelectorProps) {
     const id = useId();
     const [open, setOpen] = useState<boolean>(false);
     const [value, setValue] = useState<string>(status.slug);
-    const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-    const { statuses, filterByStatus, updateIssueStatus } = useWorkspaceIssuesStore();
+    const { statuses, filterByStatus, isIssueUpdating, performUpdateStatus } = useWorkspaceIssuesStore();
+
+    const isUpdating = isIssueUpdating(issueId);
 
     useEffect(() => {
         setValue(status.slug);
@@ -30,37 +29,7 @@ export function StatusSelector({ status, issueId }: StatusSelectorProps) {
         setValue(statusSlug);
         setOpen(false);
 
-        if (!issueId) return;
-
-        const newStatus = statuses.find((s) => s.slug === statusSlug);
-
-        if (!newStatus) return;
-
-        if (newStatus.id === status.id) return;
-
-        updateIssueStatus(issueId, newStatus);
-
-        setIsUpdating(true);
-
-        router.patch(
-            route('workspace.issues.update-status', { issue: issueId }),
-            { status_id: newStatus.id },
-            {
-                preserveScroll: true,
-                preserveState: true,
-                onError: (errors) => {
-                    updateIssueStatus(issueId, status);
-                    setIsUpdating(false);
-
-                    toast.error(errors.status_id || 'Erreur lors de la mise à jour du statut');
-                },
-                onSuccess: () => {
-                    setIsUpdating(false);
-
-                    toast.success('Statut mis à jour avec succès');
-                }
-            }
-        );
+        performUpdateStatus(issueId, statusSlug, status);
     };
 
     return (
