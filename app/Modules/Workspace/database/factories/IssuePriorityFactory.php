@@ -2,6 +2,7 @@
 
 namespace App\Modules\Workspace\database\factories;
 
+use App\Modules\Workspace\Enums\PriorityIconType;
 use App\Modules\Workspace\Models\IssuePriority;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,8 +23,7 @@ class IssuePriorityFactory extends Factory
         return [
             'slug' => $this->faker->unique()->slug(),
             'name' => $this->faker->word(),
-            'color' => $this->faker->hexColor(),
-            'icon_type' => $this->faker->word(),
+            'icon_type' => $this->faker->randomElement(PriorityIconType::cases()),
             'order' => $this->faker->numberBetween(1, 100),
         ];
     }
@@ -33,8 +33,7 @@ class IssuePriorityFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'slug' => 'urgent',
             'name' => 'Urgent',
-            'color' => '#dc2626',
-            'icon_type' => 'UrgentPriorityIcon',
+            'icon_type' => PriorityIconType::Urgent,
             'order' => 4,
         ]);
     }
@@ -44,8 +43,7 @@ class IssuePriorityFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'slug' => 'high',
             'name' => 'Haute',
-            'color' => '#f97316',
-            'icon_type' => 'HighPriorityIcon',
+            'icon_type' => PriorityIconType::High,
             'order' => 3,
         ]);
     }
@@ -55,8 +53,7 @@ class IssuePriorityFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'slug' => 'medium',
             'name' => 'Moyenne',
-            'color' => '#eab308',
-            'icon_type' => 'MediumPriorityIcon',
+            'icon_type' => PriorityIconType::Medium,
             'order' => 2,
         ]);
     }
@@ -66,19 +63,17 @@ class IssuePriorityFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'slug' => 'low',
             'name' => 'Faible',
-            'color' => '#64748b',
-            'icon_type' => 'LowPriorityIcon',
+            'icon_type' => PriorityIconType::Low,
             'order' => 1,
         ]);
     }
-    
+
     public function none(): static
     {
         return $this->state(fn (array $attributes) => [
             'slug' => 'none',
             'name' => 'Pas prioritaire',
-            'color' => '#94a3b8',
-            'icon_type' => 'NoPriorityIcon',
+            'icon_type' => PriorityIconType::NoPriority,
             'order' => 0,
         ]);
     }

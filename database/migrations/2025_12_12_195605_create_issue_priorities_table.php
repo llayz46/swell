@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('issue_priorities', function (Blueprint $table) {
             $table->id();
-            
+
             $table->string('slug', 50)->unique();
             $table->string('name', 100);
-            $table->string('color', 7);
-            $table->string('icon_type', 50);
+            $table->enum('icon_type', ['NoPriorityIcon', 'LowPriorityIcon', 'MediumPriorityIcon', 'HighPriorityIcon', 'UrgentPriorityIcon']);
             $table->unsignedInteger('order');
-            
+
             $table->timestamps();
         });
     }
