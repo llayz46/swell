@@ -11,7 +11,6 @@ class StoreIssueRequest extends BaseIssueRequest
      */
     public function rules(): array
     {
-        // Pour la création, on utilise toutes les règles de base
         return $this->baseRules();
     }
 }
