@@ -57,7 +57,7 @@ class IssueResource extends JsonResource
                 'slug' => $label->slug,
                 'color' => $label->color,
             ])),
-            'dueDate' => $this->due_date?->toISOString(),
+            'dueDate' => $this->due_date?->format('Y-m-d'),
             'createdAt' => $this->created_at->toISOString(),
             'updatedAt' => $this->updated_at->toISOString(),
         ];

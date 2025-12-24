@@ -56,6 +56,7 @@ type WorkspaceIssuesStore = {
     updateIssueStatus: (issueId: number, status: IssueStatus) => void;
     updateIssueAssignee: (issueId: number, assignee: IssueAssignee | null) => void;
     updateIssueLabels: (issueId: number, labels: IssueLabel[]) => void;
+    updateIssueDueDate: (issueId: number, dueDate: string | null) => void;
     removeIssue: (issueId: number) => void;
     addIssue: (issue: Issue) => void;
 
@@ -64,6 +65,7 @@ type WorkspaceIssuesStore = {
     performUpdatePriority: (issueId: number, priorityId: number, currentPriority: IssuePriority) => void;
     performUpdateAssignee: (issueId: number, newAssignee: IssueAssignee | null, currentAssignee: IssueAssignee | null) => void;
     performToggleLabel: (issueId: number, labelId: number, currentLabels: IssueLabel[]) => void;
+    performUpdateDueDate: (issueId: number, dueDate: string | null, currentDueDate: string | null | undefined) => void;
     performDeleteIssue: (issueId: number, onSuccess?: () => void) => void;
 
     // Helper pour vérifier si une issue est en cours de mise à jour
@@ -172,6 +174,13 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         set((state) => ({
             issues: state.issues.map((i) =>
                 i.id === issueId ? { ...i, labels } : i
+            ),
+        })),
+
+    updateIssueDueDate: (issueId, dueDate) =>
+        set((state) => ({
+            issues: state.issues.map((i) =>
+                i.id === issueId ? { ...i, dueDate: dueDate || undefined } : i
             ),
         })),
 
@@ -352,6 +361,43 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     set({ updatingIssues: newSet });
 
                     const errorMessage = (errors as Record<string, string>).label_id || "Erreur lors de la mise à jour de l'étiquette";
+                    toast.error(errorMessage);
+                },
+            },
+        );
+    },
+
+    performUpdateDueDate: (issueId, dueDate, currentDueDate) => {
+        if (!issueId) return;
+
+        const { updateIssueDueDate, updatingIssues } = get();
+
+        if (dueDate === currentDueDate) return;
+
+        updateIssueDueDate(issueId, dueDate);
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.patch(
+            route('workspace.issues.update-due-date', { issue: issueId }),
+            { due_date: dueDate },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+                    toast.success("Date d'échéance mise à jour avec succès");
+                },
+                onError: (errors) => {
+                    updateIssueDueDate(issueId, currentDueDate || null);
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+
+                    const errorMessage = (errors as Record<string, string>).due_date || "Erreur lors de la mise à jour de la date d'échéance";
                     toast.error(errorMessage);
                 },
             },

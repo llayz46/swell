@@ -2,7 +2,6 @@ import { CalendarIcon } from 'lucide-react';
 import * as React from 'react';
 import { format, isValid, parse } from 'date-fns';
 import { fr } from 'date-fns/locale';
-
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
@@ -47,13 +46,12 @@ export function DatePickerInput({
     };
 
     const handleInputBlur = () => {
-        // Valider la date seulement quand l'utilisateur quitte l'input
         const parsedDate = parse(inputValue, 'dd MMMM yyyy', new Date(), { locale: fr });
+        
         if (isValid(parsedDate)) {
             onChange?.(format(parsedDate, 'yyyy-MM-dd'));
             setMonth(parsedDate);
         } else if (inputValue.trim() !== '') {
-            // Si la date est invalide, réinitialiser à la valeur précédente
             if (validDate) {
                 setInputValue(format(validDate, 'dd MMMM yyyy', { locale: fr }));
             } else {
@@ -61,7 +59,6 @@ export function DatePickerInput({
                 onChange?.('');
             }
         } else {
-            // Input vide
             onChange?.('');
         }
     };

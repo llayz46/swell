@@ -1,4 +1,8 @@
+import { PriorityIcon } from '@/components/swell/workspace/icons';
 import { StatusIcon } from '@/components/swell/workspace/icons/icon-mapper';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
     ContextMenuContent,
     ContextMenuGroup,
@@ -10,14 +14,17 @@ import {
     ContextMenuSubTrigger,
 } from '@/components/ui/context-menu';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
-import { PriorityIcon } from '@/components/swell/workspace/icons';
 import type { Issue } from '@/types/workspace';
+import { format, isValid, parse } from 'date-fns';
+import { useState, useEffect } from 'react';
+import { fr } from 'date-fns/locale';
 import {
     AlarmClock,
     ArrowRightLeft,
     BarChart3,
     CalendarClock,
     CheckCircle2,
+    CheckIcon,
     CircleCheck,
     Clipboard,
     Clock,
@@ -32,9 +39,8 @@ import {
     Tag,
     Trash2,
     User,
-    CheckIcon,
+    X,
 } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useShallow } from 'zustand/react/shallow';
 
 interface IssueContextMenuProps {
@@ -42,18 +48,20 @@ interface IssueContextMenuProps {
 }
 
 export function IssueContextMenu({ issue }: IssueContextMenuProps) {
-    const { statuses, team, priorities, labels, performUpdateStatus, performUpdateAssignee, performUpdatePriority, performToggleLabel } = useWorkspaceIssuesStore(
-        useShallow((state) => ({
-            statuses: state.statuses,
-            team: state.team,
-            priorities: state.priorities,
-            labels: state.labels,
-            performUpdateStatus: state.performUpdateStatus,
-            performUpdateAssignee: state.performUpdateAssignee,
-            performUpdatePriority: state.performUpdatePriority,
-            performToggleLabel: state.performToggleLabel,
-        })),
-    );
+    const { statuses, team, priorities, labels, performUpdateStatus, performUpdateAssignee, performUpdatePriority, performToggleLabel, performUpdateDueDate } =
+        useWorkspaceIssuesStore(
+            useShallow((state) => ({
+                statuses: state.statuses,
+                team: state.team,
+                priorities: state.priorities,
+                labels: state.labels,
+                performUpdateStatus: state.performUpdateStatus,
+                performUpdateAssignee: state.performUpdateAssignee,
+                performUpdatePriority: state.performUpdatePriority,
+                performToggleLabel: state.performToggleLabel,
+                performUpdateDueDate: state.performUpdateDueDate,
+            })),
+        );
 
     const handleStatusChange = (statusSlug: string) => {
         performUpdateStatus(issue.id, statusSlug, issue.status);
@@ -71,6 +79,31 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
     const handleLabelToggle = (labelId: number) => {
         performToggleLabel(issue.id, labelId, issue.labels);
     };
+
+    const handleDueDateChange = (selectedDate: Date | undefined) => {
+        if (selectedDate && isValid(selectedDate)) {
+            const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+            performUpdateDueDate(issue.id, formattedDate, issue.dueDate);
+            setDate(selectedDate);
+        }
+    };
+
+    const handleClearDueDate = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        performUpdateDueDate(issue.id, null, issue.dueDate);
+        setDate(undefined);
+    };
+
+    const initialDate = issue.dueDate ? parse(issue.dueDate, 'yyyy-MM-dd', new Date()) : undefined;
+    const validInitialDate = initialDate && isValid(initialDate) ? initialDate : undefined;
+    const [date, setDate] = useState<Date | undefined>(validInitialDate);
+
+    useEffect(() => {
+        const newDate = issue.dueDate ? parse(issue.dueDate, 'yyyy-MM-dd', new Date()) : undefined;
+        const validDate = newDate && isValid(newDate) ? newDate : undefined;
+        setDate(validDate);
+    }, [issue.dueDate]);
 
     return (
         <ContextMenuContent className="w-64 bg-sidebar">
@@ -95,22 +128,24 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                         <User className="mr-2 size-4" /> Attribution
                     </ContextMenuSubTrigger>
                     <ContextMenuSubContent className="w-48">
-                        <ContextMenuItem onClick={(e) => {
-                            e.preventDefault();
-                            handleAssigneeChange(null);
-                        }}>
+                        <ContextMenuItem
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleAssigneeChange(null);
+                            }}
+                        >
                             <User className="mr-2 size-4" /> Non attribué
                             {!issue.assignee && <CheckIcon className="ml-auto size-4" />}
                         </ContextMenuItem>
                         {team?.members?.map((member) => (
-                            <ContextMenuItem 
-                                key={member.id} 
+                            <ContextMenuItem
+                                key={member.id}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     handleAssigneeChange(member.id);
                                 }}
                             >
-                                <Avatar className="size-4 mr-2">
+                                <Avatar className="mr-2 size-4">
                                     <AvatarImage src={member.avatarUrl} alt={member.name} />
                                     <AvatarFallback>{member.name[0]}</AvatarFallback>
                                 </Avatar>
@@ -135,11 +170,7 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                                     handlePriorityChange(priority.id);
                                 }}
                             >
-                                <PriorityIcon
-                                    iconType={priority.icon_type}
-                                    width={16}
-                                    height={16}
-                                />
+                                <PriorityIcon iconType={priority.icon_type} width={16} height={16} />
                                 {priority.name}
                                 {priority.id === issue.priority?.id && <CheckIcon className="ml-auto size-4" />}
                             </ContextMenuItem>
@@ -155,29 +186,52 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                         {labels.map((label) => (
                             <ContextMenuItem
                                 key={label.id}
-                                className="flex gap-2" 
+                                className="flex gap-2"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     handleLabelToggle(label.id);
                                 }}
                             >
-                                <span
-                                    className="inline-block size-2 rounded-full"
-                                    style={{ backgroundColor: label.color }}
-                                    aria-hidden="true"
-                                />
+                                <span className="inline-block size-2 rounded-full" style={{ backgroundColor: label.color }} aria-hidden="true" />
                                 {label.name}
-                                {issue.labels.some(l => l.id === label.id) && <CheckIcon className="ml-auto size-4" />}
+                                {issue.labels.some((l) => l.id === label.id) && <CheckIcon className="ml-auto size-4" />}
                             </ContextMenuItem>
                         ))}
                     </ContextMenuSubContent>
                 </ContextMenuSub>
 
-                {/*<ContextMenuItem onClick={handleSetDueDate}>*/}
-                <ContextMenuItem disabled>
-                    <CalendarClock className="mr-2 size-4" /> Définir la date d'échéance...
-                    <ContextMenuShortcut>D</ContextMenuShortcut>
-                </ContextMenuItem>
+                <ContextMenuSub>
+                    <ContextMenuSubTrigger>
+                        <CalendarClock className="mr-2 size-4" /> Définir la date d'échéance...
+                    </ContextMenuSubTrigger>
+                    <ContextMenuSubContent className="w-auto p-0">
+                        <div className="flex flex-col">
+                            <Calendar
+                                mode="single"
+                                selected={date}
+                                onSelect={handleDueDateChange}
+                                className="bg-transparent"
+                                locale={fr}
+                            />
+                            {date && (
+                                <div className="flex items-center justify-between border-t border-border px-3 py-2">
+                                    <span className="text-sm text-muted-foreground">
+                                        {format(date, 'dd MMMM yyyy', { locale: fr })}
+                                    </span>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="size-6 p-0"
+                                        onClick={handleClearDueDate}
+                                    >
+                                        <X className="size-3.5" />
+                                        <span className="sr-only">Effacer la date</span>
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    </ContextMenuSubContent>
+                </ContextMenuSub>
 
                 <ContextMenuItem disabled>
                     <Pencil className="mr-2 size-4" /> Renommer...
@@ -271,7 +325,10 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
 
             <ContextMenuSeparator />
 
-            <ContextMenuItem className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40" disabled>
+            <ContextMenuItem
+                className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
+                disabled
+            >
                 <Trash2 className="mr-2 size-4 text-destructive" /> Supprimer
                 <ContextMenuShortcut className="text-destructive">⌘⌫</ContextMenuShortcut>
             </ContextMenuItem>

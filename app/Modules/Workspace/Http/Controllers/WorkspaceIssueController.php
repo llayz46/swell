@@ -5,9 +5,10 @@ namespace App\Modules\Workspace\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Workspace\Http\Requests\Issue\StoreIssueRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueAssigneeRequest;
+use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueDueDateRequest;
+use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueLabelRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssuePriorityRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueStatusRequest;
-use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueLabelRequest;
 use App\Modules\Workspace\Models\Issue;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -46,7 +47,7 @@ class WorkspaceIssueController extends Controller
             'rank' => $this->generateNextRank(),
         ]);
 
-        if (!empty($validated['label_ids'])) {
+        if (! empty($validated['label_ids'])) {
             $issue->labels()->attach($validated['label_ids']);
         }
 
@@ -126,19 +127,33 @@ class WorkspaceIssueController extends Controller
 
         return back();
     }
-    
+
     /**
      * Update the labels of the specified issue.
      */
     public function updateLabel(UpdateIssueLabelRequest $request, Issue $issue)
     {
         $labelId = $request->validated()['label_id'];
-        
+
         if ($issue->labels()->where('issue_labels.id', $labelId)->exists()) {
             $issue->labels()->detach($labelId);
         } else {
             $issue->labels()->attach($labelId);
         }
+
+        return back();
+    }
+
+    /**
+     * Update the due date of the specified issue.
+     */
+    public function updateDueDate(UpdateIssueDueDateRequest $request, Issue $issue)
+    {
+        $validated = $request->validated();
+
+        $issue->update([
+            'due_date' => $validated['due_date'],
+        ]);
 
         return back();
     }
