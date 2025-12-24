@@ -61,7 +61,7 @@ type WorkspaceIssuesStore = {
     // Actions avec appels serveur
     performUpdateStatus: (issueId: number, statusIdOrSlug: number | string, currentStatus: IssueStatus) => void;
     performUpdatePriority: (issueId: number, priorityId: number, currentPriority: IssuePriority) => void;
-    performUpdateAssignee: (issueId: number, assigneeId: number | null, currentAssignee: IssueAssignee | null) => void;
+    performUpdateAssignee: (issueId: number, newAssignee: IssueAssignee | null, currentAssignee: IssueAssignee | null) => void;
     performDeleteIssue: (issueId: number, onSuccess?: () => void) => void;
 
     // Helper pour vérifier si une issue est en cours de mise à jour
@@ -268,19 +268,18 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         );
     },
 
-    performUpdateAssignee: (issueId, assigneeId, currentAssignee) => {
+    performUpdateAssignee: (issueId, newAssignee, currentAssignee) => {
         if (!issueId) return;
 
         const { updateIssueAssignee, updatingIssues } = get();
 
-        const newAssignee = assigneeId ? ({ id: assigneeId } as IssueAssignee) : null;
-
+        // Mise à jour optimiste avec l'objet complet
         updateIssueAssignee(issueId, newAssignee);
         set({ updatingIssues: new Set(updatingIssues).add(issueId) });
 
         router.patch(
             route('workspace.issues.update-assignee', { issue: issueId }),
-            { assignee_id: assigneeId },
+            { assignee_id: newAssignee?.id || null },
             {
                 preserveScroll: true,
                 preserveState: true,
@@ -289,7 +288,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     const newSet = new Set(updatingIssues);
                     newSet.delete(issueId);
                     set({ updatingIssues: newSet });
-                    toast.success('Assigné mis à jour avec succès');
+                    toast.success('Assignation mise à jour avec succès');
                 },
                 onError: (errors) => {
                     updateIssueAssignee(issueId, currentAssignee);
@@ -298,7 +297,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     newSet.delete(issueId);
                     set({ updatingIssues: newSet });
 
-                    const errorMessage = (errors as Record<string, string>).assignee_id || "Erreur lors de la mise à jour de l'assigné";
+                    const errorMessage = (errors as Record<string, string>).assignee_id || "Erreur lors de la mise à jour de l'assignation";
                     toast.error(errorMessage);
                 },
             },

@@ -11,8 +11,7 @@ import { IssueAssignee } from '@/types/workspace';
 import { CheckIcon, CircleUserRound, Send, UserIcon } from 'lucide-react';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { router } from '@inertiajs/react';
+import { useShallow } from 'zustand/react/shallow';
 
 interface AssigneeUserProps {
     user: IssueAssignee | null;
@@ -22,45 +21,28 @@ interface AssigneeUserProps {
 export function UserAssignee({ user, issueId }: AssigneeUserProps) {
     const [open, setOpen] = useState(false);
     const [currentAssignee, setCurrentAssignee] = useState<IssueAssignee | null>(user);
-    const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-    const members = useWorkspaceIssuesStore((state) => state.team?.members || []);
-    const updateIssueAssignee = useWorkspaceIssuesStore((state) => state.updateIssueAssignee);
+    const { members, isIssueUpdating, performUpdateAssignee } = useWorkspaceIssuesStore(
+        useShallow((state) => ({
+            members: state.team?.members || [],
+            isIssueUpdating: state.isIssueUpdating,
+            performUpdateAssignee: state.performUpdateAssignee,
+        })),
+    );
+
+    const isUpdating = isIssueUpdating(issueId);
 
     useEffect(() => {
         setCurrentAssignee(user);
     }, [user]);
-    
+
     const handleAssigneeChange = (newAssignee: IssueAssignee | null) => {
         setOpen(false);
 
         if (newAssignee?.id === user?.id) return;
 
         setCurrentAssignee(newAssignee);
-        updateIssueAssignee(issueId, newAssignee);
-
-        setIsUpdating(true);
-
-        router.patch(
-            route('workspace.issues.update-assignee', { issue: issueId }),
-            { assignee_id: newAssignee?.id || null },
-            {
-                preserveScroll: true,
-                preserveState: true,
-                onError: (errors) => {
-                    setCurrentAssignee(user);
-                    updateIssueAssignee(issueId, user);
-                    setIsUpdating(false);
-
-                    toast.error(errors.assignee_id);
-                },
-                onSuccess: () => {
-                    setIsUpdating(false);
-
-                    toast.success('Assigné mis à jour avec succès');
-                }
-            }
-        );
+        performUpdateAssignee(issueId, newAssignee, user);
     };
 
     return (

@@ -33,6 +33,7 @@ import {
     User,
     CheckIcon,
 } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useShallow } from 'zustand/react/shallow';
 
 interface IssueContextMenuProps {
@@ -40,15 +41,22 @@ interface IssueContextMenuProps {
 }
 
 export function IssueContextMenu({ issue }: IssueContextMenuProps) {
-    const { statuses, performUpdateStatus } = useWorkspaceIssuesStore(
+    const { statuses, performUpdateStatus, performUpdateAssignee, team } = useWorkspaceIssuesStore(
         useShallow((state) => ({
             statuses: state.statuses,
             performUpdateStatus: state.performUpdateStatus,
+            performUpdateAssignee: state.performUpdateAssignee,
+            team: state.team,
         })),
     );
 
     const handleStatusChange = (statusSlug: string) => {
         performUpdateStatus(issue.id, statusSlug, issue.status);
+    };
+
+    const handleAssigneeChange = (assigneeId: number | null) => {
+        const newAssignee = assigneeId ? team?.members?.find((m) => m.id === assigneeId) || null : null;
+        performUpdateAssignee(issue.id, newAssignee, issue.assignee);
     };
 
     return (
@@ -74,24 +82,20 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                         <User className="mr-2 size-4" /> Attribution
                     </ContextMenuSubTrigger>
                     <ContextMenuSubContent className="w-48">
-                        {/*<ContextMenuItem onClick={() => handleAssigneeChange(null)}>*/}
-                        <ContextMenuItem>
+                        <ContextMenuItem onClick={() => handleAssigneeChange(null)}>
                             <User className="mr-2 size-4" /> Non attribué
+                            {!issue.assignee && <CheckIcon className="ml-auto size-4" />}
                         </ContextMenuItem>
-                        {/*{users
-                     .filter((user) => user.teamIds.includes('CORE'))
-                     .map((user) => (
-                        <ContextMenuItem
-                           key={user.id}
-                           onClick={() => handleAssigneeChange(user.id)}
-                        >
-                           <Avatar className="size-4">
-                              <AvatarImage src={user.avatarUrl} alt={user.name} />
-                              <AvatarFallback>{user.name[0]}</AvatarFallback>
-                           </Avatar>
-                           {user.name}
-                        </ContextMenuItem>
-                     ))}*/}
+                        {team?.members?.map((member) => (
+                            <ContextMenuItem key={member.id} onClick={() => handleAssigneeChange(member.id)}>
+                                <Avatar className="size-4 mr-2">
+                                    <AvatarImage src={member.avatarUrl} alt={member.name} />
+                                    <AvatarFallback>{member.name[0]}</AvatarFallback>
+                                </Avatar>
+                                {member.name}
+                                {member.id === issue.assignee?.id && <CheckIcon className="ml-auto size-4" />}
+                            </ContextMenuItem>
+                        ))}
                     </ContextMenuSubContent>
                 </ContextMenuSub>
 
