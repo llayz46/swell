@@ -1,5 +1,5 @@
-import WorkspaceLayout from "@/layouts/workspace-layout";
-import { Head } from "@inertiajs/react";
+import WorkspaceLayout from '@/layouts/workspace-layout';
+import { Head } from '@inertiajs/react';
 
 export default function Index() {
     return (
@@ -13,5 +13,5 @@ export default function Index() {
             <Head title="Tableau de bord - Workspace" />
             index page workspace
         </WorkspaceLayout>
-    )
+    );
 }

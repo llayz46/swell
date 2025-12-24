@@ -20,5 +20,9 @@ export function AppShell({ children, variant = 'header' }: AppShellProps) {
     const cookieState = getCookieBoolean(appSidebarConfig.cookieName);
     const defaultOpen = cookieState !== undefined ? cookieState : fallbackOpen;
 
-    return <SidebarProvider defaultOpen={defaultOpen} cookieName={appSidebarConfig.cookieName}>{children}</SidebarProvider>;
+    return (
+        <SidebarProvider defaultOpen={defaultOpen} cookieName={appSidebarConfig.cookieName}>
+            {children}
+        </SidebarProvider>
+    );
 }

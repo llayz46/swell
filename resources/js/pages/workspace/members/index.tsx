@@ -1,9 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import Header from '@/components/swell/workspace/layout/headers/members/header';
 import { TeamsBadgeGroup } from '@/components/swell/workspace/teams-badge-group';
 import { WorkspaceTableHeader } from '@/components/swell/workspace/workspace-table-header';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import WorkspaceLayout from '@/layouts/workspace-layout';
-import Header from '@/components/swell/workspace/layout/headers/members/header';
 import { TeamMember } from '@/types/workspace';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { Head } from '@inertiajs/react';
@@ -16,9 +16,7 @@ const TABLE_COLUMNS = [
 
 export default function Index({ members }: { members: TeamMember[] }) {
     return (
-        <WorkspaceLayout
-            header={<Header members={members} />}
-        >
+        <WorkspaceLayout header={<Header members={members} />}>
             <Head title="Membres - Workspace" />
 
             <div className="w-full">
@@ -37,12 +35,12 @@ export default function Index({ members }: { members: TeamMember[] }) {
 function MemberRow({ user }: { user: User }) {
     return (
         <div className="flex w-full items-center border-b border-muted-foreground/5 px-6 py-3 text-sm hover:bg-sidebar/50">
-            <div className="flex w-[85%] md:w-[70%] items-center gap-2">
+            <div className="flex w-[85%] items-center gap-2 md:w-[70%]">
                 <Avatar className="size-8 shrink-0">
                     <AvatarImage src={user.avatarUrl} alt={user.name} />
                     <AvatarFallback>{user.name[0]}</AvatarFallback>
                 </Avatar>
-                
+
                 <div className="flex flex-col items-start overflow-hidden">
                     <span className="w-full truncate font-medium">{user.name}</span>
                     <span className="w-full truncate text-xs text-muted-foreground">{user.email}</span>

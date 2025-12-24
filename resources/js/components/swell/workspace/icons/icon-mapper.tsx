@@ -1,13 +1,6 @@
-import { FC } from 'react';
 import * as LucideIcons from 'lucide-react';
-import {
-    BacklogIcon,
-    PausedIcon,
-    ToDoIcon,
-    InProgressIcon,
-    TechnicalReviewIcon,
-    CompletedIcon,
-} from './status';
+import { FC } from 'react';
+import { BacklogIcon, CompletedIcon, InProgressIcon, PausedIcon, TechnicalReviewIcon, ToDoIcon } from './status';
 
 // Map des icônes personnalisées
 const customIcons = {

@@ -38,7 +38,7 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
                     onClick={handleImageClick}
                     src={getStorageUrl(product.featured_image?.url)}
                     alt={product.featured_image?.alt_text}
-                    className="size-full rounded-lg bg-muted object-cover transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
+                    className="size-full cursor-pointer rounded-lg bg-muted object-cover transition-transform duration-300 ease-in-out hover:scale-105"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
 

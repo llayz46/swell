@@ -5,7 +5,7 @@
 export function formatWorkspaceRole(role: string | { name: string } | string[] | { name: string }[]): string {
     // Handle array of roles - return the first workspace/team role
     if (Array.isArray(role)) {
-        const workspaceRole = role.find(r => {
+        const workspaceRole = role.find((r) => {
             const name = typeof r === 'string' ? r : r.name;
             return name.startsWith('workspace-') || name.startsWith('team-');
         });

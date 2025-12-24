@@ -37,16 +37,8 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
     const [assigneeOpen, setAssigneeOpen] = useState<boolean>(false);
     const [labelsOpen, setLabelsOpen] = useState<boolean>(false);
 
-    const {
-        statuses,
-        priorities,
-        labels,
-        team,
-        issueDialogOpen,
-        issueDialogIssue,
-        issueDialogStatusId,
-        closeIssueDialog,
-    } = useWorkspaceIssuesStore();
+    const { statuses, priorities, labels, team, issueDialogOpen, issueDialogIssue, issueDialogStatusId, closeIssueDialog } =
+        useWorkspaceIssuesStore();
 
     const isEditMode = !!issueDialogIssue;
 
@@ -145,13 +137,9 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
         <Dialog open={issueDialogOpen} onOpenChange={closeIssueDialog}>
             <DialogContent className="shadow-dialog flex max-h-[calc(100vh-32px)] flex-col gap-0 overflow-y-visible border-transparent p-0 sm:max-w-xl [&>button:last-child]:top-3.5">
                 <DialogHeader className="contents space-y-0 text-left">
-                    <DialogTitle className="border-b px-6 py-4 text-base">
-                        {isEditMode ? 'Modifier la tâche' : 'Nouvelle tâche'}
-                    </DialogTitle>
+                    <DialogTitle className="border-b px-6 py-4 text-base">{isEditMode ? 'Modifier la tâche' : 'Nouvelle tâche'}</DialogTitle>
                 </DialogHeader>
-                <DialogDescription className="sr-only">
-                    {isEditMode ? 'Modifier la tâche' : 'Nouvelle tâche'}
-                </DialogDescription>
+                <DialogDescription className="sr-only">{isEditMode ? 'Modifier la tâche' : 'Nouvelle tâche'}</DialogDescription>
                 <div className="overflow-y-auto">
                     <div className="pt-4">
                         <form className="space-y-4 *:not-last:px-6" onSubmit={submit}>
@@ -251,11 +239,7 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
                                             >
                                                 {selectedPriority ? (
                                                     <div className="flex items-center gap-2">
-                                                        <PriorityIcon
-                                                            iconType={selectedPriority.icon_type}
-                                                            width={14}
-                                                            height={14}
-                                                        />
+                                                        <PriorityIcon iconType={selectedPriority.icon_type} width={14} height={14} />
                                                         {selectedPriority.name}
                                                     </div>
                                                 ) : (

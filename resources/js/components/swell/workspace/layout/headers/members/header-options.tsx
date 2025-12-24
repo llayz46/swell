@@ -1,15 +1,15 @@
-import { Filter } from './filter';
 import type { TeamMember } from '@/types/workspace';
+import { Filter } from './filter';
 
 export default function HeaderOptions({ members }: { members: TeamMember[] }) {
-   return (
-      <div className="w-full flex justify-between items-center border-b py-1.5 px-6 h-10">
-         <Filter members={members} />
-         
-         {/*<Button className="relative" size="xs" variant="secondary">
+    return (
+        <div className="flex h-10 w-full items-center justify-between border-b px-6 py-1.5">
+            <Filter members={members} />
+
+            {/*<Button className="relative" size="xs" variant="secondary">
             <SlidersHorizontal className="size-4 mr-1" />
             Display
          </Button>*/}
-      </div>
-   );
+        </div>
+    );
 }

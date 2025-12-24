@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import type { Issue, IssueStatus, IssuePriority, IssueLabel, IssueAssignee, Team } from '@/types/workspace';
+import type { Issue, IssueAssignee, IssueLabel, IssuePriority, IssueStatus, Team } from '@/types/workspace';
 import { router } from '@inertiajs/react';
 import { toast } from 'sonner';
+import { create } from 'zustand';
 
 type Filters = {
     status: number[];
@@ -152,40 +152,30 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         set((state) => ({
             issues: state.issues.map((i) => (i.id === issue.id ? issue : i)),
         })),
-        
+
     updateIssuePriority: (issueId, priority) =>
         set((state) => ({
-            issues: state.issues.map((i) =>
-                i.id === issueId ? { ...i, priority } : i
-            ),
-        })),  
-        
+            issues: state.issues.map((i) => (i.id === issueId ? { ...i, priority } : i)),
+        })),
+
     updateIssueStatus: (issueId, status) =>
         set((state) => ({
-            issues: state.issues.map((i) =>
-                i.id === issueId ? { ...i, status } : i
-            ),
-        })),  
+            issues: state.issues.map((i) => (i.id === issueId ? { ...i, status } : i)),
+        })),
 
     updateIssueAssignee: (issueId, assignee) =>
         set((state) => ({
-            issues: state.issues.map((i) =>
-                i.id === issueId ? { ...i, assignee } : i
-            ),
+            issues: state.issues.map((i) => (i.id === issueId ? { ...i, assignee } : i)),
         })),
 
     updateIssueLabels: (issueId, labels) =>
         set((state) => ({
-            issues: state.issues.map((i) =>
-                i.id === issueId ? { ...i, labels } : i
-            ),
+            issues: state.issues.map((i) => (i.id === issueId ? { ...i, labels } : i)),
         })),
 
     updateIssueDueDate: (issueId, dueDate) =>
         set((state) => ({
-            issues: state.issues.map((i) =>
-                i.id === issueId ? { ...i, dueDate: dueDate || undefined } : i
-            ),
+            issues: state.issues.map((i) => (i.id === issueId ? { ...i, dueDate: dueDate || undefined } : i)),
         })),
 
     removeIssue: (issueId) =>
@@ -205,9 +195,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         const { statuses, updateIssueStatus, updatingIssues } = get();
 
         const newStatus =
-            typeof statusIdOrSlug === 'number'
-                ? statuses.find((s) => s.id === statusIdOrSlug)
-                : statuses.find((s) => s.slug === statusIdOrSlug);
+            typeof statusIdOrSlug === 'number' ? statuses.find((s) => s.id === statusIdOrSlug) : statuses.find((s) => s.slug === statusIdOrSlug);
 
         if (!newStatus) {
             toast.error('Statut invalide');
@@ -337,9 +325,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         }
 
         const hasLabel = currentLabels.some((l) => l.id === labelId);
-        const newLabels = hasLabel
-            ? currentLabels.filter((l) => l.id !== labelId)
-            : [...currentLabels, label];
+        const newLabels = hasLabel ? currentLabels.filter((l) => l.id !== labelId) : [...currentLabels, label];
 
         updateIssueLabels(issueId, newLabels);
         set({ updatingIssues: new Set(updatingIssues).add(issueId) });
@@ -434,7 +420,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                 newSet.delete(issueId);
                 set({ updatingIssues: newSet });
 
-                const errorMessage = (errors as Record<string, string>).message || "Erreur lors de la suppression de la tâche";
+                const errorMessage = (errors as Record<string, string>).message || 'Erreur lors de la suppression de la tâche';
                 toast.error(errorMessage);
             },
         });
@@ -450,9 +436,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
     toggleFilter: (filterType, value) =>
         set((state) => {
             const currentFilters = state.filters[filterType];
-            const newFilters = currentFilters.includes(value)
-                ? currentFilters.filter((v) => v !== value)
-                : [...currentFilters, value];
+            const newFilters = currentFilters.includes(value) ? currentFilters.filter((v) => v !== value) : [...currentFilters, value];
 
             return {
                 filters: {
@@ -500,7 +484,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         const { issues } = get();
         return issues.filter((issue) => issue.labels.some((label) => label.id === labelId));
     },
-    
+
     hasActiveFilters: () => {
         const { filters } = get();
         return Object.values(filters).some((filterArray) => filterArray.length > 0);
@@ -510,22 +494,13 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         const { issues, filters } = get();
 
         return issues.filter((issue) => {
-            if (
-                filters.status.length === 0 &&
-                filters.assignee.length === 0 &&
-                filters.priority.length === 0 &&
-                filters.labels.length === 0
-            ) {
+            if (filters.status.length === 0 && filters.assignee.length === 0 && filters.priority.length === 0 && filters.labels.length === 0) {
                 return true;
             }
 
-            const statusMatch =
-                filters.status.length === 0 || filters.status.includes(issue.status.id);
-            const priorityMatch =
-                filters.priority.length === 0 || filters.priority.includes(issue.priority.id);
-            const labelMatch =
-                filters.labels.length === 0 ||
-                issue.labels.some((label) => filters.labels.includes(label.id));
+            const statusMatch = filters.status.length === 0 || filters.status.includes(issue.status.id);
+            const priorityMatch = filters.priority.length === 0 || filters.priority.includes(issue.priority.id);
+            const labelMatch = filters.labels.length === 0 || issue.labels.some((label) => filters.labels.includes(label.id));
             const assigneeMatch =
                 filters.assignee.length === 0 ||
                 (issue.assignee && filters.assignee.includes(issue.assignee.id.toString())) ||
@@ -547,7 +522,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                 acc[statusId].push(issue);
                 return acc;
             },
-            {} as Record<string, Issue[]>
+            {} as Record<string, Issue[]>,
         );
     },
 }));

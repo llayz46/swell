@@ -7,9 +7,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { IssueAssignee } from '@/types/workspace';
 import { CheckIcon, CircleUserRound, Send, UserIcon } from 'lucide-react';
-import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 

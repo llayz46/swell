@@ -1,11 +1,11 @@
-import WorkspaceLayout from '@/layouts/workspace-layout';
-import Header from '@/components/swell/workspace/layout/headers/issues/header';
-import { GroupIssues } from '@/components/swell/workspace/issues/group-issues';
 import { FilteredGroupIssues } from '@/components/swell/workspace/issues/filtered-group-issues';
-import { Head } from '@inertiajs/react';
-import { Issue, IssueStatus, IssuePriority, IssueLabel, Team } from '@/types/workspace';
-import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
+import { GroupIssues } from '@/components/swell/workspace/issues/group-issues';
 import { IssueDialog } from '@/components/swell/workspace/issues/issue-dialog';
+import Header from '@/components/swell/workspace/layout/headers/issues/header';
+import WorkspaceLayout from '@/layouts/workspace-layout';
+import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
+import { Issue, IssueLabel, IssuePriority, IssueStatus, Team } from '@/types/workspace';
+import { Head } from '@inertiajs/react';
 import { useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -48,12 +48,16 @@ export default function Issues({ team, issues, statuses, priorities, labels, fil
         });
     }, [team, issues, statuses, labels, priorities, normalizedFilters, isLead, isMember]);
 
-    const { statuses: storeStatuses, filters: storeFilters, issues: allIssues } = useWorkspaceIssuesStore(
+    const {
+        statuses: storeStatuses,
+        filters: storeFilters,
+        issues: allIssues,
+    } = useWorkspaceIssuesStore(
         useShallow((state) => ({
             statuses: state.statuses,
             filters: state.filters,
             issues: state.issues,
-        }))
+        })),
     );
 
     const isFiltering = Object.values(storeFilters).some((f) => f.length > 0);
@@ -71,26 +75,16 @@ export default function Issues({ team, issues, statuses, priorities, labels, fil
             <Head title="Teams - Workspace" />
 
             <div>
-                {storeStatuses.map((status) => (
+                {storeStatuses.map((status) =>
                     isFiltering ? (
-                        <FilteredGroupIssues
-                            key={status.id}
-                            status={status}
-                            allIssues={filteredIssues}
-                        />
+                        <FilteredGroupIssues key={status.id} status={status} allIssues={filteredIssues} />
                     ) : (
-                        <GroupIssues
-                            key={status.id}
-                            status={status}
-                            allIssues={allIssues}
-                        />
-                    )
-                ))}
+                        <GroupIssues key={status.id} status={status} allIssues={allIssues} />
+                    ),
+                )}
             </div>
 
-            <IssueDialog
-                teamId={team?.id}
-            />
+            <IssueDialog teamId={team?.id} />
         </WorkspaceLayout>
     );
 }

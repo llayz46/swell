@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { Plus } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 interface CreateIssueButtonProps {
     statusId?: number;
@@ -11,22 +11,11 @@ interface CreateIssueButtonProps {
     children?: React.ReactNode;
 }
 
-export function CreateIssueButton({
-    statusId,
-    variant = 'ghost',
-    size = 'icon',
-    className,
-    children,
-}: CreateIssueButtonProps) {
+export function CreateIssueButton({ statusId, variant = 'ghost', size = 'icon', className, children }: CreateIssueButtonProps) {
     const { openIssueDialog } = useWorkspaceIssuesStore();
 
     return (
-        <Button
-            onClick={() => openIssueDialog({ statusId })}
-            variant={variant}
-            size={size}
-            className={cn(className, 'size-6')}
-        >
+        <Button onClick={() => openIssueDialog({ statusId })} variant={variant} size={size} className={cn(className, 'size-6')}>
             {children || <Plus size={16} />}
         </Button>
     );

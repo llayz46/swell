@@ -1,49 +1,45 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 // import { useSearchStore } from '@/store/search-store';
-import { SearchIcon } from 'lucide-react';
-import { useEffect, useRef } from 'react';
-import Notifications from './notifications';
+import { useRef } from 'react';
 
 export default function HeaderNav() {
-   // const { isSearchOpen, toggleSearch, closeSearch, setSearchQuery, searchQuery } =
-   //    useSearchStore();
-   const searchInputRef = useRef<HTMLInputElement>(null);
-   const searchContainerRef = useRef<HTMLDivElement>(null);
-   const previousValueRef = useRef<string>('');
+    // const { isSearchOpen, toggleSearch, closeSearch, setSearchQuery, searchQuery } =
+    //    useSearchStore();
+    const searchInputRef = useRef<HTMLInputElement>(null);
+    const searchContainerRef = useRef<HTMLDivElement>(null);
+    const previousValueRef = useRef<string>('');
 
-   // useEffect(() => {
-   //    if (isSearchOpen && searchInputRef.current) {
-   //       searchInputRef.current.focus();
-   //    }
-   // }, [isSearchOpen]);
+    // useEffect(() => {
+    //    if (isSearchOpen && searchInputRef.current) {
+    //       searchInputRef.current.focus();
+    //    }
+    // }, [isSearchOpen]);
 
-   // useEffect(() => {
-   //    const handleClickOutside = (event: MouseEvent) => {
-   //       if (
-   //          searchContainerRef.current &&
-   //          !searchContainerRef.current.contains(event.target as Node) &&
-   //          isSearchOpen
-   //       ) {
-   //          if (searchQuery.trim() === '') {
-   //             closeSearch();
-   //          }
-   //       }
-   //    };
+    // useEffect(() => {
+    //    const handleClickOutside = (event: MouseEvent) => {
+    //       if (
+    //          searchContainerRef.current &&
+    //          !searchContainerRef.current.contains(event.target as Node) &&
+    //          isSearchOpen
+    //       ) {
+    //          if (searchQuery.trim() === '') {
+    //             closeSearch();
+    //          }
+    //       }
+    //    };
 
-   //    document.addEventListener('mousedown', handleClickOutside);
-   //    return () => {
-   //       document.removeEventListener('mousedown', handleClickOutside);
-   //    };
-   // }, [isSearchOpen, closeSearch, searchQuery]);
+    //    document.addEventListener('mousedown', handleClickOutside);
+    //    return () => {
+    //       document.removeEventListener('mousedown', handleClickOutside);
+    //    };
+    // }, [isSearchOpen, closeSearch, searchQuery]);
 
-   return (
-      <div className="w-full flex justify-between items-center border-b py-1.5 px-6 h-10">
-         <SidebarTrigger className="" />
+    return (
+        <div className="flex h-10 w-full items-center justify-between border-b px-6 py-1.5">
+            <SidebarTrigger className="" />
 
-         <div className="flex items-center gap-2">
-            {/*{isSearchOpen ? (
+            <div className="flex items-center gap-2">
+                {/*{isSearchOpen ? (
                <div
                   ref={searchContainerRef}
                   className="relative flex items-center justify-center w-64 transition-all duration-200 ease-in-out"
@@ -95,7 +91,7 @@ export default function HeaderNav() {
                   <Notifications />
                </>
             )}*/}
-         </div>
-      </div>
-   );
+            </div>
+        </div>
+    );
 }

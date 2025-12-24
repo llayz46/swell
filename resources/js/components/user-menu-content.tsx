@@ -1,20 +1,15 @@
 import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
-import { type User, type SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
-import { Link, router } from '@inertiajs/react';
-import { Calendar, Gift, House, LayoutGrid, LogOut, Settings, ShieldCheckIcon } from 'lucide-react';
+import { type SharedData } from '@/types';
+import { Link, router, usePage } from '@inertiajs/react';
+import { Calendar, Gift, House, LayoutGrid, LayoutListIcon, LogOut, Settings, ShieldCheckIcon } from 'lucide-react';
 
-interface UserMenuContentProps {
-    user: User;
-    page: { url: string };
-}
-
-export function UserMenuContent({ user, page }: UserMenuContentProps) {
-    const { swell } = usePage<SharedData>().props;
+export function UserMenuContent() {
+    const page = usePage<SharedData>();
+    const { swell, auth } = page.props;
     const cleanup = useMobileNavigation();
-    const isAdmin = user.roles.some((role) => role.name === 'admin');
+    const isAdmin = auth.user.roles.some((role) => role.name === 'admin');
 
     const handleLogout = () => {
         cleanup();
@@ -25,7 +20,7 @@ export function UserMenuContent({ user, page }: UserMenuContentProps) {
         <>
             <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <UserInfo user={user} showEmail={true} />
+                    <UserInfo user={auth.user} showEmail={true} />
                 </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -60,6 +55,20 @@ export function UserMenuContent({ user, page }: UserMenuContentProps) {
                 )}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+            {auth.isWorkspaceUser && (
+                <>
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem asChild>
+                            <Link href="/workspace" className="block w-full">
+                                <LayoutListIcon className="mr-2" />
+                                <span>Workspace</span>
+                            </Link>
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+
+                    <DropdownMenuSeparator />
+                </>
+            )}
             <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
                     <Link className="block w-full" href={route('profile.edit')} as="button" prefetch onClick={cleanup}>

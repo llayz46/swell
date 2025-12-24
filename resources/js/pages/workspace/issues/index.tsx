@@ -1,7 +1,7 @@
-import WorkspaceLayout from "@/layouts/workspace-layout";
-import { Button } from "@/components/ui/button";
-import { Head } from "@inertiajs/react";
-import { Plus, Filter } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import WorkspaceLayout from '@/layouts/workspace-layout';
+import { Head } from '@inertiajs/react';
+import { Filter, Plus } from 'lucide-react';
 
 export default function IssuesIndex() {
     return (
@@ -30,5 +30,5 @@ export default function IssuesIndex() {
                 <p>Liste des tâches...</p>
             </div>
         </WorkspaceLayout>
-    )
+    );
 }

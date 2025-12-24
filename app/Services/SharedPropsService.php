@@ -17,8 +17,6 @@ class SharedPropsService
 
     /**
      * Get Swell configuration from cache.
-     *
-     * @return array
      */
     public function getSwellConfig(): array
     {
@@ -40,16 +38,13 @@ class SharedPropsService
                 ],
                 'workspace' => [
                     'enabled' => config('swell.workspace.enabled', true),
-                ]
+                ],
             ];
         });
     }
 
     /**
      * Get authentication data with user teams.
-     *
-     * @param Request $request
-     * @return array
      */
     public function getAuthData(Request $request): array
     {
@@ -57,6 +52,7 @@ class SharedPropsService
 
         return [
             'user' => $user,
+            'isWorkspaceUser' => $user?->isWorkspaceUser() ?? false,
             'teams' => config('swell.workspace.enabled', true)
                 ? $this->workspaceService->getUserTeams($user)
                 : [],
@@ -75,14 +71,12 @@ class SharedPropsService
 
     /**
      * Get cart with cache.
-     *
-     * @return CartResource
      */
     public function getCart(): CartResource
     {
         $cacheKey = auth()->check()
-            ? 'cart-user-' . auth()->id()
-            : 'cart-session-' . session()->getId();
+            ? 'cart-user-'.auth()->id()
+            : 'cart-session-'.session()->getId();
 
         return Cache::remember($cacheKey, 30, function () {
             return CartResource::make(
@@ -98,7 +92,7 @@ class SharedPropsService
      */
     public function getInfoBanner()
     {
-        if (!config('swell.banner.enabled', true)) {
+        if (! config('swell.banner.enabled', true)) {
             return [];
         }
 
@@ -109,8 +103,6 @@ class SharedPropsService
 
     /**
      * Clear all Swell configuration caches.
-     *
-     * @return void
      */
     public function clearAllCaches(): void
     {

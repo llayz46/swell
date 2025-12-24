@@ -1,10 +1,10 @@
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import { PaginationComponent } from '@/components/swell/pagination-component';
+import SearchInput from '@/components/swell/search-input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import SearchInput from '@/components/swell/search-input';
 import AdminLayout from '@/layouts/admin-layout';
 import { cn } from '@/lib/utils';
 import type { BreadcrumbItem, PaginatedResponse, Product } from '@/types';
@@ -91,11 +91,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les produits" />
 
-            <SearchInput
-                placeholder="Rechercher un produit..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
+            <SearchInput placeholder="Rechercher un produit..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
 
             <Deferred data="products" fallback={<DeferredFallback />}>
                 <>

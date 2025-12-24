@@ -1,5 +1,5 @@
 import InputError from '@/components/input-error';
-import { SwellCard, SwellCardHeader, SwellCardContent, CardTitle } from '@/components/ui/card';
+import { CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { TabsContent } from '@/components/ui/tabs';

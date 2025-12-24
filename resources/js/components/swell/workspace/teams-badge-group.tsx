@@ -29,12 +29,10 @@ export function TeamsBadgeGroup({ teams, maxDisplay = 3 }: TeamsBadgeGroupProps)
                                 </span>
                             ))}
                         </div>
-                        {remainingCount > 0 && (
-                            <span className="text-xs text-muted-foreground">+{remainingCount}</span>
-                        )}
+                        {remainingCount > 0 && <span className="text-xs text-muted-foreground">+{remainingCount}</span>}
                     </div>
                 </TooltipTrigger>
-                <TooltipContent className="max-w-md border bg-background p-2 text-muted-foreground **:data-[slot=tooltip-arrow]:fill-background **:data-[slot=tooltip-arrow]:bg-background">
+                <TooltipContent className="max-w-md border bg-background p-2 text-muted-foreground **:data-[slot=tooltip-arrow]:bg-background **:data-[slot=tooltip-arrow]:fill-background">
                     <div className="flex flex-col gap-1">
                         {teams.map((team) => (
                             <div key={team.id} className="flex items-center gap-2 text-xs">

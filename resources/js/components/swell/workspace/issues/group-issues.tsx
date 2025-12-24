@@ -1,8 +1,8 @@
-import { IssueLine } from './issue-line';
 import { StatusIcon } from '@/components/swell/workspace/icons';
 import { CreateIssueButton } from '@/components/swell/workspace/issues/create-issue-button';
-import { IssueStatus, Issue } from '@/types/workspace';
+import { Issue, IssueStatus } from '@/types/workspace';
 import { useMemo } from 'react';
+import { IssueLine } from './issue-line';
 
 interface GroupIssuesProps {
     status: IssueStatus;
@@ -10,16 +10,13 @@ interface GroupIssuesProps {
 }
 
 export function GroupIssues({ status, allIssues }: GroupIssuesProps) {
-    const issues = useMemo(
-        () => allIssues.filter((issue) => issue.status.id === status.id),
-        [allIssues, status]
-    );
-        
+    const issues = useMemo(() => allIssues.filter((issue) => issue.status.id === status.id), [allIssues, status]);
+
     const count = issues.length;
-        
+
     return (
         <div className="bg-workspace">
-            <div className="bg-workspace sticky top-0 z-10 w-full h-10">
+            <div className="sticky top-0 z-10 h-10 w-full bg-workspace">
                 <div
                     className="flex h-full w-full items-center justify-between px-6"
                     style={{
@@ -32,9 +29,7 @@ export function GroupIssues({ status, allIssues }: GroupIssuesProps) {
                         <span className="text-sm text-muted-foreground">{count}</span>
                     </div>
 
-                    <CreateIssueButton 
-                        statusId={status.id}
-                    />
+                    <CreateIssueButton statusId={status.id} />
                 </div>
             </div>
 

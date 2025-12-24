@@ -1,12 +1,12 @@
-import { Badge } from '@/components/ui/badge';
+import Header from '@/components/swell/workspace/layout/headers/teams/header';
 import { MembersAvatarGroup } from '@/components/swell/workspace/members-avatar-group';
 import { WorkspaceTableHeader } from '@/components/swell/workspace/workspace-table-header';
+import { Badge } from '@/components/ui/badge';
 import WorkspaceLayout from '@/layouts/workspace-layout';
 import { Team } from '@/types/workspace';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { Head } from '@inertiajs/react';
-import { CircleDashed, Check } from 'lucide-react';
-import Header from '@/components/swell/workspace/layout/headers/teams/header';
+import { Check, CircleDashed } from 'lucide-react';
 
 const TABLE_COLUMNS = [
     { label: 'Nom', className: 'w-[70%] sm:w-[50%] md:w-[45%] lg:w-[40%]' },
@@ -53,9 +53,7 @@ function TeamRow({ team }: { team: Team }) {
                 )}
             </div>
 
-            <div className="hidden text-xs text-muted-foreground sm:block sm:w-[20%] md:w-[15%]">
-                {team.identifier}
-            </div>
+            <div className="hidden text-xs text-muted-foreground sm:block sm:w-[20%] md:w-[15%]">{team.identifier}</div>
 
             <div className="flex w-[30%] sm:w-[20%] md:w-[15%]">
                 {team.members && team.members.length > 0 && <MembersAvatarGroup members={team.members} />}

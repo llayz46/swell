@@ -1,71 +1,59 @@
 import { Button } from '@/components/ui/button';
-import {
-   Command,
-   CommandGroup,
-   CommandItem,
-   CommandList,
-   CommandSeparator,
-} from '@/components/ui/command';
+import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useState } from 'react';
-import { ArrowUpDown, CheckIcon, ChevronRight, ListFilter, Shield } from 'lucide-react';
 import { TeamMember } from '@/types/workspace';
+import { ArrowUpDown, ChevronRight, ListFilter, Shield } from 'lucide-react';
+import { useState } from 'react';
 
 type FilterType = 'role' | 'sort';
 
 const ROLES: Array<'Guest' | 'Member' | 'Admin'> = ['Guest', 'Member', 'Admin'];
 
 export function Filter({ members }: { members: TeamMember[] }) {
-   const [open, setOpen] = useState(false);
-   const [active, setActive] = useState<FilterType | null>(null);
+    const [open, setOpen] = useState(false);
+    const [active, setActive] = useState<FilterType | null>(null);
 
-   return (
-      <Popover open={open} onOpenChange={setOpen}>
-         <PopoverTrigger asChild>
-            <Button size="xs" variant="ghost" className="relative">
-               <ListFilter className="size-4 mr-1" />
-               Filtrer
-               {/*{getActiveFiltersCount() > 0 && (
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <Button size="xs" variant="ghost" className="relative">
+                    <ListFilter className="mr-1 size-4" />
+                    Filtrer
+                    {/*{getActiveFiltersCount() > 0 && (
                   <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full size-4 flex items-center justify-center">
                      {getActiveFiltersCount()}
                   </span>
                )}*/}
-            </Button>
-         </PopoverTrigger>
-         <PopoverContent className="p-0 w-60" align="start">
-            {active === null ? (
-               <Command>
-                  <CommandList>
-                     <CommandGroup>
-                        <CommandItem
-                           onSelect={() => setActive('role')}
-                           className="flex items-center justify-between cursor-pointer"
-                        >
-                           <span className="flex items-center gap-2">
-                              <Shield className="size-4 text-muted-foreground" />
-                              Statut
-                           </span>
-                           <div className="flex items-center">
-                              {/*{filters.role.length > 0 && (
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-60 p-0" align="start">
+                {active === null ? (
+                    <Command>
+                        <CommandList>
+                            <CommandGroup>
+                                <CommandItem onSelect={() => setActive('role')} className="flex cursor-pointer items-center justify-between">
+                                    <span className="flex items-center gap-2">
+                                        <Shield className="size-4 text-muted-foreground" />
+                                        Statut
+                                    </span>
+                                    <div className="flex items-center">
+                                        {/*{filters.role.length > 0 && (
                                  <span className="text-xs text-muted-foreground mr-1">
                                     {filters.role.length}
                                  </span>
                               )}*/}
-                              <ChevronRight className="size-4" />
-                           </div>
-                        </CommandItem>
-                        <CommandItem
-                           onSelect={() => setActive('sort')}
-                           className="flex items-center justify-between cursor-pointer"
-                        >
-                           <span className="flex items-center gap-2">
-                              <ArrowUpDown className="size-4 text-muted-foreground" />
-                              Trier par
-                           </span>
-                           <ChevronRight className="size-4" />
-                        </CommandItem>
-                     </CommandGroup>
-                     {/*{getActiveFiltersCount() > 0 && (
+                                        <ChevronRight className="size-4" />
+                                    </div>
+                                </CommandItem>
+                                <CommandItem onSelect={() => setActive('sort')} className="flex cursor-pointer items-center justify-between">
+                                    <span className="flex items-center gap-2">
+                                        <ArrowUpDown className="size-4 text-muted-foreground" />
+                                        Trier par
+                                    </span>
+                                    <ChevronRight className="size-4" />
+                                </CommandItem>
+                            </CommandGroup>
+                            {/*{getActiveFiltersCount() > 0 && (
                         <>
                            <CommandSeparator />
                            <CommandGroup>
@@ -78,51 +66,41 @@ export function Filter({ members }: { members: TeamMember[] }) {
                            </CommandGroup>
                         </>
                      )}*/}
-                  </CommandList>
-               </Command>
-            ) : active === 'role' ? (
-               <Command>
-                  <div className="flex items-center border-b p-2">
-                     <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-6"
-                        onClick={() => setActive(null)}
-                     >
-                        <ChevronRight className="size-4 rotate-180" />
-                     </Button>
-                     <span className="ml-2 font-medium">Statut</span>
-                  </div>
-                  <CommandList>
-                     <CommandGroup>
-                        {ROLES.map((role) => (
-                           <CommandItem
-                              key={role}
-                              value={role}
-                              // onSelect={() => toggleFilter('role', role)}
-                              className="flex items-center justify-between"
-                           >
-                              {role}
-                              {/*{filters.role.includes(role) && <CheckIcon size={16} />}*/}
-                           </CommandItem>
-                        ))}
-                     </CommandGroup>
-                  </CommandList>
-               </Command>
-            ) : active === 'sort' ? (
-               <Command>
-                  <div className="flex items-center border-b p-2">
-                     <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-6"
-                        onClick={() => setActive(null)}
-                     >
-                        <ChevronRight className="size-4 rotate-180" />
-                     </Button>
-                     <span className="ml-2 font-medium">Trier par</span>
-                  </div>
-                  {/*<CommandList>
+                        </CommandList>
+                    </Command>
+                ) : active === 'role' ? (
+                    <Command>
+                        <div className="flex items-center border-b p-2">
+                            <Button variant="ghost" size="icon" className="size-6" onClick={() => setActive(null)}>
+                                <ChevronRight className="size-4 rotate-180" />
+                            </Button>
+                            <span className="ml-2 font-medium">Statut</span>
+                        </div>
+                        <CommandList>
+                            <CommandGroup>
+                                {ROLES.map((role) => (
+                                    <CommandItem
+                                        key={role}
+                                        value={role}
+                                        // onSelect={() => toggleFilter('role', role)}
+                                        className="flex items-center justify-between"
+                                    >
+                                        {role}
+                                        {/*{filters.role.includes(role) && <CheckIcon size={16} />}*/}
+                                    </CommandItem>
+                                ))}
+                            </CommandGroup>
+                        </CommandList>
+                    </Command>
+                ) : active === 'sort' ? (
+                    <Command>
+                        <div className="flex items-center border-b p-2">
+                            <Button variant="ghost" size="icon" className="size-6" onClick={() => setActive(null)}>
+                                <ChevronRight className="size-4 rotate-180" />
+                            </Button>
+                            <span className="ml-2 font-medium">Trier par</span>
+                        </div>
+                        {/*<CommandList>
                      <CommandGroup heading="Name">
                         <CommandItem
                            onSelect={() => setSort('name-asc')}
@@ -172,9 +150,9 @@ export function Filter({ members }: { members: TeamMember[] }) {
                         </CommandItem>
                      </CommandGroup>
                   </CommandList>*/}
-               </Command>
-            ) : null}
-         </PopoverContent>
-      </Popover>
-   );
+                    </Command>
+                ) : null}
+            </PopoverContent>
+        </Popover>
+    );
 }

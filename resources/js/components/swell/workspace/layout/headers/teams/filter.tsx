@@ -1,92 +1,77 @@
 import { Button } from '@/components/ui/button';
-import {
-   Command,
-   CommandGroup,
-   CommandItem,
-   CommandList,
-   CommandSeparator,
-} from '@/components/ui/command';
+import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useMemo, useState } from 'react';
-import { ArrowUpDown, CheckIcon, ChevronRight, ListFilter, Shield } from 'lucide-react';
 import type { Team } from '@/types/workspace';
+import { ArrowUpDown, ChevronRight, ListFilter, Shield } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
 type FilterType = 'membership' | 'sort' | 'identifiers';
 
 const Membership: Array<'Membre' | 'Non Membre'> = ['Membre', 'Non Membre'];
 
 export function Filter({ teams }: { teams: Team[] }) {
-   const [open, setOpen] = useState(false);
-   const [active, setActive] = useState<FilterType | null>(null);
+    const [open, setOpen] = useState(false);
+    const [active, setActive] = useState<FilterType | null>(null);
 
-   const Identifiers: Team['identifier'][] = useMemo(() => {
-      return teams.map((team) => team.identifier);
-   }, [teams]);
+    const Identifiers: Team['identifier'][] = useMemo(() => {
+        return teams.map((team) => team.identifier);
+    }, [teams]);
 
-   return (
-      <Popover open={open} onOpenChange={setOpen}>
-         <PopoverTrigger asChild>
-            <Button size="xs" variant="ghost" className="relative">
-               <ListFilter className="size-4 mr-1" />
-               Filtrer
-               {/*{getActiveFiltersCount() > 0 && (
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <Button size="xs" variant="ghost" className="relative">
+                    <ListFilter className="mr-1 size-4" />
+                    Filtrer
+                    {/*{getActiveFiltersCount() > 0 && (
                   <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full size-4 flex items-center justify-center">
                      {getActiveFiltersCount()}
                   </span>
                )}*/}
-            </Button>
-         </PopoverTrigger>
-         <PopoverContent className="p-0 w-60" align="start">
-            {active === null ? (
-               <Command>
-                  <CommandList>
-                     <CommandGroup>
-                        <CommandItem
-                           onSelect={() => setActive('membership')}
-                           className="flex items-center justify-between cursor-pointer"
-                        >
-                           <span className="flex items-center gap-2">
-                              <Shield className="size-4 text-muted-foreground" />
-                              Membres
-                           </span>
-                           <div className="flex items-center">
-                              {/*{filters.membership.length > 0 && (
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-60 p-0" align="start">
+                {active === null ? (
+                    <Command>
+                        <CommandList>
+                            <CommandGroup>
+                                <CommandItem onSelect={() => setActive('membership')} className="flex cursor-pointer items-center justify-between">
+                                    <span className="flex items-center gap-2">
+                                        <Shield className="size-4 text-muted-foreground" />
+                                        Membres
+                                    </span>
+                                    <div className="flex items-center">
+                                        {/*{filters.membership.length > 0 && (
                                  <span className="text-xs text-muted-foreground mr-1">
                                     {filters.membership.length}
                                  </span>
                               )}*/}
-                              <ChevronRight className="size-4" />
-                           </div>
-                        </CommandItem>
-                        <CommandItem
-                           onSelect={() => setActive('identifiers')}
-                           className="flex items-center justify-between cursor-pointer"
-                        >
-                           <span className="flex items-center gap-2">
-                              <Shield className="size-4 text-muted-foreground" />
-                              Identifiants
-                           </span>
-                           <div className="flex items-center">
-                              {/*{filters.identifier.length > 0 && (
+                                        <ChevronRight className="size-4" />
+                                    </div>
+                                </CommandItem>
+                                <CommandItem onSelect={() => setActive('identifiers')} className="flex cursor-pointer items-center justify-between">
+                                    <span className="flex items-center gap-2">
+                                        <Shield className="size-4 text-muted-foreground" />
+                                        Identifiants
+                                    </span>
+                                    <div className="flex items-center">
+                                        {/*{filters.identifier.length > 0 && (
                                  <span className="text-xs text-muted-foreground mr-1">
                                     {filters.identifier.length}
                                  </span>
                               )}*/}
-                              <ChevronRight className="size-4" />
-                           </div>
-                        </CommandItem>
-                        <CommandItem
-                           onSelect={() => setActive('sort')}
-                           className="flex items-center justify-between cursor-pointer"
-                        >
-                           <span className="flex items-center gap-2">
-                              <ArrowUpDown className="size-4 text-muted-foreground" />
-                              Trier par
-                           </span>
-                           <ChevronRight className="size-4" />
-                        </CommandItem>
-                     </CommandGroup>
-                     {/*{getActiveFiltersCount() > 0 && (
+                                        <ChevronRight className="size-4" />
+                                    </div>
+                                </CommandItem>
+                                <CommandItem onSelect={() => setActive('sort')} className="flex cursor-pointer items-center justify-between">
+                                    <span className="flex items-center gap-2">
+                                        <ArrowUpDown className="size-4 text-muted-foreground" />
+                                        Trier par
+                                    </span>
+                                    <ChevronRight className="size-4" />
+                                </CommandItem>
+                            </CommandGroup>
+                            {/*{getActiveFiltersCount() > 0 && (
                         <>
                            <CommandSeparator />
                            <CommandGroup>
@@ -99,132 +84,117 @@ export function Filter({ teams }: { teams: Team[] }) {
                            </CommandGroup>
                         </>
                      )}*/}
-                  </CommandList>
-               </Command>
-            ) : active === 'membership' ? (
-               <Command>
-                  <div className="flex items-center border-b p-2">
-                     <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-6"
-                        onClick={() => setActive(null)}
-                     >
-                        <ChevronRight className="size-4 rotate-180" />
-                     </Button>
-                     <span className="ml-2 font-medium">Statut</span>
-                  </div>
-                  <CommandList>
-                     <CommandGroup>
-                        {Membership.map((type) => (
-                           <CommandItem
-                              key={type}
-                              value={type}
-                              // onSelect={() => toggleFilter('membership', type)}
-                              className="flex items-center justify-between"
-                           >
-                              {type}
-                              {/*{filters.membership.includes(type) && <CheckIcon size={16} />}*/}
-                           </CommandItem>
-                        ))}
-                     </CommandGroup>
-                  </CommandList>
-               </Command>
-            ) : active === 'identifiers' ? (
-               <Command>
-                  <div className="flex items-center border-b p-2">
-                     <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-6"
-                        onClick={() => setActive(null)}
-                     >
-                        <ChevronRight className="size-4 rotate-180" />
-                     </Button>
-                     <span className="ml-2 font-medium">Statut</span>
-                  </div>
-                  <CommandList>
-                     <CommandGroup>
-                        {Identifiers.map((id) => (
-                           <CommandItem
-                              key={id}
-                              value={id}
-                              // onSelect={() => toggleFilter('identifier', id)}
-                              className="flex items-center justify-between"
-                           >
-                              {id}
-                              {/*{filters.identifier.includes(id) && <CheckIcon size={16} />}*/}
-                           </CommandItem>
-                        ))}
-                     </CommandGroup>
-                  </CommandList>
-               </Command>
-            ) : active === 'sort' ? (
-               <Command>
-                  <div className="flex items-center border-b p-2">
-                     <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-6"
-                        onClick={() => setActive(null)}
-                     >
-                        <ChevronRight className="size-4 rotate-180" />
-                     </Button>
-                     <span className="ml-2 font-medium">Trier par</span>
-                  </div>
-                  <CommandList>
-                     <CommandGroup heading="Name">
-                        {/*<CommandItem
+                        </CommandList>
+                    </Command>
+                ) : active === 'membership' ? (
+                    <Command>
+                        <div className="flex items-center border-b p-2">
+                            <Button variant="ghost" size="icon" className="size-6" onClick={() => setActive(null)}>
+                                <ChevronRight className="size-4 rotate-180" />
+                            </Button>
+                            <span className="ml-2 font-medium">Statut</span>
+                        </div>
+                        <CommandList>
+                            <CommandGroup>
+                                {Membership.map((type) => (
+                                    <CommandItem
+                                        key={type}
+                                        value={type}
+                                        // onSelect={() => toggleFilter('membership', type)}
+                                        className="flex items-center justify-between"
+                                    >
+                                        {type}
+                                        {/*{filters.membership.includes(type) && <CheckIcon size={16} />}*/}
+                                    </CommandItem>
+                                ))}
+                            </CommandGroup>
+                        </CommandList>
+                    </Command>
+                ) : active === 'identifiers' ? (
+                    <Command>
+                        <div className="flex items-center border-b p-2">
+                            <Button variant="ghost" size="icon" className="size-6" onClick={() => setActive(null)}>
+                                <ChevronRight className="size-4 rotate-180" />
+                            </Button>
+                            <span className="ml-2 font-medium">Statut</span>
+                        </div>
+                        <CommandList>
+                            <CommandGroup>
+                                {Identifiers.map((id) => (
+                                    <CommandItem
+                                        key={id}
+                                        value={id}
+                                        // onSelect={() => toggleFilter('identifier', id)}
+                                        className="flex items-center justify-between"
+                                    >
+                                        {id}
+                                        {/*{filters.identifier.includes(id) && <CheckIcon size={16} />}*/}
+                                    </CommandItem>
+                                ))}
+                            </CommandGroup>
+                        </CommandList>
+                    </Command>
+                ) : active === 'sort' ? (
+                    <Command>
+                        <div className="flex items-center border-b p-2">
+                            <Button variant="ghost" size="icon" className="size-6" onClick={() => setActive(null)}>
+                                <ChevronRight className="size-4 rotate-180" />
+                            </Button>
+                            <span className="ml-2 font-medium">Trier par</span>
+                        </div>
+                        <CommandList>
+                            <CommandGroup heading="Name">
+                                {/*<CommandItem
                            onSelect={() => setSort('name-asc')}
                            className="flex items-center justify-between"
                         >
                            A → Z{sort === 'name-asc' && <CheckIcon size={16} />}
                         </CommandItem>*/}
-                        {/*<CommandItem
+                                {/*<CommandItem
                            onSelect={() => setSort('name-desc')}
                            className="flex items-center justify-between"
                         >
                            Z → A{sort === 'name-desc' && <CheckIcon size={16} />}
                         </CommandItem>*/}
-                     </CommandGroup>
-                     <CommandSeparator />
-                     <CommandGroup heading="Members">
-                        {/*<CommandItem
+                            </CommandGroup>
+                            <CommandSeparator />
+                            <CommandGroup heading="Members">
+                                {/*<CommandItem
                            onSelect={() => setSort('members-asc')}
                            className="flex items-center justify-between"
                         >
                            No. of Members (asc)
                            {sort === 'members-asc' && <CheckIcon size={16} />}
                         </CommandItem>*/}
-                        {/*<CommandItem
+                                {/*<CommandItem
                            onSelect={() => setSort('members-desc')}
                            className="flex items-center justify-between"
                         >
                            No. of Members (desc)
                            {sort === 'members-desc' && <CheckIcon size={16} />}
                         </CommandItem>*/}
-                     </CommandGroup>
-                     <CommandSeparator />
-                     <CommandGroup heading="Projects">
-                        {/*<CommandItem
+                            </CommandGroup>
+                            <CommandSeparator />
+                            <CommandGroup heading="Projects">
+                                {/*<CommandItem
                            onSelect={() => setSort('projects-asc')}
                            className="flex items-center justify-between"
                         >
                            No. of Projects (asc)
                            {sort === 'projects-asc' && <CheckIcon size={16} />}
                         </CommandItem>*/}
-                        {/*<CommandItem
+                                {/*<CommandItem
                            onSelect={() => setSort('projects-desc')}
                            className="flex items-center justify-between"
                         >
                            No. of Projects (desc)
                            {sort === 'projects-desc' && <CheckIcon size={16} />}
                         </CommandItem>*/}
-                     </CommandGroup>
-                  </CommandList>
-               </Command>
-            ) : null}
-         </PopoverContent>
-      </Popover>
-   );
+                            </CommandGroup>
+                        </CommandList>
+                    </Command>
+                ) : null}
+            </PopoverContent>
+        </Popover>
+    );
 }

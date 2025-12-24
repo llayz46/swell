@@ -1,8 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { TeamMember } from '@/types/workspace';
-import { Star } from 'lucide-react';
 import { getStorageUrl } from '@/utils/format-storage-url';
+import { Star } from 'lucide-react';
 
 interface MembersAvatarGroupProps {
     members: TeamMember[];
@@ -35,7 +35,7 @@ export function MembersAvatarGroup({ members, maxDisplay = 3 }: MembersAvatarGro
                         )}
                     </div>
                 </TooltipTrigger>
-                <TooltipContent className="max-w-md border bg-background p-2 text-muted-foreground **:data-[slot=tooltip-arrow]:fill-background **:data-[slot=tooltip-arrow]:bg-background">
+                <TooltipContent className="max-w-md border bg-background p-2 text-muted-foreground **:data-[slot=tooltip-arrow]:bg-background **:data-[slot=tooltip-arrow]:fill-background">
                     <div className="flex flex-col gap-1">
                         {members.map((member, index) => (
                             <div key={index} className="flex items-center gap-1.5">

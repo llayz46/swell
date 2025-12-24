@@ -14,10 +14,7 @@ export function getSidebarCSSProperties(config: Partial<SidebarConfig>): React.C
 /**
  * Generate sidebar provider class names based on config
  */
-export function getSidebarProviderClassName(
-    config: Partial<SidebarConfig>,
-    customClassName?: string
-): string {
+export function getSidebarProviderClassName(config: Partial<SidebarConfig>, customClassName?: string): string {
     const baseClasses = 'group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full';
 
     const configClasses = {
@@ -30,10 +27,7 @@ export function getSidebarProviderClassName(
 /**
  * Generate sidebar wrapper class names based on config
  */
-export function getSidebarWrapperClassName(
-    config: Partial<SidebarConfig>,
-    customClassName?: string
-): string {
+export function getSidebarWrapperClassName(config: Partial<SidebarConfig>, customClassName?: string): string {
     const baseClasses = '';
 
     const variantClasses = {

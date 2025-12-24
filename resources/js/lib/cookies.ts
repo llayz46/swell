@@ -33,13 +33,7 @@ export function getCookieBoolean(name: string): boolean | undefined {
  * Set a cookie with optional configuration
  */
 export function setCookie(name: string, value: string, options: CookieOptions = {}): void {
-    const {
-        path = '/',
-        maxAge,
-        domain,
-        secure,
-        sameSite = 'lax',
-    } = options;
+    const { path = '/', maxAge, domain, secure, sameSite = 'lax' } = options;
 
     let cookieString = `${name}=${value}`;
 

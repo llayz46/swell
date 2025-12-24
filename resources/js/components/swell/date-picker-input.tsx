@@ -1,11 +1,11 @@
-import { CalendarIcon } from 'lucide-react';
-import * as React from 'react';
-import { format, isValid, parse } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { format, isValid, parse } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { CalendarIcon } from 'lucide-react';
+import * as React from 'react';
 
 interface DatePickerInputProps {
     value?: string;
@@ -15,22 +15,14 @@ interface DatePickerInputProps {
     className?: string;
 }
 
-export function DatePickerInput({
-    value = '',
-    onChange,
-    placeholder = 'Sélectionner une date',
-    disabled = false,
-    className,
-}: DatePickerInputProps) {
+export function DatePickerInput({ value = '', onChange, placeholder = 'Sélectionner une date', disabled = false, className }: DatePickerInputProps) {
     const [open, setOpen] = React.useState(false);
 
     const dateValue = value ? parse(value, 'yyyy-MM-dd', new Date()) : undefined;
     const validDate = dateValue && isValid(dateValue) ? dateValue : undefined;
 
     const [month, setMonth] = React.useState<Date | undefined>(validDate || new Date());
-    const [inputValue, setInputValue] = React.useState(
-        validDate ? format(validDate, 'dd MMMM yyyy', { locale: fr }) : ''
-    );
+    const [inputValue, setInputValue] = React.useState(validDate ? format(validDate, 'dd MMMM yyyy', { locale: fr }) : '');
 
     React.useEffect(() => {
         if (validDate) {
@@ -47,7 +39,7 @@ export function DatePickerInput({
 
     const handleInputBlur = () => {
         const parsedDate = parse(inputValue, 'dd MMMM yyyy', new Date(), { locale: fr });
-        
+
         if (isValid(parsedDate)) {
             onChange?.(format(parsedDate, 'yyyy-MM-dd'));
             setMonth(parsedDate);
@@ -94,12 +86,7 @@ export function DatePickerInput({
             />
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
-                        disabled={disabled}
-                    >
+                    <Button type="button" variant="ghost" className="absolute top-1/2 right-2 size-6 -translate-y-1/2" disabled={disabled}>
                         <CalendarIcon className="size-3.5" />
                         <span className="sr-only">Sélectionner une date</span>
                     </Button>

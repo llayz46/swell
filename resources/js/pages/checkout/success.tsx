@@ -30,7 +30,7 @@ export default function Success({ order }: { order: Order }) {
                                 Confirmée
                             </Badge>
                         </SwellCardHeader>
-                        
+
                         <SwellCardContent>
                             <div className="space-y-4">
                                 <div className="flex justify-between text-sm">
@@ -83,7 +83,7 @@ export default function Success({ order }: { order: Order }) {
                         <SwellCardHeader>
                             <h3 className="text-lg font-semibold text-foreground">Et maintenant ?</h3>
                         </SwellCardHeader>
-                        
+
                         <SwellCardContent>
                             <div className="space-y-4">
                                 <div className="flex items-center gap-3">

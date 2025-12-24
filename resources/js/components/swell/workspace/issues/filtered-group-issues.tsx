@@ -1,9 +1,9 @@
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { IssueLine } from './issue-line';
 import { StatusIcon } from '@/components/swell/workspace/icons';
-import { IssueStatus, Issue } from '@/types/workspace';
+import { Button } from '@/components/ui/button';
+import { Issue, IssueStatus } from '@/types/workspace';
+import { Plus } from 'lucide-react';
 import { useMemo } from 'react';
+import { IssueLine } from './issue-line';
 
 interface FilteredGroupIssuesProps {
     status: IssueStatus;
@@ -11,16 +11,13 @@ interface FilteredGroupIssuesProps {
 }
 
 export function FilteredGroupIssues({ status, allIssues }: FilteredGroupIssuesProps) {
-    const issues = useMemo(
-        () => allIssues.filter((issue) => issue.status.id === status.id),
-        [allIssues, status]
-    );
-    
+    const issues = useMemo(() => allIssues.filter((issue) => issue.status.id === status.id), [allIssues, status]);
+
     const count = issues.length;
 
     return (
         <div className="bg-workspace">
-            <div className="bg-workspace sticky top-0 z-10 w-full h-10">
+            <div className="sticky top-0 z-10 h-10 w-full bg-workspace">
                 <div
                     className="flex h-full w-full items-center justify-between px-6"
                     style={{

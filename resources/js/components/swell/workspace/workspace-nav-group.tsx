@@ -1,37 +1,24 @@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import {
     SidebarGroup,
     SidebarGroupLabel,
     SidebarMenu,
+    SidebarMenuAction,
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarMenuSub,
-    SidebarMenuAction,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import {
-   DropdownMenu,
-   DropdownMenuContent,
-   DropdownMenuItem,
-   DropdownMenuSeparator,
-   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-   Archive,
-   Bell,
-   ChevronRight,
-   Link as LinkIcon,
-   MoreHorizontal,
-   Settings,
-} from 'lucide-react';
 import { useActiveNav } from '@/hooks/use-active-nav';
 import { NavItemWithChildren, type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
+import { Archive, Bell, ChevronRight, Link as LinkIcon, MoreHorizontal, Settings } from 'lucide-react';
 
 const isNavItemWithChildren = (item: NavItem | NavItemWithChildren): item is NavItemWithChildren => {
     return 'childrens' in item && Array.isArray(item.childrens);
-}
+};
 
 export function WorkspaceNavGroup({ items = [], label }: { items: (NavItem | NavItemWithChildren)[]; label?: string }) {
     return (
@@ -40,30 +27,19 @@ export function WorkspaceNavGroup({ items = [], label }: { items: (NavItem | Nav
             <SidebarMenu>
                 {items.map((item, index) => {
                     if (isNavItemWithChildren(item)) {
-                        return (
-                            <CollapsibleNavItem
-                                key={item.title}
-                                item={item}
-                                defaultOpen={index === 0}
-                            />
-                        );
+                        return <CollapsibleNavItem key={item.title} item={item} defaultOpen={index === 0} />;
                     }
 
-                    return (
-                        <SidebarMenuItemWithActive
-                            key={item.title}
-                            item={item}
-                        />
-                    );
+                    return <SidebarMenuItemWithActive key={item.title} item={item} />;
                 })}
             </SidebarMenu>
         </SidebarGroup>
     );
 }
 
-const SidebarMenuItemWithActive = ({ child = false, item }: { child?: boolean, item: NavItem }) => {
+const SidebarMenuItemWithActive = ({ child = false, item }: { child?: boolean; item: NavItem }) => {
     const isActive = useActiveNav(item.href);
-    
+
     if (child) {
         return (
             <SidebarMenuSubItem>
@@ -74,9 +50,9 @@ const SidebarMenuItemWithActive = ({ child = false, item }: { child?: boolean, i
                     </Link>
                 </SidebarMenuSubButton>
             </SidebarMenuSubItem>
-        );   
+        );
     }
-    
+
     return (
         <SidebarMenuItem>
             <SidebarMenuButton asChild isActive={isActive} tooltip={{ children: item.title }}>

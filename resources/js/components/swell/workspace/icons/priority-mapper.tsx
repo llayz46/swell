@@ -1,12 +1,5 @@
 import { FC } from 'react';
-import {
-    NoPriorityIcon,
-    LowPriorityIcon,
-    MediumPriorityIcon,
-    HighPriorityIcon,
-    UrgentPriorityIcon,
-    PriorityIconProps,
-} from './priority';
+import { HighPriorityIcon, LowPriorityIcon, MediumPriorityIcon, NoPriorityIcon, PriorityIconProps, UrgentPriorityIcon } from './priority';
 
 // Map des icônes de priorité disponibles
 const priorityIcons = {
@@ -29,14 +22,7 @@ interface PriorityIconComponentProps extends PriorityIconProps {
  * @example
  * <PriorityIcon iconType="HighPriorityIcon" color="#f97316" width={16} height={16} />
  */
-export const PriorityIcon: FC<PriorityIconComponentProps> = ({
-    iconType,
-    width = 16,
-    height = 16,
-    color,
-    className,
-    ...props
-}) => {
+export const PriorityIcon: FC<PriorityIconComponentProps> = ({ iconType, width = 16, height = 16, color, className, ...props }) => {
     const Icon = priorityIcons[iconType];
     return <Icon width={width} height={height} color={color} className={className} {...props} />;
 };

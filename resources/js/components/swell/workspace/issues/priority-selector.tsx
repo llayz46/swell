@@ -59,14 +59,7 @@ export function PrioritySelector({ priority, issueId }: PrioritySelectorProps) {
                         {(() => {
                             const selectedItem = priorities.find((item) => item.slug === value);
                             if (selectedItem) {
-                                return (
-                                    <PriorityIcon
-                                        iconType={selectedItem.icon_type}
-                                        width={16}
-                                        height={16}
-                                        className="text-muted-foreground"
-                                    />
-                                );
+                                return <PriorityIcon iconType={selectedItem.icon_type} width={16} height={16} className="text-muted-foreground" />;
                             }
                             return null;
                         })()}

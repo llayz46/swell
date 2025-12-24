@@ -101,22 +101,22 @@ export function PaginationComponent({ pagination, preserveQuery = [], only }: Pa
                     <PaginationPrevious href={getUrlWithPreservedQuery(pagination.links.prev)} />
                 </PaginationItem>
                 {visiblePages.map((item, index) => {
-                        if (item === 'ellipsis-start' || item === 'ellipsis-end') {
-                            return (
-                                <PaginationItem key={`ellipsis-${index}`} className="max-[350px]:hidden">
-                                    <PaginationEllipsis />
-                                </PaginationItem>
-                            );
-                        }
-                        const link = item as MetaLink;
+                    if (item === 'ellipsis-start' || item === 'ellipsis-end') {
                         return (
-                            <PaginationItem key={link.label} className="max-[350px]:hidden">
-                                <PaginationLink href={getUrlWithPreservedQuery(link.url)} isActive={link.active}>
-                                    {link.label}
-                                </PaginationLink>
+                            <PaginationItem key={`ellipsis-${index}`} className="max-[350px]:hidden">
+                                <PaginationEllipsis />
                             </PaginationItem>
                         );
-                    })}
+                    }
+                    const link = item as MetaLink;
+                    return (
+                        <PaginationItem key={link.label} className="max-[350px]:hidden">
+                            <PaginationLink href={getUrlWithPreservedQuery(link.url)} isActive={link.active}>
+                                {link.label}
+                            </PaginationLink>
+                        </PaginationItem>
+                    );
+                })}
                 <PaginationItem>
                     <PaginationNext href={getUrlWithPreservedQuery(pagination.links.next)} />
                 </PaginationItem>

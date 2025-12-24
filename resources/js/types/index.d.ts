@@ -5,6 +5,7 @@ import { Team } from './workspace';
 
 export interface Auth {
     user: User;
+    isWorkspaceUser: boolean;
     teams: Team[];
 }
 
@@ -74,18 +75,20 @@ export interface User {
     avatar?: string;
     avatar_url?: string;
     avatarUrl?: string; // API Resource format
-    roles: string[] | {
-        id: number;
-        name: string;
-        guard_name: string;
-        created_at: string;
-        updated_at: string;
-        pivot: {
-            model_type: string;
-            model_id: number;
-            role_id: number;
-        };
-    }[];
+    roles:
+        | string[]
+        | {
+              id: number;
+              name: string;
+              guard_name: string;
+              created_at: string;
+              updated_at: string;
+              pivot: {
+                  model_type: string;
+                  model_id: number;
+                  role_id: number;
+              };
+          }[];
     teams?: Team[];
     email_verified_at?: string | null;
     created_at?: string;

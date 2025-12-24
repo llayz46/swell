@@ -24,9 +24,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                         </div>
                         <DialogHeader>
                             <DialogTitle className="sm:text-center">{options?.title}</DialogTitle>
-                            {options?.description && (
-                                <DialogDescription className="sm:text-center">{options.description}</DialogDescription>
-                            )}
+                            {options?.description && <DialogDescription className="sm:text-center">{options.description}</DialogDescription>}
                         </DialogHeader>
                     </div>
 
@@ -36,12 +34,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                                 {options?.cancelText || 'Annuler'}
                             </Button>
                         </DialogClose>
-                        <Button
-                            type="button"
-                            className="flex-1"
-                            variant={options?.variant || 'default'}
-                            onClick={handleConfirm}
-                        >
+                        <Button type="button" className="flex-1" variant={options?.variant || 'default'} onClick={handleConfirm}>
                             {options?.confirmText || 'Confirmer'}
                         </Button>
                     </DialogFooter>

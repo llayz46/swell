@@ -1,6 +1,6 @@
-import { Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 import { type ComponentPropsWithoutRef } from 'react';
 
 interface SearchInputProps extends Omit<ComponentPropsWithoutRef<typeof Input>, 'className'> {
@@ -8,11 +8,7 @@ interface SearchInputProps extends Omit<ComponentPropsWithoutRef<typeof Input>, 
     placeholder?: string;
 }
 
-export default function SearchInput({
-    children,
-    placeholder = "Rechercher...",
-    ...inputProps
-}: SearchInputProps) {
+export default function SearchInput({ children, placeholder = 'Rechercher...', ...inputProps }: SearchInputProps) {
     return (
         <Card className="p-1">
             <CardContent className="p-0">
