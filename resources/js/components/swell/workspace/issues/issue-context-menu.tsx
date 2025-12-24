@@ -48,7 +48,7 @@ interface IssueContextMenuProps {
 }
 
 export function IssueContextMenu({ issue }: IssueContextMenuProps) {
-    const { statuses, team, priorities, labels, performUpdateStatus, performUpdateAssignee, performUpdatePriority, performToggleLabel, performUpdateDueDate, performDeleteIssue } =
+    const { statuses, team, priorities, labels, performUpdateStatus, performUpdateAssignee, performUpdatePriority, performToggleLabel, performUpdateDueDate, performDeleteIssue, openIssueDialog } =
         useWorkspaceIssuesStore(
             useShallow((state) => ({
                 statuses: state.statuses,
@@ -61,6 +61,7 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                 performToggleLabel: state.performToggleLabel,
                 performUpdateDueDate: state.performUpdateDueDate,
                 performDeleteIssue: state.performDeleteIssue,
+                openIssueDialog: state.openIssueDialog,
             })),
         );
 
@@ -207,7 +208,7 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
 
                 <ContextMenuSub>
                     <ContextMenuSubTrigger>
-                        <CalendarClock className="mr-2 size-4" /> Définir la date d'échéance...
+                        <CalendarClock className="mr-2 size-4" /> Définir la date d'échéance
                     </ContextMenuSubTrigger>
                     <ContextMenuSubContent className="w-auto p-0">
                         <div className="flex flex-col">
@@ -238,9 +239,8 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                     </ContextMenuSubContent>
                 </ContextMenuSub>
 
-                <ContextMenuItem disabled>
-                    <Pencil className="mr-2 size-4" /> Renommer...
-                    <ContextMenuShortcut>R</ContextMenuShortcut>
+                <ContextMenuItem onClick={() => openIssueDialog({ issue })}>
+                    <Pencil className="mr-2 size-4" /> Editer
                 </ContextMenuItem>
 
                 <ContextMenuSeparator />

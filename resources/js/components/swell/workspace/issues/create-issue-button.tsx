@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface CreateIssueButtonProps {
-    statusId?: string;
+    statusId?: number;
     variant?: 'default' | 'outline' | 'ghost' | 'secondary';
     size?: 'default' | 'sm' | 'lg' | 'icon';
     className?: string;
@@ -18,11 +18,11 @@ export function CreateIssueButton({
     className,
     children,
 }: CreateIssueButtonProps) {
-    const { openCreateIssueDialog } = useWorkspaceIssuesStore();
+    const { openIssueDialog } = useWorkspaceIssuesStore();
 
     return (
         <Button
-            onClick={() => openCreateIssueDialog(statusId)}
+            onClick={() => openIssueDialog({ statusId })}
             variant={variant}
             size={size}
             className={cn(className, 'size-6')}

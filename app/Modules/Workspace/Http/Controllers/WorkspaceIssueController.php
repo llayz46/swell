@@ -8,9 +8,9 @@ use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueAssigneeRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueDueDateRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueLabelRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssuePriorityRequest;
+use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueStatusRequest;
 use App\Modules\Workspace\Models\Issue;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class WorkspaceIssueController extends Controller
@@ -75,9 +75,27 @@ class WorkspaceIssueController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Issue $issue)
+    public function update(UpdateIssueRequest $request, Issue $issue)
     {
-        //
+        $this->authorize('update', $issue);
+
+        $validated = $request->validated();
+
+        $issue->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'status_id' => $validated['status_id'],
+            'priority_id' => $validated['priority_id'],
+            'assignee_id' => $validated['assignee_id'],
+            'due_date' => $validated['due_date'],
+        ]);
+
+        // Update labels
+        if (isset($validated['label_ids'])) {
+            $issue->labels()->sync($validated['label_ids']);
+        }
+
+        return back();
     }
 
     /**

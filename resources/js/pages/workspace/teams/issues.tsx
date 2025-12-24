@@ -5,7 +5,7 @@ import { FilteredGroupIssues } from '@/components/swell/workspace/issues/filtere
 import { Head } from '@inertiajs/react';
 import { Issue, IssueStatus, IssuePriority, IssueLabel, Team } from '@/types/workspace';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
-import { CreateIssueDialog } from '@/components/swell/workspace/issues/create-issue-dialog';
+import { IssueDialog } from '@/components/swell/workspace/issues/issue-dialog';
 import { useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -87,8 +87,8 @@ export default function Issues({ team, issues, statuses, priorities, labels, fil
                     )
                 ))}
             </div>
-            
-            <CreateIssueDialog
+
+            <IssueDialog
                 teamId={team?.id}
             />
         </WorkspaceLayout>

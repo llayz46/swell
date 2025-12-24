@@ -106,6 +106,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     ->name('update-label');
                 Route::patch('/{issue}/due-date', [WorkspaceIssueController::class, 'updateDueDate'])
                     ->name('update-due-date');
+                Route::patch('/{issue}', [WorkspaceIssueController::class, 'update'])
+                    ->name('update');
                 Route::delete('/{issue}', [WorkspaceIssueController::class, 'destroy'])
                     ->name('destroy');
                 Route::post('/', [WorkspaceIssueController::class, 'store'])

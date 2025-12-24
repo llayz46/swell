@@ -31,8 +31,9 @@ type WorkspaceIssuesStore = {
     filters: Filters;
     isLead: boolean;
     isMember: boolean;
-    createIssueDialogOpen: boolean;
-    createIssueDialogStatusId: string | null;
+    issueDialogOpen: boolean;
+    issueDialogIssue: Issue | null;
+    issueDialogStatusId: number | null;
     updatingIssues: Set<number>;
 
     // Actions d'initialisation
@@ -46,9 +47,9 @@ type WorkspaceIssuesStore = {
     setIsLead: (isLead: boolean) => void;
     setIsMember: (isMember: boolean) => void;
 
-    // Actions du dialog de création
-    openCreateIssueDialog: (statusId?: string) => void;
-    closeCreateIssueDialog: () => void;
+    // Actions du dialog d'issue
+    openIssueDialog: (options?: { statusId?: number; issue?: Issue }) => void;
+    closeIssueDialog: () => void;
 
     // Actions de manipulation d'issues (état local uniquement)
     updateIssue: (issue: Issue) => void;
@@ -103,8 +104,9 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
     },
     isLead: false,
     isMember: false,
-    createIssueDialogOpen: false,
-    createIssueDialogStatusId: null,
+    issueDialogOpen: false,
+    issueDialogIssue: null,
+    issueDialogStatusId: null,
     updatingIssues: new Set<number>(),
 
     // Actions d'initialisation
@@ -132,16 +134,18 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
     setIsLead: (isLead) => set({ isLead }),
     setIsMember: (isMember) => set({ isMember }),
 
-    // Actions du dialog de création
-    openCreateIssueDialog: (statusId) =>
+    // Actions du dialog d'issue
+    openIssueDialog: (options) =>
         set({
-            createIssueDialogOpen: true,
-            createIssueDialogStatusId: statusId || null,
+            issueDialogOpen: true,
+            issueDialogIssue: options?.issue || null,
+            issueDialogStatusId: options?.statusId || null,
         }),
-    closeCreateIssueDialog: () =>
+    closeIssueDialog: () =>
         set({
-            createIssueDialogOpen: false,
-            createIssueDialogStatusId: null,
+            issueDialogOpen: false,
+            issueDialogIssue: null,
+            issueDialogStatusId: null,
         }),
 
     updateIssue: (issue) =>

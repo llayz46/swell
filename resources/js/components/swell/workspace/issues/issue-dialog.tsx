@@ -16,35 +16,45 @@ import { CheckIcon, ChevronsUpDown, LoaderCircle, X } from 'lucide-react';
 import { FormEventHandler, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-interface CreateIssueDialogProps {
+interface IssueDialogProps {
     teamId: number;
 }
 
 type IssueFormData = {
     title: string;
     description: string;
-    status_id: string;
-    priority_id: string;
+    status_id: number;
+    priority_id: number;
     assignee_id: number | null;
-    label_ids: string[];
+    label_ids: number[];
     due_date: string;
     team_id: number;
 };
 
-export function CreateIssueDialog({ teamId }: CreateIssueDialogProps) {
+export function IssueDialog({ teamId }: IssueDialogProps) {
     const [statusOpen, setStatusOpen] = useState<boolean>(false);
     const [priorityOpen, setPriorityOpen] = useState<boolean>(false);
     const [assigneeOpen, setAssigneeOpen] = useState<boolean>(false);
     const [labelsOpen, setLabelsOpen] = useState<boolean>(false);
 
-    const { statuses, priorities, labels, team, createIssueDialogOpen, createIssueDialogStatusId, closeCreateIssueDialog } =
-        useWorkspaceIssuesStore();
+    const {
+        statuses,
+        priorities,
+        labels,
+        team,
+        issueDialogOpen,
+        issueDialogIssue,
+        issueDialogStatusId,
+        closeIssueDialog,
+    } = useWorkspaceIssuesStore();
 
-    const { data, setData, post, processing, errors, reset } = useForm<IssueFormData>({
+    const isEditMode = !!issueDialogIssue;
+
+    const { data, setData, post, patch, processing, errors, reset } = useForm<IssueFormData>({
         title: '',
         description: '',
-        status_id: statuses[0]?.id || '',
-        priority_id: priorities[0]?.id || '',
+        status_id: statuses[0]?.id || 0,
+        priority_id: priorities[0]?.id || 0,
         assignee_id: null,
         label_ids: [],
         due_date: '',
@@ -52,28 +62,67 @@ export function CreateIssueDialog({ teamId }: CreateIssueDialogProps) {
     });
 
     useEffect(() => {
-        if (createIssueDialogOpen && createIssueDialogStatusId) {
-            setData('status_id', createIssueDialogStatusId);
+        if (!issueDialogOpen) {
+            reset();
         }
-    }, [createIssueDialogOpen, createIssueDialogStatusId]);
+    }, [issueDialogOpen, reset]);
+
+    useEffect(() => {
+        if (issueDialogOpen) {
+            if (issueDialogIssue) {
+                setData({
+                    title: issueDialogIssue.title,
+                    description: issueDialogIssue.description || '',
+                    status_id: issueDialogIssue.status.id,
+                    priority_id: issueDialogIssue.priority.id,
+                    assignee_id: issueDialogIssue.assignee?.id || null,
+                    label_ids: issueDialogIssue.labels.map((l) => l.id),
+                    due_date: issueDialogIssue.dueDate || '',
+                    team_id: teamId,
+                });
+            } else {
+                reset();
+                if (issueDialogStatusId) {
+                    setData('status_id', issueDialogStatusId);
+                }
+            }
+        }
+    }, [issueDialogOpen, issueDialogIssue, issueDialogStatusId]);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('workspace.issues.store'), {
-            preserveScroll: true,
-            onSuccess: () => {
-                reset();
-                closeCreateIssueDialog();
-                toast.success('Tâche créée avec succès');
-            },
-            onError: (errors) => {
-                const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
-                toast.error('Erreur lors de la création de la tâche', {
-                    description: allErrors,
-                });
-            },
-        });
+        if (isEditMode && issueDialogIssue) {
+            patch(route('workspace.issues.update', { issue: issueDialogIssue.id }), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    reset();
+                    closeIssueDialog();
+                    toast.success('Tâche modifiée avec succès');
+                },
+                onError: (errors) => {
+                    const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
+                    toast.error('Erreur lors de la modification de la tâche', {
+                        description: allErrors,
+                    });
+                },
+            });
+        } else {
+            post(route('workspace.issues.store'), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    reset();
+                    closeIssueDialog();
+                    toast.success('Tâche créée avec succès');
+                },
+                onError: (errors) => {
+                    const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
+                    toast.error('Erreur lors de la création de la tâche', {
+                        description: allErrors,
+                    });
+                },
+            });
+        }
     };
 
     const selectedStatus = statuses.find((s) => s.id === data.status_id);
@@ -81,11 +130,11 @@ export function CreateIssueDialog({ teamId }: CreateIssueDialogProps) {
     const selectedAssignee = team?.members?.find((m) => m.id === data.assignee_id);
     const selectedLabels = labels.filter((l) => data.label_ids.includes(l.id));
 
-    const toggleLabel = (labelId: string) => {
+    const toggleLabel = (labelId: number) => {
         setData('label_ids', data.label_ids.includes(labelId) ? data.label_ids.filter((id) => id !== labelId) : [...data.label_ids, labelId]);
     };
 
-    const removeLabel = (labelId: string) => {
+    const removeLabel = (labelId: number) => {
         setData(
             'label_ids',
             data.label_ids.filter((id) => id !== labelId),
@@ -93,12 +142,16 @@ export function CreateIssueDialog({ teamId }: CreateIssueDialogProps) {
     };
 
     return (
-        <Dialog open={createIssueDialogOpen} onOpenChange={closeCreateIssueDialog}>
+        <Dialog open={issueDialogOpen} onOpenChange={closeIssueDialog}>
             <DialogContent className="shadow-dialog flex max-h-[calc(100vh-32px)] flex-col gap-0 overflow-y-visible border-transparent p-0 sm:max-w-xl [&>button:last-child]:top-3.5">
                 <DialogHeader className="contents space-y-0 text-left">
-                    <DialogTitle className="border-b px-6 py-4 text-base">Nouvelle tâche</DialogTitle>
+                    <DialogTitle className="border-b px-6 py-4 text-base">
+                        {isEditMode ? 'Modifier la tâche' : 'Nouvelle tâche'}
+                    </DialogTitle>
                 </DialogHeader>
-                <DialogDescription className="sr-only">Nouvelle tâche</DialogDescription>
+                <DialogDescription className="sr-only">
+                    {isEditMode ? 'Modifier la tâche' : 'Nouvelle tâche'}
+                </DialogDescription>
                 <div className="overflow-y-auto">
                     <div className="pt-4">
                         <form className="space-y-4 *:not-last:px-6" onSubmit={submit}>
@@ -420,7 +473,7 @@ export function CreateIssueDialog({ teamId }: CreateIssueDialogProps) {
                                 </DialogClose>
                                 <Button type="submit" disabled={processing}>
                                     {processing && <LoaderCircle className="size-4 animate-spin" />}
-                                    Créer la tâche
+                                    {isEditMode ? 'Modifier' : 'Créer'} la tâche
                                 </Button>
                             </DialogFooter>
                         </form>
