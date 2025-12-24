@@ -1,7 +1,7 @@
 import { AppContent } from '@/components/app-content';
 import { ToasterWrapper } from '@/components/swell/toaster-wrapper';
-import { WorkspaceShell } from '@/components/swell/workspace/workspace-shell';
-import { WorkspaceSidebar } from '@/components/swell/workspace/workspace-sidebar';
+import { WorkspaceShell } from '@/components/swell/workspace/layout/sidebar/workspace-shell';
+import { WorkspaceSidebar } from '@/components/swell/workspace/layout/sidebar/workspace-sidebar';
 import { cn } from '@/lib/utils';
 import type { NavItem } from '@/types';
 import { type PropsWithChildren } from 'react';

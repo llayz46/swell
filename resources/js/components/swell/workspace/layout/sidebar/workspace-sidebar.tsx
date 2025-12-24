@@ -1,7 +1,7 @@
 import AppLogoIcon from '@/components/app-logo-icon';
 import { NavFooter } from '@/components/nav-footer';
 import { NavUser } from '@/components/nav-user';
-import WorkspaceNewIssueDialog from '@/components/swell/workspace/workspace-new-issue-dialog';
+import WorkspaceNewIssueDialog from '@/components/swell/workspace/layout/sidebar/workspace-new-issue-dialog';
 import ThemeToggle from '@/components/theme-toggle';
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
