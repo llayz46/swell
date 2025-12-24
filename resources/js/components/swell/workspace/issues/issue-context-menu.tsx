@@ -120,7 +120,7 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
 
                 <ContextMenuSub>
                     <ContextMenuSubTrigger>
-                        <User className="mr-2 size-4" /> Attribution
+                        <User className="mr-2 size-4" /> Assignation
                     </ContextMenuSubTrigger>
                     <ContextMenuSubContent className="w-48">
                         <ContextMenuItem
@@ -129,7 +129,7 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                                 handleAssigneeChange(null);
                             }}
                         >
-                            <User className="mr-2 size-4" /> Non attribué
+                            <User className="mr-2 size-4" /> Non assigné
                             {!issue.assignee && <CheckIcon className="ml-auto size-4" />}
                         </ContextMenuItem>
                         {team?.members?.map((member) => (
