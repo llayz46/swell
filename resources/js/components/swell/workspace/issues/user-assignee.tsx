@@ -22,15 +22,15 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
     const [open, setOpen] = useState(false);
     const [currentAssignee, setCurrentAssignee] = useState<IssueAssignee | null>(user);
 
-    const { members, isIssueUpdating, performUpdateAssignee } = useWorkspaceIssuesStore(
+    const { members, updatingIssues, performUpdateAssignee } = useWorkspaceIssuesStore(
         useShallow((state) => ({
             members: state.team?.members || [],
-            isIssueUpdating: state.isIssueUpdating,
+            updatingIssues: state.updatingIssues,
             performUpdateAssignee: state.performUpdateAssignee,
         })),
     );
 
-    const isUpdating = isIssueUpdating(issueId);
+    const isUpdating = updatingIssues.has(issueId);
 
     useEffect(() => {
         setCurrentAssignee(user);

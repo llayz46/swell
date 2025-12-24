@@ -1,7 +1,7 @@
 import type { PriorityIconName } from '@/components/swell/workspace/icons/priority-mapper';
 
 export interface IssueStatus {
-  id: string
+  id: number
   slug: string
   name: string
   color: string
@@ -9,14 +9,14 @@ export interface IssueStatus {
 }
 
 export interface IssuePriority {
-  id: string
+  id: number
   slug: string
   name: string
   icon_type: PriorityIconName
 }
 
 export interface IssueLabel {
-  id: string
+  id: number
   name: string
   slug: string
   color: string

@@ -10,6 +10,7 @@ import {
     ContextMenuSubTrigger,
 } from '@/components/ui/context-menu';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
+import { PriorityIcon } from '@/components/swell/workspace/icons';
 import type { Issue } from '@/types/workspace';
 import {
     AlarmClock,
@@ -41,13 +42,14 @@ interface IssueContextMenuProps {
 }
 
 export function IssueContextMenu({ issue }: IssueContextMenuProps) {
-    const { statuses, team, priorities, performUpdateStatus, performUpdateAssignee } = useWorkspaceIssuesStore(
+    const { statuses, team, priorities, performUpdateStatus, performUpdateAssignee, performUpdatePriority } = useWorkspaceIssuesStore(
         useShallow((state) => ({
             statuses: state.statuses,
             team: state.team,
             priorities: state.priorities,
             performUpdateStatus: state.performUpdateStatus,
             performUpdateAssignee: state.performUpdateAssignee,
+            performUpdatePriority: state.performUpdatePriority,
         })),
     );
 
@@ -59,7 +61,11 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
         const newAssignee = assigneeId ? team?.members?.find((m) => m.id === assigneeId) || null : null;
         performUpdateAssignee(issue.id, newAssignee, issue.assignee);
     };
-    
+
+    const handlePriorityChange = (priorityId: number) => {
+        performUpdatePriority(issue.id, priorityId, issue.priority);
+    };
+        
     return (
         <ContextMenuContent className="w-64 bg-sidebar">
             <ContextMenuGroup>
@@ -105,14 +111,21 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                         <BarChart3 className="mr-2 size-4" /> Priorité
                     </ContextMenuSubTrigger>
                     <ContextMenuSubContent className="w-48">
-                        {/*{priorities.map((priority) => (
-                     <ContextMenuItem
-                        key={priority.id}
-                        onClick={() => handlePriorityChange(priority.id)}
-                     >
-                        <priority.icon className="size-4" /> {priority.name}
-                     </ContextMenuItem>
-                  ))}*/}
+                        {priorities.map((priority) => (
+                            <ContextMenuItem
+                                key={priority.id}
+                                className="flex gap-2"
+                                onClick={() => handlePriorityChange(priority.id)}
+                            >
+                                <PriorityIcon
+                                    iconType={priority.icon_type}
+                                    width={16}
+                                    height={16}
+                                />
+                                {priority.name}
+                                {priority.id === issue.priority?.id && <CheckIcon className="ml-auto size-4" />}
+                            </ContextMenuItem>
+                        ))}
                     </ContextMenuSubContent>
                 </ContextMenuSub>
 

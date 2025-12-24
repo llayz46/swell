@@ -75,7 +75,7 @@ type WorkspaceIssuesStore = {
     // Helpers pour filtrer les issues
     filterByStatus: (statusId: string) => Issue[];
     filterByAssignee: (assigneeId: string | null) => Issue[];
-    filterByPriority: (priorityId: string) => Issue[];
+    filterByPriority: (priorityId: number) => Issue[];
     filterByLabel: (labelId: string) => Issue[];
     hasActiveFilters: () => boolean;
     getFilteredIssues: () => Issue[];
@@ -184,7 +184,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
 
         const newStatus =
             typeof statusIdOrSlug === 'number'
-            ? statuses.find((s) => s.id === String(statusIdOrSlug))
+                ? statuses.find((s) => s.id === statusIdOrSlug)
                 : statuses.find((s) => s.slug === statusIdOrSlug);
 
         if (!newStatus) {
@@ -229,7 +229,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
 
         const { priorities, updateIssuePriority, updatingIssues } = get();
 
-        const newPriority = priorities.find((p) => Number(p.id) === priorityId);
+        const newPriority = priorities.find((p) => p.id === priorityId);
 
         if (!newPriority) {
             toast.error('Priorité invalide');

@@ -6,6 +6,7 @@ import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { IssueStatus } from '@/types/workspace';
 import { CheckIcon } from 'lucide-react';
 import { useEffect, useId, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
 interface StatusSelectorProps {
     status: IssueStatus;
@@ -17,9 +18,16 @@ export function StatusSelector({ status, issueId }: StatusSelectorProps) {
     const [open, setOpen] = useState<boolean>(false);
     const [value, setValue] = useState<string>(status.slug);
 
-    const { statuses, filterByStatus, isIssueUpdating, performUpdateStatus } = useWorkspaceIssuesStore();
+    const { statuses, filterByStatus, updatingIssues, performUpdateStatus } = useWorkspaceIssuesStore(
+        useShallow((state) => ({
+            statuses: state.statuses,
+            filterByStatus: state.filterByStatus,
+            updatingIssues: state.updatingIssues,
+            performUpdateStatus: state.performUpdateStatus,
+        })),
+    );
 
-    const isUpdating = isIssueUpdating(issueId);
+    const isUpdating = updatingIssues.has(issueId);
 
     useEffect(() => {
         setValue(status.slug);

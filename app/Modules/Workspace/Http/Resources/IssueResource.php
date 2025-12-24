@@ -27,7 +27,7 @@ class IssueResource extends JsonResource
                 'icon_type' => $this->status->icon_type,
             ]),
             'priority' => $this->whenLoaded('priority', fn () => [
-                'id' => $this->priority->slug,
+                'id' => $this->priority->id,
                 'slug' => $this->priority->slug,
                 'name' => $this->priority->name,
                 'color' => $this->priority->color,

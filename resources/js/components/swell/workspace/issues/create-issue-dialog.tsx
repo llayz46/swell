@@ -200,7 +200,6 @@ export function CreateIssueDialog({ teamId }: CreateIssueDialogProps) {
                                                     <div className="flex items-center gap-2">
                                                         <PriorityIcon
                                                             iconType={selectedPriority.icon_type}
-                                                            color={selectedPriority.color}
                                                             width={14}
                                                             height={14}
                                                         />

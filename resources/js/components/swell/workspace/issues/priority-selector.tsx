@@ -4,62 +4,43 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import type { IssuePriority } from '@/types/workspace';
-import { router } from '@inertiajs/react';
 import { CheckIcon } from 'lucide-react';
 import { useEffect, useId, useState } from 'react';
-import { toast } from "sonner";
+import { useShallow } from 'zustand/react/shallow';
 
 interface PrioritySelectorProps {
     priority: IssuePriority;
-    issueId?: number;
+    issueId: number;
 }
 
 export function PrioritySelector({ priority, issueId }: PrioritySelectorProps) {
     const id = useId();
     const [open, setOpen] = useState<boolean>(false);
     const [value, setValue] = useState<string>(priority.slug);
-    const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-    const { priorities, filterByPriority, updateIssuePriority } = useWorkspaceIssuesStore();
+    const { priorities, filterByPriority, updatingIssues, performUpdatePriority } = useWorkspaceIssuesStore(
+        useShallow((state) => ({
+            priorities: state.priorities,
+            filterByPriority: state.filterByPriority,
+            updatingIssues: state.updatingIssues,
+            performUpdatePriority: state.performUpdatePriority,
+        })),
+    );
+
+    const isUpdating = updatingIssues.has(issueId);
 
     useEffect(() => {
         setValue(priority.slug);
     }, [priority.slug]);
 
     const handlePriorityChange = (prioritySlug: string) => {
+        const selectedPriority = priorities.find((p) => p.slug === prioritySlug);
+        if (!selectedPriority) return;
+
         setValue(prioritySlug);
         setOpen(false);
 
-        if (!issueId) return;
-
-        const newPriority = priorities.find((p) => p.slug === prioritySlug);
-        if (!newPriority) return;
-
-        if (newPriority.slug === priority.slug) return;
-
-        updateIssuePriority(issueId, newPriority);
-
-        setIsUpdating(true);
-
-        router.patch(
-            route('workspace.issues.update-priority', { issue: issueId }),
-            { priority_id: newPriority.id },
-            {
-                preserveScroll: true,
-                preserveState: true,
-                onError: (errors) => {
-                    updateIssuePriority(issueId, priority);
-                    setIsUpdating(false);
-                
-                    toast.error(errors.priority_id);
-                },
-                onSuccess: () => {
-                    setIsUpdating(false);
-                    
-                    toast.success('Priorité mise à jour avec succès');
-                }
-            }
-        );
+        performUpdatePriority(issueId, selectedPriority.id, priority);
     };
 
     return (
@@ -102,16 +83,16 @@ export function PrioritySelector({ priority, issueId }: PrioritySelectorProps) {
                                         key={item.id}
                                         value={item.slug}
                                         keywords={[item.name, item.slug]}
-                                        onSelect={handlePriorityChange}
+                                        onSelect={() => handlePriorityChange(item.slug)}
                                         className="flex items-center justify-between"
                                     >
                                         <div className="flex items-center gap-2">
-                                            <PriorityIcon iconType={item.icon_type} color={item.color} width={14} height={14} className="shrink-0" />
+                                            <PriorityIcon iconType={item.icon_type} width={14} height={14} className="shrink-0" />
                                             {item.name}
                                         </div>
                                         {value === item.slug && <CheckIcon size={16} className="ml-auto" />}
                                         {filterByPriority && (
-                                            <span className="text-xs text-muted-foreground">{filterByPriority(item.slug).length}</span>
+                                            <span className="text-xs text-muted-foreground">{filterByPriority(item.id).length}</span>
                                         )}
                                     </CommandItem>
                                 ))}

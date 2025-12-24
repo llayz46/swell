@@ -270,14 +270,14 @@ export function Filter() {
                               className="flex items-center justify-between"
                            >
                               <div className="flex items-center gap-2">
-                                 <PriorityIcon iconType={priority.icon_type} color={priority.color} />
+                                 <PriorityIcon iconType={priority.icon_type} />
                                  {priority.name}
                               </div>
                               {filters.priority.includes(priority.slug) && (
                                  <CheckIcon size={16} className="ml-auto" />
                               )}
                               <span className="text-muted-foreground text-xs">
-                                 {filterByPriority(priority.slug).length}
+                                 {filterByPriority(priority.id).length}
                               </span>
                            </CommandItem>
                         ))}
