@@ -99,7 +99,7 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
                 ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>Nouveau membre</DropdownMenuLabel>
-                <DropdownMenuItem>
+                <DropdownMenuItem disabled>
                     <div className="flex items-center gap-2">
                         <Send className="size-4" />
                         <span>Inviter et assigner...</span>
