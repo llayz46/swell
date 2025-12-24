@@ -55,6 +55,7 @@ type WorkspaceIssuesStore = {
     updateIssuePriority: (issueId: number, priority: IssuePriority) => void;
     updateIssueStatus: (issueId: number, status: IssueStatus) => void;
     updateIssueAssignee: (issueId: number, assignee: IssueAssignee | null) => void;
+    updateIssueLabels: (issueId: number, labels: IssueLabel[]) => void;
     removeIssue: (issueId: number) => void;
     addIssue: (issue: Issue) => void;
 
@@ -62,6 +63,7 @@ type WorkspaceIssuesStore = {
     performUpdateStatus: (issueId: number, statusIdOrSlug: number | string, currentStatus: IssueStatus) => void;
     performUpdatePriority: (issueId: number, priorityId: number, currentPriority: IssuePriority) => void;
     performUpdateAssignee: (issueId: number, newAssignee: IssueAssignee | null, currentAssignee: IssueAssignee | null) => void;
+    performToggleLabel: (issueId: number, labelId: number, currentLabels: IssueLabel[]) => void;
     performDeleteIssue: (issueId: number, onSuccess?: () => void) => void;
 
     // Helper pour vérifier si une issue est en cours de mise à jour
@@ -164,7 +166,14 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
             issues: state.issues.map((i) =>
                 i.id === issueId ? { ...i, assignee } : i
             ),
-        })),  
+        })),
+
+    updateIssueLabels: (issueId, labels) =>
+        set((state) => ({
+            issues: state.issues.map((i) =>
+                i.id === issueId ? { ...i, labels } : i
+            ),
+        })),
 
     removeIssue: (issueId) =>
         set((state) => ({
@@ -273,7 +282,6 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
 
         const { updateIssueAssignee, updatingIssues } = get();
 
-        // Mise à jour optimiste avec l'objet complet
         updateIssueAssignee(issueId, newAssignee);
         set({ updatingIssues: new Set(updatingIssues).add(issueId) });
 
@@ -298,6 +306,52 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     set({ updatingIssues: newSet });
 
                     const errorMessage = (errors as Record<string, string>).assignee_id || "Erreur lors de la mise à jour de l'assignation";
+                    toast.error(errorMessage);
+                },
+            },
+        );
+    },
+
+    performToggleLabel: (issueId, labelId, currentLabels) => {
+        if (!issueId) return;
+
+        const { labels, updateIssueLabels, updatingIssues } = get();
+
+        const label = labels.find((l) => l.id === labelId);
+        if (!label) {
+            toast.error('Étiquette invalide');
+            return;
+        }
+
+        const hasLabel = currentLabels.some((l) => l.id === labelId);
+        const newLabels = hasLabel
+            ? currentLabels.filter((l) => l.id !== labelId)
+            : [...currentLabels, label];
+
+        updateIssueLabels(issueId, newLabels);
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.patch(
+            route('workspace.issues.update-label', { issue: issueId }),
+            { label_id: labelId },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+                    toast.success(hasLabel ? 'Étiquette retirée avec succès' : 'Étiquette ajoutée avec succès');
+                },
+                onError: (errors) => {
+                    updateIssueLabels(issueId, currentLabels);
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+
+                    const errorMessage = (errors as Record<string, string>).label_id || "Erreur lors de la mise à jour de l'étiquette";
                     toast.error(errorMessage);
                 },
             },

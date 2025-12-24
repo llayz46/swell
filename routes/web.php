@@ -102,6 +102,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->name('update-status');
             Route::patch('/{issue}/assignee', [WorkspaceIssueController::class, 'updateAssignee'])
                 ->name('update-assignee');
+            Route::patch('/{issue}/label', [WorkspaceIssueController::class, 'updateLabel'])
+                ->name('update-label');
             Route::post('/', [WorkspaceIssueController::class, 'store'])
                 ->name('store');
         });

@@ -7,6 +7,7 @@ use App\Modules\Workspace\Http\Requests\Issue\StoreIssueRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueAssigneeRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssuePriorityRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueStatusRequest;
+use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueLabelRequest;
 use App\Modules\Workspace\Models\Issue;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -122,6 +123,22 @@ class WorkspaceIssueController extends Controller
         $issue->update([
             'assignee_id' => $validated['assignee_id'],
         ]);
+
+        return back();
+    }
+    
+    /**
+     * Update the labels of the specified issue.
+     */
+    public function updateLabel(UpdateIssueLabelRequest $request, Issue $issue)
+    {
+        $labelId = $request->validated()['label_id'];
+        
+        if ($issue->labels()->where('issue_labels.id', $labelId)->exists()) {
+            $issue->labels()->detach($labelId);
+        } else {
+            $issue->labels()->attach($labelId);
+        }
 
         return back();
     }

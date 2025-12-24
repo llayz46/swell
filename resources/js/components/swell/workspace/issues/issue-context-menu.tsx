@@ -42,14 +42,16 @@ interface IssueContextMenuProps {
 }
 
 export function IssueContextMenu({ issue }: IssueContextMenuProps) {
-    const { statuses, team, priorities, performUpdateStatus, performUpdateAssignee, performUpdatePriority } = useWorkspaceIssuesStore(
+    const { statuses, team, priorities, labels, performUpdateStatus, performUpdateAssignee, performUpdatePriority, performToggleLabel } = useWorkspaceIssuesStore(
         useShallow((state) => ({
             statuses: state.statuses,
             team: state.team,
             priorities: state.priorities,
+            labels: state.labels,
             performUpdateStatus: state.performUpdateStatus,
             performUpdateAssignee: state.performUpdateAssignee,
             performUpdatePriority: state.performUpdatePriority,
+            performToggleLabel: state.performToggleLabel,
         })),
     );
 
@@ -65,7 +67,11 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
     const handlePriorityChange = (priorityId: number) => {
         performUpdatePriority(issue.id, priorityId, issue.priority);
     };
-        
+
+    const handleLabelToggle = (labelId: number) => {
+        performToggleLabel(issue.id, labelId, issue.labels);
+    };
+
     return (
         <ContextMenuContent className="w-64 bg-sidebar">
             <ContextMenuGroup>
@@ -89,12 +95,21 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                         <User className="mr-2 size-4" /> Attribution
                     </ContextMenuSubTrigger>
                     <ContextMenuSubContent className="w-48">
-                        <ContextMenuItem onClick={() => handleAssigneeChange(null)}>
+                        <ContextMenuItem onClick={(e) => {
+                            e.preventDefault();
+                            handleAssigneeChange(null);
+                        }}>
                             <User className="mr-2 size-4" /> Non attribué
                             {!issue.assignee && <CheckIcon className="ml-auto size-4" />}
                         </ContextMenuItem>
                         {team?.members?.map((member) => (
-                            <ContextMenuItem key={member.id} onClick={() => handleAssigneeChange(member.id)}>
+                            <ContextMenuItem 
+                                key={member.id} 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleAssigneeChange(member.id);
+                                }}
+                            >
                                 <Avatar className="size-4 mr-2">
                                     <AvatarImage src={member.avatarUrl} alt={member.name} />
                                     <AvatarFallback>{member.name[0]}</AvatarFallback>
@@ -115,7 +130,10 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                             <ContextMenuItem
                                 key={priority.id}
                                 className="flex gap-2"
-                                onClick={() => handlePriorityChange(priority.id)}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handlePriorityChange(priority.id);
+                                }}
                             >
                                 <PriorityIcon
                                     iconType={priority.icon_type}
@@ -134,26 +152,34 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                         <Tag className="mr-2 size-4" /> Étiquettes
                     </ContextMenuSubTrigger>
                     <ContextMenuSubContent className="w-48">
-                        {/*{labels.map((label) => (
-                     <ContextMenuItem key={label.id} onClick={() => handleLabelToggle(label.id)}>
-                        <span
-                           className="inline-block size-3 rounded-full"
-                           style={{ backgroundColor: label.color }}
-                           aria-hidden="true"
-                        />
-                        {label.name}
-                     </ContextMenuItem>
-                  ))}*/}
+                        {labels.map((label) => (
+                            <ContextMenuItem
+                                key={label.id}
+                                className="flex gap-2" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleLabelToggle(label.id);
+                                }}
+                            >
+                                <span
+                                    className="inline-block size-2 rounded-full"
+                                    style={{ backgroundColor: label.color }}
+                                    aria-hidden="true"
+                                />
+                                {label.name}
+                                {issue.labels.some(l => l.id === label.id) && <CheckIcon className="ml-auto size-4" />}
+                            </ContextMenuItem>
+                        ))}
                     </ContextMenuSubContent>
                 </ContextMenuSub>
 
                 {/*<ContextMenuItem onClick={handleSetDueDate}>*/}
-                <ContextMenuItem>
+                <ContextMenuItem disabled>
                     <CalendarClock className="mr-2 size-4" /> Définir la date d'échéance...
                     <ContextMenuShortcut>D</ContextMenuShortcut>
                 </ContextMenuItem>
 
-                <ContextMenuItem>
+                <ContextMenuItem disabled>
                     <Pencil className="mr-2 size-4" /> Renommer...
                     <ContextMenuShortcut>R</ContextMenuShortcut>
                 </ContextMenuItem>
@@ -161,27 +187,27 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                 <ContextMenuSeparator />
 
                 {/*<ContextMenuItem onClick={handleAddLink}>*/}
-                <ContextMenuItem>
+                <ContextMenuItem disabled>
                     <LinkIcon className="mr-2 size-4" /> Ajouter un lien...
                     <ContextMenuShortcut>Ctrl L</ContextMenuShortcut>
                 </ContextMenuItem>
 
                 <ContextMenuSub>
-                    <ContextMenuSubTrigger>
+                    <ContextMenuSubTrigger disabled>
                         <Repeat2 className="mr-2 size-4" /> Convertir en
                     </ContextMenuSubTrigger>
                     <ContextMenuSubContent className="w-48">
-                        <ContextMenuItem>
+                        <ContextMenuItem disabled>
                             <FileText className="mr-2 size-4" /> Document
                         </ContextMenuItem>
-                        <ContextMenuItem>
+                        <ContextMenuItem disabled>
                             <MessageSquare className="mr-2 size-4" /> Commentaire
                         </ContextMenuItem>
                     </ContextMenuSubContent>
                 </ContextMenuSub>
 
                 {/*<ContextMenuItem onClick={handleMakeCopy}>*/}
-                <ContextMenuItem>
+                <ContextMenuItem disabled>
                     <CopyIcon className="mr-2 size-4" /> Faire une copie...
                 </ContextMenuItem>
             </ContextMenuGroup>
@@ -189,63 +215,63 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
             <ContextMenuSeparator />
 
             {/*<ContextMenuItem onClick={handleCreateRelated}>*/}
-            <ContextMenuItem>
+            <ContextMenuItem disabled>
                 <PlusSquare className="mr-2 size-4" /> Create related
             </ContextMenuItem>
 
             <ContextMenuSub>
-                <ContextMenuSubTrigger>
+                <ContextMenuSubTrigger disabled>
                     <Flag className="mr-2 size-4" /> Marquer comme
                 </ContextMenuSubTrigger>
                 <ContextMenuSubContent className="w-48">
                     {/*<ContextMenuItem onClick={() => handleMarkAs('Completed')}>*/}
-                    <ContextMenuItem>
+                    <ContextMenuItem disabled>
                         <CheckCircle2 className="mr-2 size-4" /> Terminé
                     </ContextMenuItem>
                     {/*<ContextMenuItem onClick={() => handleMarkAs('Duplicate')}>*/}
-                    <ContextMenuItem>
+                    <ContextMenuItem disabled>
                         <CopyIcon className="mr-2 size-4" /> Dupliquer
                     </ContextMenuItem>
                     {/*<ContextMenuItem onClick={() => handleMarkAs("Won't Fix")}>*/}
-                    <ContextMenuItem>
+                    <ContextMenuItem disabled>
                         <Clock className="mr-2 size-4" /> Non résolu
                     </ContextMenuItem>
                 </ContextMenuSubContent>
             </ContextMenuSub>
 
             {/*<ContextMenuItem onClick={handleMove}>*/}
-            <ContextMenuItem>
+            <ContextMenuItem disabled>
                 <ArrowRightLeft className="mr-2 size-4" /> Déplacer
             </ContextMenuItem>
 
             <ContextMenuSeparator />
 
             {/*<ContextMenuItem onClick={handleSubscribe}>*/}
-            <ContextMenuItem>
+            <ContextMenuItem disabled>
                 {/*<Bell className="mr-2 size-4" /> {isSubscribed ? "Se désabonner" : "S'abonner"}*/}
                 <ContextMenuShortcut>S</ContextMenuShortcut>
             </ContextMenuItem>
 
             {/*<ContextMenuItem onClick={handleFavorite}>*/}
-            <ContextMenuItem>
+            <ContextMenuItem disabled>
                 {/*<Star className="mr-2 size-4" /> {isFavorite ? 'Retirer des favoris' : 'Favoris'}*/}
                 <ContextMenuShortcut>F</ContextMenuShortcut>
             </ContextMenuItem>
 
             {/*<ContextMenuItem onClick={handleCopy}>*/}
-            <ContextMenuItem>
+            <ContextMenuItem disabled>
                 <Clipboard className="mr-2 size-4" /> Copier
             </ContextMenuItem>
 
             {/*<ContextMenuItem onClick={handleRemindMe}>*/}
-            <ContextMenuItem>
+            <ContextMenuItem disabled>
                 <AlarmClock className="mr-2 size-4" /> Rappeler
                 <ContextMenuShortcut>H</ContextMenuShortcut>
             </ContextMenuItem>
 
             <ContextMenuSeparator />
 
-            <ContextMenuItem className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40">
+            <ContextMenuItem className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40" disabled>
                 <Trash2 className="mr-2 size-4 text-destructive" /> Supprimer
                 <ContextMenuShortcut className="text-destructive">⌘⌫</ContextMenuShortcut>
             </ContextMenuItem>
