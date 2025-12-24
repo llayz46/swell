@@ -245,8 +245,7 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
 
                 <ContextMenuSeparator />
 
-                {/*<ContextMenuItem onClick={handleAddLink}>*/}
-                <ContextMenuItem disabled>
+                {/*<ContextMenuItem onClick={handleAddLink}>
                     <LinkIcon className="mr-2 size-4" /> Ajouter un lien...
                     <ContextMenuShortcut>Ctrl L</ContextMenuShortcut>
                 </ContextMenuItem>
@@ -265,16 +264,14 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                     </ContextMenuSubContent>
                 </ContextMenuSub>
 
-                {/*<ContextMenuItem onClick={handleMakeCopy}>*/}
-                <ContextMenuItem disabled>
+                <ContextMenuItem onClick={handleMakeCopy}>
                     <CopyIcon className="mr-2 size-4" /> Faire une copie...
-                </ContextMenuItem>
+                </ContextMenuItem>*/}
             </ContextMenuGroup>
 
-            <ContextMenuSeparator />
+            {/*<ContextMenuSeparator />
 
-            {/*<ContextMenuItem onClick={handleCreateRelated}>*/}
-            <ContextMenuItem disabled>
+            <ContextMenuItem onClick={handleCreateRelated}>
                 <PlusSquare className="mr-2 size-4" /> Create related
             </ContextMenuItem>
 
@@ -283,52 +280,44 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                     <Flag className="mr-2 size-4" /> Marquer comme
                 </ContextMenuSubTrigger>
                 <ContextMenuSubContent className="w-48">
-                    {/*<ContextMenuItem onClick={() => handleMarkAs('Completed')}>*/}
-                    <ContextMenuItem disabled>
+                    <ContextMenuItem onClick={() => handleMarkAs('Completed')}>
                         <CheckCircle2 className="mr-2 size-4" /> Terminé
                     </ContextMenuItem>
-                    {/*<ContextMenuItem onClick={() => handleMarkAs('Duplicate')}>*/}
-                    <ContextMenuItem disabled>
+                    <ContextMenuItem onClick={() => handleMarkAs('Duplicate')}>
                         <CopyIcon className="mr-2 size-4" /> Dupliquer
                     </ContextMenuItem>
-                    {/*<ContextMenuItem onClick={() => handleMarkAs("Won't Fix")}>*/}
-                    <ContextMenuItem disabled>
+                    <ContextMenuItem onClick={() => handleMarkAs("Won't Fix")}>
                         <Clock className="mr-2 size-4" /> Non résolu
                     </ContextMenuItem>
                 </ContextMenuSubContent>
             </ContextMenuSub>
 
-            {/*<ContextMenuItem onClick={handleMove}>*/}
-            <ContextMenuItem disabled>
+            <ContextMenuItem onClick={handleMove}>
                 <ArrowRightLeft className="mr-2 size-4" /> Déplacer
             </ContextMenuItem>
 
             <ContextMenuSeparator />
 
-            {/*<ContextMenuItem onClick={handleSubscribe}>*/}
-            <ContextMenuItem disabled>
-                {/*<Bell className="mr-2 size-4" /> {isSubscribed ? "Se désabonner" : "S'abonner"}*/}
+            <ContextMenuItem onClick={handleSubscribe}>
+                <Bell className="mr-2 size-4" /> {isSubscribed ? "Se désabonner" : "S'abonner"}
                 <ContextMenuShortcut>S</ContextMenuShortcut>
             </ContextMenuItem>
 
-            {/*<ContextMenuItem onClick={handleFavorite}>*/}
-            <ContextMenuItem disabled>
-                {/*<Star className="mr-2 size-4" /> {isFavorite ? 'Retirer des favoris' : 'Favoris'}*/}
+            <ContextMenuItem onClick={handleFavorite}>
+                <Star className="mr-2 size-4" /> {isFavorite ? 'Retirer des favoris' : 'Favoris'}
                 <ContextMenuShortcut>F</ContextMenuShortcut>
             </ContextMenuItem>
 
-            {/*<ContextMenuItem onClick={handleCopy}>*/}
-            <ContextMenuItem disabled>
+            <ContextMenuItem onClick={handleCopy}>
                 <Clipboard className="mr-2 size-4" /> Copier
             </ContextMenuItem>
 
-            {/*<ContextMenuItem onClick={handleRemindMe}>*/}
-            <ContextMenuItem disabled>
+            <ContextMenuItem onClick={handleRemindMe}>
                 <AlarmClock className="mr-2 size-4" /> Rappeler
                 <ContextMenuShortcut>H</ContextMenuShortcut>
             </ContextMenuItem>
 
-            <ContextMenuSeparator />
+            <ContextMenuSeparator />*/}
 
             <ContextMenuItem
                 className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
