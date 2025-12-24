@@ -16,31 +16,9 @@ import {
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import type { Issue } from '@/types/workspace';
 import { format, isValid, parse } from 'date-fns';
-import { useState, useEffect } from 'react';
 import { fr } from 'date-fns/locale';
-import {
-    AlarmClock,
-    ArrowRightLeft,
-    BarChart3,
-    CalendarClock,
-    CheckCircle2,
-    CheckIcon,
-    CircleCheck,
-    Clipboard,
-    Clock,
-    Copy as CopyIcon,
-    FileText,
-    Flag,
-    Link as LinkIcon,
-    MessageSquare,
-    Pencil,
-    PlusSquare,
-    Repeat2,
-    Tag,
-    Trash2,
-    User,
-    X,
-} from 'lucide-react';
+import { BarChart3, CalendarClock, CheckIcon, CircleCheck, Pencil, Tag, Trash2, User, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 interface IssueContextMenuProps {
@@ -48,22 +26,33 @@ interface IssueContextMenuProps {
 }
 
 export function IssueContextMenu({ issue }: IssueContextMenuProps) {
-    const { statuses, team, priorities, labels, performUpdateStatus, performUpdateAssignee, performUpdatePriority, performToggleLabel, performUpdateDueDate, performDeleteIssue, openIssueDialog } =
-        useWorkspaceIssuesStore(
-            useShallow((state) => ({
-                statuses: state.statuses,
-                team: state.team,
-                priorities: state.priorities,
-                labels: state.labels,
-                performUpdateStatus: state.performUpdateStatus,
-                performUpdateAssignee: state.performUpdateAssignee,
-                performUpdatePriority: state.performUpdatePriority,
-                performToggleLabel: state.performToggleLabel,
-                performUpdateDueDate: state.performUpdateDueDate,
-                performDeleteIssue: state.performDeleteIssue,
-                openIssueDialog: state.openIssueDialog,
-            })),
-        );
+    const {
+        statuses,
+        team,
+        priorities,
+        labels,
+        performUpdateStatus,
+        performUpdateAssignee,
+        performUpdatePriority,
+        performToggleLabel,
+        performUpdateDueDate,
+        performDeleteIssue,
+        openIssueDialog,
+    } = useWorkspaceIssuesStore(
+        useShallow((state) => ({
+            statuses: state.statuses,
+            team: state.team,
+            priorities: state.priorities,
+            labels: state.labels,
+            performUpdateStatus: state.performUpdateStatus,
+            performUpdateAssignee: state.performUpdateAssignee,
+            performUpdatePriority: state.performUpdatePriority,
+            performToggleLabel: state.performToggleLabel,
+            performUpdateDueDate: state.performUpdateDueDate,
+            performDeleteIssue: state.performDeleteIssue,
+            openIssueDialog: state.openIssueDialog,
+        })),
+    );
 
     const handleStatusChange = (statusSlug: string) => {
         performUpdateStatus(issue.id, statusSlug, issue.status);
@@ -212,24 +201,11 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                     </ContextMenuSubTrigger>
                     <ContextMenuSubContent className="w-auto p-0">
                         <div className="flex flex-col">
-                            <Calendar
-                                mode="single"
-                                selected={date}
-                                onSelect={handleDueDateChange}
-                                className="bg-transparent"
-                                locale={fr}
-                            />
+                            <Calendar mode="single" selected={date} onSelect={handleDueDateChange} className="bg-transparent" locale={fr} />
                             {date && (
                                 <div className="flex items-center justify-between border-t border-border px-3 py-2">
-                                    <span className="text-sm text-muted-foreground">
-                                        {format(date, 'dd MMMM yyyy', { locale: fr })}
-                                    </span>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="size-6 p-0"
-                                        onClick={handleClearDueDate}
-                                    >
+                                    <span className="text-sm text-muted-foreground">{format(date, 'dd MMMM yyyy', { locale: fr })}</span>
+                                    <Button variant="ghost" size="sm" className="size-6 p-0" onClick={handleClearDueDate}>
                                         <X className="size-3.5" />
                                         <span className="sr-only">Effacer la date</span>
                                     </Button>
