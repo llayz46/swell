@@ -167,7 +167,6 @@ export function Filter() {
                         {statuses.map((item) => (
                            <CommandItem
                               key={item.id}
-                              value={item.id}
                               onSelect={() => toggleFilter('status', item.id)}
                               className="flex items-center justify-between"
                            >
@@ -224,7 +223,7 @@ export function Filter() {
                            <CommandItem
                               key={member.id}
                               value={member.name}
-                              onSelect={() => toggleFilter('assignee', member.id.toString())}
+                              onSelect={() => toggleFilter('assignee', member.id)}
                               className="flex items-center justify-between"
                            >
                               <div className="flex items-center gap-2">
@@ -265,15 +264,14 @@ export function Filter() {
                         {priorities.map((priority) => (
                            <CommandItem
                               key={priority.id}
-                              value={priority.id}
-                              onSelect={() => toggleFilter('priority', priority.slug)}
+                              onSelect={() => toggleFilter('priority', priority.id)}
                               className="flex items-center justify-between"
                            >
                               <div className="flex items-center gap-2">
                                  <PriorityIcon iconType={priority.icon_type} />
                                  {priority.name}
                               </div>
-                              {filters.priority.includes(priority.slug) && (
+                              {filters.priority.includes(priority.id) && (
                                  <CheckIcon size={16} className="ml-auto" />
                               )}
                               <span className="text-muted-foreground text-xs">
@@ -304,8 +302,7 @@ export function Filter() {
                         {labels.map((label) => (
                            <CommandItem
                               key={label.id}
-                              value={label.id}
-                              onSelect={() => toggleFilter('labels', label.slug)}
+                              onSelect={() => toggleFilter('labels', label.id)}
                               className="flex items-center justify-between"
                            >
                               <div className="flex items-center gap-2">
@@ -315,11 +312,11 @@ export function Filter() {
                                  ></span>
                                  {label.name}
                               </div>
-                              {filters.labels.includes(label.slug) && (
+                              {filters.labels.includes(label.id) && (
                                  <CheckIcon size={16} className="ml-auto" />
                               )}
                               <span className="text-muted-foreground text-xs">
-                                 {filterByLabel(label.slug).length}
+                                 {filterByLabel(label.id).length}
                               </span>
                            </CommandItem>
                         ))}

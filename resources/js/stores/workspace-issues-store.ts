@@ -4,10 +4,10 @@ import { router } from '@inertiajs/react';
 import { toast } from 'sonner';
 
 type Filters = {
-    status: string[];
+    status: number[];
     assignee: string[];
-    priority: string[];
-    labels: string[];
+    priority: number[];
+    labels: number[];
 };
 
 type InitializeData = {
@@ -68,15 +68,15 @@ type WorkspaceIssuesStore = {
     isIssueUpdating: (issueId: number) => boolean;
 
     // Actions de filtrage
-    toggleFilter: (filterType: keyof Filters, value: string) => void;
+    toggleFilter: (filterType: keyof Filters, value: number | string) => void;
     clearFilters: () => void;
     getActiveFiltersCount: () => number;
 
     // Helpers pour filtrer les issues
-    filterByStatus: (statusId: string) => Issue[];
+    filterByStatus: (statusId: number) => Issue[];
     filterByAssignee: (assigneeId: string | null) => Issue[];
     filterByPriority: (priorityId: number) => Issue[];
-    filterByLabel: (labelId: string) => Issue[];
+    filterByLabel: (labelId: number) => Issue[];
     hasActiveFilters: () => boolean;
     getFilteredIssues: () => Issue[];
 
@@ -406,7 +406,6 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         const { issues, filters } = get();
 
         return issues.filter((issue) => {
-            // Si aucun filtre n'est actif, retourner toutes les issues
             if (
                 filters.status.length === 0 &&
                 filters.assignee.length === 0 &&
@@ -416,7 +415,6 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                 return true;
             }
 
-            // Vérifier chaque type de filtre
             const statusMatch =
                 filters.status.length === 0 || filters.status.includes(issue.status.id);
             const priorityMatch =

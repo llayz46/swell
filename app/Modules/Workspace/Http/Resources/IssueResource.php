@@ -52,8 +52,9 @@ class IssueResource extends JsonResource
                 'color' => $this->team->color,
             ]),
             'labels' => $this->whenLoaded('labels', fn () => $this->labels->map(fn($label) => [
-                'id' => $label->slug,
+                'id' => $label->id,
                 'name' => $label->name,
+                'slug' => $label->slug,
                 'color' => $label->color,
             ])),
             'dueDate' => $this->due_date?->toISOString(),
