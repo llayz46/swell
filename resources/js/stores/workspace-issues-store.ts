@@ -418,7 +418,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                 const newSet = new Set(updatingIssues);
                 newSet.delete(issueId);
                 set({ updatingIssues: newSet });
-                toast.success('Issue supprimée avec succès');
+                toast.success('Tâche supprimée avec succès');
 
                 if (onSuccess) {
                     onSuccess();
@@ -430,7 +430,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                 newSet.delete(issueId);
                 set({ updatingIssues: newSet });
 
-                const errorMessage = (errors as Record<string, string>).message || "Erreur lors de la suppression de l'issue";
+                const errorMessage = (errors as Record<string, string>).message || "Erreur lors de la suppression de la tâche";
                 toast.error(errorMessage);
             },
         });

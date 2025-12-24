@@ -38,6 +38,8 @@ class WorkspaceIssueController extends Controller
      */
     public function store(StoreIssueRequest $request)
     {
+        $this->authorize('create', Issue::class);
+
         $validated = $request->validated();
 
         $issue = Issue::create([
@@ -83,7 +85,11 @@ class WorkspaceIssueController extends Controller
      */
     public function destroy(Issue $issue)
     {
-        //
+        $this->authorize('delete', $issue);
+
+        $issue->delete();
+
+        return back();
     }
 
     /**
@@ -91,6 +97,8 @@ class WorkspaceIssueController extends Controller
      */
     public function updatePriority(UpdateIssuePriorityRequest $request, Issue $issue)
     {
+        $this->authorize('update', $issue);
+
         $validated = $request->validated();
 
         $issue->update([
@@ -105,6 +113,8 @@ class WorkspaceIssueController extends Controller
      */
     public function updateStatus(UpdateIssueStatusRequest $request, Issue $issue)
     {
+        $this->authorize('update', $issue);
+
         $validated = $request->validated();
 
         $issue->update([
@@ -119,6 +129,8 @@ class WorkspaceIssueController extends Controller
      */
     public function updateAssignee(UpdateIssueAssigneeRequest $request, Issue $issue)
     {
+        $this->authorize('assign', $issue);
+
         $validated = $request->validated();
 
         $issue->update([
@@ -133,6 +145,8 @@ class WorkspaceIssueController extends Controller
      */
     public function updateLabel(UpdateIssueLabelRequest $request, Issue $issue)
     {
+        $this->authorize('update', $issue);
+
         $labelId = $request->validated()['label_id'];
 
         if ($issue->labels()->where('issue_labels.id', $labelId)->exists()) {
@@ -149,6 +163,8 @@ class WorkspaceIssueController extends Controller
      */
     public function updateDueDate(UpdateIssueDueDateRequest $request, Issue $issue)
     {
+        $this->authorize('update', $issue);
+
         $validated = $request->validated();
 
         $issue->update([

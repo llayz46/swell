@@ -48,7 +48,7 @@ interface IssueContextMenuProps {
 }
 
 export function IssueContextMenu({ issue }: IssueContextMenuProps) {
-    const { statuses, team, priorities, labels, performUpdateStatus, performUpdateAssignee, performUpdatePriority, performToggleLabel, performUpdateDueDate } =
+    const { statuses, team, priorities, labels, performUpdateStatus, performUpdateAssignee, performUpdatePriority, performToggleLabel, performUpdateDueDate, performDeleteIssue } =
         useWorkspaceIssuesStore(
             useShallow((state) => ({
                 statuses: state.statuses,
@@ -60,6 +60,7 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                 performUpdatePriority: state.performUpdatePriority,
                 performToggleLabel: state.performToggleLabel,
                 performUpdateDueDate: state.performUpdateDueDate,
+                performDeleteIssue: state.performDeleteIssue,
             })),
         );
 
@@ -104,6 +105,10 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
         const validDate = newDate && isValid(newDate) ? newDate : undefined;
         setDate(validDate);
     }, [issue.dueDate]);
+
+    const handleDeleteIssue = async () => {
+        await performDeleteIssue(issue.id);
+    };
 
     return (
         <ContextMenuContent className="w-64 bg-sidebar">
@@ -327,7 +332,7 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
 
             <ContextMenuItem
                 className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
-                disabled
+                onClick={handleDeleteIssue}
             >
                 <Trash2 className="mr-2 size-4 text-destructive" /> Supprimer
                 <ContextMenuShortcut className="text-destructive">⌘⌫</ContextMenuShortcut>

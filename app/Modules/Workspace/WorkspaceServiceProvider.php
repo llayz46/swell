@@ -2,18 +2,33 @@
 
 namespace App\Modules\Workspace;
 
+use App\Modules\Workspace\Models\Issue;
+use App\Modules\Workspace\Policies\IssuePolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class WorkspaceServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-        
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+
         $this->publishes([
-            __DIR__ . '/database/migrations' => database_path('migrations'),
+            __DIR__.'/database/migrations' => database_path('migrations'),
         ], 'swell-workspace');
 
-        if (!config('swell.workspace.enabled', false)) return;
+        if (! config('swell.workspace.enabled', false)) {
+            return;
+        }
+
+        $this->registerPolicies();
+    }
+
+    /**
+     * Register the workspace policies.
+     */
+    protected function registerPolicies(): void
+    {
+        Gate::policy(Issue::class, IssuePolicy::class);
     }
 }
