@@ -12,7 +12,6 @@ export interface IssuePriority {
   id: string
   slug: string
   name: string
-  color: string
   icon_type: PriorityIconName
 }
 

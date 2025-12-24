@@ -41,12 +41,13 @@ interface IssueContextMenuProps {
 }
 
 export function IssueContextMenu({ issue }: IssueContextMenuProps) {
-    const { statuses, performUpdateStatus, performUpdateAssignee, team } = useWorkspaceIssuesStore(
+    const { statuses, team, priorities, performUpdateStatus, performUpdateAssignee } = useWorkspaceIssuesStore(
         useShallow((state) => ({
             statuses: state.statuses,
+            team: state.team,
+            priorities: state.priorities,
             performUpdateStatus: state.performUpdateStatus,
             performUpdateAssignee: state.performUpdateAssignee,
-            team: state.team,
         })),
     );
 
@@ -58,7 +59,7 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
         const newAssignee = assigneeId ? team?.members?.find((m) => m.id === assigneeId) || null : null;
         performUpdateAssignee(issue.id, newAssignee, issue.assignee);
     };
-
+    
     return (
         <ContextMenuContent className="w-64 bg-sidebar">
             <ContextMenuGroup>
