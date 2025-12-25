@@ -83,7 +83,7 @@ export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: SidebarPro
             <SidebarContent>
                 <WorkspaceNavGroup items={mainNavItems} />
                 <WorkspaceNavGroup items={workspaceNavItems} label="Workspace" />
-                {teamsNavItems.length > 0 && <WorkspaceNavGroup items={teamsNavItems} label="Mes teams" />}
+                {teamsNavItems.length > 0 && <WorkspaceNavGroup items={teamsNavItems} label="Mes équipes" />}
             </SidebarContent>
 
             <SidebarFooter>

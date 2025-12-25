@@ -12,7 +12,7 @@ export function TeamsBadgeGroup({ teams, maxDisplay = 3 }: TeamsBadgeGroupProps)
     const remainingCount = teams.length - displayedTeams.length;
 
     if (teams.length === 0) {
-        return <span className="text-xs font-medium text-muted-foreground">Aucune team</span>;
+        return <span className="text-xs font-medium text-muted-foreground">Aucune équipe</span>;
     }
 
     return (

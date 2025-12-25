@@ -25,7 +25,7 @@ export function formatWorkspaceRole(role: string | { name: string } | string[] |
         case 'workspace-admin':
             return 'Admin Workspace';
         case 'team-lead':
-            return 'Team Lead';
+            return 'Lead d\'équipe';
         case 'team-member':
             return 'Membre';
         case 'lead': // Pivot role

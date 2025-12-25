@@ -72,21 +72,21 @@ const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
 
     const handleLeaveTeam = async (teamId: number) => {
         await confirm({
-            title: 'Voulez-vous vraiment quitter cette team ?',
+            title: 'Voulez-vous vraiment quitter cette équipe ?',
             description:
-            'Voulez-vous vraiment quitter cette team ? Ceci est une action irréversible.',
-            confirmText: 'Quitter la team',
+            'Voulez-vous vraiment quitter cette équipe ? Ceci est une action irréversible.',
+            confirmText: 'Quitter l\'équipe',
             cancelText: 'Annuler',
             variant: 'destructive',
             icon: <LogOutIcon className="size-4" />,
             onConfirm: () => leaveTeam(teamId),
         });
     };
-    
+
     const leaveTeam = (teamId: number) => {
         router.post(route('workspace.teams.leave', teamId), {}, {
             onSuccess: () => {
-                toast.success('Vous avez quitté la team')
+                toast.success('Vous avez quitté l\'équipe')
             },
             onError: (error) => {
                 toast.error(error.team)

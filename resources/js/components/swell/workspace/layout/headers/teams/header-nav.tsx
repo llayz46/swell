@@ -10,14 +10,14 @@ export default function HeaderNav({ teamsLength }: { teamsLength: number }) {
                 <SidebarTrigger />
 
                 <div className="flex items-center gap-1">
-                    <span className="text-sm font-medium">Teams</span>
+                    <span className="text-sm font-medium">Équipes</span>
                     <Badge variant="secondary">{teamsLength}</Badge>
                 </div>
             </div>
 
             <Button variant="secondary" size="xs">
                 <Plus />
-                Ajouter une team
+                Ajouter une équipe
             </Button>
         </div>
     );
