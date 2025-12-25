@@ -1,7 +1,6 @@
 import AppLogoIcon from '@/components/app-logo-icon';
 import { NavFooter } from '@/components/nav-footer';
 import { NavUser } from '@/components/nav-user';
-import WorkspaceNewIssueDialog from '@/components/swell/workspace/layout/sidebar/workspace-new-issue-dialog';
 import ThemeToggle from '@/components/theme-toggle';
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
@@ -55,7 +54,7 @@ export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: SidebarPro
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <DropdownMenu>
-                            <div className="flex w-full items-center gap-1 pt-2">
+                            <div className="flex w-full items-center justify-between pt-2">
                                 <DropdownMenuTrigger asChild>
                                     <SidebarMenuButton
                                         size="lg"
@@ -72,8 +71,6 @@ export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: SidebarPro
                                 </DropdownMenuTrigger>
 
                                 <ThemeToggle />
-
-                                <WorkspaceNewIssueDialog />
                             </div>
                         </DropdownMenu>
                     </SidebarMenuItem>
