@@ -38,4 +38,4 @@ Contributions to the Swell project are welcome! If you have ideas, suggestions, 
 ## 🧪 Demo
 
 You can try the demo of Swell to see it in action.
-🌍 [https://layzshop.llayz.fr](https://layzshop.llayz.fr)
+🌍 [https://app.swellkit.dev](https://app.swellkit.dev)
