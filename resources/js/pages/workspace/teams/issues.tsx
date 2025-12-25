@@ -72,7 +72,7 @@ export default function Issues({ team, issues, statuses, priorities, labels, fil
 
     return (
         <WorkspaceLayout header={<Header />}>
-            <Head title="Équipes - Workspace" />
+            <Head title={`Tâches - ${team.identifier} - Workspace`} />
 
             <div>
                 {storeStatuses.map((status) =>
