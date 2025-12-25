@@ -3,7 +3,9 @@
 namespace App\Modules\Workspace;
 
 use App\Modules\Workspace\Models\Issue;
+use App\Modules\Workspace\Models\Team;
 use App\Modules\Workspace\Policies\IssuePolicy;
+use App\Modules\Workspace\Policies\TeamPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,5 +32,6 @@ class WorkspaceServiceProvider extends ServiceProvider
     protected function registerPolicies(): void
     {
         Gate::policy(Issue::class, IssuePolicy::class);
+        Gate::policy(Team::class, TeamPolicy::class);
     }
 }

@@ -20,7 +20,11 @@ class IssuePolicy
      */
     public function view(User $user, Issue $issue): bool
     {
-        return $user->hasPermissionTo('workspace.issues.view');
+        if (! $user->hasPermissionTo('workspace.issues.view')) {
+            return false;
+        }
+
+        return $this->userBelongsToIssueTeam($user, $issue);
     }
 
     /**
@@ -36,7 +40,11 @@ class IssuePolicy
      */
     public function update(User $user, Issue $issue): bool
     {
-        return $user->hasPermissionTo('workspace.issues.update');
+        if (! $user->hasPermissionTo('workspace.issues.update')) {
+            return false;
+        }
+
+        return $this->userBelongsToIssueTeam($user, $issue);
     }
 
     /**
@@ -44,7 +52,11 @@ class IssuePolicy
      */
     public function delete(User $user, Issue $issue): bool
     {
-        return $user->hasPermissionTo('workspace.issues.delete');
+        if (! $user->hasPermissionTo('workspace.issues.delete')) {
+            return false;
+        }
+
+        return $this->userBelongsToIssueTeam($user, $issue);
     }
 
     /**
@@ -52,7 +64,11 @@ class IssuePolicy
      */
     public function restore(User $user, Issue $issue): bool
     {
-        return $user->hasPermissionTo('workspace.issues.delete');
+        if (! $user->hasPermissionTo('workspace.issues.delete')) {
+            return false;
+        }
+
+        return $this->userBelongsToIssueTeam($user, $issue);
     }
 
     /**
@@ -60,6 +76,24 @@ class IssuePolicy
      */
     public function assign(User $user, Issue $issue): bool
     {
-        return $user->hasPermissionTo('workspace.issues.assign');
+        if (! $user->hasPermissionTo('workspace.issues.assign')) {
+            return false;
+        }
+
+        return $this->userBelongsToIssueTeam($user, $issue);
+    }
+
+    /**
+     * Check if user belongs to the issue's team or is workspace admin.
+     */
+    private function userBelongsToIssueTeam(User $user, Issue $issue): bool
+    {
+        // Workspace admins have access to all issues
+        if ($user->hasRole('workspace-admin')) {
+            return true;
+        }
+
+        // Team leads and members need to belong to the issue's team
+        return $user->teams()->where('teams.id', $issue->team_id)->exists();
     }
 }

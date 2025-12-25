@@ -27,6 +27,7 @@ export interface NavItem {
 }
 
 export interface NavItemWithChildren {
+    id?: number;
     title: string;
     icon?: LucideIcon | string | undefined;
     childrens: NavItem[];

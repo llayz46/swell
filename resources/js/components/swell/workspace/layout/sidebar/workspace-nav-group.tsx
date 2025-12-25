@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/sidebar';
 import { useActiveNav } from '@/hooks/use-active-nav';
 import { NavItemWithChildren, type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { Archive, Bell, ChevronRight, Link as LinkIcon, MoreHorizontal, Settings } from 'lucide-react';
+import { Link, router } from '@inertiajs/react';
+import { ChevronRight, MoreHorizontal, Settings } from 'lucide-react';
 
 const isNavItemWithChildren = (item: NavItem | NavItemWithChildren): item is NavItemWithChildren => {
     return 'childrens' in item && Array.isArray(item.childrens);
@@ -25,9 +25,9 @@ export function WorkspaceNavGroup({ items = [], label }: { items: (NavItem | Nav
         <SidebarGroup>
             {label && <SidebarGroupLabel>{label}</SidebarGroupLabel>}
             <SidebarMenu>
-                {items.map((item, index) => {
+                {items.map((item) => {
                     if (isNavItemWithChildren(item)) {
-                        return <CollapsibleNavItem key={item.title} item={item} defaultOpen={index === 0} />;
+                        return <CollapsibleNavItem key={item.title} item={item} />;
                     }
 
                     return <SidebarMenuItemWithActive key={item.title} item={item} />;
@@ -65,9 +65,13 @@ const SidebarMenuItemWithActive = ({ child = false, item }: { child?: boolean; i
     );
 };
 
-const CollapsibleNavItem = ({ item, defaultOpen }: { item: NavItemWithChildren; defaultOpen: boolean }) => {
+const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
+    const handleLeaveTeam = (teamId: number) => {
+        router.post(route('workspace.teams.leave', teamId));
+    };
+
     return (
-        <Collapsible asChild defaultOpen={defaultOpen} className="group/collapsible">
+        <Collapsible asChild className="group/collapsible">
             <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
                     <SidebarMenuButton tooltip={item.title}>
@@ -90,26 +94,32 @@ const CollapsibleNavItem = ({ item, defaultOpen }: { item: NavItemWithChildren; 
                                 </SidebarMenuAction>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-48 rounded-lg" side="right" align="start">
-                                <DropdownMenuItem>
+                                <DropdownMenuItem disabled>
                                     <Settings className="size-4" />
-                                    <span>Team settings</span>
+                                    <span>Paramètres</span>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
+                                {/*<DropdownMenuItem>
                                     <LinkIcon className="size-4" />
-                                    <span>Copy link</span>
+                                    <span>Copier le lien</span>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
                                     <Archive className="size-4" />
-                                    <span>Open archive</span>
+                                    <span>Ouvrir les archives</span>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem>
                                     <Bell className="size-4" />
-                                    <span>Subscribe</span>
-                                </DropdownMenuItem>
+                                    <span>S'abonner</span>
+                                </DropdownMenuItem>*/}
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>
-                                    <span>Leave team...</span>
+                                <DropdownMenuItem
+                                    className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        if (item.id) handleLeaveTeam(item.id);
+                                    }}
+                                >
+                                    <span>Quitter l'équipe</span>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>

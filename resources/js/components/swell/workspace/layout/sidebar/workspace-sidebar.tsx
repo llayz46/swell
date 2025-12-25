@@ -28,6 +28,7 @@ export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: SidebarPro
     const { name, auth } = usePage<SharedData>().props;
 
     const teamsNavItems: NavItemWithChildren[] = (auth.teams ?? []).map((team) => ({
+        id: team.id,
         title: team.name,
         icon: team.icon,
         childrens: [
