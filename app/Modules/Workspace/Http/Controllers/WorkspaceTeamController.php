@@ -123,8 +123,16 @@ class WorkspaceTeamController extends Controller
     public function leave(Team $team)
     {
         $this->authorize('leave', $team);
+        
+        $user = auth()->user();
 
-        $team->removeMember(auth()->user());
+        if ($team->isLead($user) && $team->leads()->count() === 1) {
+            return back()->withErrors([
+                'team' => 'Vous ne pouvez pas quitter l\'équipe car vous êtes le seul lead. Veuillez d\'abord transférer votre rôle à un autre membre.',
+            ]);
+        }
+
+        $team->removeMember($user);
 
         return redirect()->route('workspace.index')->with('success', 'Vous avez quitté l\'équipe avec succès');
     }

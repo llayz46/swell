@@ -16,6 +16,7 @@ import { useConfirmContext } from '@/contexts/confirm-context';
 import { NavItemWithChildren, type NavItem } from '@/types';
 import { Link, router } from '@inertiajs/react';
 import { ChevronRight, MoreHorizontal, Settings, LogOutIcon } from 'lucide-react';
+import { toast } from 'sonner';
 
 const isNavItemWithChildren = (item: NavItem | NavItemWithChildren): item is NavItemWithChildren => {
     return 'childrens' in item && Array.isArray(item.childrens);
@@ -83,7 +84,14 @@ const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
     };
     
     const leaveTeam = (teamId: number) => {
-        router.post(route('workspace.teams.leave', teamId));
+        router.post(route('workspace.teams.leave', teamId), {}, {
+            onSuccess: () => {
+                toast.success('Vous avez quitté la team')
+            },
+            onError: (error) => {
+                toast.error(error.team)
+            }
+        });
     };
 
     return (

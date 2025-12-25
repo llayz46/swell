@@ -76,3 +76,46 @@ test('leaving a team unassigns user issues', function () {
     expect($team->fresh()->isMember($user))->toBeFalse();
     expect($issue->fresh()->assignee_id)->toBeNull();
 });
+
+test('the last lead cannot leave the team', function () {
+    $team = Team::factory()->create();
+    $lead = User::factory()->create();
+
+    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'team-lead']);
+    $lead->assignRole('team-lead');
+
+    $team->addMember($lead, 'lead');
+
+    expect($team->isLead($lead))->toBeTrue();
+    expect($team->leads()->count())->toBe(1);
+
+    $this->actingAs($lead)
+        ->post(route('workspace.teams.leave', $team))
+        ->assertSessionHasErrors('team');
+
+    expect($team->fresh()->isLead($lead))->toBeTrue();
+});
+
+test('a lead can leave if there are other leads', function () {
+    $team = Team::factory()->create();
+    $lead1 = User::factory()->create();
+    $lead2 = User::factory()->create();
+
+    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'team-lead']);
+    $lead1->assignRole('team-lead');
+    $lead2->assignRole('team-lead');
+
+    $team->addMember($lead1, 'lead');
+    $team->addMember($lead2, 'lead');
+
+    expect($team->leads()->count())->toBe(2);
+
+    $this->actingAs($lead1)
+        ->post(route('workspace.teams.leave', $team))
+        ->assertRedirect(route('workspace.index'));
+
+    expect($team->fresh()->isMember($lead1))->toBeFalse();
+
+    expect($team->fresh()->isLead($lead2))->toBeTrue();
+    expect($team->fresh()->leads()->count())->toBe(1);
+});
