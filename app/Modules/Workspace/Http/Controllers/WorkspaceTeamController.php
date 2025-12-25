@@ -64,7 +64,7 @@ class WorkspaceTeamController extends Controller
         ]);
     }
 
-    public function members(Team $team): Response 
+    public function members(Team $team): Response
     {
         //
     }
@@ -122,8 +122,10 @@ class WorkspaceTeamController extends Controller
      */
     public function leave(Team $team)
     {
-        $team->members()->detach(auth()->user());
+        $this->authorize('leave', $team);
 
-        return redirect()->route('workspace.index');
+        $team->removeMember(auth()->user());
+
+        return redirect()->route('workspace.index')->with('success', 'Vous avez quitté l\'équipe avec succès');
     }
 }

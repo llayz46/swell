@@ -6,6 +6,7 @@ use App\Modules\Workspace\Models\Issue;
 use App\Modules\Workspace\Models\Team;
 use App\Modules\Workspace\Policies\IssuePolicy;
 use App\Modules\Workspace\Policies\TeamPolicy;
+use App\Modules\Workspace\Services\WorkspaceService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +25,8 @@ class WorkspaceServiceProvider extends ServiceProvider
         }
 
         $this->registerPolicies();
+
+        $this->registerServices();
     }
 
     /**
@@ -33,5 +36,10 @@ class WorkspaceServiceProvider extends ServiceProvider
     {
         Gate::policy(Issue::class, IssuePolicy::class);
         Gate::policy(Team::class, TeamPolicy::class);
+    }
+
+    public function registerServices(): void
+    {
+        $this->app->singleton(WorkspaceService::class);
     }
 }

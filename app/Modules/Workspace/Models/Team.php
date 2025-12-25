@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Team extends Model
 {
     use HasFactory;
-    
+
     protected static function newFactory()
     {
         return \App\Modules\Workspace\database\factories\TeamFactory::new();
@@ -53,13 +53,13 @@ class Team extends Model
 
     public function removeMember(User $user): void
     {
-        $this->members()->detach($user->id);
+        app(\App\Modules\Workspace\Actions\RemoveTeamMember::class)->handle($this, $user);
     }
 
     public function isLead(User $user): bool
     {
         return $this->members()
-            ->wherePivot('user_id', $user->id)
+            ->where('users.id', $user->id)
             ->wherePivot('role', 'lead')
             ->exists();
     }
@@ -67,15 +67,15 @@ class Team extends Model
     public function isMember(User $user): bool
     {
         return $this->members()
-            ->wherePivot('user_id', $user->id)
+            ->where('users.id', $user->id)
             ->exists();
     }
 
     public function getRoleForUser(User $user): ?string
     {
         return $this->members()
-            ->wherePivot('user_id', $user->id)
-            ->value('role');
+            ->where('users.id', $user->id)
+            ->value('team_user.role');
     }
 
     /**
@@ -85,12 +85,12 @@ class Team extends Model
     public function transferLead(User $fromUser, User $toUser): void
     {
         // Vérifier que fromUser est bien lead
-        if (!$this->isLead($fromUser)) {
+        if (! $this->isLead($fromUser)) {
             throw new \Exception("L'utilisateur source n'est pas lead de cette team");
         }
 
         // Vérifier que toUser est membre
-        if (!$this->isMember($toUser)) {
+        if (! $this->isMember($toUser)) {
             throw new \Exception("L'utilisateur cible n'est pas membre de cette team");
         }
 
@@ -110,7 +110,7 @@ class Team extends Model
      */
     public function promoteMember(User $user): void
     {
-        if (!$this->isMember($user)) {
+        if (! $this->isMember($user)) {
             throw new \Exception("L'utilisateur n'est pas membre de cette team");
         }
 
@@ -124,7 +124,7 @@ class Team extends Model
      */
     public function demoteLead(User $user): void
     {
-        if (!$this->isLead($user)) {
+        if (! $this->isLead($user)) {
             throw new \Exception("L'utilisateur n'est pas lead de cette team");
         }
 

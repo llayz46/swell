@@ -12,9 +12,10 @@ import {
     SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { useActiveNav } from '@/hooks/use-active-nav';
+import { useConfirmContext } from '@/contexts/confirm-context';
 import { NavItemWithChildren, type NavItem } from '@/types';
 import { Link, router } from '@inertiajs/react';
-import { ChevronRight, MoreHorizontal, Settings } from 'lucide-react';
+import { ChevronRight, MoreHorizontal, Settings, LogOutIcon } from 'lucide-react';
 
 const isNavItemWithChildren = (item: NavItem | NavItemWithChildren): item is NavItemWithChildren => {
     return 'childrens' in item && Array.isArray(item.childrens);
@@ -66,7 +67,22 @@ const SidebarMenuItemWithActive = ({ child = false, item }: { child?: boolean; i
 };
 
 const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
-    const handleLeaveTeam = (teamId: number) => {
+    const { confirm } = useConfirmContext();
+
+    const handleLeaveTeam = async (teamId: number) => {
+        await confirm({
+            title: 'Voulez-vous vraiment quitter cette team ?',
+            description:
+            'Voulez-vous vraiment quitter cette team ? Ceci est une action irréversible.',
+            confirmText: 'Quitter la team',
+            cancelText: 'Annuler',
+            variant: 'destructive',
+            icon: <LogOutIcon className="size-4" />,
+            onConfirm: () => leaveTeam(teamId),
+        });
+    };
+    
+    const leaveTeam = (teamId: number) => {
         router.post(route('workspace.teams.leave', teamId));
     };
 

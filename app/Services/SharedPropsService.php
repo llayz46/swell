@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Factories\CartFactory;
 use App\Http\Resources\CartResource;
 use App\Modules\Banner\Models\BannerMessage;
+use App\Modules\Workspace\Services\WorkspaceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 

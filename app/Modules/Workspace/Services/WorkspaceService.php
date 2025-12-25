@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Modules\Workspace\Services;
 
 use App\Models\User;
 use App\Modules\Workspace\Http\Resources\TeamResource;
@@ -11,12 +11,11 @@ class WorkspaceService
     /**
      * Get cached teams for the given user.
      *
-     * @param User|null $user
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|null
      */
     public function getUserTeams(?User $user)
     {
-        if (!$user) {
+        if (! $user) {
             return null;
         }
 
@@ -31,9 +30,6 @@ class WorkspaceService
 
     /**
      * Clear the teams cache for a specific user.
-     *
-     * @param User $user
-     * @return void
      */
     public function clearUserTeamsCache(User $user): void
     {
@@ -43,12 +39,12 @@ class WorkspaceService
     /**
      * Refresh the teams cache for a specific user.
      *
-     * @param User $user
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function refreshUserTeams(User $user)
     {
         $this->clearUserTeamsCache($user);
+
         return $this->getUserTeams($user);
     }
 }

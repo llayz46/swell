@@ -84,6 +84,15 @@ class TeamPolicy
     }
 
     /**
+     * Determine whether the user can leave the team.
+     */
+    public function leave(User $user, Team $team): bool
+    {
+        // User must be a member to leave
+        return $team->isMember($user);
+    }
+
+    /**
      * Check if user belongs to the team or is workspace admin.
      */
     private function userBelongsToTeam(User $user, Team $team): bool
