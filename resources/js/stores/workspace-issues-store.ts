@@ -110,7 +110,21 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
     updatingIssues: new Set<number>(),
 
     // Actions d'initialisation
-    initialize: ({ team, issues, statuses, priorities, labels, filters, isLead, isMember }) =>
+    initialize: ({ team, issues, statuses, priorities, labels, filters, isLead, isMember }) => {
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(window.location.search);
+
+        let shouldOpenDialog = false;
+        let initialStatusId = null;
+
+        if (url.pathname.endsWith('/new')) {
+            shouldOpenDialog = true;
+            const statusParam = params.get('status');
+            if (statusParam) {
+                initialStatusId = parseInt(statusParam);
+            }
+        }
+
         set((state) => ({
             team,
             issues,
@@ -120,7 +134,10 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
             filters: { ...state.filters, ...filters },
             isLead,
             isMember,
-        })),
+            issueDialogOpen: shouldOpenDialog,
+            issueDialogStatusId: initialStatusId,
+        }));
+    },
 
     setTeam: (team) => set({ team }),
     setIssues: (issues) => set({ issues }),
@@ -135,18 +152,34 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
     setIsMember: (isMember) => set({ isMember }),
 
     // Actions du dialog d'issue
-    openIssueDialog: (options) =>
+    openIssueDialog: (options) => {
+        const url = new URL(window.location.href);
+        if (!url.pathname.endsWith('/new')) {
+            url.pathname = url.pathname + '/new';
+        }
+        if (options?.statusId !== undefined) {
+            url.searchParams.set('status', options.statusId.toString());
+        }
+        window.history.pushState({}, '', url.toString());
+
         set({
             issueDialogOpen: true,
             issueDialogIssue: options?.issue || null,
             issueDialogStatusId: options?.statusId || null,
-        }),
-    closeIssueDialog: () =>
+        });
+    },
+    closeIssueDialog: () => {
+        const url = new URL(window.location.href);
+        url.pathname = url.pathname.replace('/new', '');
+        url.searchParams.delete('status');
+        window.history.replaceState({}, '', url.toString());
+
         set({
             issueDialogOpen: false,
             issueDialogIssue: null,
             issueDialogStatusId: null,
-        }),
+        });
+    },
 
     updateIssue: (issue) =>
         set((state) => ({
