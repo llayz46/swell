@@ -141,7 +141,7 @@ export function IssueContextMenu({ issue }: IssueContextMenuProps) {
                                 }}
                             >
                                 <Avatar className="mr-2 size-4">
-                                    <AvatarImage src={member.avatarUrl} alt={member.name} />
+                                    <AvatarImage src={member.avatar_url} alt={member.name} />
                                     <AvatarFallback>{member.name[0]}</AvatarFallback>
                                 </Avatar>
                                 {member.name}

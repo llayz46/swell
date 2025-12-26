@@ -179,7 +179,7 @@ export function Filter() {
                                     >
                                         <div className="flex items-center gap-2">
                                             <Avatar className="size-5">
-                                                <AvatarImage src={member.avatarUrl} alt={member.name} />
+                                                <AvatarImage src={member.avatar_url} alt={member.name} />
                                                 <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                             {member.name}

@@ -38,7 +38,7 @@ class IssueResource extends JsonResource
                 'id' => $this->assignee->id,
                 'name' => $this->assignee->name,
                 'email' => $this->assignee->email,
-                'avatarUrl' => $this->assignee->avatar_url,
+                'avatar_url' => $this->assignee->avatar_url,
             ] : null),
             'creator' => $this->whenLoaded('creator', fn () => [
                 'id' => $this->creator->id,

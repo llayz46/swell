@@ -51,7 +51,7 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
                 <button className="relative w-fit focus:outline-none">
                     {currentAssignee ? (
                         <Avatar className="size-6 shrink-0">
-                            <AvatarImage src={currentAssignee.avatarUrl} alt={currentAssignee.name} />
+                            <AvatarImage src={currentAssignee.avatar_url} alt={currentAssignee.name} />
                             <AvatarFallback>{currentAssignee.name[0]}</AvatarFallback>
                         </Avatar>
                     ) : (
@@ -87,7 +87,7 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
                     >
                         <div className="flex items-center gap-2">
                             <Avatar className="size-5">
-                                <AvatarImage src={member.avatarUrl} alt={member.name} />
+                                <AvatarImage src={member.avatar_url} alt={member.name} />
                                 <AvatarFallback>{member.name[0]}</AvatarFallback>
                             </Avatar>
 

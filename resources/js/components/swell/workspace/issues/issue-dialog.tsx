@@ -295,7 +295,7 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
                                             {selectedAssignee ? (
                                                 <div className="flex items-center gap-2">
                                                     <Avatar className="size-5">
-                                                        <AvatarImage src={selectedAssignee.avatarUrl} alt={selectedAssignee.name} />
+                                                        <AvatarImage src={selectedAssignee.avatar_url} alt={selectedAssignee.name} />
                                                         <AvatarFallback className="text-xs">
                                                             {selectedAssignee.name
                                                                 .split(' ')
@@ -347,7 +347,7 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
                                                         >
                                                             <div className="flex items-center gap-2">
                                                                 <Avatar className="size-5">
-                                                                    <AvatarImage src={member.avatarUrl} alt={member.name} />
+                                                                    <AvatarImage src={member.avatar_url} alt={member.name} />
                                                                     <AvatarFallback className="text-xs">
                                                                         {member.name
                                                                             .split(' ')

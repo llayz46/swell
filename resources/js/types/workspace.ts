@@ -26,7 +26,7 @@ export interface IssueAssignee {
     id: number;
     name: string;
     email: string;
-    avatarUrl?: string;
+    avatar_url?: string;
 }
 
 export interface Issue {
@@ -96,7 +96,7 @@ export interface Team {
     leads?: {
         id: number;
         name: string;
-        avatarUrl?: string;
+        avatar_url?: string;
     }[];
     membersCount?: number;
     issuesCount?: number;

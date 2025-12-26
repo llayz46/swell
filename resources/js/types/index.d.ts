@@ -75,7 +75,6 @@ export interface User {
     email: string;
     avatar?: string;
     avatar_url?: string;
-    avatarUrl?: string; // API Resource format
     roles:
         | string[]
         | {
