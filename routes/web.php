@@ -11,6 +11,7 @@ use App\Modules\Loyalty\Http\Controllers\LoyaltyController;
 use App\Modules\Review\Http\Controllers\ReviewController;
 use App\Modules\Wishlist\Http\Controllers\WishlistController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceDashboardController;
+use App\Modules\Workspace\Http\Controllers\WorkspaceInboxController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceIssueController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceMembersController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceTeamController;
@@ -54,11 +55,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->prefix('workspace')->name('workspace.')->group(function () {
             Route::get('/', WorkspaceDashboardController::class)->name('index');
 
-            // Route::prefix('inbox')->name('inbox.')->group(function () {
-            //     Route::get('/', [WorkspaceInboxController::class, 'index'])->name('index');
-            //     Route::put('/{inboxItem}', [WorkspaceInboxController::class, 'markAsRead'])->name('read');
-            //     Route::post('/read-all', [WorkspaceInboxController::class, 'markAllAsRead'])->name('read-all');
-            // });
+            Route::prefix('inbox')->name('inbox.')->group(function () {
+                Route::get('/', [WorkspaceInboxController::class, 'index'])->name('index');
+                // Route::put('/{inboxItem}', [WorkspaceInboxController::class, 'markAsRead'])->name('read');
+                // Route::post('/read-all', [WorkspaceInboxController::class, 'markAllAsRead'])->name('read-all');
+            });
 
             // Route::get('/my-issues', WorkspaceMyIssuesController::class)->name('my-issues');
 
@@ -77,7 +78,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::post('/{team}/invite', [WorkspaceTeamController::class, 'invite'])->name('invite');
                 Route::post('/{team}/leave', [WorkspaceTeamController::class, 'leave'])->name('leave');
                 // Route::delete('/{team}/remove/{user}', [WorkspaceTeamController::class, 'removeMember'])->name('remove-member');
-                // Route::post('/{team}/join', [WorkspaceTeamController::class, 'join'])->name('join');
 
                 // // Transfert de lead (team-lead uniquement)
                 // Route::post('/{team}/transfer-lead', [WorkspaceTeamController::class, 'transferLead'])
@@ -93,6 +93,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 //     Route::post('/{team}/add-member', [WorkspaceTeamController::class, 'addMemberAsAdmin'])
                 //         ->name('add-member-admin');
                 // });
+            });
+
+            Route::prefix('team-invitations')->name('team-invitations.')->group(function () {
+                Route::post('/{invitation}/accept', [\App\Modules\Workspace\Http\Controllers\TeamInvitationController::class, 'accept'])->name('accept');
+                Route::post('/{invitation}/decline', [\App\Modules\Workspace\Http\Controllers\TeamInvitationController::class, 'decline'])->name('decline');
             });
 
             Route::prefix('issues')->name('issues.')->group(function () {

@@ -105,3 +105,26 @@ export interface Team {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface TeamInvitation {
+      id: number;
+      team: {
+          id: number;
+          identifier: string;
+          name: string;
+          icon?: string;
+          color: string;
+      };
+      inviter: {
+          id: number;
+          name: string;
+          avatar_url?: string;
+      };
+      role: string;
+      message?: string;
+      status: 'pending' | 'accepted' | 'declined';
+      is_pending: boolean;
+      is_expired: boolean;
+      expires_at?: string;
+      created_at: string;
+  }

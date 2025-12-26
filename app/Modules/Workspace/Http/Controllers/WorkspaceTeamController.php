@@ -3,13 +3,14 @@
 namespace App\Modules\Workspace\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Workspace\Http\Requests\Team\InviteTeamMemberRequest;
 use App\Modules\Workspace\Models\Issue;
 use App\Modules\Workspace\Models\IssueLabel;
 use App\Modules\Workspace\Models\IssuePriority;
 use App\Modules\Workspace\Models\IssueStatus;
 use App\Modules\Workspace\Models\Team;
+use App\Modules\Workspace\Models\TeamInvitation;
 use Illuminate\Http\Request;
-use App\Modules\Workspace\Http\Requests\Team\InviteTeamMemberRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -29,8 +30,17 @@ class WorkspaceTeamController extends Controller
                 $team->role = $team->getRoleForUser(auth()->user());
             });
 
+        $pendingInvitations = TeamInvitation::query()
+            ->forUser(auth()->user())
+            ->pending()
+            ->notExpired()
+            ->with(['team', 'inviter'])
+            ->latest()
+            ->get();
+
         return Inertia::render('workspace/teams/index', [
             'teams' => $teams->toResourceCollection(),
+            'pendingInvitations' => $pendingInvitations,
         ]);
     }
 
@@ -126,7 +136,7 @@ class WorkspaceTeamController extends Controller
     public function invite(Team $team, InviteTeamMemberRequest $request)
     {
         $this->authorize('manage-members', $team);
-        
+
         $invitation = app(\App\Modules\Workspace\Actions\InviteTeamMember::class)->handle(
             $team,
             $request->validated(),
@@ -152,6 +162,10 @@ class WorkspaceTeamController extends Controller
         }
 
         $team->removeMember($user);
+
+        $workspaceService = app(\App\Modules\Workspace\Services\WorkspaceService::class);
+        $workspaceService->clearUserTeamsCache($user);
+        $workspaceService->clearWorkspaceMembersCache();
 
         return redirect()->route('workspace.index')->with('success', 'Vous avez quitté l\'équipe avec succès');
     }
