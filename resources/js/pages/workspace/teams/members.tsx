@@ -49,7 +49,7 @@ export default function Members({ team }: IssuesPageProps) {
 }
 
 function MemberRow({ member }: { member: TeamMember }) {
-    const handleChangeRole = (newRole: 'lead' | 'member') => {
+    const handleChangeRole = (newRole: 'team-lead' | 'team-member') => {
         console.log('Change role to:', newRole);
     };
 
@@ -88,13 +88,13 @@ function MemberRow({ member }: { member: TeamMember }) {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        {member.role === 'member' ? (
-                            <DropdownMenuItem onClick={() => handleChangeRole('lead')}>
+                        {member.role === 'team-member' ? (
+                            <DropdownMenuItem onClick={() => handleChangeRole('team-lead')}>
                                 <Shield className="mr-2 size-4" />
                                 Promouvoir en lead
                             </DropdownMenuItem>
                         ) : (
-                            <DropdownMenuItem onClick={() => handleChangeRole('member')}>
+                            <DropdownMenuItem onClick={() => handleChangeRole('team-member')}>
                                 <ShieldOff className="mr-2 size-4" />
                                 Rétrograder en membre
                             </DropdownMenuItem>

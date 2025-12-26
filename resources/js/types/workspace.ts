@@ -76,7 +76,7 @@ interface BaseMember {
 }
 
 export interface TeamMember extends BaseMember {
-    role: 'lead' | 'member';
+    role: 'team-lead' | 'team-member';
     joined_at: string;
 }
 

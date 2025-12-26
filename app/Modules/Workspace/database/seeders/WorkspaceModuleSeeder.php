@@ -3,12 +3,13 @@
 namespace App\Modules\Workspace\Database\Seeders;
 
 use App\Models\User;
+use App\Modules\Workspace\Models\InboxItem;
 use App\Modules\Workspace\Models\Issue;
 use App\Modules\Workspace\Models\IssueLabel;
 use App\Modules\Workspace\Models\IssuePriority;
 use App\Modules\Workspace\Models\IssueStatus;
-use App\Modules\Workspace\Models\InboxItem;
 use App\Modules\Workspace\Models\Team;
+use App\Modules\Workspace\Models\TeamInvitation;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -38,15 +39,18 @@ class WorkspaceModuleSeeder extends Seeder
 
         $this->createInboxItems($users, $issues);
 
+        $invitations = $this->createTeamInvitations($teams, $users);
+
         $this->command->info('✅ Workspace Module seeded successfully!');
         $this->command->newLine();
-        $this->command->info("📊 Summary:");
-        $this->command->info("   - Users: " . $users->count());
-        $this->command->info("   - Teams: " . $teams->count());
-        $this->command->info("   - Issues: " . $issues->count());
-        $this->command->info("   - Statuses: " . $statuses->count());
-        $this->command->info("   - Priorities: " . $priorities->count());
-        $this->command->info("   - Labels: " . $labels->count());
+        $this->command->info('📊 Summary:');
+        $this->command->info('   - Users: '.$users->count());
+        $this->command->info('   - Teams: '.$teams->count());
+        $this->command->info('   - Issues: '.$issues->count());
+        $this->command->info('   - Statuses: '.$statuses->count());
+        $this->command->info('   - Priorities: '.$priorities->count());
+        $this->command->info('   - Labels: '.$labels->count());
+        $this->command->info('   - Team Invitations: '.$invitations->count());
     }
 
     private function createRolesAndPermissions(): void
@@ -115,141 +119,231 @@ class WorkspaceModuleSeeder extends Seeder
     {
         $this->command->info('Creating issue statuses...');
 
-        return collect([
-            IssueStatus::factory()->backlog()->create(['color' => '#ec4899', 'icon_type' => 'BacklogIcon']),
-            IssueStatus::factory()->todo()->create(['color' => '#f97316', 'icon_type' => 'ToDoIcon']),
-            IssueStatus::factory()->inProgress()->create(['color' => '#facc15', 'icon_type' => 'InProgressIcon']),
-            IssueStatus::factory()->technicalReview()->create(['color' => '#22c55e', 'icon_type' => 'TechnicalReviewIcon']),
-            IssueStatus::factory()->paused()->create(['color' => '#0ea5e9', 'icon_type' => 'PausedIcon']),
-            IssueStatus::factory()->completed()->create(['color' => '#8b5cf6', 'icon_type' => 'CompletedIcon']),
-        ]);
+        $statuses = [
+            ['slug' => 'backlog', 'name' => 'Backlog', 'color' => '#ec4899', 'icon_type' => 'BacklogIcon', 'order' => 1],
+            ['slug' => 'todo', 'name' => 'To Do', 'color' => '#f97316', 'icon_type' => 'ToDoIcon', 'order' => 2],
+            ['slug' => 'in-progress', 'name' => 'In Progress', 'color' => '#facc15', 'icon_type' => 'InProgressIcon', 'order' => 3],
+            ['slug' => 'technical-review', 'name' => 'Technical Review', 'color' => '#22c55e', 'icon_type' => 'TechnicalReviewIcon', 'order' => 4],
+            ['slug' => 'paused', 'name' => 'Paused', 'color' => '#0ea5e9', 'icon_type' => 'PausedIcon', 'order' => 5],
+            ['slug' => 'completed', 'name' => 'Completed', 'color' => '#8b5cf6', 'icon_type' => 'CompletedIcon', 'order' => 6],
+        ];
+
+        return collect($statuses)->map(function ($status) {
+            return IssueStatus::firstOrCreate(
+                ['slug' => $status['slug']],
+                $status
+            );
+        });
     }
 
     private function createPriorities()
     {
         $this->command->info('Creating issue priorities...');
 
-        return collect([
-            IssuePriority::factory()->urgent()->create(),
-            IssuePriority::factory()->high()->create(),
-            IssuePriority::factory()->medium()->create(),
-            IssuePriority::factory()->low()->create(),
-            IssuePriority::factory()->none()->create(),
-        ]);
+        $priorities = [
+            ['slug' => 'urgent', 'name' => 'Urgent', 'icon_type' => 'UrgentPriorityIcon', 'order' => 1],
+            ['slug' => 'high', 'name' => 'High', 'icon_type' => 'HighPriorityIcon', 'order' => 2],
+            ['slug' => 'medium', 'name' => 'Medium', 'icon_type' => 'MediumPriorityIcon', 'order' => 3],
+            ['slug' => 'low', 'name' => 'Low', 'icon_type' => 'LowPriorityIcon', 'order' => 4],
+            ['slug' => 'none', 'name' => 'None', 'icon_type' => 'NoPriorityIcon', 'order' => 5],
+        ];
+
+        return collect($priorities)->map(function ($priority) {
+            return IssuePriority::firstOrCreate(
+                ['slug' => $priority['slug']],
+                $priority
+            );
+        });
     }
 
     private function createLabels()
     {
         $this->command->info('Creating issue labels...');
 
-        return collect([
-            IssueLabel::factory()->ui()->create(),
-            IssueLabel::factory()->bug()->create(),
-            IssueLabel::factory()->feature()->create(),
-            IssueLabel::factory()->documentation()->create(),
-            IssueLabel::factory()->refactor()->create(),
-            IssueLabel::factory()->performance()->create(),
-            IssueLabel::factory()->design()->create(),
-            IssueLabel::factory()->security()->create(),
-            IssueLabel::factory()->accessibility()->create(),
-            IssueLabel::factory()->testing()->create(),
-            IssueLabel::factory()->internationalization()->create(),
-        ]);
+        $labels = [
+            ['slug' => 'ui', 'name' => 'UI', 'color' => '#3b82f6'],
+            ['slug' => 'bug', 'name' => 'Bug', 'color' => '#ef4444'],
+            ['slug' => 'feature', 'name' => 'Feature', 'color' => '#10b981'],
+            ['slug' => 'documentation', 'name' => 'Documentation', 'color' => '#8b5cf6'],
+            ['slug' => 'refactor', 'name' => 'Refactor', 'color' => '#f59e0b'],
+            ['slug' => 'performance', 'name' => 'Performance', 'color' => '#06b6d4'],
+            ['slug' => 'design', 'name' => 'Design', 'color' => '#ec4899'],
+            ['slug' => 'security', 'name' => 'Security', 'color' => '#f97316'],
+            ['slug' => 'accessibility', 'name' => 'Accessibility', 'color' => '#84cc16'],
+            ['slug' => 'testing', 'name' => 'Testing', 'color' => '#14b8a6'],
+            ['slug' => 'internationalization', 'name' => 'i18n', 'color' => '#a855f7'],
+        ];
+
+        return collect($labels)->map(function ($label) {
+            return IssueLabel::firstOrCreate(
+                ['slug' => $label['slug']],
+                $label
+            );
+        });
     }
 
     private function createUsers()
     {
         $this->command->info('Creating users...');
 
-        $existingUsers = User::whereIn('email', [
-            'workspace-admin@example.com',
-            'lead@example.com',
-            'member1@example.com',
-            'member2@example.com',
-            'member3@example.com',
-        ])->get();
-
-        if ($existingUsers->count() >= 5) {
-            $this->command->info('Using existing users...');
-            return $existingUsers;
-        }
+        $users = collect();
 
         // Workspace Admin
-        $workspaceAdmin = User::factory()->create([
-            'name' => 'Workspace Admin',
-            'email' => 'workspace-admin@example.com',
-        ]);
+        $workspaceAdmin = User::factory()->create(
+            [
+                'name' => 'Workspace Admin',
+                'email' => 'workspace-admin@example.com',
+            ],
+        );
         $workspaceAdmin->assignRole('workspace-admin');
+        $users->push($workspaceAdmin);
 
-        // Team Lead
-        $teamLead = User::factory()->create([
-            'name' => 'Team Lead',
-            'email' => 'lead@example.com',
-        ]);
-        $teamLead->assignRole('team-lead');
+        // Team Leads (4 leads)
+        $leadNames = [
+            ['name' => 'Alice Martin', 'email' => 'alice.martin@example.com'],
+            ['name' => 'Thomas Bernard', 'email' => 'thomas.bernard@example.com'],
+            ['name' => 'Sophie Dubois', 'email' => 'sophie.dubois@example.com'],
+            ['name' => 'Lucas Moreau', 'email' => 'lucas.moreau@example.com'],
+        ];
 
-        // Team Members
-        $member1 = User::factory()->create([
-            'name' => 'John Developer',
-            'email' => 'member1@example.com',
-        ]);
-        $member1->assignRole('team-member');
+        foreach ($leadNames as $leadData) {
+            $lead = User::factory()->create(
+                [
+                    'name' => $leadData['name'],
+                    'email' => $leadData['email'],
+                ],
+            );
+            $lead->assignRole('team-lead');
+            $users->push($lead);
+        }
 
-        $member2 = User::factory()->create([
-            'name' => 'Jane Designer',
-            'email' => 'member2@example.com',
-        ]);
-        $member2->assignRole('team-member');
+        // Team Members (15 membres)
+        $memberNames = [
+            ['name' => 'Emma Petit', 'email' => 'emma.petit@example.com'],
+            ['name' => 'Hugo Roux', 'email' => 'hugo.roux@example.com'],
+            ['name' => 'Léa Laurent', 'email' => 'lea.laurent@example.com'],
+            ['name' => 'Nathan Simon', 'email' => 'nathan.simon@example.com'],
+            ['name' => 'Chloé Michel', 'email' => 'chloe.michel@example.com'],
+            ['name' => 'Louis Lefebvre', 'email' => 'louis.lefebvre@example.com'],
+            ['name' => 'Camille Garcia', 'email' => 'camille.garcia@example.com'],
+            ['name' => 'Gabriel David', 'email' => 'gabriel.david@example.com'],
+            ['name' => 'Manon Bertrand', 'email' => 'manon.bertrand@example.com'],
+            ['name' => 'Arthur Robert', 'email' => 'arthur.robert@example.com'],
+            ['name' => 'Inès Richard', 'email' => 'ines.richard@example.com'],
+            ['name' => 'Jules Durand', 'email' => 'jules.durand@example.com'],
+            ['name' => 'Zoé Leroy', 'email' => 'zoe.leroy@example.com'],
+            ['name' => 'Raphaël Moreau', 'email' => 'raphael.moreau@example.com'],
+            ['name' => 'Lina Girard', 'email' => 'lina.girard@example.com'],
+        ];
 
-        $member3 = User::factory()->create([
-            'name' => 'Bob Tester',
-            'email' => 'member3@example.com',
-        ]);
-        $member3->assignRole('team-member');
+        foreach ($memberNames as $memberData) {
+            $member = User::factory()->create(
+                [
+                    'name' => $memberData['name'],
+                    'email' => $memberData['email'],
+                ]
+            );
+            $member->assignRole('team-member');
+            $users->push($member);
+        }
 
-        return collect([$workspaceAdmin, $teamLead, $member1, $member2, $member3]);
+        return $users;
     }
 
     private function createTeams($users)
     {
         $this->command->info('Creating teams...');
 
-        $teamLead = $users->firstWhere('email', 'lead@example.com');
-        $members = $users->reject(fn($u) => $u->email === 'lead@example.com');
+        $teams = collect();
+        $leads = $users->filter(fn ($u) => $u->hasRole('team-lead'));
+        $members = $users->filter(fn ($u) => $u->hasRole('team-member'));
 
-        $coreTeam = Team::create([
-            'identifier' => 'CORE',
-            'name' => 'Core Development',
-            'icon' => '💻',
-            'color' => '#3b82f6',
-            'description' => 'Main application development team',
-        ]);
-        $coreTeam->addMember($teamLead, 'lead');
-        foreach ($members->take(2) as $member) {
-            $coreTeam->addMember($member, 'member');
+        $teamsData = [
+            [
+                'identifier' => 'CORE',
+                'name' => 'Core Development',
+                'icon' => '💻',
+                'color' => '#3b82f6',
+                'description' => 'Main application development team',
+                'memberCount' => 6,
+            ],
+            [
+                'identifier' => 'DESIGN',
+                'name' => 'Design System',
+                'icon' => '🎨',
+                'color' => '#ec4899',
+                'description' => 'UI/UX and design system team',
+                'memberCount' => 4,
+            ],
+            [
+                'identifier' => 'PERF',
+                'name' => 'Performance',
+                'icon' => '⚡',
+                'color' => '#f59e0b',
+                'description' => 'Performance optimization and monitoring',
+                'memberCount' => 3,
+            ],
+            [
+                'identifier' => 'API',
+                'name' => 'API Development',
+                'icon' => '🔌',
+                'color' => '#10b981',
+                'description' => 'Backend API development and integration',
+                'memberCount' => 5,
+            ],
+            [
+                'identifier' => 'QA',
+                'name' => 'Quality Assurance',
+                'icon' => '🧪',
+                'color' => '#8b5cf6',
+                'description' => 'Testing and quality assurance',
+                'memberCount' => 4,
+            ],
+            [
+                'identifier' => 'INFRA',
+                'name' => 'Infrastructure',
+                'icon' => '🛠️',
+                'color' => '#06b6d4',
+                'description' => 'DevOps and infrastructure management',
+                'memberCount' => 3,
+            ],
+        ];
+
+        $availableMembers = $members->shuffle();
+        $memberIndex = 0;
+        $leadsList = $leads->values(); // Reset keys for proper indexing
+
+        foreach ($teamsData as $index => $teamData) {
+            $team = Team::firstOrCreate(
+                ['identifier' => $teamData['identifier']],
+                [
+                    'name' => $teamData['name'],
+                    'icon' => $teamData['icon'],
+                    'color' => $teamData['color'],
+                    'description' => $teamData['description'],
+                ]
+            );
+
+            // Assigner un lead seulement si le team n'a pas encore de membres
+            if ($team->members()->count() === 0) {
+                if ($leadsList->count() > 0) {
+                    $lead = $leadsList[$index % $leadsList->count()];
+                    $team->addMember($lead, 'team-lead');
+                }
+
+                // Assigner des membres
+                for ($i = 0; $i < $teamData['memberCount']; $i++) {
+                    if ($memberIndex < $availableMembers->count()) {
+                        $team->addMember($availableMembers[$memberIndex], 'team-member');
+                        $memberIndex++;
+                    }
+                }
+            }
+
+            $teams->push($team);
         }
 
-        $designTeam = Team::create([
-            'identifier' => 'DESIGN',
-            'name' => 'Design System',
-            'icon' => '🎨',
-            'color' => '#ec4899',
-            'description' => 'UI/UX and design system team',
-        ]);
-        $designTeam->addMember($teamLead, 'lead');
-        $designTeam->addMember($members->values()[1], 'member');
-
-        $perfTeam = Team::create([
-            'identifier' => 'PERF',
-            'name' => 'Performance',
-            'icon' => '⚡',
-            'color' => '#f59e0b',
-            'description' => 'Performance optimization and monitoring',
-        ]);
-        $perfTeam->addMember($teamLead, 'lead');
-        $perfTeam->addMember($members->values()[2], 'member');
-
-        return collect([$coreTeam, $designTeam, $perfTeam]);
+        return $teams;
     }
 
     private function createIssues($teams, $users, $statuses, $priorities, $labels)
@@ -259,19 +353,23 @@ class WorkspaceModuleSeeder extends Seeder
         $issues = collect();
 
         foreach ($teams as $team) {
-            $issueCount = rand(10, 15);
+            // Plus de tâches pour les équipes plus grandes
+            $issueCount = rand(40, 60);
+
+            $teamMembers = $team->members;
 
             for ($i = 0; $i < $issueCount; $i++) {
                 $issue = Issue::factory()->create([
                     'team_id' => $team->id,
-                    'creator_id' => $users->random()->id,
-                    'assignee_id' => $team->members->random()->id,
+                    'creator_id' => $teamMembers->random()->id,
+                    'assignee_id' => rand(0, 100) < 80 ? $teamMembers->random()->id : null,
                     'status_id' => $statuses->random()->id,
                     'priority_id' => $priorities->random()->id,
                 ]);
 
+                // Ajouter 1 à 4 labels par issue
                 $issue->labels()->syncWithoutDetaching(
-                    $labels->random(rand(1, 3))->pluck('id')->toArray()
+                    $labels->random(rand(1, 4))->pluck('id')->toArray()
                 );
 
                 $issues->push($issue);
@@ -286,13 +384,100 @@ class WorkspaceModuleSeeder extends Seeder
         $this->command->info('Creating inbox items...');
 
         foreach ($users as $user) {
+            // Plus d'items dans l'inbox pour un jeu de données plus réaliste
             InboxItem::factory()
-                ->count(rand(5, 10))
+                ->count(rand(15, 30))
                 ->create([
                     'user_id' => $user->id,
                     'issue_id' => $issues->random()->id,
                     'actor_id' => $users->random()->id,
                 ]);
         }
+    }
+
+    private function createTeamInvitations($teams, $users)
+    {
+        $this->command->info('Creating team invitations...');
+
+        $invitations = collect();
+
+        $workspaceAdmin = $users->firstWhere('email', 'workspace-admin@example.com');
+        $teamMembers = $users->filter(fn ($u) => $u->hasRole('team-member'));
+
+        // Créer plusieurs invitations pending pour différents utilisateurs
+        foreach ($teams as $team) {
+            $teamLead = $team->leads()->first();
+
+            if (! $teamLead) {
+                continue;
+            }
+
+            // Inviter le workspace admin à quelques équipes
+            if (! $team->isMember($workspaceAdmin) && rand(0, 100) < 40) {
+                $invitations->push(
+                    TeamInvitation::factory()->create([
+                        'team_id' => $team->id,
+                        'user_id' => $workspaceAdmin->id,
+                        'invited_by' => $teamLead->id,
+                        'role' => 'team-member',
+                        'message' => "Nous aimerions que tu rejoignes l'équipe {$team->name} !",
+                        'status' => 'pending',
+                        'expires_at' => now()->addDays(rand(3, 14)),
+                    ])
+                );
+            }
+
+            // Inviter quelques membres aléatoires
+            $nonMembers = $teamMembers->filter(fn ($u) => ! $team->isMember($u));
+
+            foreach ($nonMembers->random(min(3, $nonMembers->count())) as $member) {
+                $statusChoice = rand(0, 100);
+
+                if ($statusChoice < 60) {
+                    // 60% pending
+                    $invitations->push(
+                        TeamInvitation::factory()->pending()->create([
+                            'team_id' => $team->id,
+                            'user_id' => $member->id,
+                            'invited_by' => $teamLead->id,
+                            'role' => rand(0, 100) < 90 ? 'team-member' : 'team-lead',
+                            'expires_at' => now()->addDays(rand(5, 30)),
+                        ])
+                    );
+                } elseif ($statusChoice < 80) {
+                    // 20% accepted
+                    $invitations->push(
+                        TeamInvitation::factory()->accepted()->create([
+                            'team_id' => $team->id,
+                            'user_id' => $member->id,
+                            'invited_by' => $teamLead->id,
+                            'role' => 'team-member',
+                        ])
+                    );
+                } elseif ($statusChoice < 90) {
+                    // 10% declined
+                    $invitations->push(
+                        TeamInvitation::factory()->declined()->create([
+                            'team_id' => $team->id,
+                            'user_id' => $member->id,
+                            'invited_by' => $teamLead->id,
+                            'role' => 'team-member',
+                        ])
+                    );
+                } else {
+                    // 10% expired
+                    $invitations->push(
+                        TeamInvitation::factory()->expired()->create([
+                            'team_id' => $team->id,
+                            'user_id' => $member->id,
+                            'invited_by' => $teamLead->id,
+                            'role' => 'team-member',
+                        ])
+                    );
+                }
+            }
+        }
+
+        return $invitations;
     }
 }

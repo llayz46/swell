@@ -84,7 +84,7 @@ test('the last lead cannot leave the team', function () {
     \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'team-lead']);
     $lead->assignRole('team-lead');
 
-    $team->addMember($lead, 'lead');
+    $team->addMember($lead, 'team-lead');
 
     expect($team->isLead($lead))->toBeTrue();
     expect($team->leads()->count())->toBe(1);
@@ -105,8 +105,8 @@ test('a lead can leave if there are other leads', function () {
     $lead1->assignRole('team-lead');
     $lead2->assignRole('team-lead');
 
-    $team->addMember($lead1, 'lead');
-    $team->addMember($lead2, 'lead');
+    $team->addMember($lead1, 'team-lead');
+    $team->addMember($lead2, 'team-lead');
 
     expect($team->leads()->count())->toBe(2);
 

@@ -45,7 +45,7 @@ export function MembersAvatarGroup({ members, maxDisplay = 3 }: MembersAvatarGro
                                 </Avatar>
                                 <span className="text-sm">{member.name}</span>
                                 <span className="mt-px text-xs text-muted-foreground">- {member.email}</span>
-                                {member.role === 'lead' && <Star className="size-3 fill-yellow-500 text-yellow-500" />}
+                                {member.role === 'team-lead' && <Star className="size-3 fill-yellow-500 text-yellow-500" />}
                             </div>
                         ))}
                     </div>

@@ -34,7 +34,7 @@ class Team extends Model
     public function leads(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'team_user')
-            ->wherePivot('role', 'lead')
+            ->wherePivot('role', 'team-lead')
             ->withPivot('role', 'joined_at');
     }
 
@@ -43,7 +43,7 @@ class Team extends Model
         return $this->hasMany(Issue::class);
     }
 
-    public function addMember(User $user, string $role = 'member'): void
+    public function addMember(User $user, string $role = 'team-member'): void
     {
         $this->members()->attach($user->id, [
             'role' => $role,
@@ -60,7 +60,7 @@ class Team extends Model
     {
         return $this->members()
             ->where('users.id', $user->id)
-            ->wherePivot('role', 'lead')
+            ->wherePivot('role', 'team-lead')
             ->exists();
     }
 
@@ -96,12 +96,12 @@ class Team extends Model
 
         // Rétrograder le lead actuel en membre
         $this->members()->updateExistingPivot($fromUser->id, [
-            'role' => 'member',
+            'role' => 'team-member',
         ]);
 
         // Promouvoir le nouveau lead
         $this->members()->updateExistingPivot($toUser->id, [
-            'role' => 'lead',
+            'role' => 'team-lead',
         ]);
     }
 
@@ -115,7 +115,7 @@ class Team extends Model
         }
 
         $this->members()->updateExistingPivot($user->id, [
-            'role' => 'lead',
+            'role' => 'team-lead',
         ]);
     }
 
@@ -129,7 +129,7 @@ class Team extends Model
         }
 
         $this->members()->updateExistingPivot($user->id, [
-            'role' => 'member',
+            'role' => 'team-member',
         ]);
     }
 }

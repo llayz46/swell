@@ -1,10 +1,10 @@
 <?php
 
+use App\Models\User;
+use App\Modules\Workspace\Models\Team;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\User;
-use App\Modules\Workspace\Models\Team;
 
 return new class extends Migration
 {
@@ -15,20 +15,20 @@ return new class extends Migration
     {
         Schema::create('team_user', function (Blueprint $table) {
             $table->id();
-            
+
             $table->foreignIdFor(Team::class, 'team_id')
                 ->constrained('teams')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-                
+
             $table->foreignIdFor(User::class, 'user_id')
                 ->constrained('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-                
-            $table->enum('role', ['lead', 'member']);
-    
-            $table->timestamp('joined_at')->useCurrent(); 
+
+            $table->enum('role', ['team-lead', 'team-member']);
+
+            $table->timestamp('joined_at')->useCurrent();
         });
     }
 
