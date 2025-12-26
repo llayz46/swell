@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return [
+        $shared = [
             ...parent::share($request),
             'name' => config('app.name'),
             'swell' => fn () => $this->sharedPropsService->getSwellConfig(),
@@ -51,8 +51,16 @@ class HandleInertiaRequests extends Middleware
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'categories' => fn () => $this->sharedPropsService->getCategories(),
             'cart' => fn () => $this->sharedPropsService->getCart(),
-            'infoBanner' => fn () => $this->sharedPropsService->getInfoBanner(),
-            'workspaceMembers' => fn () => $this->sharedPropsService->getWorkspaceMembers($request),
         ];
+
+        if (config('swell.banner.enabled', true)) {
+            $shared['infoBanner'] = fn () => $this->sharedPropsService->getInfoBanner();
+        }
+
+        if (config('swell.workspace.enabled', true)) {
+            $shared['workspaceMembers'] = fn () => $this->sharedPropsService->getWorkspaceMembers($request);
+        }
+
+        return $shared;
     }
 }
