@@ -18,17 +18,16 @@ const TABLE_COLUMNS = [
 
 export default function Index({ teams }: { teams: Team[] }) {
     return (
-        <WorkspaceLayout header={<Header teams={teams} />}>
+        <WorkspaceLayout
+            header={<Header teams={teams} />}
+            tableHeader={<WorkspaceTableHeader columns={TABLE_COLUMNS} />}
+        >
             <Head title="Équipes - Workspace" />
 
             <div className="w-full">
-                <WorkspaceTableHeader columns={TABLE_COLUMNS} />
-
-                <div className="w-full">
-                    {teams.map((team) => (
-                        <TeamRow key={team.id} team={team} />
-                    ))}
-                </div>
+                {teams.map((team) => (
+                    <TeamRow key={team.id} team={team} />
+                ))}
             </div>
         </WorkspaceLayout>
     );

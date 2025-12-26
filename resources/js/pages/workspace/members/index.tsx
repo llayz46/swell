@@ -16,17 +16,16 @@ const TABLE_COLUMNS = [
 
 export default function Index({ members }: { members: WorkspaceMember[] }) {
     return (
-        <WorkspaceLayout header={<Header members={members} />}>
+        <WorkspaceLayout
+            header={<Header members={members} />}
+            tableHeader={<WorkspaceTableHeader columns={TABLE_COLUMNS} />}
+        >
             <Head title="Membres - Workspace" />
 
             <div className="w-full">
-                <WorkspaceTableHeader columns={TABLE_COLUMNS} />
-
-                <div className="w-full">
-                    {members.map((member) => (
-                        <MemberRow key={member.id} member={member} />
-                    ))}
-                </div>
+                {members.map((member) => (
+                    <MemberRow key={member.id} member={member} />
+                ))}
             </div>
         </WorkspaceLayout>
     );

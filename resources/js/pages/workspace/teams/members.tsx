@@ -32,17 +32,16 @@ const TABLE_COLUMNS = [
 
 export default function Members({ team }: IssuesPageProps) {
     return (
-        <WorkspaceLayout header={<Header members={team.members} />}>
+        <WorkspaceLayout
+            header={<Header members={team.members} />}
+            tableHeader={<WorkspaceTableHeader columns={TABLE_COLUMNS} />}
+        >
             <Head title={`Tâches - ${team.identifier} - Workspace`} />
 
             <div className="w-full">
-                <WorkspaceTableHeader columns={TABLE_COLUMNS} />
-
-                <div className="w-full">
-                    {team.members?.map((member) => (
-                        <MemberRow key={member.id} member={member} />
-                    ))}
-                </div>
+                {team.members?.map((member) => (
+                    <MemberRow key={member.id} member={member} />
+                ))}
             </div>
         </WorkspaceLayout>
     );
