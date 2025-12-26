@@ -4,7 +4,7 @@ import { WorkspaceTableHeader } from '@/components/swell/workspace/workspace-tab
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import WorkspaceLayout from '@/layouts/workspace-layout';
-import { TeamMember } from '@/types/workspace';
+import { WorkspaceMember } from '@/types/workspace';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { Head } from '@inertiajs/react';
 
@@ -14,7 +14,7 @@ const TABLE_COLUMNS = [
     { label: 'Teams', className: 'hidden md:block md:w-[15%]' },
 ];
 
-export default function Index({ members }: { members: TeamMember[] }) {
+export default function Index({ members }: { members: WorkspaceMember[] }) {
     return (
         <WorkspaceLayout header={<Header members={members} />}>
             <Head title="Membres - Workspace" />
@@ -24,7 +24,7 @@ export default function Index({ members }: { members: TeamMember[] }) {
 
                 <div className="w-full">
                     {members.map((member) => (
-                        <MemberRow key={member.id} user={member} />
+                        <MemberRow key={member.id} member={member} />
                     ))}
                 </div>
             </div>
@@ -32,27 +32,27 @@ export default function Index({ members }: { members: TeamMember[] }) {
     );
 }
 
-function MemberRow({ user }: { user: User }) {
+function MemberRow({ member }: { member: WorkspaceMember }) {
     return (
         <div className="flex w-full items-center border-b border-muted-foreground/5 px-6 py-3 text-sm hover:bg-sidebar/50">
             <div className="flex w-[85%] items-center gap-2 md:w-[70%]">
                 <Avatar className="size-8 shrink-0">
-                    <AvatarImage src={user.avatarUrl} alt={user.name} />
-                    <AvatarFallback>{user.name[0]}</AvatarFallback>
+                    <AvatarImage src={member.avatar_url} alt={member.name} />
+                    <AvatarFallback>{member.name[0]}</AvatarFallback>
                 </Avatar>
 
                 <div className="flex flex-col items-start overflow-hidden">
-                    <span className="w-full truncate font-medium">{user.name}</span>
-                    <span className="w-full truncate text-xs text-muted-foreground">{user.email}</span>
+                    <span className="w-full truncate font-medium">{member.name}</span>
+                    <span className="w-full truncate text-xs text-muted-foreground">{member.email}</span>
                 </div>
             </div>
 
             <div className="w-[15%] text-xs text-muted-foreground">
-                <Badge variant="secondary">{formatWorkspaceRole(user.roles)}</Badge>
+                <Badge variant="secondary">{formatWorkspaceRole(member.roles)}</Badge>
             </div>
 
             <div className="hidden w-[30%] text-xs text-muted-foreground md:flex md:w-[15%]">
-                {user.teams && <TeamsBadgeGroup teams={user.teams} />}
+                {member.teams && <TeamsBadgeGroup teams={member.teams} />}
             </div>
         </div>
     );

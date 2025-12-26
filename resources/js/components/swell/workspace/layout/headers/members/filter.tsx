@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { TeamMember } from '@/types/workspace';
+import type { TeamMember, WorkspaceMember } from '@/types/workspace';
 import { ArrowUpDown, ChevronRight, ListFilter, Shield } from 'lucide-react';
 import { useState } from 'react';
 
@@ -9,7 +9,7 @@ type FilterType = 'role' | 'sort';
 
 const ROLES: Array<'Guest' | 'Member' | 'Admin'> = ['Guest', 'Member', 'Admin'];
 
-export function Filter({ members }: { members: TeamMember[] }) {
+export function Filter({ members }: { members: TeamMember[] | WorkspaceMember[] }) {
     const [open, setOpen] = useState(false);
     const [active, setActive] = useState<FilterType | null>(null);
 

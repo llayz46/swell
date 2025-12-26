@@ -66,7 +66,9 @@ class WorkspaceTeamController extends Controller
 
     public function members(Team $team): Response
     {
-        //
+        return Inertia::render('workspace/teams/members', [
+            'team' => $team->load('members', 'leads')->toResource(),
+        ]);
     }
 
     /**
@@ -123,7 +125,7 @@ class WorkspaceTeamController extends Controller
     public function leave(Team $team)
     {
         $this->authorize('leave', $team);
-        
+
         $user = auth()->user();
 
         if ($team->isLead($user) && $team->leads()->count() === 1) {

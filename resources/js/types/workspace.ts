@@ -66,13 +66,23 @@ export interface WorkspaceContextData {
     labels: IssueLabel[];
 }
 
-export interface TeamMember {
+interface BaseMember {
     id: number;
     name: string;
     email: string;
-    avatarUrl?: string;
+    avatar_url?: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface TeamMember extends BaseMember {
     role: 'lead' | 'member';
-    joinedAt: string;
+    joined_at: string;
+}
+
+export interface WorkspaceMember extends BaseMember {
+    roles: string[];
+    teams: Team[];
 }
 
 export interface Team {

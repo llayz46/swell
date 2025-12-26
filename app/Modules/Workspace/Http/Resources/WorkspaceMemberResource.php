@@ -18,7 +18,7 @@ class WorkspaceMemberResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'avatarUrl' => $this->avatar_url ?? null,
+            'avatar_url' => $this->avatar_url ?? null,
             'roles' => $this->whenLoaded('roles', function () {
                 return $this->roles
                     ->filter(fn($role) => str_starts_with($role->name, 'team-') || str_starts_with($role->name, 'workspace-'))
@@ -32,11 +32,11 @@ class WorkspaceMemberResource extends JsonResource
                     'name' => $team->name,
                     'icon' => $team->icon,
                     'color' => $team->color,
-                    'joinedAt' => $team->pivot->joined_at,
+                    'joined_at' => $team->pivot->joined_at,
                 ]);
             }),
-            'createdAt' => $this->created_at->toISOString(),
-            'updatedAt' => $this->updated_at->toISOString(),
+            'created_at' => $this->created_at->toISOString(),
+            'updated_at' => $this->updated_at->toISOString(),
         ];
     }
 }

@@ -1,7 +1,7 @@
-import type { TeamMember } from '@/types/workspace';
+import type { TeamMember, WorkspaceMember } from '@/types/workspace';
 import { Filter } from './filter';
 
-export default function HeaderOptions({ members }: { members: TeamMember[] }) {
+export default function HeaderOptions({ members }: { members: TeamMember[] | WorkspaceMember[] }) {
     return (
         <div className="flex h-10 w-full items-center justify-between border-b px-6 py-1.5">
             <Filter members={members} />
