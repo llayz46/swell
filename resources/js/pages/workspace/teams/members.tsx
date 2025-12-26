@@ -27,7 +27,7 @@ const TABLE_COLUMNS = [
     { label: 'Nom', className: 'w-[75%] md:w-[65%]' },
     { label: 'Rôle', className: 'w-[20%] md:w-[15%]' },
     { label: 'Rejoint le', className: 'hidden md:block md:w-[15%]' },
-    { label: 'Actions', className: 'w-[5%]' },
+    { label: 'Actions', className: 'w-[5%] flex justify-center' },
 ];
 
 export default function Members({ team }: IssuesPageProps) {
