@@ -9,6 +9,7 @@ use App\Modules\Workspace\Models\IssuePriority;
 use App\Modules\Workspace\Models\IssueStatus;
 use App\Modules\Workspace\Models\Team;
 use Illuminate\Http\Request;
+use App\Modules\Workspace\Http\Requests\Team\InviteTeamMemberRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -117,6 +118,22 @@ class WorkspaceTeamController extends Controller
     public function destroy(Team $team)
     {
         //
+    }
+
+    /**
+     * Invite a user to the team.
+     */
+    public function invite(Team $team, InviteTeamMemberRequest $request)
+    {
+        $this->authorize('manage-members', $team);
+        
+        $invitation = app(\App\Modules\Workspace\Actions\InviteTeamMember::class)->handle(
+            $team,
+            $request->validated(),
+            auth()->user()
+        );
+
+        return back();
     }
 
     /**

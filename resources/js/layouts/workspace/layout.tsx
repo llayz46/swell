@@ -2,10 +2,14 @@ import { AppContent } from '@/components/app-content';
 import { ToasterWrapper } from '@/components/swell/toaster-wrapper';
 import { WorkspaceShell } from '@/components/swell/workspace/layout/sidebar/workspace-shell';
 import { WorkspaceSidebar } from '@/components/swell/workspace/layout/sidebar/workspace-sidebar';
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { InviteMemberDialog } from '@/components/swell/workspace/members/invite-member-dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import type { NavItem } from '@/types';
-import { type PropsWithChildren } from 'react';
+import type { WorkspaceMember } from '@/types/workspace';
+import { usePage } from '@inertiajs/react';
+import { type PropsWithChildren, useEffect } from 'react';
 
 interface SidebarProps {
     mainNavItems: NavItem[];
@@ -15,7 +19,22 @@ interface SidebarProps {
     tableHeader?: React.ReactNode;
 }
 
-export default function AppSidebarLayout({ children, header, headersNumber = 2, mainNavItems, workspaceNavItems, tableHeader }: PropsWithChildren<SidebarProps>) {
+export default function AppSidebarLayout({
+    children,
+    header,
+    headersNumber = 2,
+    mainNavItems,
+    workspaceNavItems,
+    tableHeader,
+}: PropsWithChildren<SidebarProps>) {
+    const { workspaceMembers } = usePage<{ workspaceMembers: WorkspaceMember[] | null }>().props;
+
+    useEffect(() => {
+        if (workspaceMembers) {
+            useWorkspaceMembersStore.setState({ members: workspaceMembers });
+        }
+    }, [workspaceMembers]);
+
     // Hauteur ajustée selon le nombre de headers ET si un tableHeader existe
     const scrollHeight = tableHeader
         ? {
@@ -30,7 +49,7 @@ export default function AppSidebarLayout({ children, header, headersNumber = 2, 
     return (
         <WorkspaceShell variant="sidebar">
             <WorkspaceSidebar mainNavItems={mainNavItems} workspaceNavItems={workspaceNavItems} />
-            
+
             <AppContent
                 variant="sidebar"
                 className="overflow-hidden bg-workspace md:border md:peer-data-[variant=inset]:shadow-none md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 lg:peer-data-[variant=inset]:rounded-md lg:peer-data-[variant=inset]:peer-data-[state=expanded]:m-2"
@@ -38,10 +57,9 @@ export default function AppSidebarLayout({ children, header, headersNumber = 2, 
                 {header}
                 {tableHeader}
 
-                <ScrollArea className={cn('size-full', scrollHeight[headersNumber])}>
-                    {children}
-                </ScrollArea>
+                <ScrollArea className={cn('size-full', scrollHeight[headersNumber])}>{children}</ScrollArea>
 
+                <InviteMemberDialog />
                 <ToasterWrapper />
             </AppContent>
         </WorkspaceShell>

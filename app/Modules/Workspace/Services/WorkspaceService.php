@@ -4,6 +4,7 @@ namespace App\Modules\Workspace\Services;
 
 use App\Models\User;
 use App\Modules\Workspace\Http\Resources\TeamResource;
+use App\Modules\Workspace\Http\Resources\WorkspaceMemberResource;
 use Illuminate\Support\Facades\Cache;
 
 class WorkspaceService
@@ -46,5 +47,30 @@ class WorkspaceService
         $this->clearUserTeamsCache($user);
 
         return $this->getUserTeams($user);
+    }
+
+    /**
+     * Get cached workspace members.
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function getWorkspaceMembers()
+    {
+        return Cache::remember('workspace-members', 60, function () {
+            $members = User::query()
+                ->whereHas('roles', fn ($q) => $q->whereIn('name', ['workspace-admin', 'team-lead', 'team-member']))
+                ->with(['roles', 'teams'])
+                ->get();
+
+            return WorkspaceMemberResource::collection($members);
+        });
+    }
+
+    /**
+     * Clear the workspace members cache.
+     */
+    public function clearWorkspaceMembersCache(): void
+    {
+        Cache::forget('workspace-members');
     }
 }

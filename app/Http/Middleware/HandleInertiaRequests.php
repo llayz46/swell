@@ -9,9 +9,7 @@ use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
-    public function __construct(private SharedPropsService $sharedPropsService)
-    {
-    }
+    public function __construct(private SharedPropsService $sharedPropsService) {}
 
     /**
      * The root template that's loaded on the first page visit.
@@ -54,6 +52,7 @@ class HandleInertiaRequests extends Middleware
             'categories' => fn () => $this->sharedPropsService->getCategories(),
             'cart' => fn () => $this->sharedPropsService->getCart(),
             'infoBanner' => fn () => $this->sharedPropsService->getInfoBanner(),
+            'workspaceMembers' => fn () => $this->sharedPropsService->getWorkspaceMembers($request),
         ];
     }
 }

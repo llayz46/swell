@@ -8,6 +8,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
+import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import { IssueAssignee } from '@/types/workspace';
 import { CheckIcon, CircleUserRound, Send, UserIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -22,14 +23,17 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
     const [open, setOpen] = useState(false);
     const [currentAssignee, setCurrentAssignee] = useState<IssueAssignee | null>(user);
 
-    const { members, updatingIssues, performUpdateAssignee } = useWorkspaceIssuesStore(
+    const { openInviteMemberDialog } = useWorkspaceMembersStore();
+    
+    const { team, members, updatingIssues, performUpdateAssignee } = useWorkspaceIssuesStore(
         useShallow((state) => ({
+            team: state.team,
             members: state.team?.members || [],
             updatingIssues: state.updatingIssues,
             performUpdateAssignee: state.performUpdateAssignee,
         })),
     );
-
+    
     const isUpdating = updatingIssues.has(issueId);
 
     useEffect(() => {
@@ -55,7 +59,7 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
                             <AvatarFallback>{currentAssignee.name[0]}</AvatarFallback>
                         </Avatar>
                     ) : (
-                        <CircleUserRound className="size-5 text-zinc-600" />
+                        <CircleUserRound className="size-6 text-zinc-600" />
                     )}
                 </button>
             </DropdownMenuTrigger>
@@ -99,10 +103,12 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
                 ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>Nouveau membre</DropdownMenuLabel>
-                <DropdownMenuItem disabled>
+                <DropdownMenuItem onClick={() => {
+                    openInviteMemberDialog({ teamId: team?.id });
+                }}>
                     <div className="flex items-center gap-2">
                         <Send className="size-4" />
-                        <span>Inviter et assigner...</span>
+                        <span>Inviter et assigner</span>
                     </div>
                 </DropdownMenuItem>
             </DropdownMenuContent>

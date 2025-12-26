@@ -74,7 +74,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::get('/{team:identifier}/members', [WorkspaceTeamController::class, 'members'])->name('members');
                 // Route::put('/{team}', [WorkspaceTeamController::class, 'update'])->name('update');
                 // Route::delete('/{team}', [WorkspaceTeamController::class, 'destroy'])->name('destroy');
-                // Route::post('/{team}/invite', [WorkspaceTeamController::class, 'invite'])->name('invite');
+                Route::post('/{team}/invite', [WorkspaceTeamController::class, 'invite'])->name('invite');
                 Route::post('/{team}/leave', [WorkspaceTeamController::class, 'leave'])->name('leave');
                 // Route::delete('/{team}/remove/{user}', [WorkspaceTeamController::class, 'removeMember'])->name('remove-member');
                 // Route::post('/{team}/join', [WorkspaceTeamController::class, 'join'])->name('join');

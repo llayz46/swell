@@ -43,6 +43,11 @@ class Team extends Model
         return $this->hasMany(Issue::class);
     }
 
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(TeamInvitation::class);
+    }
+
     public function addMember(User $user, string $role = 'team-member'): void
     {
         $this->members()->attach($user->id, [

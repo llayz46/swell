@@ -103,6 +103,20 @@ class SharedPropsService
     }
 
     /**
+     * Get workspace members (only for workspace routes).
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|null
+     */
+    public function getWorkspaceMembers(Request $request)
+    {
+        if (! $request->routeIs('workspace.*')) {
+            return null;
+        }
+
+        return $this->workspaceService->getWorkspaceMembers();
+    }
+
+    /**
      * Clear all Swell configuration caches.
      */
     public function clearAllCaches(): void
@@ -110,5 +124,6 @@ class SharedPropsService
         Cache::forget('swell_config');
         Cache::forget('infoBanner');
         $this->categoryCacheService->clearCache();
+        $this->workspaceService->clearWorkspaceMembersCache();
     }
 }
