@@ -3,6 +3,7 @@ import { create } from 'zustand';
 
 type WorkspaceMembersStore = {
     members: WorkspaceMember[];
+    roles: string[];
     inviteMemberDialogOpen: boolean;
     
     openInviteMemberDialog: (options?: { teamId?: number; }) => void;
@@ -13,6 +14,7 @@ type WorkspaceMembersStore = {
 
 export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get) => ({
     members: [],
+    roles: ['team-lead', 'team-member'],
     inviteMemberDialogOpen: false,
     inviteMemberTeamId: null,
     

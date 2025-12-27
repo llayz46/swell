@@ -3,6 +3,7 @@
 namespace App\Modules\Workspace\database\factories;
 
 use App\Models\User;
+use App\Modules\Workspace\Enums\WorkspaceRole;
 use App\Modules\Workspace\Models\Team;
 use App\Modules\Workspace\Models\TeamInvitation;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,7 +26,7 @@ class TeamInvitationFactory extends Factory
             'team_id' => Team::factory(),
             'user_id' => User::factory(),
             'invited_by' => User::factory(),
-            'role' => $this->faker->randomElement(['team-lead', 'team-member']),
+            'role' => $this->faker->randomElement(WorkspaceRole::values()),
             'message' => $this->faker->optional(0.7)->sentence(),
             'status' => 'pending',
             'expires_at' => $this->faker->optional(0.3)->dateTimeBetween('now', '+30 days'),
@@ -38,7 +39,7 @@ class TeamInvitationFactory extends Factory
     public function asLead(): static
     {
         return $this->state(fn (array $attributes) => [
-            'role' => 'team-lead',
+            'role' => WorkspaceRole::TeamLead->value,
         ]);
     }
 
@@ -48,7 +49,7 @@ class TeamInvitationFactory extends Factory
     public function asMember(): static
     {
         return $this->state(fn (array $attributes) => [
-            'role' => 'team-member',
+            'role' => WorkspaceRole::TeamMember->value,
         ]);
     }
 

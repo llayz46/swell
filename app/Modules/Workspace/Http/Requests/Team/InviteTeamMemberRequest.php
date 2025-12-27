@@ -3,8 +3,10 @@
 namespace App\Modules\Workspace\Http\Requests\Team;
 
 use App\Models\User;
+use App\Modules\Workspace\Enums\WorkspaceRole;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class InviteTeamMemberRequest extends FormRequest
 {
@@ -17,7 +19,7 @@ class InviteTeamMemberRequest extends FormRequest
     {
         if (! $this->has('role')) {
             $this->merge([
-                'role' => 'team-member',
+                'role' => WorkspaceRole::TeamMember->value,
             ]);
         }
     }
@@ -54,7 +56,7 @@ class InviteTeamMemberRequest extends FormRequest
             'role' => [
                 'required',
                 'string',
-                'in:team-lead,team-member',
+                Rule::in(WorkspaceRole::values()),
             ],
             'message' => [
                 'nullable',
@@ -73,7 +75,7 @@ class InviteTeamMemberRequest extends FormRequest
 
             'role.required' => 'Oups ! Veuillez sélectionner un rôle pour ce membre.',
             'role.string' => 'Hmm, quelque chose ne va pas avec le rôle sélectionné.',
-            'role.in' => 'Le rôle doit être "team-lead" ou "team-member".',
+            'role.in' => 'Le rôle sélectionné n\'est pas valide.',
 
             'message.string' => 'Hmm, quelque chose ne va pas avec le message.',
             'message.max' => 'Le message est un peu trop long. Essayez de le raccourcir (500 caractères max).',

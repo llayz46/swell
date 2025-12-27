@@ -3,6 +3,8 @@
 namespace App\Modules\Workspace\Models;
 
 use App\Models\User;
+use App\Modules\Workspace\Enums\WorkspaceRole;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,12 +14,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Issue extends Model
 {
     use HasFactory;
-    
+
     protected static function newFactory()
     {
         return \App\Modules\Workspace\database\factories\IssueFactory::new();
     }
-    
+
     protected $fillable = [
         'identifier',
         'title',
@@ -30,11 +32,11 @@ class Issue extends Model
         'due_date',
         'rank',
     ];
-    
+
     protected $casts = [
         'due_date' => 'datetime',
     ];
-    
+
     public function status(): BelongsTo
     {
         return $this->belongsTo(IssueStatus::class, 'status_id');
@@ -74,7 +76,26 @@ class Issue extends Model
     {
         return $this->hasMany(InboxItem::class);
     }
-    
+
+    /**
+     * Scope to eager load all common issue relations with optimized workspace roles.
+     */
+    public function scopeWithFullRelations(Builder $query): Builder
+    {
+        $workspaceRoleNames = ['workspace-admin', ...WorkspaceRole::values()];
+
+        return $query->with([
+            'status',
+            'priority',
+            'labels',
+            'creator',
+            'team',
+            'assignee' => fn ($q) => $q->with([
+                'roles' => fn ($roleQuery) => $roleQuery->whereIn('name', $workspaceRoleNames),
+            ]),
+        ]);
+    }
+
     public static function generateIdentifier(): string
     {
         $prefix = config('swell.workspace.identifier_prefix', 'WS');

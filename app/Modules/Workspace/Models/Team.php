@@ -3,6 +3,7 @@
 namespace App\Modules\Workspace\Models;
 
 use App\Models\User;
+use App\Modules\Workspace\Enums\WorkspaceRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -34,7 +35,7 @@ class Team extends Model
     public function leads(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'team_user')
-            ->wherePivot('role', 'team-lead')
+            ->wherePivot('role', WorkspaceRole::TeamLead->value)
             ->withPivot('role', 'joined_at');
     }
 
@@ -48,10 +49,10 @@ class Team extends Model
         return $this->hasMany(TeamInvitation::class);
     }
 
-    public function addMember(User $user, string $role = 'team-member'): void
+    public function addMember(User $user, ?string $role = null): void
     {
         $this->members()->attach($user->id, [
-            'role' => $role,
+            'role' => $role ?? WorkspaceRole::TeamMember->value,
             'joined_at' => now(),
         ]);
     }
@@ -65,7 +66,7 @@ class Team extends Model
     {
         return $this->members()
             ->where('users.id', $user->id)
-            ->wherePivot('role', 'team-lead')
+            ->wherePivot('role', WorkspaceRole::TeamLead->value)
             ->exists();
     }
 
@@ -101,12 +102,12 @@ class Team extends Model
 
         // Rétrograder le lead actuel en membre
         $this->members()->updateExistingPivot($fromUser->id, [
-            'role' => 'team-member',
+            'role' => WorkspaceRole::TeamMember->value,
         ]);
 
         // Promouvoir le nouveau lead
         $this->members()->updateExistingPivot($toUser->id, [
-            'role' => 'team-lead',
+            'role' => WorkspaceRole::TeamLead->value,
         ]);
     }
 
@@ -120,7 +121,7 @@ class Team extends Model
         }
 
         $this->members()->updateExistingPivot($user->id, [
-            'role' => 'team-lead',
+            'role' => WorkspaceRole::TeamLead->value,
         ]);
     }
 
@@ -134,7 +135,7 @@ class Team extends Model
         }
 
         $this->members()->updateExistingPivot($user->id, [
-            'role' => 'team-member',
+            'role' => WorkspaceRole::TeamMember->value,
         ]);
     }
 }

@@ -21,7 +21,7 @@ class WorkspaceIssueController extends Controller
     public function index()
     {
         return Inertia::render('workspace/issues/index', [
-            'issues' => Issue::paginate(10),
+            'issues' => Issue::withFullRelations()->paginate(10),
         ]);
     }
 

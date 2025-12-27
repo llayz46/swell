@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Modules\Review\Models\Review;
 use App\Modules\Wishlist\Models\Wishlist;
+use App\Modules\Workspace\Enums\WorkspaceRole;
 use App\Modules\Workspace\Models\Team;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -108,6 +109,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isWorkspaceUser(): bool
     {
-        return $this->hasAnyRole(['workspace-admin', 'team-lead', 'team-member']);
+        return $this->hasAnyRole(['workspace-admin', ...WorkspaceRole::values()]);
     }
 }

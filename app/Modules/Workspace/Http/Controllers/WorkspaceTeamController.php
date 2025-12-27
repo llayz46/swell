@@ -49,7 +49,7 @@ class WorkspaceTeamController extends Controller
         $this->authorize('view', $team);
 
         $query = Issue::query()
-            ->with(['status', 'priority', 'assignee', 'labels', 'creator', 'priority'])
+            ->withFullRelations()
             ->where('team_id', $team->id)
             ->orderBy('rank');
 

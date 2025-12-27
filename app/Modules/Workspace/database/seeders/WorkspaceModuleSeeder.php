@@ -3,6 +3,7 @@
 namespace App\Modules\Workspace\Database\Seeders;
 
 use App\Models\User;
+use App\Modules\Workspace\Enums\WorkspaceRole;
 use App\Modules\Workspace\Models\InboxItem;
 use App\Modules\Workspace\Models\Issue;
 use App\Modules\Workspace\Models\IssueLabel;
@@ -87,7 +88,7 @@ class WorkspaceModuleSeeder extends Seeder
         $workspaceAdmin->syncPermissions($allPermissions);
 
         // Team Lead
-        $teamLead = Role::firstOrCreate(['name' => 'team-lead']);
+        $teamLead = Role::firstOrCreate(['name' => WorkspaceRole::TeamLead->value]);
         $teamLead->syncPermissions([
             'workspace.access',
             'workspace.teams.view',
@@ -104,7 +105,7 @@ class WorkspaceModuleSeeder extends Seeder
         ]);
 
         // Team Member
-        $teamMember = Role::firstOrCreate(['name' => 'team-member']);
+        $teamMember = Role::firstOrCreate(['name' => WorkspaceRole::TeamMember->value]);
         $teamMember->syncPermissions([
             'workspace.access',
             'workspace.teams.view',
@@ -213,7 +214,7 @@ class WorkspaceModuleSeeder extends Seeder
                     'email' => $leadData['email'],
                 ],
             );
-            $lead->assignRole('team-lead');
+            $lead->assignRole(WorkspaceRole::TeamLead->value);
             $users->push($lead);
         }
 
@@ -243,7 +244,7 @@ class WorkspaceModuleSeeder extends Seeder
                     'email' => $memberData['email'],
                 ]
             );
-            $member->assignRole('team-member');
+            $member->assignRole(WorkspaceRole::TeamMember->value);
             $users->push($member);
         }
 
@@ -255,8 +256,8 @@ class WorkspaceModuleSeeder extends Seeder
         $this->command->info('Creating teams...');
 
         $teams = collect();
-        $leads = $users->filter(fn ($u) => $u->hasRole('team-lead'));
-        $members = $users->filter(fn ($u) => $u->hasRole('team-member'));
+        $leads = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::TeamLead->value));
+        $members = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::TeamMember->value));
 
         $teamsData = [
             [
@@ -328,13 +329,13 @@ class WorkspaceModuleSeeder extends Seeder
             if ($team->members()->count() === 0) {
                 if ($leadsList->count() > 0) {
                     $lead = $leadsList[$index % $leadsList->count()];
-                    $team->addMember($lead, 'team-lead');
+                    $team->addMember($lead, WorkspaceRole::TeamLead->value);
                 }
 
                 // Assigner des membres
                 for ($i = 0; $i < $teamData['memberCount']; $i++) {
                     if ($memberIndex < $availableMembers->count()) {
-                        $team->addMember($availableMembers[$memberIndex], 'team-member');
+                        $team->addMember($availableMembers[$memberIndex], WorkspaceRole::TeamMember->value);
                         $memberIndex++;
                     }
                 }
@@ -402,7 +403,7 @@ class WorkspaceModuleSeeder extends Seeder
         $invitations = collect();
 
         $workspaceAdmin = $users->firstWhere('email', 'workspace-admin@example.com');
-        $teamMembers = $users->filter(fn ($u) => $u->hasRole('team-member'));
+        $teamMembers = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::TeamMember->value));
 
         // Créer plusieurs invitations pending pour différents utilisateurs
         foreach ($teams as $team) {
@@ -419,7 +420,7 @@ class WorkspaceModuleSeeder extends Seeder
                         'team_id' => $team->id,
                         'user_id' => $workspaceAdmin->id,
                         'invited_by' => $teamLead->id,
-                        'role' => 'team-member',
+                        'role' => WorkspaceRole::TeamMember->value,
                         'message' => "Nous aimerions que tu rejoignes l'équipe {$team->name} !",
                         'status' => 'pending',
                         'expires_at' => now()->addDays(rand(3, 14)),
@@ -440,7 +441,7 @@ class WorkspaceModuleSeeder extends Seeder
                             'team_id' => $team->id,
                             'user_id' => $member->id,
                             'invited_by' => $teamLead->id,
-                            'role' => rand(0, 100) < 90 ? 'team-member' : 'team-lead',
+                            'role' => rand(0, 100) < 90 ? WorkspaceRole::TeamMember->value : WorkspaceRole::TeamLead->value,
                             'expires_at' => now()->addDays(rand(5, 30)),
                         ])
                     );
@@ -451,7 +452,7 @@ class WorkspaceModuleSeeder extends Seeder
                             'team_id' => $team->id,
                             'user_id' => $member->id,
                             'invited_by' => $teamLead->id,
-                            'role' => 'team-member',
+                            'role' => WorkspaceRole::TeamMember->value,
                         ])
                     );
                 } elseif ($statusChoice < 90) {
@@ -461,7 +462,7 @@ class WorkspaceModuleSeeder extends Seeder
                             'team_id' => $team->id,
                             'user_id' => $member->id,
                             'invited_by' => $teamLead->id,
-                            'role' => 'team-member',
+                            'role' => WorkspaceRole::TeamMember->value,
                         ])
                     );
                 } else {
@@ -471,7 +472,7 @@ class WorkspaceModuleSeeder extends Seeder
                             'team_id' => $team->id,
                             'user_id' => $member->id,
                             'invited_by' => $teamLead->id,
-                            'role' => 'team-member',
+                            'role' => WorkspaceRole::TeamMember->value,
                         ])
                     );
                 }

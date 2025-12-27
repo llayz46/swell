@@ -8,12 +8,14 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Textarea } from '@/components/ui/textarea';
 import { CheckIcon, ChevronsUpDown, LoaderCircle } from 'lucide-react';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
+import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { FormEventHandler, useEffect, useState } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
 import type { SharedData } from '@/types';
 
 type InviteMemberFormData = {
+    role: string | null;
     team_id: number | null;
     user_id: number | null;
     message: string;
@@ -22,15 +24,18 @@ type InviteMemberFormData = {
 export function InviteMemberDialog() {
     const { user } = usePage<SharedData>().props.auth; 
     const [memberDropdownOpen, setMemberDropdownOpen] = useState<boolean>(false);
+    const [roleDropdownOpen, setRoleDropdownOpen] = useState<boolean>(false);
 
     const { 
         members,
+        roles,
         inviteMemberDialogOpen,
         closeInviteMemberDialog,
         inviteMemberTeamId
     } = useWorkspaceMembersStore();
 
     const { data, setData, post, processing, errors, reset } = useForm<InviteMemberFormData>({
+        role: null,
         team_id: null,
         user_id: null,
         message: ''
@@ -44,6 +49,8 @@ export function InviteMemberDialog() {
         ? members.filter((m) => !m.teams.some(team => team.id === inviteMemberTeamId) && m.id !== user.id)
         : members.filter((m) => m.id !== user.id);
     const selectedMember = filteredMembers.find((m) => m.id === data.user_id);
+    
+    const selectedRole = data.role;
     
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -63,7 +70,7 @@ export function InviteMemberDialog() {
             },
         });
     }
-
+    
     return (
         <Dialog open={inviteMemberDialogOpen} onOpenChange={closeInviteMemberDialog}>
             <DialogContent className="shadow-dialog flex max-h-[calc(100vh-32px)] flex-col gap-0 overflow-y-visible border-transparent p-0 sm:max-w-xl [&>button:last-child]:top-3.5">
@@ -74,76 +81,119 @@ export function InviteMemberDialog() {
                 <div className="overflow-y-auto">
                     <div className="pt-4">
                         <form className="space-y-4 *:not-last:px-6" onSubmit={submit}>
-                            <div className="*:not-first:mt-2">
-                                <Label htmlFor="user_id">Membre</Label>
-                                <Popover open={memberDropdownOpen} onOpenChange={setMemberDropdownOpen} modal={true}>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            role="combobox"
-                                            aria-expanded={memberDropdownOpen}
-                                            className="w-full justify-between"
-                                            disabled={processing}
-                                        >
-                                            {selectedMember ? (
-                                                <div className="flex items-center gap-2">
-                                                    <Avatar className="size-5">
-                                                        <AvatarImage src={selectedMember.avatar_url} alt={selectedMember.name} />
-                                                        <AvatarFallback className="text-xs">
-                                                            {selectedMember.name
-                                                                .split(' ')
-                                                                .map((n) => n[0])
-                                                                .join('')
-                                                                .toUpperCase()}
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                    {selectedMember.name}
-                                                </div>
-                                            ) : (
-                                                'Sélectionnez un membre'
-                                            )}
-                                            <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-full min-w-(--radix-popper-anchor-width) border-input p-0" align="start">
-                                        <Command>
-                                            <CommandInput placeholder="Rechercher un membre..." />
-                                            <CommandList>
-                                                <CommandEmpty>Aucun membre trouvé.</CommandEmpty>
-                                                <CommandGroup>
-                                                    {filteredMembers.map((member) => (
-                                                        <CommandItem
-                                                            key={member.id}
-                                                            value={member.name}
-                                                            keywords={[member.name, member.email]}
-                                                            onSelect={() => {
-                                                                setData('user_id', member.id);
-                                                                setMemberDropdownOpen(false);
-                                                            }}
-                                                            className="flex items-center justify-between"
-                                                        >
-                                                            <div className="flex items-center gap-2">
-                                                                <Avatar className="size-5">
-                                                                    <AvatarImage src={member.avatar_url} alt={member.name} />
-                                                                    <AvatarFallback className="text-xs">
-                                                                        {member.name
-                                                                            .split(' ')
-                                                                            .map((n) => n[0])
-                                                                            .join('')
-                                                                            .toUpperCase()}
-                                                                    </AvatarFallback>
-                                                                </Avatar>
-                                                                {member.name}
-                                                            </div>
-                                                            {data.user_id === member.id && <CheckIcon size={16} />}
-                                                        </CommandItem>
-                                                    ))}
-                                                </CommandGroup>
-                                            </CommandList>
-                                        </Command>
-                                    </PopoverContent>
-                                </Popover>
-                                <InputError message={errors.user_id} />
+                            <div className="grid grid-cols-5 gap-3">
+                                <div className="*:not-first:mt-2 col-span-3">
+                                    <Label htmlFor="user_id">Membre</Label>
+                                    <Popover open={memberDropdownOpen} onOpenChange={setMemberDropdownOpen} modal={true}>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                role="combobox"
+                                                aria-expanded={memberDropdownOpen}
+                                                className="w-full justify-between"
+                                                disabled={processing}
+                                            >
+                                                {selectedMember ? (
+                                                    <div className="flex items-center gap-2">
+                                                        <Avatar className="size-5">
+                                                            <AvatarImage src={selectedMember.avatar_url} alt={selectedMember.name} />
+                                                            <AvatarFallback className="text-xs">
+                                                                {selectedMember.name
+                                                                    .split(' ')
+                                                                    .map((n) => n[0])
+                                                                    .join('')
+                                                                    .toUpperCase()}
+                                                            </AvatarFallback>
+                                                        </Avatar>
+                                                        {selectedMember.name}
+                                                    </div>
+                                                ) : (
+                                                    'Sélectionnez un membre'
+                                                )}
+                                                <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-full min-w-(--radix-popper-anchor-width) border-input p-0" align="start">
+                                            <Command>
+                                                <CommandInput placeholder="Rechercher un membre..." />
+                                                <CommandList>
+                                                    <CommandEmpty>Aucun membre trouvé.</CommandEmpty>
+                                                    <CommandGroup>
+                                                        {filteredMembers.map((member) => (
+                                                            <CommandItem
+                                                                key={member.id}
+                                                                value={member.name}
+                                                                keywords={[member.name, member.email]}
+                                                                onSelect={() => {
+                                                                    setData('user_id', member.id);
+                                                                    setMemberDropdownOpen(false);
+                                                                }}
+                                                                className="flex items-center justify-between"
+                                                            >
+                                                                <div className="flex items-center gap-2">
+                                                                    <Avatar className="size-5">
+                                                                        <AvatarImage src={member.avatar_url} alt={member.name} />
+                                                                        <AvatarFallback className="text-xs">
+                                                                            {member.name
+                                                                                .split(' ')
+                                                                                .map((n) => n[0])
+                                                                                .join('')
+                                                                                .toUpperCase()}
+                                                                        </AvatarFallback>
+                                                                    </Avatar>
+                                                                    {member.name}
+                                                                </div>
+                                                                {data.user_id === member.id && <CheckIcon size={16} />}
+                                                            </CommandItem>
+                                                        ))}
+                                                    </CommandGroup>
+                                                </CommandList>
+                                            </Command>
+                                        </PopoverContent>
+                                    </Popover>
+                                    <InputError message={errors.user_id} />
+                                </div>
+
+                                <div className="*:not-first:mt-2 col-span-2">
+                                    <Label htmlFor="role_id">Rôle</Label>
+                                    <Popover open={roleDropdownOpen} onOpenChange={setRoleDropdownOpen} modal={true}>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                role="combobox"
+                                                aria-expanded={roleDropdownOpen}
+                                                className="w-full justify-between"
+                                                disabled={processing}
+                                            >
+                                                {selectedRole ? formatWorkspaceRole(selectedRole) : 'Sélectionnez un rôle'}
+                                                <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-full min-w-(--radix-popper-anchor-width) border-input p-0" align="start">
+                                            <Command>
+                                                <CommandList>
+                                                    <CommandGroup>
+                                                        {roles.map((role, index) => (
+                                                            <CommandItem
+                                                                key={index}
+                                                                value={role}
+                                                                onSelect={() => {
+                                                                    setData('role', role);
+                                                                    setRoleDropdownOpen(false);
+                                                                }}
+                                                                className="flex items-center justify-between"
+                                                            >
+                                                                {formatWorkspaceRole(role)}
+                                                                {data.role === role && <CheckIcon size={16} />}
+                                                            </CommandItem>
+                                                        ))}
+                                                    </CommandGroup>
+                                                </CommandList>
+                                            </Command>
+                                        </PopoverContent>
+                                    </Popover>
+                                    <InputError message={errors.role} />
+                                </div>
                             </div>
 
                             <div className="*:not-first:mt-2">

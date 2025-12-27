@@ -3,6 +3,7 @@
 namespace App\Modules\Workspace\Services;
 
 use App\Models\User;
+use App\Modules\Workspace\Enums\WorkspaceRole;
 use App\Modules\Workspace\Http\Resources\TeamResource;
 use App\Modules\Workspace\Http\Resources\WorkspaceMemberResource;
 use Illuminate\Support\Facades\Cache;
@@ -58,12 +59,22 @@ class WorkspaceService
     {
         return Cache::remember('workspace-members', 60, function () {
             $members = User::query()
-                ->whereHas('roles', fn ($q) => $q->whereIn('name', ['workspace-admin', 'team-lead', 'team-member']))
+                ->whereHas('roles', fn ($q) => $q->whereIn('name', ['workspace-admin', ...WorkspaceRole::values()]))
                 ->with(['roles', 'teams'])
                 ->get();
 
             return WorkspaceMemberResource::collection($members);
         });
+    }
+
+    /**
+     * Get workspace roles (static enum values).
+     *
+     * @return array<int, array{value: string, label: string}>
+     */
+    public function getWorkspaceRoles(): array
+    {
+        return WorkspaceRole::toArray();
     }
 
     /**
