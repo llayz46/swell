@@ -42,7 +42,6 @@ class TeamInvitationController extends Controller
     {
         $user = auth()->user();
 
-        // Check if the invitation belongs to the authenticated user
         if ($invitation->user_id !== $user->id) {
             abort(403, 'Cette invitation ne vous appartient pas.');
         }

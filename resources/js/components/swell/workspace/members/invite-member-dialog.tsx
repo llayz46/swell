@@ -108,7 +108,7 @@ export function InviteMemberDialog() {
                                     <PopoverContent className="w-full min-w-(--radix-popper-anchor-width) border-input p-0" align="start">
                                         <Command>
                                             <CommandInput placeholder="Rechercher un membre..." />
-                                            <CommandList >
+                                            <CommandList>
                                                 <CommandEmpty>Aucun membre trouvé.</CommandEmpty>
                                                 <CommandGroup>
                                                     {filteredMembers.map((member) => (
@@ -159,7 +159,6 @@ export function InviteMemberDialog() {
                                 />
                                 <InputError message={errors.message} />
                             </div>
-
 
                             <DialogFooter className="border-t px-6 py-4">
                                 <DialogClose asChild>
