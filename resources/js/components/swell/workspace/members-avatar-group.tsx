@@ -23,7 +23,7 @@ export function MembersAvatarGroup({ members, maxDisplay = 3 }: MembersAvatarGro
                 <TooltipTrigger asChild>
                     <div className="flex -space-x-2">
                         {displayedMembers.map((member, index) => (
-                            <Avatar key={index} className="size-6 border-2 border-background dark:border-sidebar">
+                            <Avatar key={index} className="size-6 border-2 border-workspace">
                                 <AvatarImage src={getStorageUrl(member.avatar_url)} alt={member.name} />
                                 <AvatarFallback className="text-xs">{member.name[0]}</AvatarFallback>
                             </Avatar>
