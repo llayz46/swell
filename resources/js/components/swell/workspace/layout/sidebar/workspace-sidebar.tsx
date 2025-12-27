@@ -54,7 +54,7 @@ export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: SidebarPro
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <DropdownMenu>
-                            <div className="flex w-full items-center justify-between pt-2">
+                            <div className="flex w-full items-center gap-2 justify-between pt-2">
                                 <DropdownMenuTrigger asChild>
                                     <SidebarMenuButton
                                         size="lg"
