@@ -64,7 +64,7 @@ export function Filter() {
                                 >
                                     <span className="flex items-center gap-2">
                                         <User className="size-4 text-muted-foreground" />
-                                        Attribution
+                                        Assignation
                                     </span>
                                     <div className="flex items-center">
                                         {filters.assignee.length > 0 && (
@@ -174,7 +174,7 @@ export function Filter() {
                                     <CommandItem
                                         key={member.id}
                                         value={member.name}
-                                        onSelect={() => toggleFilter('assignee', member.id)}
+                                        onSelect={() => toggleFilter('assignee', member.id.toString())}
                                         className="flex items-center justify-between"
                                     >
                                         <div className="flex items-center gap-2">
