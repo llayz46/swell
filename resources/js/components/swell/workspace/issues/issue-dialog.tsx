@@ -174,7 +174,7 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="*:not-first:mt-2">
                                     <Label htmlFor="status">Statut</Label>
-                                    <Popover open={statusOpen} onOpenChange={setStatusOpen}>
+                                    <Popover open={statusOpen} onOpenChange={setStatusOpen} modal={true}>
                                         <PopoverTrigger asChild>
                                             <Button
                                                 variant="outline"
@@ -228,7 +228,7 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
 
                                 <div className="*:not-first:mt-2">
                                     <Label htmlFor="priority">Priorité</Label>
-                                    <Popover open={priorityOpen} onOpenChange={setPriorityOpen}>
+                                    <Popover open={priorityOpen} onOpenChange={setPriorityOpen} modal={true}>
                                         <PopoverTrigger asChild>
                                             <Button
                                                 variant="outline"
@@ -283,7 +283,7 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
 
                             <div className="*:not-first:mt-2">
                                 <Label htmlFor="assignee">Assigné à</Label>
-                                <Popover open={assigneeOpen} onOpenChange={setAssigneeOpen}>
+                                <Popover open={assigneeOpen} onOpenChange={setAssigneeOpen} modal={true}>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
@@ -371,7 +371,7 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
 
                             <div className="*:not-first:mt-2">
                                 <Label htmlFor="labels">Étiquettes</Label>
-                                <Popover open={labelsOpen} onOpenChange={setLabelsOpen}>
+                                <Popover open={labelsOpen} onOpenChange={setLabelsOpen} modal={true}>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"

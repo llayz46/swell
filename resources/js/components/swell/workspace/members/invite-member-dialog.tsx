@@ -76,7 +76,7 @@ export function InviteMemberDialog() {
                         <form className="space-y-4 *:not-last:px-6" onSubmit={submit}>
                             <div className="*:not-first:mt-2">
                                 <Label htmlFor="user_id">Membre</Label>
-                                <Popover open={memberDropdownOpen} onOpenChange={setMemberDropdownOpen}>
+                                <Popover open={memberDropdownOpen} onOpenChange={setMemberDropdownOpen} modal={true}>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
