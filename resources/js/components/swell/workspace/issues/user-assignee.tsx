@@ -108,7 +108,7 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
                 }}>
                     <div className="flex items-center gap-2">
                         <Send className="size-4" />
-                        <span>Inviter et assigner</span>
+                        <span>Inviter</span>
                     </div>
                 </DropdownMenuItem>
             </DropdownMenuContent>
