@@ -122,11 +122,11 @@ class WorkspaceModuleSeeder extends Seeder
 
         $statuses = [
             ['slug' => 'backlog', 'name' => 'Backlog', 'color' => '#ec4899', 'icon_type' => 'BacklogIcon', 'order' => 1],
-            ['slug' => 'todo', 'name' => 'To Do', 'color' => '#f97316', 'icon_type' => 'ToDoIcon', 'order' => 2],
-            ['slug' => 'in-progress', 'name' => 'In Progress', 'color' => '#facc15', 'icon_type' => 'InProgressIcon', 'order' => 3],
-            ['slug' => 'technical-review', 'name' => 'Technical Review', 'color' => '#22c55e', 'icon_type' => 'TechnicalReviewIcon', 'order' => 4],
-            ['slug' => 'paused', 'name' => 'Paused', 'color' => '#0ea5e9', 'icon_type' => 'PausedIcon', 'order' => 5],
-            ['slug' => 'completed', 'name' => 'Completed', 'color' => '#8b5cf6', 'icon_type' => 'CompletedIcon', 'order' => 6],
+            ['slug' => 'todo', 'name' => 'A faire', 'color' => '#f97316', 'icon_type' => 'ToDoIcon', 'order' => 2],
+            ['slug' => 'in-progress', 'name' => 'En cours', 'color' => '#facc15', 'icon_type' => 'InProgressIcon', 'order' => 3],
+            ['slug' => 'technical-review', 'name' => 'Révision technique', 'color' => '#22c55e', 'icon_type' => 'TechnicalReviewIcon', 'order' => 4],
+            ['slug' => 'paused', 'name' => 'En pause', 'color' => '#0ea5e9', 'icon_type' => 'PausedIcon', 'order' => 5],
+            ['slug' => 'completed', 'name' => 'Terminé', 'color' => '#8b5cf6', 'icon_type' => 'CompletedIcon', 'order' => 6],
         ];
 
         return collect($statuses)->map(function ($status) {
@@ -142,11 +142,11 @@ class WorkspaceModuleSeeder extends Seeder
         $this->command->info('Creating issue priorities...');
 
         $priorities = [
-            ['slug' => 'urgent', 'name' => 'Urgent', 'icon_type' => 'UrgentPriorityIcon', 'order' => 1],
-            ['slug' => 'high', 'name' => 'High', 'icon_type' => 'HighPriorityIcon', 'order' => 2],
-            ['slug' => 'medium', 'name' => 'Medium', 'icon_type' => 'MediumPriorityIcon', 'order' => 3],
-            ['slug' => 'low', 'name' => 'Low', 'icon_type' => 'LowPriorityIcon', 'order' => 4],
-            ['slug' => 'none', 'name' => 'None', 'icon_type' => 'NoPriorityIcon', 'order' => 5],
+            ['slug' => 'none', 'name' => 'Aucune', 'icon_type' => 'NoPriorityIcon', 'order' => 1],
+            ['slug' => 'low', 'name' => 'Faible', 'icon_type' => 'LowPriorityIcon', 'order' => 2],
+            ['slug' => 'medium', 'name' => 'Moyenne', 'icon_type' => 'MediumPriorityIcon', 'order' => 3],
+            ['slug' => 'high', 'name' => 'Haute', 'icon_type' => 'HighPriorityIcon', 'order' => 4],
+            ['slug' => 'urgent', 'name' => 'Urgent', 'icon_type' => 'UrgentPriorityIcon', 'order' => 5],
         ];
 
         return collect($priorities)->map(function ($priority) {
@@ -162,17 +162,17 @@ class WorkspaceModuleSeeder extends Seeder
         $this->command->info('Creating issue labels...');
 
         $labels = [
-            ['slug' => 'ui', 'name' => 'UI', 'color' => '#3b82f6'],
-            ['slug' => 'bug', 'name' => 'Bug', 'color' => '#ef4444'],
-            ['slug' => 'feature', 'name' => 'Feature', 'color' => '#10b981'],
+            ['slug' => 'ui', 'name' => 'Développement UI', 'color' => '#3b82f6'],
+            ['slug' => 'bug', 'name' => 'Correction de Bug', 'color' => '#ef4444'],
+            ['slug' => 'feature', 'name' => 'Nouvelle Fonctionnalité', 'color' => '#10b981'],
             ['slug' => 'documentation', 'name' => 'Documentation', 'color' => '#8b5cf6'],
-            ['slug' => 'refactor', 'name' => 'Refactor', 'color' => '#f59e0b'],
-            ['slug' => 'performance', 'name' => 'Performance', 'color' => '#06b6d4'],
-            ['slug' => 'design', 'name' => 'Design', 'color' => '#ec4899'],
-            ['slug' => 'security', 'name' => 'Security', 'color' => '#f97316'],
-            ['slug' => 'accessibility', 'name' => 'Accessibility', 'color' => '#84cc16'],
-            ['slug' => 'testing', 'name' => 'Testing', 'color' => '#14b8a6'],
-            ['slug' => 'internationalization', 'name' => 'i18n', 'color' => '#a855f7'],
+            ['slug' => 'refactor', 'name' => 'Refactorisation du Code', 'color' => '#f59e0b'],
+            ['slug' => 'performance', 'name' => 'Optimisation des Performances', 'color' => '#06b6d4'],
+            ['slug' => 'design', 'name' => 'Implémentation du Design', 'color' => '#ec4899'],
+            ['slug' => 'security', 'name' => 'Correctif de Sécurité', 'color' => '#f97316'],
+            ['slug' => 'accessibility', 'name' => 'Amélioration de l\'Accessibilité', 'color' => '#84cc16'],
+            ['slug' => 'testing', 'name' => 'Tests Unitaires', 'color' => '#14b8a6'],
+            ['slug' => 'internationalization', 'name' => 'Internationalisation (i18n)', 'color' => '#a855f7'],
         ];
 
         return collect($labels)->map(function ($label) {
