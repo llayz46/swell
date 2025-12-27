@@ -26,7 +26,7 @@ class TeamInvitationFactory extends Factory
             'team_id' => Team::factory(),
             'user_id' => User::factory(),
             'invited_by' => User::factory(),
-            'role' => $this->faker->randomElement(WorkspaceRole::values()),
+            'role' => $this->faker->randomElement(WorkspaceRole::teamRoles()),
             'message' => $this->faker->optional(0.7)->sentence(),
             'status' => 'pending',
             'expires_at' => $this->faker->optional(0.3)->dateTimeBetween('now', '+30 days'),

@@ -52,7 +52,7 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
         performUpdateAssignee(issueId, newAssignee, user);
     };
 
-    const isAdminOrTeamLead = auth.user?.roles?.some(role => role.name === 'team-lead' || role.name === 'workspace-admin') ?? false;
+    const canInvite = auth.user?.roles?.some(role => typeof role !== 'string' && role.name === 'workspace-admin') || team?.role === 'team-lead';
     
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -107,7 +107,7 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
                     </DropdownMenuItem>
                 ))}
                 
-                {isAdminOrTeamLead && (
+                {canInvite && (
                     <>
                         <DropdownMenuSeparator />
                         <DropdownMenuLabel>Nouveau membre</DropdownMenuLabel>

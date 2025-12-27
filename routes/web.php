@@ -51,7 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [LoyaltyController::class, 'index'])->name('loyalty.index');
     });
 
-    Route::middleware(['feature:workspace', 'role:workspace-admin|team-lead|team-member'])
+    Route::middleware(['feature:workspace', 'role:workspace-admin|workspace-lead|workspace-member'])
         ->prefix('workspace')->name('workspace.')->group(function () {
             Route::get('/', WorkspaceDashboardController::class)->name('index');
 

@@ -57,8 +57,8 @@ test('leaving a team unassigns user issues', function () {
     $team = Team::factory()->create();
     $user = User::factory()->create();
 
-    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'team-member']);
-    $user->assignRole('team-member');
+    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'workspace-member']);
+    $user->assignRole('workspace-member');
 
     $team->addMember($user);
 
@@ -81,8 +81,8 @@ test('the last lead cannot leave the team', function () {
     $team = Team::factory()->create();
     $lead = User::factory()->create();
 
-    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'team-lead']);
-    $lead->assignRole('team-lead');
+    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'workspace-lead']);
+    $lead->assignRole('workspace-lead');
 
     $team->addMember($lead, 'team-lead');
 
@@ -101,9 +101,9 @@ test('a lead can leave if there are other leads', function () {
     $lead1 = User::factory()->create();
     $lead2 = User::factory()->create();
 
-    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'team-lead']);
-    $lead1->assignRole('team-lead');
-    $lead2->assignRole('team-lead');
+    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'workspace-lead']);
+    $lead1->assignRole('workspace-lead');
+    $lead2->assignRole('workspace-lead');
 
     $team->addMember($lead1, 'team-lead');
     $team->addMember($lead2, 'team-lead');

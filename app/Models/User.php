@@ -109,6 +109,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isWorkspaceUser(): bool
     {
-        return $this->hasAnyRole(['workspace-admin', ...WorkspaceRole::values()]);
+        return $this->hasAnyRole(['workspace-admin', ...WorkspaceRole::workspaceRoles()]);
     }
 }

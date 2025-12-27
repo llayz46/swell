@@ -87,9 +87,9 @@ class WorkspaceModuleSeeder extends Seeder
         $workspaceAdmin = Role::firstOrCreate(['name' => 'workspace-admin']);
         $workspaceAdmin->syncPermissions($allPermissions);
 
-        // Team Lead
-        $teamLead = Role::firstOrCreate(['name' => WorkspaceRole::TeamLead->value]);
-        $teamLead->syncPermissions([
+        // Workspace Lead
+        $workspaceLead = Role::firstOrCreate(['name' => WorkspaceRole::WorkspaceLead->value]);
+        $workspaceLead->syncPermissions([
             'workspace.access',
             'workspace.teams.view',
             'workspace.teams.create',
@@ -104,9 +104,9 @@ class WorkspaceModuleSeeder extends Seeder
             'workspace.inbox.view',
         ]);
 
-        // Team Member
-        $teamMember = Role::firstOrCreate(['name' => WorkspaceRole::TeamMember->value]);
-        $teamMember->syncPermissions([
+        // Workspace Member
+        $workspaceMember = Role::firstOrCreate(['name' => WorkspaceRole::WorkspaceMember->value]);
+        $workspaceMember->syncPermissions([
             'workspace.access',
             'workspace.teams.view',
             'workspace.issues.view',
@@ -214,7 +214,7 @@ class WorkspaceModuleSeeder extends Seeder
                     'email' => $leadData['email'],
                 ],
             );
-            $lead->assignRole(WorkspaceRole::TeamLead->value);
+            $lead->assignRole(WorkspaceRole::WorkspaceLead->value);
             $users->push($lead);
         }
 
@@ -244,7 +244,7 @@ class WorkspaceModuleSeeder extends Seeder
                     'email' => $memberData['email'],
                 ]
             );
-            $member->assignRole(WorkspaceRole::TeamMember->value);
+            $member->assignRole(WorkspaceRole::WorkspaceMember->value);
             $users->push($member);
         }
 
@@ -256,8 +256,8 @@ class WorkspaceModuleSeeder extends Seeder
         $this->command->info('Creating teams...');
 
         $teams = collect();
-        $leads = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::TeamLead->value));
-        $members = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::TeamMember->value));
+        $leads = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::WorkspaceLead->value));
+        $members = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::WorkspaceMember->value));
 
         $teamsData = [
             [
@@ -403,7 +403,7 @@ class WorkspaceModuleSeeder extends Seeder
         $invitations = collect();
 
         $workspaceAdmin = $users->firstWhere('email', 'workspace-admin@example.com');
-        $teamMembers = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::TeamMember->value));
+        $teamMembers = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::WorkspaceMember->value));
 
         // Créer plusieurs invitations pending pour différents utilisateurs
         foreach ($teams as $team) {
