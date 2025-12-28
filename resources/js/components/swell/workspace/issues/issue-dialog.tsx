@@ -42,7 +42,7 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
 
     const isEditMode = !!issueDialogIssue;
 
-    const { data, setData, post, patch, processing, errors, reset } = useForm<IssueFormData>({
+    const { data, setData, post, patch, processing, errors, reset, clearErrors } = useForm<IssueFormData>({
         title: '',
         description: '',
         status_id: statuses[0]?.id || 0,
@@ -56,11 +56,13 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
     useEffect(() => {
         if (!issueDialogOpen) {
             reset();
+            clearErrors();
         }
-    }, [issueDialogOpen, reset]);
+    }, [issueDialogOpen, reset, clearErrors]);
 
     useEffect(() => {
         if (issueDialogOpen) {
+            clearErrors();
             if (issueDialogIssue) {
                 setData({
                     title: issueDialogIssue.title,
@@ -79,7 +81,7 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
                 }
             }
         }
-    }, [issueDialogOpen, issueDialogIssue, issueDialogStatusId]);
+    }, [issueDialogOpen, issueDialogIssue, issueDialogStatusId, clearErrors]);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
