@@ -111,20 +111,6 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
 
     // Actions d'initialisation
     initialize: ({ team, issues, statuses, priorities, labels, filters, isLead, isMember }) => {
-        const url = new URL(window.location.href);
-        const params = new URLSearchParams(window.location.search);
-
-        let shouldOpenDialog = false;
-        let initialStatusId = null;
-
-        if (url.pathname.endsWith('/new')) {
-            shouldOpenDialog = true;
-            const statusParam = params.get('status');
-            if (statusParam) {
-                initialStatusId = parseInt(statusParam);
-            }
-        }
-
         set((state) => ({
             team,
             issues,
@@ -134,8 +120,8 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
             filters: { ...state.filters, ...filters },
             isLead,
             isMember,
-            issueDialogOpen: shouldOpenDialog,
-            issueDialogStatusId: initialStatusId,
+            issueDialogOpen: state.issueDialogOpen,
+            issueDialogStatusId: state.issueDialogStatusId,
         }));
     },
 
@@ -153,15 +139,6 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
 
     // Actions du dialog d'issue
     openIssueDialog: (options) => {
-        const url = new URL(window.location.href);
-        if (!url.pathname.endsWith('/new')) {
-            url.pathname = url.pathname + '/new';
-        }
-        if (options?.statusId !== undefined) {
-            url.searchParams.set('status', options.statusId.toString());
-        }
-        window.history.pushState({}, '', url.toString());
-
         set({
             issueDialogOpen: true,
             issueDialogIssue: options?.issue || null,
@@ -169,11 +146,6 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         });
     },
     closeIssueDialog: () => {
-        const url = new URL(window.location.href);
-        url.pathname = url.pathname.replace('/new', '');
-        url.searchParams.delete('status');
-        window.history.replaceState({}, '', url.toString());
-
         set({
             issueDialogOpen: false,
             issueDialogIssue: null,

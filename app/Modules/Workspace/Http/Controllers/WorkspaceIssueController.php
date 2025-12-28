@@ -78,7 +78,7 @@ class WorkspaceIssueController extends Controller
     public function update(UpdateIssueRequest $request, Issue $issue)
     {
         $this->authorize('update', $issue);
-
+        
         $validated = $request->validated();
 
         $issue->update([
@@ -90,7 +90,6 @@ class WorkspaceIssueController extends Controller
             'due_date' => $validated['due_date'],
         ]);
 
-        // Update labels
         if (isset($validated['label_ids'])) {
             $issue->labels()->sync($validated['label_ids']);
         }
