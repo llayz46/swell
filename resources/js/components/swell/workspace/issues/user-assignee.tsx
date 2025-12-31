@@ -7,11 +7,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useWorkspaceRole } from '@/hooks/use-workspace-role';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
-import { SharedData } from '@/types';
 import { IssueAssignee } from '@/types/workspace';
-import { usePage } from '@inertiajs/react';
 import { CheckIcon, CircleUserRound, Send, UserIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
@@ -25,7 +24,7 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
     const [open, setOpen] = useState(false);
     const [currentAssignee, setCurrentAssignee] = useState<IssueAssignee | null>(user);
 
-    const { auth } = usePage<SharedData>().props;
+    const { isLead } = useWorkspaceRole();
     const { openInviteMemberDialog } = useWorkspaceMembersStore();
 
     const { team, members, updatingIssues, performUpdateAssignee } = useWorkspaceIssuesStore(
@@ -45,18 +44,12 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
 
     const handleAssigneeChange = (newAssignee: IssueAssignee | null) => {
         setOpen(false);
-        
+
         if (newAssignee?.id === user?.id) return;
 
         setCurrentAssignee(newAssignee);
         performUpdateAssignee(issueId, newAssignee, user);
     };
-
-    const isLead = auth.user?.roles?.some(
-        (role) =>
-            typeof role !== 'string' &&
-            (role.name === 'workspace-admin' || role.name === 'workspace-lead'),
-    );
 
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -110,14 +103,16 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
                         {currentAssignee?.id === member.id && <CheckIcon className="ml-auto size-4" />}
                     </DropdownMenuItem>
                 ))}
-                
+
                 {isLead && (
                     <>
                         <DropdownMenuSeparator />
                         <DropdownMenuLabel>Nouveau membre</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => {
-                            openInviteMemberDialog({ teamId: team?.id });
-                        }}>
+                        <DropdownMenuItem
+                            onClick={() => {
+                                openInviteMemberDialog({ teamId: team?.id });
+                            }}
+                        >
                             <div className="flex items-center gap-2">
                                 <Send className="size-4" />
                                 <span>Inviter</span>

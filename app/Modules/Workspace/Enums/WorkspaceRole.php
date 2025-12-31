@@ -5,6 +5,7 @@ namespace App\Modules\Workspace\Enums;
 enum WorkspaceRole: string
 {
     // Rôles Spatie (globaux au niveau workspace)
+    case WorkspaceAdmin = 'workspace-admin';
     case WorkspaceLead = 'workspace-lead';
     case WorkspaceMember = 'workspace-member';
 
@@ -20,6 +21,7 @@ enum WorkspaceRole: string
     public static function workspaceRoles(): array
     {
         return [
+            self::WorkspaceAdmin->value,
             self::WorkspaceLead->value,
             self::WorkspaceMember->value,
         ];
@@ -51,6 +53,7 @@ enum WorkspaceRole: string
     public function label(): string
     {
         return match ($this) {
+            self::WorkspaceAdmin => 'Admin Workspace',
             self::WorkspaceLead => 'Lead Workspace',
             self::WorkspaceMember => 'Membre Workspace',
             self::TeamLead => 'Chef d\'équipe',
