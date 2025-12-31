@@ -78,6 +78,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::post('/{team}/invite', [WorkspaceTeamController::class, 'invite'])->name('invite');
                 Route::post('/{team}/leave', [WorkspaceTeamController::class, 'leave'])->name('leave');
                 Route::delete('/{team}/remove/{user}', [WorkspaceTeamController::class, 'removeMember'])->name('remove-member');
+                Route::post('/{team}/promote/{user}', [WorkspaceTeamController::class, 'promoteMember'])->name('promote-member');
+                Route::post('/{team}/demote/{user}', [WorkspaceTeamController::class, 'demoteMember'])->name('demote-member');
 
                 // // Transfert de lead (team-lead uniquement)
                 // Route::post('/{team}/transfer-lead', [WorkspaceTeamController::class, 'transferLead'])
@@ -85,14 +87,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 //     ->name('transfer-lead');
 
                 // // Routes admin uniquement (workspace-admin)
-                // Route::middleware('role:workspace-admin')->group(function () {
-                //     Route::post('/{team}/promote/{user}', [WorkspaceTeamController::class, 'promoteMember'])
-                //         ->name('promote-member');
-                //     Route::post('/{team}/demote/{user}', [WorkspaceTeamController::class, 'demoteMember'])
-                //         ->name('demote-member');
-                //     Route::post('/{team}/add-member', [WorkspaceTeamController::class, 'addMemberAsAdmin'])
-                //         ->name('add-member-admin');
-                // });
+                // Route::post('/{team}/add-member', [WorkspaceTeamController::class, 'addMemberAsAdmin'])
+                //     ->name('add-member-admin');
             });
 
             Route::prefix('team-invitations')->name('team-invitations.')->group(function () {

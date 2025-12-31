@@ -52,12 +52,12 @@ export default function Members({ team }: IssuesPageProps) {
 
 function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
     const { isLead } = useWorkspaceRole();
-    const { performRemoveMember } = useWorkspaceMembersStore();
+    const {
+        performPromoteMember,
+        performDemoteMember,
+        performRemoveMember,
+    } = useWorkspaceMembersStore();
     
-    const handleChangeRole = (newRole: 'team-lead' | 'team-member') => {
-        console.log('Change role to:', newRole);
-    };
-
     const handleRemoveMember = (member: TeamMember) => {
         if (!isLead) return toast.error("Vous n'avez pas les droits pour retirer un membre de l'équipe");
         performRemoveMember(team, member);
@@ -95,12 +95,12 @@ function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         {member.role === 'team-member' ? (
-                            <DropdownMenuItem onClick={() => handleChangeRole('team-lead')}>
+                            <DropdownMenuItem onClick={() => performPromoteMember(team, member)}>
                                 <Shield className="mr-2 size-4" />
                                 Promouvoir en lead
                             </DropdownMenuItem>
                         ) : (
-                            <DropdownMenuItem onClick={() => handleChangeRole('team-member')}>
+                            <DropdownMenuItem onClick={() => performDemoteMember(team, member)}>
                                 <ShieldOff className="mr-2 size-4" />
                                 Rétrograder en membre
                             </DropdownMenuItem>

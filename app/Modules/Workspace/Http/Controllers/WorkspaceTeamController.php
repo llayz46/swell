@@ -197,4 +197,56 @@ class WorkspaceTeamController extends Controller
 
         return back();
     }
+
+    /**
+     * Promote a member to team lead.
+     */
+    public function promoteMember(Team $team, \App\Models\User $user)
+    {
+        if (! $team->isMember($user)) {
+            return back()->withErrors([
+                'member' => 'L\'utilisateur n\'est pas membre de cette équipe.',
+            ]);
+        }
+
+        if ($team->isLead($user)) {
+            return back()->withErrors([
+                'member' => 'L\'utilisateur est déjà lead de cette équipe.',
+            ]);
+        }
+
+        $team->promoteMember($user);
+
+        $workspaceService = app(\App\Modules\Workspace\Services\WorkspaceService::class);
+        $workspaceService->clearUserTeamsCache($user);
+        $workspaceService->clearWorkspaceMembersCache();
+
+        return back();
+    }
+
+    /**
+     * Demote a team lead to member.
+     */
+    public function demoteMember(Team $team, \App\Models\User $user)
+    {
+        if (! $team->isLead($user)) {
+            return back()->withErrors([
+                'member' => 'L\'utilisateur n\'est pas lead de cette équipe.',
+            ]);
+        }
+
+        if ($team->leads()->count() === 1) {
+            return back()->withErrors([
+                'member' => 'Impossible de rétrograder le dernier lead de l\'équipe. Veuillez d\'abord promouvoir un autre membre.',
+            ]);
+        }
+
+        $team->demoteLead($user);
+
+        $workspaceService = app(\App\Modules\Workspace\Services\WorkspaceService::class);
+        $workspaceService->clearUserTeamsCache($user);
+        $workspaceService->clearWorkspaceMembersCache();
+
+        return back();
+    }
 }
