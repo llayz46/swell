@@ -45,14 +45,14 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
 
     const handleAssigneeChange = (newAssignee: IssueAssignee | null) => {
         setOpen(false);
-
+        
         if (newAssignee?.id === user?.id) return;
 
         setCurrentAssignee(newAssignee);
         performUpdateAssignee(issueId, newAssignee, user);
     };
 
-    const canInvite = auth.user?.roles?.some(
+    const isLead = auth.user?.roles?.some(
         (role) =>
             typeof role !== 'string' &&
             (role.name === 'workspace-admin' || role.name === 'workspace-lead'),
@@ -111,7 +111,7 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
                     </DropdownMenuItem>
                 ))}
                 
-                {canInvite && (
+                {isLead && (
                     <>
                         <DropdownMenuSeparator />
                         <DropdownMenuLabel>Nouveau membre</DropdownMenuLabel>

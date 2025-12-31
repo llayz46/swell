@@ -112,6 +112,7 @@ class WorkspaceModuleSeeder extends Seeder
             'workspace.issues.view',
             'workspace.issues.create',
             'workspace.issues.update',
+            'workspace.issues.assign',
             'workspace.inbox.view',
         ]);
     }
