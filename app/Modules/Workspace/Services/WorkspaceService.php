@@ -24,7 +24,11 @@ class WorkspaceService
         return Cache::remember("user-teams-{$user->id}", 60, function () use ($user) {
             $teams = $user->teams()
                 ->withCount('members', 'issues')
-                ->get();
+                ->get()
+                ->each(function ($team) {
+                    // L'utilisateur est forcément membre puisqu'on récupère SES équipes
+                    $team->joined = true;
+                });
 
             return TeamResource::collection($teams);
         });
@@ -51,7 +55,7 @@ class WorkspaceService
     }
 
     /**
-     * Get cached workspace members.
+     * Get cached workspace members (admins or users with at least one team).
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
@@ -59,7 +63,10 @@ class WorkspaceService
     {
         return Cache::remember('workspace-members', 60, function () {
             $members = User::query()
-                ->whereHas('roles', fn ($q) => $q->whereIn('name', ['workspace-admin', ...WorkspaceRole::values()]))
+                ->where(function ($query) {
+                    $query->whereHas('roles', fn ($q) => $q->where('name', WorkspaceRole::adminRole()))
+                        ->orWhereHas('teams');
+                })
                 ->with(['roles', 'teams'])
                 ->get();
 

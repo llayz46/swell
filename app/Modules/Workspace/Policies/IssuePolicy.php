@@ -5,6 +5,14 @@ namespace App\Modules\Workspace\Policies;
 use App\Models\User;
 use App\Modules\Workspace\Models\Issue;
 
+/**
+ * Issue Policy - Option A Architecture
+ *
+ * Permissions are now based on:
+ * - workspace-admin (Spatie role) → Has all permissions
+ * - team-lead (pivot role) → Full access to their team's issues
+ * - team-member (pivot role) → Can view/update issues in their team
+ */
 class IssuePolicy
 {
     /**
@@ -12,7 +20,7 @@ class IssuePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('workspace.issues.view');
+        return $user->isWorkspaceUser();
     }
 
     /**
@@ -20,10 +28,6 @@ class IssuePolicy
      */
     public function view(User $user, Issue $issue): bool
     {
-        if (! $user->hasPermissionTo('workspace.issues.view')) {
-            return false;
-        }
-
         return $this->userBelongsToIssueTeam($user, $issue);
     }
 
@@ -32,7 +36,8 @@ class IssuePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('workspace.issues.create');
+        // All workspace users can create issues in their teams
+        return $user->isWorkspaceUser();
     }
 
     /**
@@ -40,10 +45,6 @@ class IssuePolicy
      */
     public function update(User $user, Issue $issue): bool
     {
-        if (! $user->hasPermissionTo('workspace.issues.update')) {
-            return false;
-        }
-
         return $this->userBelongsToIssueTeam($user, $issue);
     }
 
@@ -52,11 +53,15 @@ class IssuePolicy
      */
     public function delete(User $user, Issue $issue): bool
     {
-        if (! $user->hasPermissionTo('workspace.issues.delete')) {
-            return false;
+        // Admins can delete any issue
+        if ($user->isWorkspaceAdmin()) {
+            return true;
         }
 
-        return $this->userBelongsToIssueTeam($user, $issue);
+        // Team leads can delete issues in their team
+        $team = $issue->team;
+
+        return $team && $team->isLead($user);
     }
 
     /**
@@ -64,11 +69,7 @@ class IssuePolicy
      */
     public function restore(User $user, Issue $issue): bool
     {
-        if (! $user->hasPermissionTo('workspace.issues.delete')) {
-            return false;
-        }
-
-        return $this->userBelongsToIssueTeam($user, $issue);
+        return $this->delete($user, $issue);
     }
 
     /**
@@ -76,10 +77,7 @@ class IssuePolicy
      */
     public function assign(User $user, Issue $issue): bool
     {
-        if (! $user->hasPermissionTo('workspace.issues.assign')) {
-            return false;
-        }
-
+        // All team members can assign issues
         return $this->userBelongsToIssueTeam($user, $issue);
     }
 
@@ -89,7 +87,7 @@ class IssuePolicy
     private function userBelongsToIssueTeam(User $user, Issue $issue): bool
     {
         // Workspace admins have access to all issues
-        if ($user->hasRole('workspace-admin')) {
+        if ($user->isWorkspaceAdmin()) {
             return true;
         }
 

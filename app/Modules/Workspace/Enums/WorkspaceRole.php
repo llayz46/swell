@@ -4,27 +4,19 @@ namespace App\Modules\Workspace\Enums;
 
 enum WorkspaceRole: string
 {
-    // Rôles Spatie (globaux au niveau workspace)
+    // Rôle Spatie (global au workspace)
     case WorkspaceAdmin = 'workspace-admin';
-    case WorkspaceLead = 'workspace-lead';
-    case WorkspaceMember = 'workspace-member';
 
     // Rôles Team (pour les pivots team_user)
     case TeamLead = 'team-lead';
     case TeamMember = 'team-member';
 
     /**
-     * Get all workspace-level role values (for Spatie).
-     *
-     * @return array<string>
+     * Get the admin role value (for Spatie).
      */
-    public static function workspaceRoles(): array
+    public static function adminRole(): string
     {
-        return [
-            self::WorkspaceAdmin->value,
-            self::WorkspaceLead->value,
-            self::WorkspaceMember->value,
-        ];
+        return self::WorkspaceAdmin->value;
     }
 
     /**
@@ -54,26 +46,21 @@ enum WorkspaceRole: string
     {
         return match ($this) {
             self::WorkspaceAdmin => 'Admin Workspace',
-            self::WorkspaceLead => 'Lead Workspace',
-            self::WorkspaceMember => 'Membre Workspace',
             self::TeamLead => 'Chef d\'équipe',
-            self::TeamMember => 'Membre de l\'équipe',
+            self::TeamMember => 'Membre',
         };
     }
 
     /**
-     * Get all roles as array for frontend consumption.
+     * Get team roles as array for frontend consumption (for invite dialog).
      *
      * @return array<int, array{value: string, label: string}>
      */
-    public static function toArray(): array
+    public static function teamRolesToArray(): array
     {
-        return array_map(
-            fn (self $role) => [
-                'value' => $role->value,
-                'label' => $role->label(),
-            ],
-            self::cases()
-        );
+        return [
+            ['value' => self::TeamLead->value, 'label' => self::TeamLead->label()],
+            ['value' => self::TeamMember->value, 'label' => self::TeamMember->label()],
+        ];
     }
 }

@@ -57,9 +57,7 @@ test('leaving a team unassigns user issues', function () {
     $team = Team::factory()->create();
     $user = User::factory()->create();
 
-    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'workspace-member']);
-    $user->assignRole('workspace-member');
-
+    // L'utilisateur est ajouté comme membre de la team (pas besoin de rôle Spatie)
     $team->addMember($user);
 
     $issue = Issue::factory()->create([
@@ -81,9 +79,7 @@ test('the last lead cannot leave the team', function () {
     $team = Team::factory()->create();
     $lead = User::factory()->create();
 
-    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'workspace-lead']);
-    $lead->assignRole('workspace-lead');
-
+    // Le lead est ajouté via le pivot avec le rôle team-lead (pas besoin de rôle Spatie)
     $team->addMember($lead, 'team-lead');
 
     expect($team->isLead($lead))->toBeTrue();
@@ -101,10 +97,7 @@ test('a lead can leave if there are other leads', function () {
     $lead1 = User::factory()->create();
     $lead2 = User::factory()->create();
 
-    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'workspace-lead']);
-    $lead1->assignRole('workspace-lead');
-    $lead2->assignRole('workspace-lead');
-
+    // Les leads sont ajoutés via le pivot avec le rôle team-lead (pas besoin de rôle Spatie)
     $team->addMember($lead1, 'team-lead');
     $team->addMember($lead2, 'team-lead');
 

@@ -5,6 +5,14 @@ namespace App\Modules\Workspace\Policies;
 use App\Models\User;
 use App\Modules\Workspace\Models\Team;
 
+/**
+ * Team Policy - Option A Architecture
+ *
+ * Permissions are now based on:
+ * - workspace-admin (Spatie role) → Has all permissions
+ * - team-lead (pivot role) → Can manage their team
+ * - team-member (pivot role) → Can view/participate in their team
+ */
 class TeamPolicy
 {
     /**
@@ -12,7 +20,8 @@ class TeamPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('workspace.teams.view');
+        // All workspace users can view teams
+        return $user->isWorkspaceUser();
     }
 
     /**
@@ -20,10 +29,6 @@ class TeamPolicy
      */
     public function view(User $user, Team $team): bool
     {
-        if (! $user->hasPermissionTo('workspace.teams.view')) {
-            return false;
-        }
-
         return $this->userBelongsToTeam($user, $team);
     }
 
@@ -32,7 +37,8 @@ class TeamPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('workspace.teams.create');
+        // Only workspace admins can create teams
+        return $user->isWorkspaceAdmin();
     }
 
     /**
@@ -40,15 +46,12 @@ class TeamPolicy
      */
     public function update(User $user, Team $team): bool
     {
-        if (! $user->hasPermissionTo('workspace.teams.update')) {
-            return false;
-        }
-
-        // Only workspace admins or team leads can update
-        if ($user->hasPermissionTo('workspace.teams.manage-all')) {
+        // Workspace admins can update any team
+        if ($user->isWorkspaceAdmin()) {
             return true;
         }
 
+        // Team leads can update their own team
         return $team->isLead($user);
     }
 
@@ -57,12 +60,8 @@ class TeamPolicy
      */
     public function delete(User $user, Team $team): bool
     {
-        if (! $user->hasPermissionTo('workspace.teams.delete')) {
-            return false;
-        }
-
         // Only workspace admins can delete teams
-        return $user->hasPermissionTo('workspace.teams.manage-all');
+        return $user->isWorkspaceAdmin();
     }
 
     /**
@@ -70,12 +69,8 @@ class TeamPolicy
      */
     public function manageMembers(User $user, Team $team): bool
     {
-        if (! $user->hasPermissionTo('workspace.teams.manage-members')) {
-            return false;
-        }
-
         // Workspace admins can manage all teams
-        if ($user->hasPermissionTo('workspace.teams.manage-all')) {
+        if ($user->isWorkspaceAdmin()) {
             return true;
         }
 
@@ -98,7 +93,7 @@ class TeamPolicy
     private function userBelongsToTeam(User $user, Team $team): bool
     {
         // Workspace admins have access to all teams
-        if ($user->hasPermissionTo('workspace.teams.manage-all')) {
+        if ($user->isWorkspaceAdmin()) {
             return true;
         }
 

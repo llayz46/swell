@@ -105,10 +105,18 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Check if the user is a workspace user (has any workspace role).
+     * Check if the user is a workspace user (is admin or member of at least one team).
      */
     public function isWorkspaceUser(): bool
     {
-        return $this->hasAnyRole(['workspace-admin', ...WorkspaceRole::workspaceRoles()]);
+        return $this->hasRole(WorkspaceRole::adminRole()) || $this->teams()->exists();
+    }
+
+    /**
+     * Check if the user is a workspace admin.
+     */
+    public function isWorkspaceAdmin(): bool
+    {
+        return $this->hasRole(WorkspaceRole::adminRole());
     }
 }

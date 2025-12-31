@@ -18,8 +18,10 @@ import { fr } from 'date-fns/locale';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { useWorkspaceRole } from '@/hooks/use-workspace-role';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
+import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { toast } from 'sonner';
 import { MoreHorizontal, Shield, ShieldOff, UserMinus } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface IssuesPageProps {
     team: Team;
@@ -34,6 +36,11 @@ const TABLE_COLUMNS = [
 ];
 
 export default function Members({ team }: IssuesPageProps) {
+    // Initialiser le store avec l'équipe actuelle
+    useEffect(() => {
+        useWorkspaceIssuesStore.getState().setTeam(team);
+    }, [team]);
+
     return (
         <WorkspaceLayout
             header={<Header members={team.members ?? []} />}
@@ -51,7 +58,7 @@ export default function Members({ team }: IssuesPageProps) {
 }
 
 function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
-    const { isLead } = useWorkspaceRole();
+    const { isLead } = useWorkspaceRole(team.id);
     const {
         performPromoteMember,
         performDemoteMember,

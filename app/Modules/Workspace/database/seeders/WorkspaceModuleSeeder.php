@@ -83,38 +83,9 @@ class WorkspaceModuleSeeder extends Seeder
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-        // Workspace Admin
-        $workspaceAdmin = Role::firstOrCreate(['name' => 'workspace-admin']);
+        // Workspace Admin (seul rôle Spatie pour le workspace)
+        $workspaceAdmin = Role::firstOrCreate(['name' => WorkspaceRole::adminRole()]);
         $workspaceAdmin->syncPermissions($allPermissions);
-
-        // Workspace Lead
-        $workspaceLead = Role::firstOrCreate(['name' => WorkspaceRole::WorkspaceLead->value]);
-        $workspaceLead->syncPermissions([
-            'workspace.access',
-            'workspace.teams.view',
-            'workspace.teams.create',
-            'workspace.teams.manage-own',
-            'workspace.teams.manage-members',
-            'workspace.teams.transfer-lead',
-            'workspace.issues.view',
-            'workspace.issues.create',
-            'workspace.issues.update',
-            'workspace.issues.delete',
-            'workspace.issues.assign',
-            'workspace.inbox.view',
-        ]);
-
-        // Workspace Member
-        $workspaceMember = Role::firstOrCreate(['name' => WorkspaceRole::WorkspaceMember->value]);
-        $workspaceMember->syncPermissions([
-            'workspace.access',
-            'workspace.teams.view',
-            'workspace.issues.view',
-            'workspace.issues.create',
-            'workspace.issues.update',
-            'workspace.issues.assign',
-            'workspace.inbox.view',
-        ]);
     }
 
     private function createStatuses()
@@ -190,17 +161,17 @@ class WorkspaceModuleSeeder extends Seeder
 
         $users = collect();
 
-        // Workspace Admin
+        // Workspace Admin (seul rôle Spatie)
         $workspaceAdmin = User::factory()->create(
             [
                 'name' => 'Workspace Admin',
                 'email' => 'workspace-admin@example.com',
             ],
         );
-        $workspaceAdmin->assignRole('workspace-admin');
+        $workspaceAdmin->assignRole(WorkspaceRole::adminRole());
         $users->push($workspaceAdmin);
 
-        // Team Leads (4 leads)
+        // Team Leads (seront assignés comme team-lead dans les teams)
         $leadNames = [
             ['name' => 'Alice Martin', 'email' => 'alice.martin@example.com'],
             ['name' => 'Thomas Bernard', 'email' => 'thomas.bernard@example.com'],
@@ -215,11 +186,11 @@ class WorkspaceModuleSeeder extends Seeder
                     'email' => $leadData['email'],
                 ],
             );
-            $lead->assignRole(WorkspaceRole::WorkspaceLead->value);
+            // Plus de rôle Spatie, le rôle sera dans le pivot team_user
             $users->push($lead);
         }
 
-        // Team Members (15 membres)
+        // Team Members (seront assignés comme team-member dans les teams)
         $memberNames = [
             ['name' => 'Emma Petit', 'email' => 'emma.petit@example.com'],
             ['name' => 'Hugo Roux', 'email' => 'hugo.roux@example.com'],
@@ -245,7 +216,7 @@ class WorkspaceModuleSeeder extends Seeder
                     'email' => $memberData['email'],
                 ]
             );
-            $member->assignRole(WorkspaceRole::WorkspaceMember->value);
+            // Plus de rôle Spatie, le rôle sera dans le pivot team_user
             $users->push($member);
         }
 
@@ -257,8 +228,9 @@ class WorkspaceModuleSeeder extends Seeder
         $this->command->info('Creating teams...');
 
         $teams = collect();
-        $leads = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::WorkspaceLead->value));
-        $members = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::WorkspaceMember->value));
+        // Admin est le premier, leads sont les 4 suivants (index 1-4), membres sont le reste
+        $leads = $users->slice(1, 4)->values();
+        $members = $users->slice(5)->values();
 
         $teamsData = [
             [
@@ -404,7 +376,8 @@ class WorkspaceModuleSeeder extends Seeder
         $invitations = collect();
 
         $workspaceAdmin = $users->firstWhere('email', 'workspace-admin@example.com');
-        $teamMembers = $users->filter(fn ($u) => $u->hasRole(WorkspaceRole::WorkspaceMember->value));
+        // Tous les utilisateurs sauf l'admin peuvent recevoir des invitations
+        $potentialInvitees = $users->filter(fn ($u) => $u->email !== 'workspace-admin@example.com');
 
         // Créer plusieurs invitations pending pour différents utilisateurs
         foreach ($teams as $team) {
@@ -429,8 +402,8 @@ class WorkspaceModuleSeeder extends Seeder
                 );
             }
 
-            // Inviter quelques membres aléatoires
-            $nonMembers = $teamMembers->filter(fn ($u) => ! $team->isMember($u));
+            // Inviter quelques utilisateurs qui ne sont pas encore membres
+            $nonMembers = $potentialInvitees->filter(fn ($u) => ! $team->isMember($u));
 
             foreach ($nonMembers->random(min(3, $nonMembers->count())) as $member) {
                 $statusChoice = rand(0, 100);

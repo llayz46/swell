@@ -1,56 +1,61 @@
+import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { useMemo } from 'react';
 
-export type WorkspaceRoleName = 'workspace-admin' | 'workspace-lead' | 'workspace-member' | null;
+export type TeamRoleName = 'team-lead' | 'team-member' | null;
 
 /**
  * Hook to get the user's workspace role and related permissions
- * Automatically handles role hierarchy: workspace-admin > workspace-lead > workspace-member
+ *
+ * New architecture (Option A):
+ * - workspace-admin (Spatie) → Global admin, can do everything
+ * - team-lead (pivot) → Lead of a specific team
+ * - team-member (pivot) → Member of a specific team
+ *
+ * @param teamId - Optional team ID to check role for. If not provided, uses current team from store.
  */
-export function useWorkspaceRole() {
+export function useWorkspaceRole(teamId?: number) {
     const { auth } = usePage<SharedData>().props;
+    const storeTeam = useWorkspaceIssuesStore((state) => state.team);
 
     return useMemo(() => {
         const user = auth.user;
 
-        if (!user?.roles) {
+        if (!user) {
             return {
-                role: null as WorkspaceRoleName,
                 isAdmin: false,
                 isLead: false,
                 isMember: false,
                 hasWorkspaceAccess: false,
+                teamRole: null as TeamRoleName,
             };
         }
 
-        // Extract workspace roles from user roles
-        const workspaceRoles = user.roles
-            .map((r) => (typeof r === 'string' ? r : r.name))
-            .filter((name) => name.startsWith('workspace-'));
+        // Check if user is workspace admin (Spatie role)
+        const isAdmin = user.roles?.some(
+            (r) => (typeof r === 'string' ? r : r.name) === 'workspace-admin',
+        ) ?? false;
 
-        // Determine the highest role based on hierarchy
-        let role: WorkspaceRoleName = null;
-        if (workspaceRoles.includes('workspace-admin')) {
-            role = 'workspace-admin';
-        } else if (workspaceRoles.includes('workspace-lead')) {
-            role = 'workspace-lead';
-        } else if (workspaceRoles.includes('workspace-member')) {
-            role = 'workspace-member';
-        }
+        // Get current team ID (from parameter or store)
+        const currentTeamId = teamId ?? storeTeam?.id;
 
-        // Compute permissions based on role hierarchy
-        const isAdmin = role === 'workspace-admin';
-        const isLead = isAdmin || role === 'workspace-lead';
-        const isMember = isLead || role === 'workspace-member';
-        const hasWorkspaceAccess = role !== null;
+        // Find user's role in the current team
+        const currentTeam = auth.teams?.find((t) => t.id === currentTeamId);
+        const teamRole = (currentTeam?.role as TeamRoleName) ?? null;
+
+        // Compute permissions
+        const isLeadInCurrentTeam = teamRole === 'team-lead';
+        const isLead = isAdmin || isLeadInCurrentTeam;
+        const isMember = isAdmin || !!currentTeam;
+        const hasWorkspaceAccess = auth.isWorkspaceUser;
 
         return {
-            role,
             isAdmin,
             isLead,
             isMember,
             hasWorkspaceAccess,
+            teamRole,
         };
-    }, [auth.user]);
+    }, [auth.user, auth.teams, auth.isWorkspaceUser, teamId, storeTeam?.id]);
 }
