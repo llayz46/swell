@@ -4,10 +4,12 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Plus } from 'lucide-react';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
+import { useWorkspaceRole } from '@/hooks/use-workspace-role';
 
 export default function HeaderNav({ members }: { members: number }) {
     const { openInviteMemberDialog } = useWorkspaceMembersStore();
     const { team } = useWorkspaceIssuesStore();
+    const { isLead } = useWorkspaceRole();
 
     return (
         <div className="flex h-10 w-full items-center justify-between border-b px-6 py-1.5">
@@ -20,16 +22,18 @@ export default function HeaderNav({ members }: { members: number }) {
                 </div>
             </div>
 
-            <Button 
-                variant="secondary" 
-                size="xs"
-                onClick={() => {
-                    openInviteMemberDialog({ teamId: team?.id });
-                }}
-            >
-                <Plus />
-                Inviter
-            </Button>
+            {isLead && (
+                <Button 
+                    variant="secondary" 
+                    size="xs"
+                    onClick={() => {
+                        openInviteMemberDialog({ teamId: team?.id });
+                    }}
+                >
+                    <Plus />
+                    Inviter
+                </Button>
+            )}
         </div>
     );
 }
