@@ -16,6 +16,9 @@ import {
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
+import { useWorkspaceRole } from '@/hooks/use-workspace-role';
+import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
+import { toast } from 'sonner';
 import { MoreHorizontal, Shield, ShieldOff, UserMinus } from 'lucide-react';
 
 interface IssuesPageProps {
@@ -33,27 +36,31 @@ const TABLE_COLUMNS = [
 export default function Members({ team }: IssuesPageProps) {
     return (
         <WorkspaceLayout
-            header={<Header members={team.members} />}
+            header={<Header members={team.members ?? []} />}
             tableHeader={<WorkspaceTableHeader columns={TABLE_COLUMNS} />}
         >
             <Head title={`Tâches - ${team.identifier} - Workspace`} />
 
             <div className="w-full">
                 {team.members?.map((member) => (
-                    <MemberRow key={member.id} member={member} />
+                    <MemberRow key={member.id} team={team} member={member} />
                 ))}
             </div>
         </WorkspaceLayout>
     );
 }
 
-function MemberRow({ member }: { member: TeamMember }) {
+function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
+    const { isLead } = useWorkspaceRole();
+    const { performRemoveMember } = useWorkspaceMembersStore();
+    
     const handleChangeRole = (newRole: 'team-lead' | 'team-member') => {
         console.log('Change role to:', newRole);
     };
 
-    const handleRemoveMember = () => {
-        console.log('Remove member:', member.id);
+    const handleRemoveMember = (member: TeamMember) => {
+        if (!isLead) return toast.error("Vous n'avez pas les droits pour retirer un membre de l'équipe");
+        performRemoveMember(team, member);
     };
 
     return (
@@ -99,7 +106,7 @@ function MemberRow({ member }: { member: TeamMember }) {
                             </DropdownMenuItem>
                         )}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={handleRemoveMember} className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40">
+                        <DropdownMenuItem onClick={() => handleRemoveMember(member)} className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40">
                             <UserMinus className="mr-2 size-4 text-destructive" />
                             Retirer de l'équipe
                         </DropdownMenuItem>

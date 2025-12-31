@@ -1,23 +1,30 @@
-import type { WorkspaceMember } from '@/types/workspace';
+import type { Team, TeamMember, WorkspaceMember } from '@/types/workspace';
+import { router } from '@inertiajs/react';
+import { toast } from 'sonner';
 import { create } from 'zustand';
 
 type WorkspaceMembersStore = {
     members: WorkspaceMember[];
     roles: string[];
     inviteMemberDialogOpen: boolean;
-    
-    openInviteMemberDialog: (options?: { teamId?: number; }) => void;
+    removingMembers: Set<number>;
+
+    openInviteMemberDialog: (options?: { teamId?: number }) => void;
     closeInviteMemberDialog: () => void;
-    
+
     inviteMemberTeamId: number | null;
-}
+
+    // Actions with server calls
+    performRemoveMember: (team: Team, member: TeamMember) => void;
+};
 
 export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get) => ({
     members: [],
     roles: ['team-lead', 'team-member'],
     inviteMemberDialogOpen: false,
     inviteMemberTeamId: null,
-    
+    removingMembers: new Set<number>(),
+
     openInviteMemberDialog: (options) => {
         set({
             inviteMemberDialogOpen: true,
@@ -27,6 +34,35 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
     closeInviteMemberDialog: () => {
         set({
             inviteMemberDialogOpen: false,
+        });
+    },
+
+    // Actions
+    performRemoveMember: (team, member) => {
+        const { removingMembers } = get();
+
+        set({ removingMembers: new Set(removingMembers).add(member.id) });
+
+        router.delete(route('workspace.teams.remove-member', { team: team.id, user: member.id }), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                const { removingMembers } = get();
+                const newSet = new Set(removingMembers);
+                newSet.delete(member.id);
+                set({ removingMembers: newSet });
+
+                toast.success(`${member.name} a été retiré de l'équipe avec succès`);
+            },
+            onError: (errors) => {
+                const { removingMembers } = get();
+                const newSet = new Set(removingMembers);
+                newSet.delete(member.id);
+                set({ removingMembers: newSet });
+
+                const errorMessage = (errors as Record<string, string>).member || 'Erreur lors du retrait du membre';
+                toast.error(errorMessage);
+            },
         });
     },
 }))

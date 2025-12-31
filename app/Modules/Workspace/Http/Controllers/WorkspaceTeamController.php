@@ -169,4 +169,32 @@ class WorkspaceTeamController extends Controller
 
         return redirect()->route('workspace.index')->with('success', 'Vous avez quitté l\'équipe avec succès');
     }
+
+    /**
+     * Remove a member from the team.
+     */
+    public function removeMember(Team $team, \App\Models\User $user)
+    {
+        $this->authorize('manage-members', $team);
+
+        if ($team->isLead($user) && $team->leads()->count() === 1) {
+            return back()->withErrors([
+                'member' => 'Impossible de retirer le dernier lead de l\'équipe. Veuillez d\'abord promouvoir un autre membre.',
+            ]);
+        }
+
+        if ($user->id === auth()->id()) {
+            return back()->withErrors([
+                'member' => 'Utilisez l\'option "Quitter l\'équipe" pour vous retirer vous-même.',
+            ]);
+        }
+
+        $team->removeMember($user);
+
+        $workspaceService = app(\App\Modules\Workspace\Services\WorkspaceService::class);
+        $workspaceService->clearUserTeamsCache($user);
+        $workspaceService->clearWorkspaceMembersCache();
+
+        return back();
+    }
 }
