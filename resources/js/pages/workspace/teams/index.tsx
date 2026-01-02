@@ -3,11 +3,13 @@ import { MembersAvatarGroup } from '@/components/swell/workspace/teams/members-a
 import { WorkspaceTableHeader } from '@/components/swell/workspace/workspace-table-header';
 import { Badge } from '@/components/ui/badge';
 import WorkspaceLayout from '@/layouts/workspace-layout';
+import { useWorkspaceTeamsStore } from '@/stores/workspace-teams-store';
 import type { Team, TeamInvitation } from '@/types/workspace';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { Head } from '@inertiajs/react';
 import { Check, CircleDashed } from 'lucide-react';
 import { PendingInvitationsSection } from '@/components/swell/workspace/teams/pending-invitations-section';
+import { useEffect } from 'react';
 
 const TABLE_COLUMNS = [
     { label: 'Nom', className: 'w-[70%] sm:w-[50%] md:w-[45%] lg:w-[40%]' },
@@ -17,18 +19,22 @@ const TABLE_COLUMNS = [
     { label: 'Tâches', className: 'hidden sm:block sm:w-[20%] md:w-[15%]' },
 ];
 
-export default function Index({ teams, pendingInvitations }: { teams: Team[], pendingInvitations: TeamInvitation[] }) {
+export default function Index({ teams, pendingInvitations }: { teams: Team[]; pendingInvitations: TeamInvitation[] }) {
+    const { setTeams, getFilteredAndSortedTeams } = useWorkspaceTeamsStore();
+    const filteredTeams = getFilteredAndSortedTeams();
+
+    useEffect(() => {
+        setTeams(teams);
+    }, [teams, setTeams]);
+
     return (
-        <WorkspaceLayout
-            header={<Header teams={teams} />}
-            tableHeader={<WorkspaceTableHeader columns={TABLE_COLUMNS} />}
-        >
+        <WorkspaceLayout header={<Header teams={teams} />} tableHeader={<WorkspaceTableHeader columns={TABLE_COLUMNS} />}>
             <Head title="Équipes - Workspace" />
-            
+
             <div className="w-full">
                 {pendingInvitations.length > 0 && <PendingInvitationsSection invitations={pendingInvitations} />}
 
-                {teams.map((team) => (
+                {filteredTeams.map((team) => (
                     <TeamRow key={team.id} team={team} />
                 ))}
             </div>

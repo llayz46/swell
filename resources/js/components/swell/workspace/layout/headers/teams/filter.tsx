@@ -1,21 +1,42 @@
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useWorkspaceTeamsStore } from '@/stores/workspace-teams-store';
 import type { Team } from '@/types/workspace';
-import { ArrowUpDown, ChevronRight, ListFilter, Shield } from 'lucide-react';
+import { ArrowUpDown, CheckIcon, ChevronRight, ListFilter, Shield, Tag } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 type FilterType = 'membership' | 'sort' | 'identifiers';
 
-const Membership: Array<'Membre' | 'Non Membre'> = ['Membre', 'Non Membre'];
+const MEMBERSHIPS: Array<{ value: 'joined' | 'not-joined'; label: string }> = [
+    { value: 'joined', label: 'Membre' },
+    { value: 'not-joined', label: 'Non Membre' },
+];
 
 export function Filter({ teams }: { teams: Team[] }) {
     const [open, setOpen] = useState(false);
     const [active, setActive] = useState<FilterType | null>(null);
 
-    const Identifiers: Team['identifier'][] = useMemo(() => {
+    const {
+        filters,
+        sort,
+        toggleMembershipFilter,
+        toggleIdentifierFilter,
+        clearFilters,
+        getActiveFiltersCount,
+        setSort,
+    } = useWorkspaceTeamsStore();
+
+    const identifiers: Team['identifier'][] = useMemo(() => {
         return teams.map((team) => team.identifier);
     }, [teams]);
+
+    const getMembershipCount = (membership: 'joined' | 'not-joined') => {
+        return teams.filter((team) => {
+            const isJoined = Boolean(team.joined);
+            return membership === 'joined' ? isJoined : !isJoined;
+        }).length;
+    };
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -23,11 +44,11 @@ export function Filter({ teams }: { teams: Team[] }) {
                 <Button size="xs" variant="ghost" className="relative">
                     <ListFilter className="mr-1 size-4" />
                     Filtrer
-                    {/*{getActiveFiltersCount() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full size-4 flex items-center justify-center">
-                     {getActiveFiltersCount()}
-                  </span>
-               )}*/}
+                    {getActiveFiltersCount() > 0 && (
+                        <span className="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+                            {getActiveFiltersCount()}
+                        </span>
+                    )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-60 p-0" align="start">
@@ -38,28 +59,24 @@ export function Filter({ teams }: { teams: Team[] }) {
                                 <CommandItem onSelect={() => setActive('membership')} className="flex cursor-pointer items-center justify-between">
                                     <span className="flex items-center gap-2">
                                         <Shield className="size-4 text-muted-foreground" />
-                                        Membres
+                                        Adhésion
                                     </span>
                                     <div className="flex items-center">
-                                        {/*{filters.membership.length > 0 && (
-                                 <span className="text-xs text-muted-foreground mr-1">
-                                    {filters.membership.length}
-                                 </span>
-                              )}*/}
+                                        {filters.membership.length > 0 && (
+                                            <span className="mr-1 text-xs text-muted-foreground">{filters.membership.length}</span>
+                                        )}
                                         <ChevronRight className="size-4" />
                                     </div>
                                 </CommandItem>
                                 <CommandItem onSelect={() => setActive('identifiers')} className="flex cursor-pointer items-center justify-between">
                                     <span className="flex items-center gap-2">
-                                        <Shield className="size-4 text-muted-foreground" />
+                                        <Tag className="size-4 text-muted-foreground" />
                                         Identifiants
                                     </span>
                                     <div className="flex items-center">
-                                        {/*{filters.identifier.length > 0 && (
-                                 <span className="text-xs text-muted-foreground mr-1">
-                                    {filters.identifier.length}
-                                 </span>
-                              )}*/}
+                                        {filters.identifiers.length > 0 && (
+                                            <span className="mr-1 text-xs text-muted-foreground">{filters.identifiers.length}</span>
+                                        )}
                                         <ChevronRight className="size-4" />
                                     </div>
                                 </CommandItem>
@@ -71,19 +88,19 @@ export function Filter({ teams }: { teams: Team[] }) {
                                     <ChevronRight className="size-4" />
                                 </CommandItem>
                             </CommandGroup>
-                            {/*{getActiveFiltersCount() > 0 && (
-                        <>
-                           <CommandSeparator />
-                           <CommandGroup>
-                              <CommandItem
-                                 onSelect={() => clearFilters()}
-                                 className="cursor-pointer"
-                              >
-                                 Clear all filters
-                              </CommandItem>
-                           </CommandGroup>
-                        </>
-                     )}*/}
+                            {getActiveFiltersCount() > 0 && (
+                                <>
+                                    <CommandSeparator />
+                                    <CommandGroup>
+                                        <CommandItem
+                                            onSelect={() => clearFilters()}
+                                            className="text-destructive focus-visible:ring-destructive/20 data-[selected=true]:bg-destructive/15 data-[selected=true]:text-destructive! dark:focus-visible:ring-destructive/40"
+                                        >
+                                            Effacer tous les filtres
+                                        </CommandItem>
+                                    </CommandGroup>
+                                </>
+                            )}
                         </CommandList>
                     </Command>
                 ) : active === 'membership' ? (
@@ -92,19 +109,22 @@ export function Filter({ teams }: { teams: Team[] }) {
                             <Button variant="ghost" size="icon" className="size-6" onClick={() => setActive(null)}>
                                 <ChevronRight className="size-4 rotate-180" />
                             </Button>
-                            <span className="ml-2 font-medium">Statut</span>
+                            <span className="ml-2 font-medium">Adhésion</span>
                         </div>
                         <CommandList>
                             <CommandGroup>
-                                {Membership.map((type) => (
+                                {MEMBERSHIPS.map((membership) => (
                                     <CommandItem
-                                        key={type}
-                                        value={type}
-                                        // onSelect={() => toggleFilter('membership', type)}
+                                        key={membership.value}
+                                        value={membership.value}
+                                        onSelect={() => toggleMembershipFilter(membership.value)}
                                         className="flex items-center justify-between"
                                     >
-                                        {type}
-                                        {/*{filters.membership.includes(type) && <CheckIcon size={16} />}*/}
+                                        <span>{membership.label}</span>
+                                        <div className="flex items-center gap-2">
+                                            {filters.membership.includes(membership.value) && <CheckIcon size={16} className="ml-auto" />}
+                                            <span className="text-xs text-muted-foreground">{getMembershipCount(membership.value)}</span>
+                                        </div>
                                     </CommandItem>
                                 ))}
                             </CommandGroup>
@@ -116,19 +136,19 @@ export function Filter({ teams }: { teams: Team[] }) {
                             <Button variant="ghost" size="icon" className="size-6" onClick={() => setActive(null)}>
                                 <ChevronRight className="size-4 rotate-180" />
                             </Button>
-                            <span className="ml-2 font-medium">Statut</span>
+                            <span className="ml-2 font-medium">Identifiants</span>
                         </div>
                         <CommandList>
                             <CommandGroup>
-                                {Identifiers.map((id) => (
+                                {identifiers.map((identifier) => (
                                     <CommandItem
-                                        key={id}
-                                        value={id}
-                                        // onSelect={() => toggleFilter('identifier', id)}
+                                        key={identifier}
+                                        value={identifier}
+                                        onSelect={() => toggleIdentifierFilter(identifier)}
                                         className="flex items-center justify-between"
                                     >
-                                        {id}
-                                        {/*{filters.identifier.includes(id) && <CheckIcon size={16} />}*/}
+                                        <span>{identifier}</span>
+                                        {filters.identifiers.includes(identifier) && <CheckIcon size={16} />}
                                     </CommandItem>
                                 ))}
                             </CommandGroup>
@@ -143,53 +163,24 @@ export function Filter({ teams }: { teams: Team[] }) {
                             <span className="ml-2 font-medium">Trier par</span>
                         </div>
                         <CommandList>
-                            <CommandGroup heading="Name">
-                                {/*<CommandItem
-                           onSelect={() => setSort('name-asc')}
-                           className="flex items-center justify-between"
-                        >
-                           A → Z{sort === 'name-asc' && <CheckIcon size={16} />}
-                        </CommandItem>*/}
-                                {/*<CommandItem
-                           onSelect={() => setSort('name-desc')}
-                           className="flex items-center justify-between"
-                        >
-                           Z → A{sort === 'name-desc' && <CheckIcon size={16} />}
-                        </CommandItem>*/}
+                            <CommandGroup heading="Nom">
+                                <CommandItem onSelect={() => setSort('name-asc')} className="flex items-center justify-between">
+                                    A → Z{sort === 'name-asc' && <CheckIcon size={16} />}
+                                </CommandItem>
+                                <CommandItem onSelect={() => setSort('name-desc')} className="flex items-center justify-between">
+                                    Z → A{sort === 'name-desc' && <CheckIcon size={16} />}
+                                </CommandItem>
                             </CommandGroup>
                             <CommandSeparator />
-                            <CommandGroup heading="Members">
-                                {/*<CommandItem
-                           onSelect={() => setSort('members-asc')}
-                           className="flex items-center justify-between"
-                        >
-                           No. of Members (asc)
-                           {sort === 'members-asc' && <CheckIcon size={16} />}
-                        </CommandItem>*/}
-                                {/*<CommandItem
-                           onSelect={() => setSort('members-desc')}
-                           className="flex items-center justify-between"
-                        >
-                           No. of Members (desc)
-                           {sort === 'members-desc' && <CheckIcon size={16} />}
-                        </CommandItem>*/}
-                            </CommandGroup>
-                            <CommandSeparator />
-                            <CommandGroup heading="Projects">
-                                {/*<CommandItem
-                           onSelect={() => setSort('projects-asc')}
-                           className="flex items-center justify-between"
-                        >
-                           No. of Projects (asc)
-                           {sort === 'projects-asc' && <CheckIcon size={16} />}
-                        </CommandItem>*/}
-                                {/*<CommandItem
-                           onSelect={() => setSort('projects-desc')}
-                           className="flex items-center justify-between"
-                        >
-                           No. of Projects (desc)
-                           {sort === 'projects-desc' && <CheckIcon size={16} />}
-                        </CommandItem>*/}
+                            <CommandGroup heading="Membres">
+                                <CommandItem onSelect={() => setSort('members-asc')} className="flex items-center justify-between">
+                                    Croissant
+                                    {sort === 'members-asc' && <CheckIcon size={16} />}
+                                </CommandItem>
+                                <CommandItem onSelect={() => setSort('members-desc')} className="flex items-center justify-between">
+                                    Décroissant
+                                    {sort === 'members-desc' && <CheckIcon size={16} />}
+                                </CommandItem>
                             </CommandGroup>
                         </CommandList>
                     </Command>

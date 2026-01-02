@@ -22,7 +22,7 @@ class WorkspaceTeamController extends Controller
     public function index(): Response
     {
         $teams = Team::query()
-            ->withCount('issues')
+            ->withCount(['issues', 'members'])
             ->with('members', 'leads')
             ->get()
             ->each(function ($team) {
