@@ -77,8 +77,10 @@ class WorkspaceTeamController extends Controller
 
     public function members(Team $team): Response
     {
+        $this->authorize('view', $team);
+
         return Inertia::render('workspace/teams/members', [
-            'team' => $team->load('members.teams', 'leads')->toResource(),
+            'team' => $team->load('members', 'leads')->toResource(),
         ]);
     }
 

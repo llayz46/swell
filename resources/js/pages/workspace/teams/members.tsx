@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { useWorkspaceRole } from '@/hooks/use-workspace-role';
@@ -110,7 +110,7 @@ function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
             </div>
 
             <div className="hidden w-[15%] text-xs text-muted-foreground md:block">
-                {format(member.joined_at, 'dd MMMM yyyy', { locale: fr })}
+                {member.joined_at && format(parseISO(member.joined_at), 'dd MMMM yyyy', { locale: fr })}
             </div>
 
             <div className="flex w-[5%] justify-center">
