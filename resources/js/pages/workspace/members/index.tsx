@@ -34,7 +34,7 @@ export default function Index({ members }: { members: WorkspaceMember[] }) {
 
 function MemberRow({ member }: { member: WorkspaceMember }) {
     const getInitials = useInitials();
-    
+
     return (
         <div className="flex w-full items-center border-b border-muted-foreground/5 px-6 py-3 text-sm hover:bg-sidebar/50">
             <div className="flex w-[85%] items-center gap-2 md:w-[70%]">
@@ -50,7 +50,7 @@ function MemberRow({ member }: { member: WorkspaceMember }) {
             </div>
 
             <div className="w-[15%] text-xs text-muted-foreground">
-                <Badge variant="secondary">{formatWorkspaceRole(member.roles)}</Badge>
+                <Badge variant="secondary">{formatWorkspaceRole(member.workspaceRole)}</Badge>
             </div>
 
             <div className="hidden w-[30%] text-xs text-muted-foreground md:flex md:w-[15%]">

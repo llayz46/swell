@@ -82,6 +82,7 @@ export interface TeamMember extends BaseMember {
 
 export interface WorkspaceMember extends BaseMember {
     roles: string[];
+    workspaceRole: 'workspace-admin' | 'team-lead' | 'team-member';
     teams: Team[];
 }
 
