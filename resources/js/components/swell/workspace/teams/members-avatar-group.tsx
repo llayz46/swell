@@ -14,7 +14,6 @@ export function MembersAvatarGroup({ members, maxDisplay = 3 }: MembersAvatarGro
     const remainingCount = members.length - displayedMembers.length;
     
     const getInitials = useInitials();
-    console.log(members)
 
     if (members.length === 0) return null;
 
