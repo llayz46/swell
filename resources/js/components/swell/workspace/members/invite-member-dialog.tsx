@@ -27,7 +27,8 @@ export function InviteMemberDialog() {
     const [roleDropdownOpen, setRoleDropdownOpen] = useState<boolean>(false);
     const [teamDropdownOpen, setTeamDropdownOpen] = useState<boolean>(false);
 
-    const { members, roles, invitableTeams, inviteMemberDialogOpen, closeInviteMemberDialog, inviteMemberTeamId } = useWorkspaceMembersStore();
+    const { workspaceMembers, roles, invitableTeams, inviteMemberDialogOpen, closeInviteMemberDialog, inviteMemberTeamId } =
+        useWorkspaceMembersStore();
 
     const { data, setData, post, processing, errors, reset } = useForm<InviteMemberFormData>({
         role: null,
@@ -51,9 +52,10 @@ export function InviteMemberDialog() {
     }, [inviteMemberDialogOpen]);
 
     const selectedTeamId = data.team_id;
+
     const filteredMembers = selectedTeamId
-        ? members.filter((m) => !m.teams.some((team) => team.id === selectedTeamId) && m.id !== user.id)
-        : members.filter((m) => m.id !== user.id);
+        ? workspaceMembers.filter((m) => !m.teams.some((team) => team.id === selectedTeamId) && m.id !== user.id)
+        : workspaceMembers.filter((m) => m.id !== user.id);
     const selectedMember = filteredMembers.find((m) => m.id === data.user_id);
 
     const selectedTeam = invitableTeams.find((t) => t.id === data.team_id);

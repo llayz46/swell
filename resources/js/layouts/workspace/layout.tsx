@@ -36,7 +36,7 @@ export default function AppSidebarLayout({
 
     useEffect(() => {
         if (workspaceMembers) {
-            useWorkspaceMembersStore.setState({ members: workspaceMembers });
+            useWorkspaceMembersStore.getState().setWorkspaceMembers(workspaceMembers);
         }
         if (invitableTeams) {
             useWorkspaceMembersStore.setState({ invitableTeams });

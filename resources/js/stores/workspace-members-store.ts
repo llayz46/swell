@@ -20,6 +20,7 @@ type Filters = {
 
 type WorkspaceMembersStore = {
     members: WorkspaceMember[] | TeamMember[];
+    workspaceMembers: WorkspaceMember[]; // Always invite WorkspaceMember
     invitableTeams: InvitableTeam[];
     roles: string[];
     inviteMemberDialogOpen: boolean;
@@ -40,16 +41,18 @@ type WorkspaceMembersStore = {
     filters: Filters;
     sort: SortOption;
     setMembers: (members: WorkspaceMember[] | TeamMember[]) => void;
+    setWorkspaceMembers: (members: WorkspaceMember[]) => void;
     toggleFilter: (filterType: keyof Filters, value: MemberRole) => void;
     clearFilters: () => void;
     getActiveFiltersCount: () => number;
     setSort: (sort: SortOption) => void;
-    filterByRole: (role: MemberRole) => (WorkspaceMember | TeamMember)[];
-    getFilteredAndSortedMembers: () => (WorkspaceMember | TeamMember)[];
+    filterByRole: (role: MemberRole) => WorkspaceMember[] | TeamMember[];
+    getFilteredAndSortedMembers: () => WorkspaceMember[] | TeamMember[];
 };
 
 export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get) => ({
     members: [],
+    workspaceMembers: [],
     invitableTeams: [],
     roles: ['team-lead', 'team-member'],
     inviteMemberDialogOpen: false,
@@ -160,6 +163,7 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
     },
 
     setMembers: (members) => set({ members }),
+    setWorkspaceMembers: (workspaceMembers) => set({ workspaceMembers }),
 
     toggleFilter: (filterType, value) =>
         set((state) => {
@@ -193,7 +197,7 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
         return members.filter((member) => {
             const memberRole = 'workspaceRole' in member ? member.workspaceRole : member.role;
             return memberRole === role;
-        });
+        }) as WorkspaceMember[] | TeamMember[];
     },
 
     getFilteredAndSortedMembers: () => {
@@ -205,7 +209,7 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
             filteredMembers = filteredMembers.filter((member) => {
                 const memberRole = 'workspaceRole' in member ? member.workspaceRole : member.role;
                 return filters.role.includes(memberRole);
-            });
+            }) as WorkspaceMember[] | TeamMember[];
         }
 
         if (sort) {
@@ -228,7 +232,7 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
                     default:
                         return 0;
                 }
-            });
+            }) as WorkspaceMember[] | TeamMember[];
         }
 
         return filteredMembers;

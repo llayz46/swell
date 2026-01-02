@@ -3,11 +3,12 @@ import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Plus } from 'lucide-react';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
+import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 
 export default function HeaderNav({ members }: { members: number }) {
     const { openInviteMemberDialog, invitableTeams } = useWorkspaceMembersStore();
+    const { team } = useWorkspaceIssuesStore();
 
-    // Show invite button if user has at least one team they can invite to
     const canInvite = invitableTeams.length > 0;
 
     return (
@@ -26,7 +27,7 @@ export default function HeaderNav({ members }: { members: number }) {
                     variant="secondary"
                     size="xs"
                     onClick={() => {
-                        openInviteMemberDialog();
+                        openInviteMemberDialog(team ? { teamId: team.id } : undefined);
                     }}
                 >
                     <Plus />
