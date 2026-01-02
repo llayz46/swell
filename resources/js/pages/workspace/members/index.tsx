@@ -7,7 +7,9 @@ import WorkspaceLayout from '@/layouts/workspace-layout';
 import { WorkspaceMember } from '@/types/workspace';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { useInitials } from '@/hooks/use-initials';
+import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import { Head } from '@inertiajs/react';
+import { useEffect } from 'react';
 
 const TABLE_COLUMNS = [
     { label: 'Nom', className: 'w-[85%] md:w-[70%]' },
@@ -16,6 +18,13 @@ const TABLE_COLUMNS = [
 ];
 
 export default function Index({ members }: { members: WorkspaceMember[] }) {
+    const { setMembers, getFilteredAndSortedMembers } = useWorkspaceMembersStore();
+    const filteredMembers = getFilteredAndSortedMembers() as WorkspaceMember[];
+
+    useEffect(() => {
+        setMembers(members);
+    }, [members, setMembers]);
+
     return (
         <WorkspaceLayout
             header={<Header members={members} />}
@@ -24,7 +33,7 @@ export default function Index({ members }: { members: WorkspaceMember[] }) {
             <Head title="Membres - Workspace" />
 
             <div className="w-full">
-                {members.map((member) => (
+                {filteredMembers.map((member) => (
                     <MemberRow key={member.id} member={member} />
                 ))}
             </div>

@@ -1,17 +1,25 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
+import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import type { TeamMember, WorkspaceMember } from '@/types/workspace';
-import { ArrowUpDown, ChevronRight, ListFilter, Shield } from 'lucide-react';
+import { ArrowUpDown, CheckIcon, ChevronRight, ListFilter, Shield } from 'lucide-react';
 import { useState } from 'react';
 
 type FilterType = 'role' | 'sort';
 
-const ROLES: Array<'Guest' | 'Member' | 'Admin'> = ['Guest', 'Member', 'Admin'];
+const ROLES: Array<{ value: 'workspace-admin' | 'team-lead' | 'team-member'; label: string }> = [
+    { value: 'workspace-admin', label: 'Admin' },
+    { value: 'team-lead', label: 'Lead' },
+    { value: 'team-member', label: 'Membre' },
+];
 
 export function Filter({ members }: { members: TeamMember[] | WorkspaceMember[] }) {
     const [open, setOpen] = useState(false);
     const [active, setActive] = useState<FilterType | null>(null);
+
+    const { filters, sort, toggleFilter, clearFilters, getActiveFiltersCount, setSort, filterByRole } = useWorkspaceMembersStore();
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -19,11 +27,11 @@ export function Filter({ members }: { members: TeamMember[] | WorkspaceMember[] 
                 <Button size="xs" variant="ghost" className="relative">
                     <ListFilter className="mr-1 size-4" />
                     Filtrer
-                    {/*{getActiveFiltersCount() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] rounded-full size-4 flex items-center justify-center">
-                     {getActiveFiltersCount()}
-                  </span>
-               )}*/}
+                    {getActiveFiltersCount() > 0 && (
+                        <span className="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+                            {getActiveFiltersCount()}
+                        </span>
+                    )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-60 p-0" align="start">
@@ -34,14 +42,10 @@ export function Filter({ members }: { members: TeamMember[] | WorkspaceMember[] 
                                 <CommandItem onSelect={() => setActive('role')} className="flex cursor-pointer items-center justify-between">
                                     <span className="flex items-center gap-2">
                                         <Shield className="size-4 text-muted-foreground" />
-                                        Statut
+                                        Rôle
                                     </span>
                                     <div className="flex items-center">
-                                        {/*{filters.role.length > 0 && (
-                                 <span className="text-xs text-muted-foreground mr-1">
-                                    {filters.role.length}
-                                 </span>
-                              )}*/}
+                                        {filters.role.length > 0 && <span className="mr-1 text-xs text-muted-foreground">{filters.role.length}</span>}
                                         <ChevronRight className="size-4" />
                                     </div>
                                 </CommandItem>
@@ -53,19 +57,19 @@ export function Filter({ members }: { members: TeamMember[] | WorkspaceMember[] 
                                     <ChevronRight className="size-4" />
                                 </CommandItem>
                             </CommandGroup>
-                            {/*{getActiveFiltersCount() > 0 && (
-                        <>
-                           <CommandSeparator />
-                           <CommandGroup>
-                              <CommandItem
-                                 onSelect={() => clearFilters()}
-                                 className="cursor-pointer"
-                              >
-                                 Clear all filters
-                              </CommandItem>
-                           </CommandGroup>
-                        </>
-                     )}*/}
+                            {getActiveFiltersCount() > 0 && (
+                                <>
+                                    <CommandSeparator />
+                                    <CommandGroup>
+                                        <CommandItem
+                                            onSelect={() => clearFilters()}
+                                            className="text-destructive focus-visible:ring-destructive/20 data-[selected=true]:bg-destructive/15 data-[selected=true]:text-destructive! dark:focus-visible:ring-destructive/40"
+                                        >
+                                            Effacer tous les filtres
+                                        </CommandItem>
+                                    </CommandGroup>
+                                </>
+                            )}
                         </CommandList>
                     </Command>
                 ) : active === 'role' ? (
@@ -74,19 +78,22 @@ export function Filter({ members }: { members: TeamMember[] | WorkspaceMember[] 
                             <Button variant="ghost" size="icon" className="size-6" onClick={() => setActive(null)}>
                                 <ChevronRight className="size-4 rotate-180" />
                             </Button>
-                            <span className="ml-2 font-medium">Statut</span>
+                            <span className="ml-2 font-medium">Rôle</span>
                         </div>
                         <CommandList>
                             <CommandGroup>
                                 {ROLES.map((role) => (
                                     <CommandItem
-                                        key={role}
-                                        value={role}
-                                        // onSelect={() => toggleFilter('role', role)}
+                                        key={role.value}
+                                        value={role.value}
+                                        onSelect={() => toggleFilter('role', role.value)}
                                         className="flex items-center justify-between"
                                     >
-                                        {role}
-                                        {/*{filters.role.includes(role) && <CheckIcon size={16} />}*/}
+                                        <span>{role.label}</span>
+                                        <div className="flex items-center gap-2">
+                                            {filters.role.includes(role.value) && <CheckIcon size={16} className="ml-auto" />}
+                                            <span className="text-xs text-muted-foreground">{filterByRole(role.value).length}</span>
+                                        </div>
                                     </CommandItem>
                                 ))}
                             </CommandGroup>
@@ -100,56 +107,27 @@ export function Filter({ members }: { members: TeamMember[] | WorkspaceMember[] 
                             </Button>
                             <span className="ml-2 font-medium">Trier par</span>
                         </div>
-                        {/*<CommandList>
-                     <CommandGroup heading="Name">
-                        <CommandItem
-                           onSelect={() => setSort('name-asc')}
-                           className="flex items-center justify-between"
-                        >
-                           A → Z{sort === 'name-asc' && <CheckIcon size={16} />}
-                        </CommandItem>
-                        <CommandItem
-                           onSelect={() => setSort('name-desc')}
-                           className="flex items-center justify-between"
-                        >
-                           Z → A{sort === 'name-desc' && <CheckIcon size={16} />}
-                        </CommandItem>
-                     </CommandGroup>
-                     <CommandSeparator />
-                     <CommandGroup heading="Joined">
-                        <CommandItem
-                           onSelect={() => setSort('joined-asc')}
-                           className="flex items-center justify-between"
-                        >
-                           Oldest to Newest
-                           {sort === 'joined-asc' && <CheckIcon size={16} />}
-                        </CommandItem>
-                        <CommandItem
-                           onSelect={() => setSort('joined-desc')}
-                           className="flex items-center justify-between"
-                        >
-                           Newest to Oldest
-                           {sort === 'joined-desc' && <CheckIcon size={16} />}
-                        </CommandItem>
-                     </CommandGroup>
-                     <CommandSeparator />
-                     <CommandGroup heading="Teams">
-                        <CommandItem
-                           onSelect={() => setSort('teams-asc')}
-                           className="flex items-center justify-between"
-                        >
-                           Lowest to Highest
-                           {sort === 'teams-asc' && <CheckIcon size={16} />}
-                        </CommandItem>
-                        <CommandItem
-                           onSelect={() => setSort('teams-desc')}
-                           className="flex items-center justify-between"
-                        >
-                           Highest to Lowest
-                           {sort === 'teams-desc' && <CheckIcon size={16} />}
-                        </CommandItem>
-                     </CommandGroup>
-                  </CommandList>*/}
+                        <CommandList>
+                            <CommandGroup heading="Nom">
+                                <CommandItem onSelect={() => setSort('name-asc')} className="flex items-center justify-between">
+                                    A → Z{sort === 'name-asc' && <CheckIcon size={16} />}
+                                </CommandItem>
+                                <CommandItem onSelect={() => setSort('name-desc')} className="flex items-center justify-between">
+                                    Z → A{sort === 'name-desc' && <CheckIcon size={16} />}
+                                </CommandItem>
+                            </CommandGroup>
+                            <CommandSeparator />
+                            <CommandGroup heading="Date de rejoindre">
+                                <CommandItem onSelect={() => setSort('joined-asc')} className="flex items-center justify-between">
+                                    Plus ancien → Plus récent
+                                    {sort === 'joined-asc' && <CheckIcon size={16} />}
+                                </CommandItem>
+                                <CommandItem onSelect={() => setSort('joined-desc')} className="flex items-center justify-between">
+                                    Plus récent → Plus ancien
+                                    {sort === 'joined-desc' && <CheckIcon size={16} />}
+                                </CommandItem>
+                            </CommandGroup>
+                        </CommandList>
                     </Command>
                 ) : null}
             </PopoverContent>

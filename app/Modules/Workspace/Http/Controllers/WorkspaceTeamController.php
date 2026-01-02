@@ -78,7 +78,7 @@ class WorkspaceTeamController extends Controller
     public function members(Team $team): Response
     {
         return Inertia::render('workspace/teams/members', [
-            'team' => $team->load('members', 'leads')->toResource(),
+            'team' => $team->load('members.teams', 'leads')->toResource(),
         ]);
     }
 
@@ -203,6 +203,8 @@ class WorkspaceTeamController extends Controller
      */
     public function promoteMember(Team $team, \App\Models\User $user)
     {
+        $this->authorize('manage-members', $team);
+        
         if (! $team->isMember($user)) {
             return back()->withErrors([
                 'member' => 'L\'utilisateur n\'est pas membre de cette équipe.',
@@ -229,6 +231,8 @@ class WorkspaceTeamController extends Controller
      */
     public function demoteMember(Team $team, \App\Models\User $user)
     {
+        $this->authorize('manage-members', $team);
+        
         if (! $team->isLead($user)) {
             return back()->withErrors([
                 'member' => 'L\'utilisateur n\'est pas lead de cette équipe.',

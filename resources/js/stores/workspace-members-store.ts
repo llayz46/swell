@@ -11,8 +11,15 @@ type InvitableTeam = {
     color: string;
 };
 
+type MemberRole = 'workspace-admin' | 'team-lead' | 'team-member';
+type SortOption = 'name-asc' | 'name-desc' | 'joined-asc' | 'joined-desc' | null;
+
+type Filters = {
+    role: MemberRole[];
+};
+
 type WorkspaceMembersStore = {
-    members: WorkspaceMember[];
+    members: WorkspaceMember[] | TeamMember[];
     invitableTeams: InvitableTeam[];
     roles: string[];
     inviteMemberDialogOpen: boolean;
@@ -29,6 +36,16 @@ type WorkspaceMembersStore = {
     performRemoveMember: (team: Team, member: TeamMember) => void;
     performPromoteMember: (team: Team, member: TeamMember) => void;
     performDemoteMember: (team: Team, member: TeamMember) => void;
+
+    filters: Filters;
+    sort: SortOption;
+    setMembers: (members: WorkspaceMember[] | TeamMember[]) => void;
+    toggleFilter: (filterType: keyof Filters, value: MemberRole) => void;
+    clearFilters: () => void;
+    getActiveFiltersCount: () => number;
+    setSort: (sort: SortOption) => void;
+    filterByRole: (role: MemberRole) => (WorkspaceMember | TeamMember)[];
+    getFilteredAndSortedMembers: () => (WorkspaceMember | TeamMember)[];
 };
 
 export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get) => ({
@@ -40,6 +57,10 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
     removingMembers: new Set<number>(),
     promotingMembers: new Set<number>(),
     demotingMembers: new Set<number>(),
+    filters: {
+        role: [],
+    },
+    sort: null,
 
     openInviteMemberDialog: (options) => {
         set({
@@ -136,5 +157,80 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
                 toast.error(errorMessage);
             },
         });
+    },
+
+    setMembers: (members) => set({ members }),
+
+    toggleFilter: (filterType, value) =>
+        set((state) => {
+            const currentFilters = state.filters[filterType];
+            const newFilters = currentFilters.includes(value) ? currentFilters.filter((v) => v !== value) : [...currentFilters, value];
+
+            return {
+                filters: {
+                    ...state.filters,
+                    [filterType]: newFilters,
+                },
+            };
+        }),
+
+    clearFilters: () =>
+        set({
+            filters: {
+                role: [],
+            },
+        }),
+
+    getActiveFiltersCount: () => {
+        const { filters } = get();
+        return Object.values(filters).reduce((count, filterArray) => count + filterArray.length, 0);
+    },
+
+    setSort: (sort) => set({ sort }),
+
+    filterByRole: (role) => {
+        const { members } = get();
+        return members.filter((member) => {
+            const memberRole = 'workspaceRole' in member ? member.workspaceRole : member.role;
+            return memberRole === role;
+        });
+    },
+
+    getFilteredAndSortedMembers: () => {
+        const { members, filters, sort } = get();
+
+        let filteredMembers = members;
+
+        if (filters.role.length > 0) {
+            filteredMembers = filteredMembers.filter((member) => {
+                const memberRole = 'workspaceRole' in member ? member.workspaceRole : member.role;
+                return filters.role.includes(memberRole);
+            });
+        }
+
+        if (sort) {
+            filteredMembers = [...filteredMembers].sort((a, b) => {
+                switch (sort) {
+                    case 'name-asc':
+                        return a.name.localeCompare(b.name);
+                    case 'name-desc':
+                        return b.name.localeCompare(a.name);
+                    case 'joined-asc': {
+                        const dateA = 'joined_at' in a ? a.joined_at : a.created_at;
+                        const dateB = 'joined_at' in b ? b.joined_at : b.created_at;
+                        return new Date(dateA).getTime() - new Date(dateB).getTime();
+                    }
+                    case 'joined-desc': {
+                        const dateA = 'joined_at' in a ? a.joined_at : a.created_at;
+                        const dateB = 'joined_at' in b ? b.joined_at : b.created_at;
+                        return new Date(dateB).getTime() - new Date(dateA).getTime();
+                    }
+                    default:
+                        return 0;
+                }
+            });
+        }
+
+        return filteredMembers;
     },
 }))

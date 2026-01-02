@@ -37,9 +37,18 @@ const TABLE_COLUMNS = [
 ];
 
 export default function Members({ team }: IssuesPageProps) {
+    const { setMembers, getFilteredAndSortedMembers } = useWorkspaceMembersStore();
+    const filteredMembers = getFilteredAndSortedMembers() as TeamMember[];
+
     useEffect(() => {
         useWorkspaceIssuesStore.getState().setTeam(team);
     }, [team]);
+
+    useEffect(() => {
+        if (team.members) {
+            setMembers(team.members);
+        }
+    }, [team.members, setMembers]);
 
     return (
         <WorkspaceLayout
@@ -49,7 +58,7 @@ export default function Members({ team }: IssuesPageProps) {
             <Head title={`Tâches - ${team.identifier} - Workspace`} />
 
             <div className="w-full">
-                {team.members?.map((member) => (
+                {filteredMembers.map((member) => (
                     <MemberRow key={member.id} team={team} member={member} />
                 ))}
             </div>
@@ -70,6 +79,16 @@ function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
     const handleRemoveMember = (member: TeamMember) => {
         if (!isLead) return toast.error("Vous n'avez pas les droits pour retirer un membre de l'équipe");
         performRemoveMember(team, member);
+    };
+    
+    const handlePromoteMember = (member: TeamMember) => {
+        if (!isLead) return toast.error("Vous n'avez pas les droits pour promouvoir un membre de l'équipe");
+        performPromoteMember(team, member);
+    };
+    
+    const handleDemoteMember = (member: TeamMember) => {
+        if (!isLead) return toast.error("Vous n'avez pas les droits pour rétrograder un membre de l'équipe");
+        performDemoteMember(team, member);
     };
 
     return (
@@ -104,12 +123,12 @@ function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         {member.role === 'team-member' ? (
-                            <DropdownMenuItem onClick={() => performPromoteMember(team, member)}>
+                            <DropdownMenuItem onClick={() => handlePromoteMember(member)}>
                                 <Shield className="mr-2 size-4" />
                                 Promouvoir en lead
                             </DropdownMenuItem>
                         ) : (
-                            <DropdownMenuItem onClick={() => performDemoteMember(team, member)}>
+                            <DropdownMenuItem onClick={() => handleDemoteMember(member)}>
                                 <ShieldOff className="mr-2 size-4" />
                                 Rétrograder en membre
                             </DropdownMenuItem>
