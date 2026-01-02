@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { TeamMember } from '@/types/workspace';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useInitials } from '@/hooks/use-initials';
 import { Star } from 'lucide-react';
 
 interface MembersAvatarGroupProps {
@@ -12,10 +12,11 @@ interface MembersAvatarGroupProps {
 export function MembersAvatarGroup({ members, maxDisplay = 3 }: MembersAvatarGroupProps) {
     const displayedMembers = members.slice(0, maxDisplay);
     const remainingCount = members.length - displayedMembers.length;
+    
+    const getInitials = useInitials();
+    console.log(members)
 
-    if (members.length === 0) {
-        return null;
-    }
+    if (members.length === 0) return null;
 
     return (
         <TooltipProvider>
@@ -24,8 +25,8 @@ export function MembersAvatarGroup({ members, maxDisplay = 3 }: MembersAvatarGro
                     <div className="flex -space-x-2">
                         {displayedMembers.map((member, index) => (
                             <Avatar key={index} className="size-6 border-2 border-workspace">
-                                <AvatarImage src={getStorageUrl(member.avatar_url)} alt={member.name} />
-                                <AvatarFallback className="text-xs">{member.name[0]}</AvatarFallback>
+                                <AvatarImage src={member.avatar_url} alt={member.name} />
+                                <AvatarFallback className="text-xs">{getInitials(member.name)}</AvatarFallback>
                             </Avatar>
                         ))}
                         {remainingCount > 0 && (
@@ -41,7 +42,7 @@ export function MembersAvatarGroup({ members, maxDisplay = 3 }: MembersAvatarGro
                             <div key={index} className="flex items-center gap-1.5">
                                 <Avatar className="size-5">
                                     <AvatarImage src={member.avatar_url} alt={member.name} />
-                                    <AvatarFallback className="text-[10px]">{member.name[0]}</AvatarFallback>
+                                    <AvatarFallback className="text-[10px]">{getInitials(member.name)}</AvatarFallback>
                                 </Avatar>
                                 <span className="text-sm">{member.name}</span>
                                 <span className="mt-px text-xs text-muted-foreground">- {member.email}</span>

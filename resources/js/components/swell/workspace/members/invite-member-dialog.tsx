@@ -6,13 +6,13 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
-import { CheckIcon, ChevronsUpDown, LoaderCircle } from 'lucide-react';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
-import { formatWorkspaceRole } from '@/utils/format-workspace-role';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { useForm, usePage } from '@inertiajs/react';
-import { toast } from 'sonner';
 import type { SharedData } from '@/types';
+import { formatWorkspaceRole } from '@/utils/format-workspace-role';
+import { useForm, usePage } from '@inertiajs/react';
+import { CheckIcon, ChevronsUpDown, LoaderCircle } from 'lucide-react';
+import { FormEventHandler, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 type InviteMemberFormData = {
     role: string | null;
@@ -22,38 +22,50 @@ type InviteMemberFormData = {
 };
 
 export function InviteMemberDialog() {
-    const { user } = usePage<SharedData>().props.auth; 
+    const { user } = usePage<SharedData>().props.auth;
     const [memberDropdownOpen, setMemberDropdownOpen] = useState<boolean>(false);
     const [roleDropdownOpen, setRoleDropdownOpen] = useState<boolean>(false);
+    const [teamDropdownOpen, setTeamDropdownOpen] = useState<boolean>(false);
 
-    const { 
-        members,
-        roles,
-        inviteMemberDialogOpen,
-        closeInviteMemberDialog,
-        inviteMemberTeamId
-    } = useWorkspaceMembersStore();
+    const { members, roles, invitableTeams, inviteMemberDialogOpen, closeInviteMemberDialog, inviteMemberTeamId } = useWorkspaceMembersStore();
 
     const { data, setData, post, processing, errors, reset } = useForm<InviteMemberFormData>({
         role: null,
         team_id: null,
         user_id: null,
-        message: ''
+        message: '',
     });
-    
+
+    const showTeamSelector = !inviteMemberTeamId;
+
     useEffect(() => {
-        if (inviteMemberTeamId) setData('team_id', inviteMemberTeamId);
+        if (inviteMemberTeamId) {
+            setData('team_id', inviteMemberTeamId);
+        }
     }, [inviteMemberTeamId]);
-    
-    const filteredMembers = inviteMemberTeamId
-        ? members.filter((m) => !m.teams.some(team => team.id === inviteMemberTeamId) && m.id !== user.id)
+
+    useEffect(() => {
+        if (!inviteMemberDialogOpen) {
+            reset();
+        }
+    }, [inviteMemberDialogOpen]);
+
+    const selectedTeamId = data.team_id;
+    const filteredMembers = selectedTeamId
+        ? members.filter((m) => !m.teams.some((team) => team.id === selectedTeamId) && m.id !== user.id)
         : members.filter((m) => m.id !== user.id);
     const selectedMember = filteredMembers.find((m) => m.id === data.user_id);
-    
+
+    const selectedTeam = invitableTeams.find((t) => t.id === data.team_id);
     const selectedRole = data.role;
-    
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+
+        if (!data.team_id) {
+            toast.error('Veuillez sélectionner une équipe');
+            return;
+        }
 
         post(route('workspace.teams.invite', { team: data.team_id }), {
             preserveScroll: true,
@@ -69,20 +81,78 @@ export function InviteMemberDialog() {
                 });
             },
         });
-    }
-    
+    };
+
     return (
         <Dialog open={inviteMemberDialogOpen} onOpenChange={closeInviteMemberDialog}>
             <DialogContent className="shadow-dialog flex max-h-[calc(100vh-32px)] flex-col gap-0 overflow-y-visible border-transparent p-0 sm:max-w-xl [&>button:last-child]:top-3.5">
                 <DialogHeader className="contents space-y-0 text-left">
                     <DialogTitle className="border-b px-6 py-4 text-base">Inviter un membre</DialogTitle>
                 </DialogHeader>
-                <DialogDescription className="sr-only">Inviter un membre à rejoindre l'équipe</DialogDescription>
+                <DialogDescription className="sr-only">Inviter un membre à rejoindre une équipe</DialogDescription>
                 <div className="overflow-y-auto">
                     <div className="pt-4">
                         <form className="space-y-4 *:not-last:px-6" onSubmit={submit}>
+                            {showTeamSelector && (
+                                <div className="*:not-first:mt-2">
+                                    <Label htmlFor="team_id">Équipe</Label>
+                                    <Popover open={teamDropdownOpen} onOpenChange={setTeamDropdownOpen} modal={true}>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                role="combobox"
+                                                aria-expanded={teamDropdownOpen}
+                                                className="w-full justify-between"
+                                                disabled={processing}
+                                            >
+                                                {selectedTeam ? (
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="size-3 rounded-full" style={{ backgroundColor: selectedTeam.color }} />
+                                                        {selectedTeam.name}
+                                                    </div>
+                                                ) : (
+                                                    'Sélectionnez une équipe'
+                                                )}
+                                                <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-full min-w-(--radix-popper-anchor-width) border-input p-0" align="start">
+                                            <Command>
+                                                <CommandInput placeholder="Rechercher une équipe..." />
+                                                <CommandList>
+                                                    <CommandEmpty>Aucune équipe trouvée.</CommandEmpty>
+                                                    <CommandGroup>
+                                                        {invitableTeams.map((team) => (
+                                                            <CommandItem
+                                                                key={team.id}
+                                                                value={team.name}
+                                                                keywords={[team.name, team.identifier]}
+                                                                onSelect={() => {
+                                                                    setData('team_id', team.id);
+                                                                    setData('user_id', null);
+                                                                    setTeamDropdownOpen(false);
+                                                                }}
+                                                                className="flex items-center justify-between"
+                                                            >
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className="size-3 rounded-full" style={{ backgroundColor: team.color }} />
+                                                                    {team.name}
+                                                                    <span className="text-xs text-muted-foreground">({team.identifier})</span>
+                                                                </div>
+                                                                {data.team_id === team.id && <CheckIcon size={16} />}
+                                                            </CommandItem>
+                                                        ))}
+                                                    </CommandGroup>
+                                                </CommandList>
+                                            </Command>
+                                        </PopoverContent>
+                                    </Popover>
+                                    <InputError message={errors.team_id} />
+                                </div>
+                            )}
+
                             <div className="grid grid-cols-5 gap-3">
-                                <div className="*:not-first:mt-2 col-span-3">
+                                <div className="col-span-3 *:not-first:mt-2">
                                     <Label htmlFor="user_id">Membre</Label>
                                     <Popover open={memberDropdownOpen} onOpenChange={setMemberDropdownOpen} modal={true}>
                                         <PopoverTrigger asChild>
@@ -91,7 +161,7 @@ export function InviteMemberDialog() {
                                                 role="combobox"
                                                 aria-expanded={memberDropdownOpen}
                                                 className="w-full justify-between"
-                                                disabled={processing}
+                                                disabled={processing || (showTeamSelector && !data.team_id)}
                                             >
                                                 {selectedMember ? (
                                                     <div className="flex items-center gap-2">
@@ -107,6 +177,8 @@ export function InviteMemberDialog() {
                                                         </Avatar>
                                                         {selectedMember.name}
                                                     </div>
+                                                ) : showTeamSelector && !data.team_id ? (
+                                                    "Sélectionnez d'abord une équipe"
                                                 ) : (
                                                     'Sélectionnez un membre'
                                                 )}
@@ -154,7 +226,7 @@ export function InviteMemberDialog() {
                                     <InputError message={errors.user_id} />
                                 </div>
 
-                                <div className="*:not-first:mt-2 col-span-2">
+                                <div className="col-span-2 *:not-first:mt-2">
                                     <Label htmlFor="role_id">Rôle</Label>
                                     <Popover open={roleDropdownOpen} onOpenChange={setRoleDropdownOpen} modal={true}>
                                         <PopoverTrigger asChild>
@@ -216,9 +288,9 @@ export function InviteMemberDialog() {
                                         Annuler
                                     </Button>
                                 </DialogClose>
-                                <Button type="submit" disabled={processing}>
+                                <Button type="submit" disabled={processing || !data.team_id}>
                                     {processing && <LoaderCircle className="size-4 animate-spin" />}
-                                    Inviter {selectedMember?.name || ''} dans l'équipe
+                                    Inviter {selectedMember?.name || ''} {selectedTeam ? `dans ${selectedTeam.name}` : "dans l'équipe"}
                                 </Button>
                             </DialogFooter>
                         </form>

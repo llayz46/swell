@@ -7,9 +7,14 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import type { NavItem } from '@/types';
-import type { WorkspaceMember } from '@/types/workspace';
+import type { Team, WorkspaceMember } from '@/types/workspace';
 import { usePage } from '@inertiajs/react';
 import { type PropsWithChildren, useEffect } from 'react';
+
+interface WorkspaceSharedProps {
+    workspaceMembers: WorkspaceMember[] | null;
+    invitableTeams: Team[] | null;
+}
 
 interface SidebarProps {
     mainNavItems: NavItem[];
@@ -27,13 +32,16 @@ export default function AppSidebarLayout({
     workspaceNavItems,
     tableHeader,
 }: PropsWithChildren<SidebarProps>) {
-    const { workspaceMembers } = usePage<{ workspaceMembers: WorkspaceMember[] | null }>().props;
+    const { workspaceMembers, invitableTeams } = usePage<WorkspaceSharedProps>().props;
 
     useEffect(() => {
         if (workspaceMembers) {
             useWorkspaceMembersStore.setState({ members: workspaceMembers });
         }
-    }, [workspaceMembers]);
+        if (invitableTeams) {
+            useWorkspaceMembersStore.setState({ invitableTeams });
+        }
+    }, [workspaceMembers, invitableTeams]);
 
     // Hauteur ajustée selon le nombre de headers ET si un tableHeader existe
     const scrollHeight = tableHeader

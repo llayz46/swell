@@ -1,11 +1,12 @@
 import Header from '@/components/swell/workspace/layout/headers/members/header';
-import { TeamsBadgeGroup } from '@/components/swell/workspace/teams-badge-group';
+import { TeamsBadgeGroup } from '@/components/swell/workspace/members/teams-badge-group';
 import { WorkspaceTableHeader } from '@/components/swell/workspace/workspace-table-header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import WorkspaceLayout from '@/layouts/workspace-layout';
 import { WorkspaceMember } from '@/types/workspace';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
+import { useInitials } from '@/hooks/use-initials';
 import { Head } from '@inertiajs/react';
 
 const TABLE_COLUMNS = [
@@ -32,12 +33,14 @@ export default function Index({ members }: { members: WorkspaceMember[] }) {
 }
 
 function MemberRow({ member }: { member: WorkspaceMember }) {
+    const getInitials = useInitials();
+    
     return (
         <div className="flex w-full items-center border-b border-muted-foreground/5 px-6 py-3 text-sm hover:bg-sidebar/50">
             <div className="flex w-[85%] items-center gap-2 md:w-[70%]">
                 <Avatar className="size-8 shrink-0">
                     <AvatarImage src={member.avatar_url} alt={member.name} />
-                    <AvatarFallback>{member.name[0]}</AvatarFallback>
+                    <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
                 </Avatar>
 
                 <div className="flex flex-col items-start overflow-hidden">

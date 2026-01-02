@@ -3,8 +3,17 @@ import { router } from '@inertiajs/react';
 import { toast } from 'sonner';
 import { create } from 'zustand';
 
+type InvitableTeam = {
+    id: number;
+    identifier: string;
+    name: string;
+    icon?: string;
+    color: string;
+};
+
 type WorkspaceMembersStore = {
     members: WorkspaceMember[];
+    invitableTeams: InvitableTeam[];
     roles: string[];
     inviteMemberDialogOpen: boolean;
     removingMembers: Set<number>;
@@ -24,6 +33,7 @@ type WorkspaceMembersStore = {
 
 export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get) => ({
     members: [],
+    invitableTeams: [],
     roles: ['team-lead', 'team-member'],
     inviteMemberDialogOpen: false,
     inviteMemberTeamId: null,

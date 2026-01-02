@@ -8,6 +8,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useWorkspaceRole } from '@/hooks/use-workspace-role';
+import { useInitials } from '@/hooks/use-initials';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import { IssueAssignee } from '@/types/workspace';
@@ -25,6 +26,7 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
     const [currentAssignee, setCurrentAssignee] = useState<IssueAssignee | null>(user);
 
     const { isLead } = useWorkspaceRole();
+    const getInitials = useInitials();
     const { openInviteMemberDialog } = useWorkspaceMembersStore();
 
     const { team, members, updatingIssues, performUpdateAssignee } = useWorkspaceIssuesStore(
@@ -58,7 +60,7 @@ export function UserAssignee({ user, issueId }: AssigneeUserProps) {
                     {currentAssignee ? (
                         <Avatar className="size-6 shrink-0">
                             <AvatarImage src={currentAssignee.avatar_url} alt={currentAssignee.name} />
-                            <AvatarFallback>{currentAssignee.name[0]}</AvatarFallback>
+                            <AvatarFallback className="text-xs">{getInitials(currentAssignee.name)}</AvatarFallback>
                         </Avatar>
                     ) : (
                         <CircleUserRound className="size-6 text-zinc-600" />

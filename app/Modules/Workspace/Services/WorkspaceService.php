@@ -91,4 +91,47 @@ class WorkspaceService
     {
         Cache::forget('workspace-members');
     }
+
+    /**
+     * Get teams where user can invite members.
+     *
+     * For workspace-admin: all teams
+     * For team-lead: only teams where they are lead
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|null
+     */
+    public function getInvitableTeams(?User $user)
+    {
+        if (! $user) {
+            return null;
+        }
+
+        if ($user->isWorkspaceAdmin()) {
+            return Cache::remember('invitable-teams-all', 60, function () {
+                $teams = \App\Modules\Workspace\Models\Team::query()
+                    ->withCount('members', 'issues')
+                    ->get();
+
+                return TeamResource::collection($teams);
+            });
+        }
+
+        $teams = $user->teams()
+            ->wherePivot('role', 'team-lead')
+            ->withCount('members', 'issues')
+            ->get()
+            ->each(function ($team) {
+                $team->joined = true;
+            });
+
+        return TeamResource::collection($teams);
+    }
+
+    /**
+     * Clear all invitable teams caches.
+     */
+    public function clearInvitableTeamsCache(): void
+    {
+        Cache::forget('invitable-teams-all');
+    }
 }

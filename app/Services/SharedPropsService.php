@@ -117,6 +117,20 @@ class SharedPropsService
     }
 
     /**
+     * Get teams where user can invite members (only for workspace routes).
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|null
+     */
+    public function getInvitableTeams(Request $request)
+    {
+        if (! $request->routeIs('workspace.*')) {
+            return null;
+        }
+
+        return $this->workspaceService->getInvitableTeams($request->user());
+    }
+
+    /**
      * Clear all Swell configuration caches.
      */
     public function clearAllCaches(): void

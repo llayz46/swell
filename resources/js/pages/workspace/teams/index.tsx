@@ -1,5 +1,5 @@
 import Header from '@/components/swell/workspace/layout/headers/teams/header';
-import { MembersAvatarGroup } from '@/components/swell/workspace/members-avatar-group';
+import { MembersAvatarGroup } from '@/components/swell/workspace/teams/members-avatar-group';
 import { WorkspaceTableHeader } from '@/components/swell/workspace/workspace-table-header';
 import { Badge } from '@/components/ui/badge';
 import WorkspaceLayout from '@/layouts/workspace-layout';

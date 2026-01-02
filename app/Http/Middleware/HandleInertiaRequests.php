@@ -59,6 +59,7 @@ class HandleInertiaRequests extends Middleware
 
         if (config('swell.workspace.enabled', true)) {
             $shared['workspaceMembers'] = fn () => $this->sharedPropsService->getWorkspaceMembers($request);
+            $shared['invitableTeams'] = fn () => $this->sharedPropsService->getInvitableTeams($request);
         }
 
         return $shared;

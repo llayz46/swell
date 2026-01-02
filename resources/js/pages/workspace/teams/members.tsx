@@ -17,6 +17,7 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { useWorkspaceRole } from '@/hooks/use-workspace-role';
+import { useInitials } from '@/hooks/use-initials';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { toast } from 'sonner';
@@ -36,7 +37,6 @@ const TABLE_COLUMNS = [
 ];
 
 export default function Members({ team }: IssuesPageProps) {
-    // Initialiser le store avec l'équipe actuelle
     useEffect(() => {
         useWorkspaceIssuesStore.getState().setTeam(team);
     }, [team]);
@@ -59,6 +59,8 @@ export default function Members({ team }: IssuesPageProps) {
 
 function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
     const { isLead } = useWorkspaceRole(team.id);
+    const getInitials = useInitials();
+    
     const {
         performPromoteMember,
         performDemoteMember,
@@ -75,7 +77,7 @@ function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
             <div className="flex w-[75%] items-center gap-2 md:w-[65%]">
                 <Avatar className="size-8 shrink-0">
                     <AvatarImage src={member.avatar_url} alt={member.name} />
-                    <AvatarFallback>{member.name[0]}</AvatarFallback>
+                    <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
                 </Avatar>
 
                 <div className="flex flex-col items-start overflow-hidden">
