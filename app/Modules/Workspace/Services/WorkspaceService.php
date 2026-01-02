@@ -5,6 +5,7 @@ namespace App\Modules\Workspace\Services;
 use App\Models\User;
 use App\Modules\Workspace\Enums\WorkspaceRole;
 use App\Modules\Workspace\Http\Resources\TeamResource;
+use App\Modules\Workspace\Models\Team;
 use App\Modules\Workspace\Http\Resources\WorkspaceMemberResource;
 use Illuminate\Support\Facades\Cache;
 
@@ -17,16 +18,15 @@ class WorkspaceService
      */
     public function getUserTeams(?User $user)
     {
-        if (! $user) {
-            return null;
-        }
+        if (!$user) return null;
 
         return Cache::remember("user-teams-{$user->id}", 60, function () use ($user) {
-            $teams = $user->teams()
+            $user->isWorkspaceAdmin() ?
+                $teams = Team::all()
+            : $teams = $user->teams()
                 ->withCount('members', 'issues')
                 ->get()
                 ->each(function ($team) {
-                    // L'utilisateur est forcément membre puisqu'on récupère SES équipes
                     $team->joined = true;
                 });
 
@@ -108,7 +108,7 @@ class WorkspaceService
 
         if ($user->isWorkspaceAdmin()) {
             return Cache::remember('invitable-teams-all', 60, function () {
-                $teams = \App\Modules\Workspace\Models\Team::query()
+                $teams = Team::query()
                     ->withCount('members', 'issues')
                     ->get();
 
