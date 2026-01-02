@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/sidebar';
 import { useActiveNav } from '@/hooks/use-active-nav';
 import { useConfirmContext } from '@/contexts/confirm-context';
-import { NavItemWithChildren, type NavItem } from '@/types';
-import { Link, router } from '@inertiajs/react';
+import type { NavItemWithChildren, NavItem } from '@/types';
+import { Link, router, usePage } from '@inertiajs/react';
 import { ChevronRight, MoreHorizontal, Settings, LogOutIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -69,6 +69,9 @@ const SidebarMenuItemWithActive = ({ child = false, item }: { child?: boolean; i
 
 const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
     const { confirm } = useConfirmContext();
+    const { url } = usePage();
+
+    const isOnTeamPage = item.childrens.some((child) => url.startsWith(child.href));
 
     const handleLeaveTeam = async (teamId: number) => {
         await confirm({
@@ -95,7 +98,7 @@ const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
     };
 
     return (
-        <Collapsible asChild className="group/collapsible">
+        <Collapsible asChild defaultOpen={isOnTeamPage} className="group/collapsible">
             <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
                     <SidebarMenuButton tooltip={item.title}>
