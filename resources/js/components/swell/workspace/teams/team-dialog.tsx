@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useWorkspaceTeamsStore } from '@/stores/workspace-teams-store';
 import { useForm } from '@inertiajs/react';
 import { CheckIcon, LoaderCircle, Smile } from 'lucide-react';
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useWorkspaceRole } from '@/hooks/use-workspace-role';
@@ -54,10 +54,10 @@ export function TeamDialog() {
     const [emojiPickerOpen, setEmojiPickerOpen] = useState<boolean>(false);
     const [colorPickerOpen, setColorPickerOpen] = useState<boolean>(false);
 
-    const { teamDialogOpen, closeTeamDialog } = useWorkspaceTeamsStore();
+    const { teamDialogOpen, closeTeamDialog, selectedTeamDialog } = useWorkspaceTeamsStore();
     const { isAdmin } = useWorkspaceRole();
 
-    const { data, setData, post, processing, errors, reset } = useForm<TeamFormData>({
+    const { data, setData, post, put, processing, errors, reset } = useForm<TeamFormData>({
         name: '',
         identifier: '',
         icon: '',
@@ -65,21 +65,43 @@ export function TeamDialog() {
         description: ''
     });
 
+    const isEditing = !!selectedTeamDialog;
+
+    useEffect(() => {
+        if (selectedTeamDialog) {
+            setData({
+                name: selectedTeamDialog.name,
+                identifier: selectedTeamDialog.identifier,
+                icon: selectedTeamDialog.icon ?? '',
+                color: selectedTeamDialog.color,
+                description: selectedTeamDialog.description ?? ''
+            });
+        } else {
+            reset();
+        }
+    }, [selectedTeamDialog]);
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        
-        if (!isAdmin) return toast.error('Vous n\'avez pas les droits pour créer une équipe');
 
-        post(route('workspace.teams.store'), {
+        const submitMethod = isEditing ? put : post;
+        
+        if (!isEditing && !isAdmin) return toast.error('Vous n\'avez pas les droits pour ' + (isEditing ? 'modifier' : 'créer') + ' une équipe');
+
+        const submitRoute = isEditing
+            ? route('workspace.teams.update', selectedTeamDialog!.id)
+            : route('workspace.teams.store');
+
+        submitMethod(submitRoute, {
             preserveScroll: true,
             onSuccess: () => {
                 reset();
                 closeTeamDialog();
-                toast.success('Équipe créée avec succès');
+                toast.success(isEditing ? 'Équipe modifiée avec succès' : 'Équipe créée avec succès');
             },
             onError: (errors) => {
                 const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
-                toast.error('Erreur lors de la création de l\'équipe', {
+                toast.error('Erreur lors de ' + (isEditing ? 'la modification' : 'la création') + ' de l\'équipe', {
                     description: allErrors,
                 });
             },
@@ -90,9 +112,13 @@ export function TeamDialog() {
         <Dialog open={teamDialogOpen} onOpenChange={closeTeamDialog}>
             <DialogContent className="shadow-dialog flex max-h-[calc(100vh-32px)] flex-col gap-0 overflow-y-visible border-transparent p-0 sm:max-w-xl [&>button:last-child]:top-3.5">
                 <DialogHeader className="contents space-y-0 text-left">
-                    <DialogTitle className="border-b px-6 py-4 text-base">Créer une équipe</DialogTitle>
+                    <DialogTitle className="border-b px-6 py-4 text-base">
+                        {isEditing ? 'Modifier l\'équipe' : 'Créer une équipe'}
+                    </DialogTitle>
                 </DialogHeader>
-                <DialogDescription className="sr-only">Créer une équipe</DialogDescription>
+                <DialogDescription className="sr-only">
+                    {isEditing ? 'Modifier l\'équipe' : 'Créer une équipe'}
+                </DialogDescription>
                 <div className="overflow-y-auto">
                     <div className="pt-4">
                         <form className="space-y-4 *:not-last:px-6" onSubmit={submit}>
@@ -234,7 +260,7 @@ export function TeamDialog() {
                                 </DialogClose>
                                 <Button type="submit" disabled={processing}>
                                     {processing && <LoaderCircle className="size-4 animate-spin" />}
-                                    Créer l'équipe
+                                    {isEditing ? 'Modifier l\'équipe' : 'Créer l\'équipe'}
                                 </Button>
                             </DialogFooter>
                         </form>

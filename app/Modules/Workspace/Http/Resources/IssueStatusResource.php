@@ -21,7 +21,7 @@ class IssueStatusResource extends JsonResource
             'color' => $this->color,
             'icon_type' => $this->icon_type,
             'order' => $this->order,
-            'issues' => $this->whenLoaded('issues', fn() => $this->issues->toResourceCollection()),
+            'issues' => $this->whenLoaded('issues', fn () => $this->issues->toResourceCollection()),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

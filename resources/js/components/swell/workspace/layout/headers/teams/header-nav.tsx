@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Plus } from 'lucide-react';
 import { useWorkspaceTeamsStore } from '@/stores/workspace-teams-store';
-import { TeamDialog } from '@/components/swell/workspace/teams/team-dialog';
 import { useWorkspaceRole } from '@/hooks/use-workspace-role';
 
 export default function HeaderNav({ teamsLength }: { teamsLength: number }) {
@@ -27,8 +26,6 @@ export default function HeaderNav({ teamsLength }: { teamsLength: number }) {
                     Ajouter une équipe
                 </Button>
             )}
-            
-            <TeamDialog />
         </div>
     );
 }

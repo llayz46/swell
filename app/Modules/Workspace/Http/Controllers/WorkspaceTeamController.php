@@ -5,6 +5,7 @@ namespace App\Modules\Workspace\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Workspace\Http\Requests\Team\InviteTeamMemberRequest;
 use App\Modules\Workspace\Http\Requests\Team\StoreTeamRequest;
+use App\Modules\Workspace\Http\Requests\Team\UpdateTeamRequest;
 use App\Modules\Workspace\Models\Issue;
 use App\Modules\Workspace\Models\IssueLabel;
 use App\Modules\Workspace\Models\IssuePriority;
@@ -131,9 +132,17 @@ class WorkspaceTeamController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Team $team)
+    public function update(UpdateTeamRequest $request, Team $team)
     {
-        //
+        $this->authorize('update', $team);
+
+        $team->update($request->validated());
+
+        $workspaceService = app(WorkspaceService::class);
+        $workspaceService->clearUserTeamsCache(auth()->user());
+        $workspaceService->clearWorkspaceMembersCache();
+
+        return back();
     }
 
     /**

@@ -12,6 +12,7 @@ import {
     SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { useActiveNav } from '@/hooks/use-active-nav';
+import { useWorkspaceTeamsStore } from '@/stores/workspace-teams-store';
 import { useConfirmContext } from '@/contexts/confirm-context';
 import type { NavItemWithChildren, NavItem } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
@@ -68,6 +69,7 @@ const SidebarMenuItemWithActive = ({ child = false, item }: { child?: boolean; i
 };
 
 const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
+    const { openTeamDialog } = useWorkspaceTeamsStore();
     const { confirm } = useConfirmContext();
     const { url } = usePage();
 
@@ -121,23 +123,10 @@ const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
                                 </SidebarMenuAction>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-48 rounded-lg" side="right" align="start">
-                                <DropdownMenuItem disabled>
+                                <DropdownMenuItem onClick={() => openTeamDialog({ team: item.team })}>
                                     <Settings className="size-4" />
                                     <span>Paramètres</span>
                                 </DropdownMenuItem>
-                                {/*<DropdownMenuItem>
-                                    <LinkIcon className="size-4" />
-                                    <span>Copier le lien</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Archive className="size-4" />
-                                    <span>Ouvrir les archives</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem>
-                                    <Bell className="size-4" />
-                                    <span>S'abonner</span>
-                                </DropdownMenuItem>*/}
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                     className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"

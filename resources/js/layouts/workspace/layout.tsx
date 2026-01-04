@@ -3,6 +3,7 @@ import { ToasterWrapper } from '@/components/swell/toaster-wrapper';
 import { WorkspaceShell } from '@/components/swell/workspace/layout/sidebar/workspace-shell';
 import { WorkspaceSidebar } from '@/components/swell/workspace/layout/sidebar/workspace-sidebar';
 import { InviteMemberDialog } from '@/components/swell/workspace/members/invite-member-dialog';
+import { TeamDialog } from '@/components/swell/workspace/teams/team-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
@@ -68,6 +69,7 @@ export default function AppSidebarLayout({
                 <ScrollArea className={cn('size-full', scrollHeight[headersNumber])}>{children}</ScrollArea>
 
                 <InviteMemberDialog />
+                <TeamDialog />
                 <ToasterWrapper />
             </AppContent>
         </WorkspaceShell>

@@ -30,6 +30,9 @@ export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: SidebarPro
         id: team.id,
         title: team.name,
         icon: team.icon,
+        color: team.color,
+        description: team.description,
+        team: team, // Stockage des données complètes de l'équipe
         childrens: [
             {
                 title: 'Tâches',

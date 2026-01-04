@@ -19,7 +19,7 @@ class IssueLabelResource extends JsonResource
             'slug' => $this->slug,
             'name' => $this->name,
             'color' => $this->color,
-            'issues' => $this->whenLoaded('issues', fn() => $this->issues->toResourceCollection()),
+            'issues' => $this->whenLoaded('issues', fn () => $this->issues->toResourceCollection()),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

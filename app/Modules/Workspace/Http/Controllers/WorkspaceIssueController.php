@@ -78,7 +78,7 @@ class WorkspaceIssueController extends Controller
     public function update(UpdateIssueRequest $request, Issue $issue)
     {
         $this->authorize('update', $issue);
-        
+
         $validated = $request->validated();
 
         $issue->update([

@@ -51,7 +51,7 @@ class IssueResource extends JsonResource
                 'icon' => $this->team->icon,
                 'color' => $this->team->color,
             ]),
-            'labels' => $this->whenLoaded('labels', fn () => $this->labels->map(fn($label) => [
+            'labels' => $this->whenLoaded('labels', fn () => $this->labels->map(fn ($label) => [
                 'id' => $label->id,
                 'name' => $label->name,
                 'slug' => $label->slug,

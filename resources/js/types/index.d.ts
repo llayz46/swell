@@ -30,7 +30,10 @@ export interface NavItemWithChildren {
     id?: number;
     title: string;
     icon?: LucideIcon | string | undefined;
+    color?: string;
+    description?: string;
     childrens: NavItem[];
+    team?: Team; // Ajout des données complètes de l'équipe
 }
 
 export type BannerItem = {

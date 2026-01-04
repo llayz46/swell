@@ -3,7 +3,6 @@
 namespace App\Modules\Workspace\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Workspace\Models\InboxItem;
 use Inertia\Inertia;
 use Inertia\Response;
 

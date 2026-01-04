@@ -43,7 +43,7 @@ abstract class BaseIssueRequest extends FormRequest
 
             'label_ids.array' => 'Hmm, quelque chose ne va pas avec les labels sélectionnés.',
             'label_ids.*.exists' => 'Désolé, un des labels sélectionnés est introuvable.',
-            
+
             'label_id.required' => 'Oups ! Veuillez sélectionner une étiquette.',
             'label_id.integer' => 'Hmm, quelque chose ne va pas avec l\'étiquette sélectionnée.',
             'label_id.exists' => 'Désolé, cette étiquette est introuvable. Veuillez en choisir une autre.',
