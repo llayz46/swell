@@ -2,8 +2,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Plus } from 'lucide-react';
+import { useWorkspaceTeamsStore } from '@/stores/workspace-teams-store';
+import { TeamDialog } from '@/components/swell/workspace/teams/team-dialog';
+import { useWorkspaceRole } from '@/hooks/use-workspace-role';
 
 export default function HeaderNav({ teamsLength }: { teamsLength: number }) {
+    const { openTeamDialog } = useWorkspaceTeamsStore();
+    const { isAdmin } = useWorkspaceRole();
+    
     return (
         <div className="flex h-10 w-full items-center justify-between border-b px-6 py-1.5">
             <div className="flex items-center gap-2">
@@ -15,10 +21,14 @@ export default function HeaderNav({ teamsLength }: { teamsLength: number }) {
                 </div>
             </div>
 
-            <Button variant="secondary" size="xs">
-                <Plus />
-                Ajouter une équipe
-            </Button>
+            {isAdmin && (
+                <Button variant="secondary" size="xs" onClick={() => openTeamDialog()}>
+                    <Plus />
+                    Ajouter une équipe
+                </Button>
+            )}
+            
+            <TeamDialog />
         </div>
     );
 }

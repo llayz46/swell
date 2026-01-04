@@ -67,9 +67,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::prefix('teams')->name('teams.')->group(function () {
                 Route::get('/', [WorkspaceTeamController::class, 'index'])->name('index');
-                // Route::post('/', [WorkspaceTeamController::class, 'store'])
-                //     ->middleware('permission:workspace.teams.create')
-                //     ->name('store');
+                Route::post('/', [WorkspaceTeamController::class, 'store'])->name('store');
 
                 Route::get('/{team:identifier}/issues', [WorkspaceTeamController::class, 'issues'])->name('issues');
                 Route::get('/{team:identifier}/members', [WorkspaceTeamController::class, 'members'])->name('members');

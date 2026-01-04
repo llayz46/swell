@@ -13,6 +13,11 @@ type WorkspaceTeamsStore = {
     teams: Team[];
     filters: Filters;
     sort: SortOption;
+    
+    teamDialogOpen: boolean;
+    selectedTeamDialog: Team | null;
+    openTeamDialog: (options?: { team?: Team }) => void;
+    closeTeamDialog: () => void;
 
     setTeams: (teams: Team[]) => void;
     toggleMembershipFilter: (value: MembershipFilter) => void;
@@ -30,6 +35,15 @@ export const useWorkspaceTeamsStore = create<WorkspaceTeamsStore>((set, get) => 
         identifiers: [],
     },
     sort: null,
+    
+    teamDialogOpen: false,
+    selectedTeamDialog: null,
+    openTeamDialog: (options?: { team?: Team }) => {
+        set({ teamDialogOpen: true, selectedTeamDialog: options?.team });
+    },
+    closeTeamDialog: () => {
+        set({ teamDialogOpen: false, selectedTeamDialog: null });
+    },
 
     setTeams: (teams) => set({ teams }),
 

@@ -4,12 +4,14 @@ namespace App\Modules\Workspace\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Workspace\Http\Requests\Team\InviteTeamMemberRequest;
+use App\Modules\Workspace\Http\Requests\Team\StoreTeamRequest;
 use App\Modules\Workspace\Models\Issue;
 use App\Modules\Workspace\Models\IssueLabel;
 use App\Modules\Workspace\Models\IssuePriority;
 use App\Modules\Workspace\Models\IssueStatus;
 use App\Modules\Workspace\Models\Team;
 use App\Modules\Workspace\Models\TeamInvitation;
+use App\Modules\Workspace\Services\WorkspaceService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -95,9 +97,19 @@ class WorkspaceTeamController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTeamRequest $request)
     {
-        //
+        $this->authorize('create', Team::class);
+
+        $team = Team::create($request->validated());
+
+        $team->addMember(auth()->user(), \App\Modules\Workspace\Enums\WorkspaceRole::TeamLead->value);
+
+        $workspaceService = app(WorkspaceService::class);
+        $workspaceService->clearUserTeamsCache(auth()->user());
+        $workspaceService->clearWorkspaceMembersCache();
+
+        return back();
     }
 
     /**
@@ -165,7 +177,7 @@ class WorkspaceTeamController extends Controller
 
         $team->removeMember($user);
 
-        $workspaceService = app(\App\Modules\Workspace\Services\WorkspaceService::class);
+        $workspaceService = app(WorkspaceService::class);
         $workspaceService->clearUserTeamsCache($user);
         $workspaceService->clearWorkspaceMembersCache();
 
@@ -193,7 +205,7 @@ class WorkspaceTeamController extends Controller
 
         $team->removeMember($user);
 
-        $workspaceService = app(\App\Modules\Workspace\Services\WorkspaceService::class);
+        $workspaceService = app(WorkspaceService::class);
         $workspaceService->clearUserTeamsCache($user);
         $workspaceService->clearWorkspaceMembersCache();
 
@@ -206,7 +218,7 @@ class WorkspaceTeamController extends Controller
     public function promoteMember(Team $team, \App\Models\User $user)
     {
         $this->authorize('manage-members', $team);
-        
+
         if (! $team->isMember($user)) {
             return back()->withErrors([
                 'member' => 'L\'utilisateur n\'est pas membre de cette équipe.',
@@ -221,7 +233,7 @@ class WorkspaceTeamController extends Controller
 
         $team->promoteMember($user);
 
-        $workspaceService = app(\App\Modules\Workspace\Services\WorkspaceService::class);
+        $workspaceService = app(WorkspaceService::class);
         $workspaceService->clearUserTeamsCache($user);
         $workspaceService->clearWorkspaceMembersCache();
 
@@ -234,7 +246,7 @@ class WorkspaceTeamController extends Controller
     public function demoteMember(Team $team, \App\Models\User $user)
     {
         $this->authorize('manage-members', $team);
-        
+
         if (! $team->isLead($user)) {
             return back()->withErrors([
                 'member' => 'L\'utilisateur n\'est pas lead de cette équipe.',
@@ -249,7 +261,7 @@ class WorkspaceTeamController extends Controller
 
         $team->demoteLead($user);
 
-        $workspaceService = app(\App\Modules\Workspace\Services\WorkspaceService::class);
+        $workspaceService = app(WorkspaceService::class);
         $workspaceService->clearUserTeamsCache($user);
         $workspaceService->clearWorkspaceMembersCache();
 
