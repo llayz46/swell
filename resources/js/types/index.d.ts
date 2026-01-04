@@ -33,7 +33,7 @@ export interface NavItemWithChildren {
     color?: string;
     description?: string;
     childrens: NavItem[];
-    team?: Team; // Ajout des données complètes de l'équipe
+    team?: Team;
 }
 
 export type BannerItem = {
