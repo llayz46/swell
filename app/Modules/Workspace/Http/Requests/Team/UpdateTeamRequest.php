@@ -18,11 +18,11 @@ class UpdateTeamRequest extends FormRequest
     {
         if (! $this->identifier || empty(trim($this->identifier))) {
             $this->merge([
-                'identifier' => Str::slug($this->name),
+            'identifier' => strtoupper(Str::slug($this->name)),
             ]);
         } else {
             $this->merge([
-                'identifier' => Str::slug($this->identifier),
+                'identifier' => strtoupper(Str::slug($this->identifier)),
             ]);
         }
     }
