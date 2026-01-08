@@ -36,7 +36,6 @@ export function FocusTab({ issues, statuses, priorities, selectedIssue, onSelect
     const filteredIssues = useMemo(() => {
         let filtered = [...issues];
 
-        // Search filter
         if (search) {
             const searchLower = search.toLowerCase();
             filtered = filtered.filter(
@@ -44,12 +43,10 @@ export function FocusTab({ issues, statuses, priorities, selectedIssue, onSelect
             );
         }
 
-        // Status filter
         if (statusFilter.length > 0) {
             filtered = filtered.filter((issue) => statusFilter.includes(issue.status.slug));
         }
 
-        // Priority filter
         if (priorityFilter.length > 0) {
             filtered = filtered.filter((issue) => priorityFilter.includes(issue.priority.slug));
         }
@@ -69,10 +66,8 @@ export function FocusTab({ issues, statuses, priorities, selectedIssue, onSelect
 
     return (
         <ResizablePanelGroup direction="horizontal" autoSaveId="my-issues-focus-panel" className="h-full">
-            {/* Left Panel - Issue List */}
             <ResizablePanel defaultSize={40} minSize={30} maxSize={60}>
                 <div className="flex h-full flex-col border-r">
-                    {/* Filters Header */}
                     <div className="flex items-center gap-2 border-b p-3">
                         <div className="relative flex-1">
                             <Search className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -138,7 +133,6 @@ export function FocusTab({ issues, statuses, priorities, selectedIssue, onSelect
                         </DropdownMenu>
                     </div>
 
-                    {/* Issue List */}
                     <ScrollArea className="flex-1">
                         <div className="p-2">
                             {filteredIssues.length === 0 ? (
@@ -163,7 +157,6 @@ export function FocusTab({ issues, statuses, priorities, selectedIssue, onSelect
                         </div>
                     </ScrollArea>
 
-                    {/* Footer */}
                     <div className="border-t px-3 py-2 text-xs text-muted-foreground">
                         {filteredIssues.length} tâche{filteredIssues.length > 1 ? 's' : ''}
                         {hasActiveFilters && ` (filtré)`}
@@ -173,7 +166,6 @@ export function FocusTab({ issues, statuses, priorities, selectedIssue, onSelect
 
             <ResizableHandle withHandle />
 
-            {/* Right Panel - Issue Detail */}
             <ResizablePanel defaultSize={60}>
                 <IssueDetailPanel issue={selectedIssue} />
             </ResizablePanel>

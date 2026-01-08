@@ -7,6 +7,7 @@ import { isPast, isToday, parseISO } from 'date-fns';
 import { AlertTriangle, CheckCircle2, Clock, ListTodo, Target } from 'lucide-react';
 import { useMemo } from 'react';
 import { StatCard } from './stat-card';
+import { cn } from '@/lib/utils';
 import type { MyIssue, MyIssuesStats } from './types';
 
 interface OverviewTabProps {
@@ -16,7 +17,6 @@ interface OverviewTabProps {
 }
 
 export function OverviewTab({ issues, stats, onIssueClick }: OverviewTabProps) {
-    // Focus du jour : dues aujourd'hui OU haute priorité
     const focusIssues = useMemo(() => {
         return issues
             .filter((issue) => {
@@ -28,7 +28,6 @@ export function OverviewTab({ issues, stats, onIssueClick }: OverviewTabProps) {
             .slice(0, 5);
     }, [issues]);
 
-    // En retard : due date passée
     const overdueIssues = useMemo(() => {
         return issues.filter((issue) => {
             if (!issue.dueDate) return false;
@@ -38,7 +37,6 @@ export function OverviewTab({ issues, stats, onIssueClick }: OverviewTabProps) {
         });
     }, [issues]);
 
-    // Grouper par équipe
     const issuesByTeam = useMemo(() => {
         const grouped = new Map<string, { team: MyIssue['team']; issues: MyIssue[] }>();
 
@@ -70,7 +68,7 @@ export function OverviewTab({ issues, stats, onIssueClick }: OverviewTabProps) {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-                <Card>
+                <Card className="gap-0">
                     <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                             <Target className="size-4 text-amber-500" />
@@ -94,7 +92,7 @@ export function OverviewTab({ issues, stats, onIssueClick }: OverviewTabProps) {
                     </CardContent>
                 </Card>
 
-                <Card className={overdueIssues.length > 0 ? 'border-red-200 dark:border-red-900/50' : ''}>
+                <Card className={cn('gap-0', overdueIssues.length > 0 ? 'border-red-200 dark:border-red-900/50' : '')}>
                     <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                             <AlertTriangle className={`size-4 ${overdueIssues.length > 0 ? 'text-red-500' : 'text-muted-foreground'}`} />
@@ -119,7 +117,7 @@ export function OverviewTab({ issues, stats, onIssueClick }: OverviewTabProps) {
                 </Card>
             </div>
 
-            <Card>
+            <Card className="gap-0">
                 <CardHeader className="pb-3">
                     <div className="flex items-center gap-2">
                         <ListTodo className="size-4 text-muted-foreground" />
@@ -130,15 +128,15 @@ export function OverviewTab({ issues, stats, onIssueClick }: OverviewTabProps) {
                     </div>
                     <CardDescription>Groupées par équipe</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <ScrollArea className="h-[400px] pr-4">
+                <CardContent className="p-0">
+                    <ScrollArea className="h-[400px]">
                         {issuesByTeam.length === 0 ? (
                             <p className="py-4 text-center text-sm text-muted-foreground">Aucune tâche assignée</p>
                         ) : (
-                            <div className="space-y-6">
+                            <div>
                                 {issuesByTeam.map(({ team, issues: teamIssues }) => (
-                                    <div key={team.identifier}>
-                                        <div className="mb-3 flex items-center gap-2">
+                                    <div key={team.identifier} className="relative">
+                                        <div className="sticky top-0 z-10 flex items-center gap-2 border-b bg-card px-6 py-2">
                                             <div className="size-3 rounded-sm" style={{ backgroundColor: team.color }} />
                                             <span className="text-sm font-semibold">{team.identifier}</span>
                                             <span className="text-xs text-muted-foreground">{team.name}</span>
@@ -146,7 +144,7 @@ export function OverviewTab({ issues, stats, onIssueClick }: OverviewTabProps) {
                                                 {teamIssues.length}
                                             </Badge>
                                         </div>
-                                        <div className="ml-5 space-y-1">
+                                        <div className="space-y-1 px-6 py-2">
                                             {teamIssues.map((issue) => (
                                                 <IssueRow key={issue.id} issue={issue} onClick={() => onIssueClick?.(issue)} compact />
                                             ))}
