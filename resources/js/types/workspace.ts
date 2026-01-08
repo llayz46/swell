@@ -41,6 +41,7 @@ export interface Issue {
         id: number;
         name: string;
     };
+    team?: Team;
     labels: IssueLabel[];
     dueDate?: string;
     createdAt: string;
