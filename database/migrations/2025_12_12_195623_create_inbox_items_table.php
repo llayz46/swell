@@ -46,6 +46,7 @@ return new class extends Migration
 
             $table->boolean('read')->default(false);
             $table->timestamp('read_at')->nullable();
+            $table->timestamp('snoozed_until')->nullable();
             
             $table->timestamps();
         });

@@ -2,8 +2,10 @@
 
 namespace App\Modules\Workspace;
 
+use App\Modules\Workspace\Models\InboxItem;
 use App\Modules\Workspace\Models\Issue;
 use App\Modules\Workspace\Models\Team;
+use App\Modules\Workspace\Policies\InboxItemPolicy;
 use App\Modules\Workspace\Policies\IssuePolicy;
 use App\Modules\Workspace\Policies\TeamPolicy;
 use App\Modules\Workspace\Services\WorkspaceService;
@@ -36,6 +38,7 @@ class WorkspaceServiceProvider extends ServiceProvider
     {
         Gate::policy(Issue::class, IssuePolicy::class);
         Gate::policy(Team::class, TeamPolicy::class);
+        Gate::policy(InboxItem::class, InboxItemPolicy::class);
     }
 
     public function registerServices(): void

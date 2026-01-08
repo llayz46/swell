@@ -58,8 +58,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::prefix('inbox')->name('inbox.')->group(function () {
                 Route::get('/', [WorkspaceInboxController::class, 'index'])->name('index');
-                // Route::put('/{inboxItem}', [WorkspaceInboxController::class, 'markAsRead'])->name('read');
-                // Route::post('/read-all', [WorkspaceInboxController::class, 'markAllAsRead'])->name('read-all');
+                Route::post('/read-all', [WorkspaceInboxController::class, 'markAllAsRead'])->name('read-all');
+                Route::delete('/all', [WorkspaceInboxController::class, 'destroyAll'])->name('destroy-all');
+                Route::delete('/read', [WorkspaceInboxController::class, 'destroyRead'])->name('destroy-read');
+                Route::patch('/{inboxItem}/read', [WorkspaceInboxController::class, 'markAsRead'])->name('read');
+                Route::patch('/{inboxItem}/unread', [WorkspaceInboxController::class, 'markAsUnread'])->name('unread');
+                Route::patch('/{inboxItem}/snooze', [WorkspaceInboxController::class, 'snooze'])->name('snooze');
+                Route::delete('/{inboxItem}/snooze', [WorkspaceInboxController::class, 'unsnooze']);
+                Route::delete('/{inboxItem}', [WorkspaceInboxController::class, 'destroy'])->name('destroy');
             });
 
             Route::prefix('my-issues')->name('my-issues.')->group(function () {

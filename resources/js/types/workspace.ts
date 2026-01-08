@@ -57,6 +57,7 @@ export interface InboxItem {
     actor: IssueAssignee;
     read: boolean;
     readAt?: string;
+    snoozedUntil?: string;
     createdAt: string;
 }
 
