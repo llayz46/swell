@@ -33,9 +33,7 @@ export function useWorkspaceRole(teamId?: number) {
         }
 
         // Check if user is workspace admin (Spatie role)
-        const isAdmin = user.roles?.some(
-            (r) => (typeof r === 'string' ? r : r.name) === 'workspace-admin',
-        ) ?? false;
+        const isAdmin = user.roles?.some((r) => (typeof r === 'string' ? r : r.name) === 'workspace-admin') ?? false;
 
         // Get current team ID (from parameter or store)
         const currentTeamId = teamId ?? storeTeam?.id;

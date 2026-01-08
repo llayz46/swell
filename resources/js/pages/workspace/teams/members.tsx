@@ -1,28 +1,22 @@
 import Header from '@/components/swell/workspace/layout/headers/members/header';
 import { WorkspaceTableHeader } from '@/components/swell/workspace/workspace-table-header';
-import WorkspaceLayout from '@/layouts/workspace-layout';
-import { Team, TeamMember } from '@/types/workspace';
-import { Head } from '@inertiajs/react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useInitials } from '@/hooks/use-initials';
+import { useWorkspaceRole } from '@/hooks/use-workspace-role';
+import WorkspaceLayout from '@/layouts/workspace-layout';
+import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
+import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
+import { Team, TeamMember } from '@/types/workspace';
+import { formatWorkspaceRole } from '@/utils/format-workspace-role';
+import { Head } from '@inertiajs/react';
 import { format, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { formatWorkspaceRole } from '@/utils/format-workspace-role';
-import { useWorkspaceRole } from '@/hooks/use-workspace-role';
-import { useInitials } from '@/hooks/use-initials';
-import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
-import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
-import { toast } from 'sonner';
 import { MoreHorizontal, Shield, ShieldOff, UserMinus } from 'lucide-react';
 import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 interface IssuesPageProps {
     team: Team;
@@ -51,10 +45,7 @@ export default function Members({ team }: IssuesPageProps) {
     }, [team.members, setMembers]);
 
     return (
-        <WorkspaceLayout
-            header={<Header members={team.members ?? []} />}
-            tableHeader={<WorkspaceTableHeader columns={TABLE_COLUMNS} />}
-        >
+        <WorkspaceLayout header={<Header members={team.members ?? []} />} tableHeader={<WorkspaceTableHeader columns={TABLE_COLUMNS} />}>
             <Head title={`Tâches - ${team.identifier} - Workspace`} />
 
             <div className="w-full">
@@ -69,23 +60,19 @@ export default function Members({ team }: IssuesPageProps) {
 function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
     const { isLead } = useWorkspaceRole(team.id);
     const getInitials = useInitials();
-    
-    const {
-        performPromoteMember,
-        performDemoteMember,
-        performRemoveMember,
-    } = useWorkspaceMembersStore();
-    
+
+    const { performPromoteMember, performDemoteMember, performRemoveMember } = useWorkspaceMembersStore();
+
     const handleRemoveMember = (member: TeamMember) => {
         if (!isLead) return toast.error("Vous n'avez pas les droits pour retirer un membre de l'équipe");
         performRemoveMember(team, member);
     };
-    
+
     const handlePromoteMember = (member: TeamMember) => {
         if (!isLead) return toast.error("Vous n'avez pas les droits pour promouvoir un membre de l'équipe");
         performPromoteMember(team, member);
     };
-    
+
     const handleDemoteMember = (member: TeamMember) => {
         if (!isLead) return toast.error("Vous n'avez pas les droits pour rétrograder un membre de l'équipe");
         performDemoteMember(team, member);
@@ -134,7 +121,10 @@ function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
                             </DropdownMenuItem>
                         )}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => handleRemoveMember(member)} className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40">
+                        <DropdownMenuItem
+                            onClick={() => handleRemoveMember(member)}
+                            className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
+                        >
                             <UserMinus className="mr-2 size-4 text-destructive" />
                             Retirer de l'équipe
                         </DropdownMenuItem>

@@ -28,7 +28,7 @@ export function formatWorkspaceRole(role: string | { name: string } | string[] |
         case 'workspace-admin':
             return 'Admin Workspace';
         case 'team-lead':
-            return 'Chef d\'équipe';
+            return "Chef d'équipe";
         case 'team-member':
             return 'Membre';
         default:

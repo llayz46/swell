@@ -15,7 +15,7 @@ export default function HeaderOptions() {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="flex w-72 gap-2 p-3" align="end">
-                    <DropdownMenuItem className="flex w-full flex-col gap-1 border border-accent text-xs bg-accent">
+                    <DropdownMenuItem className="flex w-full flex-col gap-1 border border-accent bg-accent text-xs">
                         <LayoutList className="size-4" />
                         Liste
                     </DropdownMenuItem>

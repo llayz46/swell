@@ -14,6 +14,7 @@ use App\Modules\Workspace\Http\Controllers\WorkspaceDashboardController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceInboxController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceIssueController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceMembersController;
+use App\Modules\Workspace\Http\Controllers\WorkspaceMyIssuesController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceTeamController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -61,7 +62,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 // Route::post('/read-all', [WorkspaceInboxController::class, 'markAllAsRead'])->name('read-all');
             });
 
-            // Route::get('/my-issues', WorkspaceMyIssuesController::class)->name('my-issues');
+            Route::prefix('my-issues')->name('my-issues.')->group(function () {
+                Route::get('/', fn () => redirect()->route('workspace.my-issues.overview'));
+                Route::get('/overview', [WorkspaceMyIssuesController::class, 'overview'])->name('overview');
+                Route::get('/focus', [WorkspaceMyIssuesController::class, 'focus'])->name('focus');
+            });
 
             Route::get('/members', WorkspaceMembersController::class)->name('members');
 

@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { TeamMember } from '@/types/workspace';
 import { useInitials } from '@/hooks/use-initials';
+import { TeamMember } from '@/types/workspace';
 import { Star } from 'lucide-react';
 
 interface MembersAvatarGroupProps {
@@ -12,7 +12,7 @@ interface MembersAvatarGroupProps {
 export function MembersAvatarGroup({ members, maxDisplay = 3 }: MembersAvatarGroupProps) {
     const displayedMembers = members.slice(0, maxDisplay);
     const remainingCount = members.length - displayedMembers.length;
-    
+
     const getInitials = useInitials();
 
     if (members.length === 0) return null;

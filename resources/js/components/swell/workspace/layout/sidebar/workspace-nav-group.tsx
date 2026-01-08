@@ -11,12 +11,12 @@ import {
     SidebarMenuSubButton,
     SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
+import { useConfirmContext } from '@/contexts/confirm-context';
 import { useActiveNav } from '@/hooks/use-active-nav';
 import { useWorkspaceTeamsStore } from '@/stores/workspace-teams-store';
-import { useConfirmContext } from '@/contexts/confirm-context';
-import type { NavItemWithChildren, NavItem } from '@/types';
+import type { NavItem, NavItemWithChildren } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
-import { ChevronRight, MoreHorizontal, Settings, LogOutIcon } from 'lucide-react';
+import { ChevronRight, LogOutIcon, MoreHorizontal, Settings } from 'lucide-react';
 import { toast } from 'sonner';
 
 const isNavItemWithChildren = (item: NavItem | NavItemWithChildren): item is NavItemWithChildren => {
@@ -78,9 +78,8 @@ const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
     const handleLeaveTeam = async (teamId: number) => {
         await confirm({
             title: 'Voulez-vous vraiment quitter cette équipe ?',
-            description:
-            'Voulez-vous vraiment quitter cette équipe ? Ceci est une action irréversible.',
-            confirmText: 'Quitter l\'équipe',
+            description: 'Voulez-vous vraiment quitter cette équipe ? Ceci est une action irréversible.',
+            confirmText: "Quitter l'équipe",
             cancelText: 'Annuler',
             variant: 'destructive',
             icon: <LogOutIcon className="size-4" />,
@@ -89,14 +88,18 @@ const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
     };
 
     const leaveTeam = (teamId: number) => {
-        router.post(route('workspace.teams.leave', teamId), {}, {
-            onSuccess: () => {
-                toast.success('Vous avez quitté l\'équipe')
+        router.post(
+            route('workspace.teams.leave', teamId),
+            {},
+            {
+                onSuccess: () => {
+                    toast.success("Vous avez quitté l'équipe");
+                },
+                onError: (error) => {
+                    toast.error(error.team);
+                },
             },
-            onError: (error) => {
-                toast.error(error.team)
-            }
-        });
+        );
     };
 
     return (

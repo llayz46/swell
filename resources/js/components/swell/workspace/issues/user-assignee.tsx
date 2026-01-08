@@ -7,8 +7,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useWorkspaceRole } from '@/hooks/use-workspace-role';
 import { useInitials } from '@/hooks/use-initials';
+import { useWorkspaceRole } from '@/hooks/use-workspace-role';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import { IssueAssignee } from '@/types/workspace';

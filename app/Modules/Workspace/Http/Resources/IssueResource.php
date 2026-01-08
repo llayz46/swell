@@ -30,9 +30,7 @@ class IssueResource extends JsonResource
                 'id' => $this->priority->id,
                 'slug' => $this->priority->slug,
                 'name' => $this->priority->name,
-                'color' => $this->priority->color,
-                'iconType' => $this->priority->icon_type,
-                'order' => $this->priority->order,
+                'icon_type' => $this->priority->icon_type,
             ]),
             'assignee' => $this->whenLoaded('assignee', fn () => $this->assignee ? [
                 'id' => $this->assignee->id,

@@ -66,7 +66,7 @@ export default function AppSidebarLayout({
                 {header}
                 {tableHeader}
 
-                <ScrollArea className={cn('size-full', scrollHeight[headersNumber])}>{children}</ScrollArea>
+                <ScrollArea id="workspace-scroll-area" className={cn('size-full', scrollHeight[headersNumber])}>{children}</ScrollArea>
 
                 <InviteMemberDialog />
                 <TeamDialog />

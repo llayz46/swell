@@ -1,9 +1,9 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { Plus } from 'lucide-react';
-import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
+import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
+import { Plus } from 'lucide-react';
 
 export default function HeaderNav({ members }: { members: number }) {
     const { openInviteMemberDialog, invitableTeams } = useWorkspaceMembersStore();

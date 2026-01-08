@@ -21,7 +21,11 @@ export function WorkspaceShell({ children, variant = 'header' }: WorkspaceShellP
     const defaultOpen = cookieState !== undefined ? cookieState : fallbackOpen;
 
     return (
-        <SidebarProvider defaultOpen={defaultOpen} cookieName={workspaceSidebarConfig.cookieName} className="has-data-[variant=inset]:bg-background h-svh">
+        <SidebarProvider
+            defaultOpen={defaultOpen}
+            cookieName={workspaceSidebarConfig.cookieName}
+            className="h-svh has-data-[variant=inset]:bg-background"
+        >
             {children}
         </SidebarProvider>
     );

@@ -9,21 +9,17 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
-import {
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle,
-} from "@/components/ui/resizable";
-import { Switch } from "@/components/ui/switch";
-import { Archive, ArrowUpDown, CheckCheck, MoreHorizontal, SlidersHorizontal, Trash2 } from 'lucide-react';
-import { Head } from '@inertiajs/react';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import { Switch } from '@/components/ui/switch';
 import WorkspaceLayout from '@/layouts/workspace-layout';
+import { Head } from '@inertiajs/react';
+import { Archive, ArrowUpDown, CheckCheck, MoreHorizontal, SlidersHorizontal, Trash2 } from 'lucide-react';
 
 export default function Index() {
     return (
         <WorkspaceLayout>
             <Head title="Messagerie - Workspace" />
-            
+
             <ResizablePanelGroup direction="horizontal" autoSaveId="inbox-panel-group" className="size-full">
                 <ResizablePanel defaultSize={350} maxSize={500}>
                     <div className="flex h-10 items-center justify-between border-b border-border px-4">
@@ -67,12 +63,8 @@ export default function Index() {
                                         <ArrowUpDown className="h-4 w-4" />
                                         Ordering
                                     </DropdownMenuLabel>
-                                    <DropdownMenuCheckboxItem>
-                                        Newest
-                                    </DropdownMenuCheckboxItem>
-                                    <DropdownMenuCheckboxItem>
-                                        Oldest
-                                    </DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem>Newest</DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem>Oldest</DropdownMenuCheckboxItem>
 
                                     <DropdownMenuSeparator />
 
@@ -81,7 +73,7 @@ export default function Index() {
                                             <Label htmlFor="show-snoozed" className="text-sm">
                                                 Show snoozed
                                             </Label>
-                                            <Switch id="show-snoozed"/>
+                                            <Switch id="show-snoozed" />
                                         </div>
                                         <div className="flex items-center justify-between">
                                             <Label htmlFor="show-read" className="text-sm">

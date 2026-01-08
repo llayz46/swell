@@ -17,15 +17,7 @@ export function Filter({ teams }: { teams: Team[] }) {
     const [open, setOpen] = useState(false);
     const [active, setActive] = useState<FilterType | null>(null);
 
-    const {
-        filters,
-        sort,
-        toggleMembershipFilter,
-        toggleIdentifierFilter,
-        clearFilters,
-        getActiveFiltersCount,
-        setSort,
-    } = useWorkspaceTeamsStore();
+    const { filters, sort, toggleMembershipFilter, toggleIdentifierFilter, clearFilters, getActiveFiltersCount, setSort } = useWorkspaceTeamsStore();
 
     const identifiers: Team['identifier'][] = useMemo(() => {
         return teams.map((team) => team.identifier);

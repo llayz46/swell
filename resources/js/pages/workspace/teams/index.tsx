@@ -1,5 +1,6 @@
 import Header from '@/components/swell/workspace/layout/headers/teams/header';
 import { MembersAvatarGroup } from '@/components/swell/workspace/teams/members-avatar-group';
+import { PendingInvitationsSection } from '@/components/swell/workspace/teams/pending-invitations-section';
 import { WorkspaceTableHeader } from '@/components/swell/workspace/workspace-table-header';
 import { Badge } from '@/components/ui/badge';
 import WorkspaceLayout from '@/layouts/workspace-layout';
@@ -8,7 +9,6 @@ import type { Team, TeamInvitation } from '@/types/workspace';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { Head } from '@inertiajs/react';
 import { Check, CircleDashed } from 'lucide-react';
-import { PendingInvitationsSection } from '@/components/swell/workspace/teams/pending-invitations-section';
 import { useEffect } from 'react';
 
 const TABLE_COLUMNS = [

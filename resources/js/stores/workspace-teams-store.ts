@@ -13,7 +13,7 @@ type WorkspaceTeamsStore = {
     teams: Team[];
     filters: Filters;
     sort: SortOption;
-    
+
     teamDialogOpen: boolean;
     selectedTeamDialog: Team | null;
     openTeamDialog: (options?: { team?: Team }) => void;
@@ -35,7 +35,7 @@ export const useWorkspaceTeamsStore = create<WorkspaceTeamsStore>((set, get) => 
         identifiers: [],
     },
     sort: null,
-    
+
     teamDialogOpen: false,
     selectedTeamDialog: null,
     openTeamDialog: (options?: { team?: Team }) => {

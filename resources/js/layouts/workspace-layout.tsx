@@ -42,7 +42,13 @@ interface WorkspaceLayoutProps extends PropsWithChildren {
 
 export default function WorkspaceLayout({ children, header, headersNumber = 2, tableHeader }: WorkspaceLayoutProps) {
     return (
-        <WorkspaceLayoutTemplate mainNavItems={mainNavItems} workspaceNavItems={workspaceNavItems} header={header} headersNumber={headersNumber} tableHeader={tableHeader}>
+        <WorkspaceLayoutTemplate
+            mainNavItems={mainNavItems}
+            workspaceNavItems={workspaceNavItems}
+            header={header}
+            headersNumber={headersNumber}
+            tableHeader={tableHeader}
+        >
             {children}
         </WorkspaceLayoutTemplate>
     );

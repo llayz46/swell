@@ -3,11 +3,11 @@ import { TeamsBadgeGroup } from '@/components/swell/workspace/members/teams-badg
 import { WorkspaceTableHeader } from '@/components/swell/workspace/workspace-table-header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { useInitials } from '@/hooks/use-initials';
 import WorkspaceLayout from '@/layouts/workspace-layout';
+import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import { WorkspaceMember } from '@/types/workspace';
 import { formatWorkspaceRole } from '@/utils/format-workspace-role';
-import { useInitials } from '@/hooks/use-initials';
-import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
 import { Head } from '@inertiajs/react';
 import { useEffect } from 'react';
 
@@ -26,10 +26,7 @@ export default function Index({ members }: { members: WorkspaceMember[] }) {
     }, [members, setMembers]);
 
     return (
-        <WorkspaceLayout
-            header={<Header members={members} />}
-            tableHeader={<WorkspaceTableHeader columns={TABLE_COLUMNS} />}
-        >
+        <WorkspaceLayout header={<Header members={members} />} tableHeader={<WorkspaceTableHeader columns={TABLE_COLUMNS} />}>
             <Head title="Membres - Workspace" />
 
             <div className="w-full">
