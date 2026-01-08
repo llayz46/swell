@@ -3,11 +3,17 @@ import { PriorityIcon } from '@/components/swell/workspace/icons/priority-mapper
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import { useMyIssuesStore } from '@/stores/my-issues-store';
 import { format, formatDistanceToNow, isPast, isToday, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { Calendar, ExternalLink, MoreHorizontal, Tag, User } from 'lucide-react';
+import { Calendar as CalendarIcon, CheckIcon, ExternalLink, Tag, User, X } from 'lucide-react';
+import { useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import type { MyIssue } from './types';
 
 interface IssueDetailPanelProps {
@@ -20,13 +26,12 @@ export function IssueDetailPanel({ issue }: IssueDetailPanelProps) {
     }
 
     const dueDate = issue.dueDate ? parseISO(issue.dueDate) : null;
-    const isOverdue = dueDate && isPast(dueDate) && !isToday(dueDate);
+    const isOverdue = dueDate && isPast(dueDate) && !isToday(dueDate) && issue.status.slug !== 'done' && issue.status.slug !== 'cancelled';
     const isDueToday = dueDate && isToday(dueDate);
 
     return (
         <ScrollArea className="h-full">
             <div className="flex flex-col p-6">
-                {/* Header */}
                 <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0 flex-1">
                         <div className="mb-2 flex items-center gap-2">
@@ -43,37 +48,24 @@ export function IssueDetailPanel({ issue }: IssueDetailPanelProps) {
                         </div>
                         <h2 className="text-xl leading-tight font-semibold">{issue.title}</h2>
                     </div>
-                    <Button variant="ghost" size="icon" className="shrink-0">
-                        <MoreHorizontal className="size-4" />
-                    </Button>
                 </div>
 
                 <Separator className="my-6" />
 
-                {/* Properties */}
                 <div className="space-y-4">
-                    {/* Status */}
                     <div className="flex items-center gap-4">
                         <span className="w-24 text-sm text-muted-foreground">Statut</span>
-                        <button className="flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted/50">
-                            <StatusIcon iconType={issue.status.icon_type} color={issue.status.color} size={16} />
-                            <span className="text-sm font-medium">{issue.status.name}</span>
-                        </button>
+                        <StatusSelector issue={issue} />
                     </div>
 
-                    {/* Priority */}
                     <div className="flex items-center gap-4">
                         <span className="w-24 text-sm text-muted-foreground">Priorité</span>
-                        <button className="flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted/50">
-                            <PriorityIcon iconType={issue.priority.icon_type} className="size-4" />
-                            <span className="text-sm font-medium">{issue.priority.name}</span>
-                        </button>
+                        <PrioritySelector issue={issue} />
                     </div>
 
-                    {/* Assignee */}
                     <div className="flex items-center gap-4">
                         <span className="w-24 text-sm text-muted-foreground">Assigné à</span>
-                        <button className="flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted/50">
+                        <div className="flex items-center gap-2 rounded-md px-2 py-1">
                             {issue.assignee ? (
                                 <>
                                     <Avatar className="size-5">
@@ -88,50 +80,22 @@ export function IssueDetailPanel({ issue }: IssueDetailPanelProps) {
                                     <span className="text-sm text-muted-foreground">Non assigné</span>
                                 </>
                             )}
-                        </button>
+                        </div>
                     </div>
 
-                    {/* Due Date */}
                     <div className="flex items-center gap-4">
                         <span className="w-24 text-sm text-muted-foreground">Échéance</span>
-                        <button className="flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted/50">
-                            <Calendar className={`size-4 ${isOverdue ? 'text-red-500' : isDueToday ? 'text-amber-500' : 'text-muted-foreground'}`} />
-                            {dueDate ? (
-                                <span className={`text-sm font-medium ${isOverdue ? 'text-red-500' : isDueToday ? 'text-amber-500' : ''}`}>
-                                    {format(dueDate, 'dd MMM yyyy', { locale: fr })}
-                                    {isOverdue && <span className="ml-2 text-xs">(en retard de {formatDistanceToNow(dueDate, { locale: fr })})</span>}
-                                    {isDueToday && <span className="ml-2 text-xs">(aujourd'hui)</span>}
-                                </span>
-                            ) : (
-                                <span className="text-sm text-muted-foreground">Aucune échéance</span>
-                            )}
-                        </button>
+                        <DueDatePicker issue={issue} isOverdue={isOverdue} isDueToday={isDueToday} />
                     </div>
 
-                    {/* Labels */}
                     <div className="flex items-start gap-4">
                         <span className="w-24 pt-1 text-sm text-muted-foreground">Labels</span>
-                        <div className="flex flex-wrap gap-1.5">
-                            {issue.labels.length > 0 ? (
-                                issue.labels.map((label) => (
-                                    <Badge key={label.id} variant="outline" className="gap-1.5 rounded-full">
-                                        <span className="size-2 rounded-full" style={{ backgroundColor: label.color }} />
-                                        {label.name}
-                                    </Badge>
-                                ))
-                            ) : (
-                                <button className="flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted/50">
-                                    <Tag className="size-4 text-muted-foreground" />
-                                    <span className="text-sm text-muted-foreground">Ajouter un label</span>
-                                </button>
-                            )}
-                        </div>
+                        <LabelSelector issue={issue} />
                     </div>
                 </div>
 
                 <Separator className="my-6" />
 
-                {/* Description */}
                 <div>
                     <h3 className="mb-3 text-sm font-medium">Description</h3>
                     {issue.description ? (
@@ -143,7 +107,6 @@ export function IssueDetailPanel({ issue }: IssueDetailPanelProps) {
 
                 <Separator className="my-6" />
 
-                {/* Metadata */}
                 <div className="space-y-2 text-xs text-muted-foreground">
                     <div className="flex items-center justify-between">
                         <span>Créé par {issue.creator.name}</span>
@@ -155,15 +118,261 @@ export function IssueDetailPanel({ issue }: IssueDetailPanelProps) {
                     </div>
                 </div>
 
-                {/* Action */}
                 <div className="mt-6">
-                    <Button variant="outline" size="sm" className="w-full gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full gap-2"
+                        onClick={() => window.open(route('workspace.teams.issues', { team: issue.team.identifier }), '_blank')}
+                    >
                         <ExternalLink className="size-4" />
-                        Voir la tâche complète
+                        Voir dans l'équipe
                     </Button>
                 </div>
             </div>
         </ScrollArea>
+    );
+}
+
+function StatusSelector({ issue }: { issue: MyIssue }) {
+    const [open, setOpen] = useState(false);
+
+    const { statuses, updatingIssues, performUpdateStatus } = useMyIssuesStore(
+        useShallow((state) => ({
+            statuses: state.statuses,
+            updatingIssues: state.updatingIssues,
+            performUpdateStatus: state.performUpdateStatus,
+        })),
+    );
+
+    const isUpdating = updatingIssues.has(issue.id);
+
+    const handleStatusChange = (statusSlug: string) => {
+        setOpen(false);
+        performUpdateStatus(issue.id, statusSlug, issue.status);
+    };
+
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <button
+                    className="flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted/50 disabled:opacity-50"
+                    disabled={isUpdating}
+                >
+                    <StatusIcon iconType={issue.status.icon_type} color={issue.status.color} size={16} />
+                    <span className="text-sm font-medium">{issue.status.name}</span>
+                </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-52 p-0" align="start">
+                <Command>
+                    <CommandInput placeholder="Changer le statut..." />
+                    <CommandList>
+                        <CommandEmpty>Aucun statut trouvé.</CommandEmpty>
+                        <CommandGroup>
+                            {statuses.map((status) => (
+                                <CommandItem
+                                    key={status.id}
+                                    value={status.slug}
+                                    keywords={[status.name]}
+                                    onSelect={handleStatusChange}
+                                    className="flex items-center justify-between"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <StatusIcon iconType={status.icon_type} color={status.color} size={14} />
+                                        {status.name}
+                                    </div>
+                                    {issue.status.slug === status.slug && <CheckIcon size={16} />}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
+    );
+}
+
+function PrioritySelector({ issue }: { issue: MyIssue }) {
+    const [open, setOpen] = useState(false);
+
+    const { priorities, updatingIssues, performUpdatePriority } = useMyIssuesStore(
+        useShallow((state) => ({
+            priorities: state.priorities,
+            updatingIssues: state.updatingIssues,
+            performUpdatePriority: state.performUpdatePriority,
+        })),
+    );
+
+    const isUpdating = updatingIssues.has(issue.id);
+
+    const handlePriorityChange = (prioritySlug: string) => {
+        const selectedPriority = priorities.find((p) => p.slug === prioritySlug);
+        if (!selectedPriority) return;
+
+        setOpen(false);
+        performUpdatePriority(issue.id, selectedPriority.id, issue.priority);
+    };
+
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <button
+                    className="flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted/50 disabled:opacity-50"
+                    disabled={isUpdating}
+                >
+                    <PriorityIcon iconType={issue.priority.icon_type} className="size-4" />
+                    <span className="text-sm font-medium">{issue.priority.name}</span>
+                </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-52 p-0" align="start">
+                <Command>
+                    <CommandInput placeholder="Changer la priorité..." />
+                    <CommandList>
+                        <CommandEmpty>Aucune priorité trouvée.</CommandEmpty>
+                        <CommandGroup>
+                            {priorities.map((priority) => (
+                                <CommandItem
+                                    key={priority.id}
+                                    value={priority.slug}
+                                    keywords={[priority.name]}
+                                    onSelect={handlePriorityChange}
+                                    className="flex items-center justify-between"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <PriorityIcon iconType={priority.icon_type} className="size-3.5" />
+                                        {priority.name}
+                                    </div>
+                                    {issue.priority.slug === priority.slug && <CheckIcon size={16} />}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
+    );
+}
+
+function DueDatePicker({ issue, isOverdue, isDueToday }: { issue: MyIssue; isOverdue?: boolean; isDueToday?: boolean }) {
+    const [open, setOpen] = useState(false);
+
+    const { updatingIssues, performUpdateDueDate } = useMyIssuesStore(
+        useShallow((state) => ({
+            updatingIssues: state.updatingIssues,
+            performUpdateDueDate: state.performUpdateDueDate,
+        })),
+    );
+
+    const isUpdating = updatingIssues.has(issue.id);
+    const dueDate = issue.dueDate ? parseISO(issue.dueDate) : undefined;
+
+    const handleDateSelect = (date: Date | undefined) => {
+        const newDueDate = date ? format(date, 'yyyy-MM-dd') : null;
+        performUpdateDueDate(issue.id, newDueDate, issue.dueDate);
+        setOpen(false);
+    };
+
+    const handleClearDate = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        performUpdateDueDate(issue.id, null, issue.dueDate);
+    };
+
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <button
+                    className="flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted/50 disabled:opacity-50"
+                    disabled={isUpdating}
+                >
+                    <CalendarIcon className={`size-4 ${isOverdue ? 'text-red-500' : isDueToday ? 'text-amber-500' : 'text-muted-foreground'}`} />
+                    {dueDate ? (
+                        <span className={`text-sm font-medium ${isOverdue ? 'text-red-500' : isDueToday ? 'text-amber-500' : ''}`}>
+                            {format(dueDate, 'dd MMM yyyy', { locale: fr })}
+                            {isOverdue && <span className="ml-2 text-xs">(en retard)</span>}
+                            {isDueToday && <span className="ml-2 text-xs">(aujourd'hui)</span>}
+                        </span>
+                    ) : (
+                        <span className="text-sm text-muted-foreground">Aucune échéance</span>
+                    )}
+                    {dueDate && !isUpdating && (
+                        <X className="ml-1 size-3 text-muted-foreground hover:text-foreground" onClick={handleClearDate} />
+                    )}
+                </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+                <Calendar mode="single" selected={dueDate} onSelect={handleDateSelect} locale={fr} initialFocus />
+            </PopoverContent>
+        </Popover>
+    );
+}
+
+function LabelSelector({ issue }: { issue: MyIssue }) {
+    const [open, setOpen] = useState(false);
+
+    const { labels, updatingIssues, performToggleLabel } = useMyIssuesStore(
+        useShallow((state) => ({
+            labels: state.labels,
+            updatingIssues: state.updatingIssues,
+            performToggleLabel: state.performToggleLabel,
+        })),
+    );
+
+    const isUpdating = updatingIssues.has(issue.id);
+
+    const handleToggleLabel = (labelId: number) => {
+        performToggleLabel(issue.id, labelId, issue.labels);
+    };
+
+    return (
+        <div className="flex flex-wrap items-center gap-1.5">
+            {issue.labels.length > 0 &&
+                issue.labels.map((label) => (
+                    <Badge key={label.id} variant="outline" className="gap-1.5 rounded-full">
+                        <span className="size-2 rounded-full" style={{ backgroundColor: label.color }} />
+                        {label.name}
+                    </Badge>
+                ))}
+
+            <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                    <button
+                        className="flex items-center gap-1.5 rounded-md px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted/50 disabled:opacity-50"
+                        disabled={isUpdating}
+                    >
+                        <Tag className="size-3.5" />
+                        {issue.labels.length === 0 ? 'Ajouter' : 'Modifier'}
+                    </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-52 p-0" align="start">
+                    <Command>
+                        <CommandInput placeholder="Rechercher un label..." />
+                        <CommandList>
+                            <CommandEmpty>Aucun label trouvé.</CommandEmpty>
+                            <CommandGroup>
+                                {labels.map((label) => {
+                                    const isSelected = issue.labels.some((l) => l.id === label.id);
+                                    return (
+                                        <CommandItem
+                                            key={label.id}
+                                            value={label.slug}
+                                            keywords={[label.name]}
+                                            onSelect={() => handleToggleLabel(label.id)}
+                                            className="flex items-center justify-between"
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <span className="size-3 rounded-full" style={{ backgroundColor: label.color }} />
+                                                {label.name}
+                                            </div>
+                                            {isSelected && <CheckIcon size={16} />}
+                                        </CommandItem>
+                                    );
+                                })}
+                            </CommandGroup>
+                        </CommandList>
+                    </Command>
+                </PopoverContent>
+            </Popover>
+        </div>
     );
 }
 

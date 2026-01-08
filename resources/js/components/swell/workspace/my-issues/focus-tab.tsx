@@ -12,23 +12,29 @@ import {
 import { Input } from '@/components/ui/input';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { IssuePriority, IssueStatus } from '@/types/workspace';
+import { useMyIssuesStore } from '@/stores/my-issues-store';
 import { format, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { Filter, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { IssueDetailPanel } from './issue-detail-panel';
 import type { MyIssue } from './types';
 
 interface FocusTabProps {
-    issues: MyIssue[];
-    statuses: IssueStatus[];
-    priorities: IssuePriority[];
     selectedIssue: MyIssue | null;
     onSelectIssue: (issue: MyIssue | null) => void;
 }
 
-export function FocusTab({ issues, statuses, priorities, selectedIssue, onSelectIssue }: FocusTabProps) {
+export function FocusTab({ selectedIssue, onSelectIssue }: FocusTabProps) {
+    const { issues, statuses, priorities } = useMyIssuesStore(
+        useShallow((state) => ({
+            issues: state.issues,
+            statuses: state.statuses,
+            priorities: state.priorities,
+        })),
+    );
+
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState<string[]>([]);
     const [priorityFilter, setPriorityFilter] = useState<string[]>([]);
