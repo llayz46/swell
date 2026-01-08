@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Switch } from '@/components/ui/switch';
 import {
     InboxEmptyState,
@@ -65,7 +66,7 @@ export default function Index() {
 
     return (
         <WorkspaceLayout>
-            <Head title="Inbox - Workspace" />
+            <Head title="Boîte de réception - Workspace" />
 
             <ResizablePanelGroup direction="horizontal" autoSaveId="inbox-panel-group" className="size-full">
                 <ResizablePanel defaultSize={40} minSize={30} maxSize={60}>
@@ -201,7 +202,7 @@ export default function Index() {
                         </div>
                     </div>
 
-                    <div className="h-[calc(100%-40px)] overflow-y-auto">
+                    <ScrollArea className="h-[calc(100%-40px)]">
                         {filteredItems.length === 0 ? (
                             <InboxEmptyState variant={getEmptyVariant()} className="h-full" />
                         ) : (
@@ -221,7 +222,7 @@ export default function Index() {
                                 </div>
                             ))
                         )}
-                    </div>
+                    </ScrollArea>
                 </ResizablePanel>
 
                 <ResizableHandle withHandle />

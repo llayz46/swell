@@ -172,8 +172,8 @@ export function InboxPreview({ item }: InboxPreviewProps) {
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => performDelete(item.id)}>
-                                <Trash2 className="mr-2 size-4" />
+                            <DropdownMenuItem onClick={() => performDelete(item.id)} className="text-destructive hover:bg-destructive/15! hover:text-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40">
+                                <Trash2 className="mr-2 size-4 text-destructive" />
                                 Supprimer
                             </DropdownMenuItem>
                         </DropdownMenuContent>
