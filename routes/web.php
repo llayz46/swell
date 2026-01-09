@@ -11,7 +11,6 @@ use App\Modules\Loyalty\Http\Controllers\LoyaltyController;
 use App\Modules\Review\Http\Controllers\ReviewController;
 use App\Modules\Wishlist\Http\Controllers\WishlistController;
 use App\Modules\Workspace\Http\Controllers\IssueCommentController;
-use App\Modules\Workspace\Http\Controllers\WorkspaceDashboardController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceInboxController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceIssueController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceMembersController;
@@ -55,8 +54,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware(['feature:workspace', 'workspace.access'])
         ->prefix('workspace')->name('workspace.')->group(function () {
-            Route::get('/', WorkspaceDashboardController::class)->name('index');
-
             Route::prefix('inbox')->name('inbox.')->group(function () {
                 Route::get('/', [WorkspaceInboxController::class, 'index'])->name('index');
                 Route::post('/read-all', [WorkspaceInboxController::class, 'markAllAsRead'])->name('read-all');
@@ -69,7 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::delete('/{inboxItem}', [WorkspaceInboxController::class, 'destroy'])->name('destroy');
             });
 
-            Route::prefix('my-issues')->name('my-issues.')->group(function () {
+            Route::name('my-issues.')->group(function () {
                 Route::get('/', fn () => redirect()->route('workspace.my-issues.overview'));
                 Route::get('/overview', [WorkspaceMyIssuesController::class, 'overview'])->name('overview');
                 Route::get('/focus', [WorkspaceMyIssuesController::class, 'focus'])->name('focus');

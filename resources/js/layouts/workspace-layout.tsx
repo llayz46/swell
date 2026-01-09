@@ -1,6 +1,6 @@
 import WorkspaceLayoutTemplate from '@/layouts/workspace/layout';
 import { NavItem } from '@/types';
-import { ChartColumn, Contact, FolderKanban, Inbox, User } from 'lucide-react';
+import { Contact, FolderKanban, Inbox, User } from 'lucide-react';
 import { type PropsWithChildren, type ReactNode } from 'react';
 
 const mainNavItems: NavItem[] = [
@@ -11,17 +11,12 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Mes tâches',
-        href: '/workspace/my-issues',
+        href: '/workspace/overview',
         icon: FolderKanban,
     },
 ];
 
 const workspaceNavItems: NavItem[] = [
-    {
-        title: 'Tableau de bord',
-        href: '/workspace',
-        icon: ChartColumn,
-    },
     {
         title: 'Teams',
         href: '/workspace/teams',
