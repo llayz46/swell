@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Modules\Workspace\Enums\WorkspaceRole;
 use App\Modules\Workspace\Models\InboxItem;
 use App\Modules\Workspace\Models\Issue;
+use App\Modules\Workspace\Models\IssueActivity;
+use App\Modules\Workspace\Models\IssueComment;
 use App\Modules\Workspace\Models\IssueLabel;
 use App\Modules\Workspace\Models\IssuePriority;
 use App\Modules\Workspace\Models\IssueStatus;
@@ -42,6 +44,12 @@ class WorkspaceModuleSeeder extends Seeder
 
         $invitations = $this->createTeamInvitations($teams, $users);
 
+        $commentsCount = $this->createIssueComments($issues, $users);
+
+        $activitiesCount = $this->createIssueActivities($issues, $users, $statuses, $priorities);
+
+        $subscriptionsCount = $this->createIssueSubscriptions($issues, $users);
+
         $this->command->info('✅ Workspace Module seeded successfully!');
         $this->command->newLine();
         $this->command->info('📊 Summary:');
@@ -52,6 +60,9 @@ class WorkspaceModuleSeeder extends Seeder
         $this->command->info('   - Priorities: '.$priorities->count());
         $this->command->info('   - Labels: '.$labels->count());
         $this->command->info('   - Team Invitations: '.$invitations->count());
+        $this->command->info('   - Issue Comments: '.$commentsCount);
+        $this->command->info('   - Issue Activities: '.$activitiesCount);
+        $this->command->info('   - Issue Subscriptions: '.$subscriptionsCount);
     }
 
     private function createRolesAndPermissions(): void
@@ -454,5 +465,215 @@ class WorkspaceModuleSeeder extends Seeder
         }
 
         return $invitations;
+    }
+
+    private function createIssueComments($issues, $users): int
+    {
+        $this->command->info('Creating issue comments...');
+
+        $count = 0;
+        $commentContents = [
+            "J'ai commencé à travailler sur ce problème. Je vais créer une PR d'ici la fin de la journée.",
+            "Est-ce qu'on pourrait avoir plus de détails sur le comportement attendu ?",
+            "J'ai trouvé la cause du bug : c'était un problème de cache. Fix en cours.",
+            "Très bonne idée ! Je pense qu'on devrait aussi considérer l'impact sur les performances.",
+            'La PR est prête pour review : #1234',
+            "J'ai testé en local et ça fonctionne parfaitement. ✅",
+            'On devrait peut-être ajouter des tests unitaires pour cette fonctionnalité.',
+            "Je suis bloqué sur ce point, quelqu'un peut m'aider ?",
+            "Après discussion avec l'équipe, on va partir sur l'approche B.",
+            'Le déploiement est prévu pour demain matin.',
+            "J'ai ajouté la documentation dans le README.",
+            'Attention, ce changement impacte aussi le module `auth`.',
+            "Super travail ! C'est exactement ce qu'on voulait.",
+            'Je propose de découper cette tâche en plusieurs sous-tâches.',
+            'Le client a validé la maquette, on peut commencer le dev.',
+        ];
+
+        $replyContents = [
+            "Merci pour l'update !",
+            'OK, je vais regarder ça.',
+            'Parfait, merci beaucoup.',
+            "Je suis d'accord avec cette approche.",
+            "J'ai une question : comment tu gères le cas X ?",
+            "Bonne idée, je m'en occupe.",
+            "C'est noté, je fais les modifications.",
+            '👍',
+            'Je valide !',
+            'On en discute demain en standup ?',
+        ];
+
+        // Ajouter des commentaires à environ 60% des issues
+        foreach ($issues->random((int) ($issues->count() * 0.6)) as $issue) {
+            $teamMembers = $issue->team->members;
+            $commentCount = rand(1, 5);
+
+            for ($i = 0; $i < $commentCount; $i++) {
+                $comment = IssueComment::create([
+                    'issue_id' => $issue->id,
+                    'user_id' => $teamMembers->random()->id,
+                    'content' => $commentContents[array_rand($commentContents)],
+                    'created_at' => $issue->created_at->addHours(rand(1, 72)),
+                ]);
+                $count++;
+
+                // 30% chance d'avoir des réponses
+                if (rand(0, 100) < 30) {
+                    $replyCount = rand(1, 3);
+                    for ($j = 0; $j < $replyCount; $j++) {
+                        IssueComment::create([
+                            'issue_id' => $issue->id,
+                            'user_id' => $teamMembers->random()->id,
+                            'parent_id' => $comment->id,
+                            'content' => $replyContents[array_rand($replyContents)],
+                            'created_at' => $comment->created_at->addMinutes(rand(5, 120)),
+                        ]);
+                        $count++;
+                    }
+                }
+            }
+        }
+
+        return $count;
+    }
+
+    private function createIssueActivities($issues, $users, $statuses, $priorities): int
+    {
+        $this->command->info('Creating issue activities...');
+
+        $count = 0;
+
+        foreach ($issues as $issue) {
+            $teamMembers = $issue->team->members;
+
+            // Activité de création (toujours présente)
+            IssueActivity::create([
+                'issue_id' => $issue->id,
+                'user_id' => $issue->creator_id,
+                'type' => IssueActivity::TYPE_CREATED,
+                'old_value' => null,
+                'new_value' => null,
+                'created_at' => $issue->created_at,
+            ]);
+            $count++;
+
+            // 50% chance de changement de status
+            if (rand(0, 100) < 50) {
+                $oldStatus = $statuses->random();
+                $newStatus = $statuses->where('id', '!=', $oldStatus->id)->random();
+                IssueActivity::create([
+                    'issue_id' => $issue->id,
+                    'user_id' => $teamMembers->random()->id,
+                    'type' => IssueActivity::TYPE_STATUS_CHANGED,
+                    'old_value' => ['id' => $oldStatus->id, 'name' => $oldStatus->name],
+                    'new_value' => ['id' => $newStatus->id, 'name' => $newStatus->name],
+                    'created_at' => $issue->created_at->addHours(rand(1, 48)),
+                ]);
+                $count++;
+            }
+
+            // 40% chance de changement de priorité
+            if (rand(0, 100) < 40) {
+                $oldPriority = $priorities->random();
+                $newPriority = $priorities->where('id', '!=', $oldPriority->id)->random();
+                IssueActivity::create([
+                    'issue_id' => $issue->id,
+                    'user_id' => $teamMembers->random()->id,
+                    'type' => IssueActivity::TYPE_PRIORITY_CHANGED,
+                    'old_value' => ['id' => $oldPriority->id, 'name' => $oldPriority->name],
+                    'new_value' => ['id' => $newPriority->id, 'name' => $newPriority->name],
+                    'created_at' => $issue->created_at->addHours(rand(1, 72)),
+                ]);
+                $count++;
+            }
+
+            // 35% chance de changement d'assigné
+            if (rand(0, 100) < 35) {
+                $oldAssignee = rand(0, 100) < 50 ? $teamMembers->random() : null;
+                $newAssignee = $teamMembers->random();
+                IssueActivity::create([
+                    'issue_id' => $issue->id,
+                    'user_id' => $teamMembers->random()->id,
+                    'type' => IssueActivity::TYPE_ASSIGNEE_CHANGED,
+                    'old_value' => $oldAssignee ? ['id' => $oldAssignee->id, 'name' => $oldAssignee->name] : null,
+                    'new_value' => ['id' => $newAssignee->id, 'name' => $newAssignee->name],
+                    'created_at' => $issue->created_at->addHours(rand(1, 24)),
+                ]);
+                $count++;
+            }
+
+            // 20% chance de changement de titre
+            if (rand(0, 100) < 20) {
+                IssueActivity::create([
+                    'issue_id' => $issue->id,
+                    'user_id' => $teamMembers->random()->id,
+                    'type' => IssueActivity::TYPE_TITLE_CHANGED,
+                    'old_value' => ['value' => 'Ancien titre de la tâche'],
+                    'new_value' => ['value' => $issue->title],
+                    'created_at' => $issue->created_at->addHours(rand(1, 12)),
+                ]);
+                $count++;
+            }
+
+            // 15% chance de changement de date d'échéance
+            if (rand(0, 100) < 15) {
+                IssueActivity::create([
+                    'issue_id' => $issue->id,
+                    'user_id' => $teamMembers->random()->id,
+                    'type' => IssueActivity::TYPE_DUE_DATE_CHANGED,
+                    'old_value' => null,
+                    'new_value' => ['date' => now()->addDays(rand(1, 30))->format('Y-m-d')],
+                    'created_at' => $issue->created_at->addHours(rand(1, 48)),
+                ]);
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    private function createIssueSubscriptions($issues, $users): int
+    {
+        $this->command->info('Creating issue subscriptions...');
+
+        $count = 0;
+
+        foreach ($issues as $issue) {
+            $teamMembers = $issue->team->members;
+
+            // Le créateur est toujours abonné
+            $issue->subscriptions()->firstOrCreate(
+                ['user_id' => $issue->creator_id],
+                ['created_at' => $issue->created_at]
+            );
+            $count++;
+
+            // L'assigné est abonné s'il existe
+            if ($issue->assignee_id) {
+                $issue->subscriptions()->firstOrCreate(
+                    ['user_id' => $issue->assignee_id],
+                    ['created_at' => $issue->created_at->addMinutes(rand(1, 60))]
+                );
+                $count++;
+            }
+
+            // 30% chance d'avoir d'autres abonnés
+            if (rand(0, 100) < 30) {
+                $additionalSubscribers = $teamMembers
+                    ->where('id', '!=', $issue->creator_id)
+                    ->where('id', '!=', $issue->assignee_id)
+                    ->random(min(rand(1, 3), $teamMembers->count() - 2));
+
+                foreach ($additionalSubscribers as $subscriber) {
+                    $issue->subscriptions()->firstOrCreate(
+                        ['user_id' => $subscriber->id],
+                        ['created_at' => $issue->created_at->addHours(rand(1, 24))]
+                    );
+                    $count++;
+                }
+            }
+        }
+
+        return $count;
     }
 }

@@ -77,6 +77,32 @@ class Issue extends Model
         return $this->hasMany(InboxItem::class);
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(IssueComment::class);
+    }
+
+    public function activities(): HasMany
+    {
+        return $this->hasMany(IssueActivity::class);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(IssueSubscription::class);
+    }
+
+    public function subscribers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'issue_subscriptions')
+            ->withPivot('created_at');
+    }
+
+    public function isSubscribed(User $user): bool
+    {
+        return $this->subscriptions()->where('user_id', $user->id)->exists();
+    }
+
     /**
      * Scope to eager load all common issue relations with optimized workspace roles.
      */

@@ -2,7 +2,6 @@ import { StatusIcon } from '@/components/swell/workspace/icons';
 import { PriorityIcon } from '@/components/swell/workspace/icons/priority-mapper';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -12,9 +11,12 @@ import { useMyIssuesStore } from '@/stores/my-issues-store';
 import { format, formatDistanceToNow, isPast, isToday, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { Calendar as CalendarIcon, CheckIcon, ExternalLink, Tag, User, X } from 'lucide-react';
+import { Link } from "@inertiajs/react";
+import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import type { MyIssue } from './types';
+import { buttonVariants } from '@/components/ui/button';
 
 interface IssueDetailPanelProps {
     issue: MyIssue | null;
@@ -119,15 +121,13 @@ export function IssueDetailPanel({ issue }: IssueDetailPanelProps) {
                 </div>
 
                 <div className="mt-6">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full gap-2"
-                        onClick={() => window.open(route('workspace.teams.issues', { team: issue.team.identifier }), '_blank')}
+                    <Link
+                        className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'w-full gap-2')}
+                        href={route('workspace.issues.show', { issue: issue.identifier })}
                     >
                         <ExternalLink className="size-4" />
-                        Voir dans l'équipe
-                    </Button>
+                        Voir la tâche
+                    </Link>
                 </div>
             </div>
         </ScrollArea>

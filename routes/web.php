@@ -10,6 +10,7 @@ use App\Http\Controllers\PromotionController;
 use App\Modules\Loyalty\Http\Controllers\LoyaltyController;
 use App\Modules\Review\Http\Controllers\ReviewController;
 use App\Modules\Wishlist\Http\Controllers\WishlistController;
+use App\Modules\Workspace\Http\Controllers\IssueCommentController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceDashboardController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceInboxController;
 use App\Modules\Workspace\Http\Controllers\WorkspaceIssueController;
@@ -106,6 +107,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             });
 
             Route::prefix('issues')->name('issues.')->group(function () {
+                Route::get('/{issue:identifier}', [WorkspaceIssueController::class, 'show'])
+                    ->name('show');
                 Route::patch('/{issue}/priority', [WorkspaceIssueController::class, 'updatePriority'])
                     ->name('update-priority');
                 Route::patch('/{issue}/status', [WorkspaceIssueController::class, 'updateStatus'])
@@ -122,6 +125,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     ->name('destroy');
                 Route::post('/', [WorkspaceIssueController::class, 'store'])
                     ->name('store');
+
+                Route::post('/{issue}/subscribe', [WorkspaceIssueController::class, 'subscribe'])
+                    ->name('subscribe');
+                Route::delete('/{issue}/subscribe', [WorkspaceIssueController::class, 'unsubscribe'])
+                    ->name('unsubscribe');
+
+                Route::post('/{issue}/comments', [IssueCommentController::class, 'store'])
+                    ->name('comments.store');
+                Route::patch('/{issue}/comments/{comment}', [IssueCommentController::class, 'update'])
+                    ->name('comments.update');
+                Route::delete('/{issue}/comments/{comment}', [IssueCommentController::class, 'destroy'])
+                    ->name('comments.destroy');
             });
         });
 });

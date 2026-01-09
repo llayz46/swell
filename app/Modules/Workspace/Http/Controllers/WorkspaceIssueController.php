@@ -10,8 +10,15 @@ use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueLabelRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssuePriorityRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueRequest;
 use App\Modules\Workspace\Http\Requests\Issue\UpdateIssueStatusRequest;
+use App\Modules\Workspace\Http\Resources\IssueDetailResource;
 use App\Modules\Workspace\Models\Issue;
+use App\Modules\Workspace\Models\IssueLabel;
+use App\Modules\Workspace\Models\IssuePriority;
+use App\Modules\Workspace\Models\IssueStatus;
+use App\Modules\Workspace\Models\IssueSubscription;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class WorkspaceIssueController extends Controller
 {
@@ -59,9 +66,69 @@ class WorkspaceIssueController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Issue $issue)
+    public function show(Issue $issue): Response
     {
-        //
+        $this->authorize('view', $issue);
+
+        $user = auth()->user();
+
+        $issue->load([
+            'status',
+            'priority',
+            'assignee',
+            'creator',
+            'team.members',
+            'labels',
+            'comments' => fn ($q) => $q->with(['user', 'replies.user'])->orderBy('created_at'),
+            'activities' => fn ($q) => $q->with('user')->orderByDesc('created_at'),
+            'subscribers',
+        ]);
+
+        $issue->is_subscribed = $issue->isSubscribed($user);
+
+        return Inertia::render('workspace/issues/show', [
+            'issue' => new IssueDetailResource($issue),
+            'statuses' => IssueStatus::orderBy('order')->get(),
+            'priorities' => IssuePriority::orderBy('order')->get(),
+            'labels' => IssueLabel::orderBy('name')->get(),
+            'teamMembers' => $issue->team->members->map(fn ($member) => [
+                'id' => $member->id,
+                'name' => $member->name,
+                'email' => $member->email,
+                'avatar_url' => $member->avatar_url,
+            ]),
+        ]);
+    }
+
+    /**
+     * Subscribe to issue notifications.
+     */
+    public function subscribe(Issue $issue): RedirectResponse
+    {
+        $this->authorize('view', $issue);
+
+        IssueSubscription::firstOrCreate([
+            'issue_id' => $issue->id,
+            'user_id' => auth()->id(),
+        ], [
+            'created_at' => now(),
+        ]);
+
+        return back();
+    }
+
+    /**
+     * Unsubscribe from issue notifications.
+     */
+    public function unsubscribe(Issue $issue): RedirectResponse
+    {
+        $this->authorize('view', $issue);
+
+        IssueSubscription::where('issue_id', $issue->id)
+            ->where('user_id', auth()->id())
+            ->delete();
+
+        return back();
     }
 
     /**

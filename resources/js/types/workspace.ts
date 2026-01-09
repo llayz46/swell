@@ -40,12 +40,51 @@ export interface Issue {
     creator: {
         id: number;
         name: string;
+        email?: string;
+        avatar_url?: string;
     };
     team?: Team;
     labels: IssueLabel[];
     dueDate?: string;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface IssueComment {
+    id: number;
+    content: string;
+    user: IssueAssignee;
+    parentId: number | null;
+    replies?: IssueComment[];
+    editedAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export type ActivityType =
+    | 'created'
+    | 'status_changed'
+    | 'priority_changed'
+    | 'assignee_changed'
+    | 'labels_changed'
+    | 'due_date_changed'
+    | 'title_changed'
+    | 'description_changed';
+
+export interface IssueActivity {
+    id: number;
+    type: ActivityType;
+    user: IssueAssignee;
+    oldValue: Record<string, unknown> | null;
+    newValue: Record<string, unknown> | null;
+    createdAt: string;
+}
+
+export interface IssueDetail extends Issue {
+    comments: IssueComment[];
+    activities: IssueActivity[];
+    isSubscribed: boolean;
+    subscribersCount: number;
 }
 
 export type NotificationType = 'comment' | 'mention' | 'assignment' | 'status' | 'reopened' | 'closed' | 'edited' | 'created';
