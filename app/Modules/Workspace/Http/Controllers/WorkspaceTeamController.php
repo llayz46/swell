@@ -69,7 +69,7 @@ class WorkspaceTeamController extends Controller
         return Inertia::render('workspace/teams/issues', [
             'team' => $team->load('members', 'leads')->toResource(),
             'issues' => $issues->toResourceCollection(),
-            'statuses' => IssueStatus::orderBy('position')->get()->toResourceCollection(),
+            'statuses' => IssueStatus::orderBy('order')->get()->toResourceCollection(),
             'priorities' => IssuePriority::orderBy('order')->get()->toResourceCollection(),
             'labels' => IssueLabel::all()->toResourceCollection(),
             'filters' => $request->only(['status', 'priority']),
