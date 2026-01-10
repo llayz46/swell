@@ -5,6 +5,13 @@ use App\Modules\Workspace\Actions\RemoveTeamMember;
 use App\Modules\Workspace\Models\Issue;
 use App\Modules\Workspace\Models\Team;
 
+beforeEach(function () {
+    if (!config('swell.workspace.enabled')) {
+        $this->markTestSkipped('La fonctionnalité workspace est désactivée.');
+        return;
+    }
+})
+
 test('removing a team member unassigns their issues', function () {
     $team = Team::factory()->create();
     $member = User::factory()->create();
@@ -69,7 +76,7 @@ test('leaving a team unassigns user issues', function () {
 
     $this->actingAs($user)
         ->post(route('workspace.teams.leave', $team))
-        ->assertRedirect(route('workspace.index'));
+        ->assertRedirect(route('workspace.my-issues.overview'));
 
     expect($team->fresh()->isMember($user))->toBeFalse();
     expect($issue->fresh()->assignee_id)->toBeNull();
@@ -105,7 +112,7 @@ test('a lead can leave if there are other leads', function () {
 
     $this->actingAs($lead1)
         ->post(route('workspace.teams.leave', $team))
-        ->assertRedirect(route('workspace.index'));
+        ->assertRedirect(route('workspace.my-issues.overview'));
 
     expect($team->fresh()->isMember($lead1))->toBeFalse();
 

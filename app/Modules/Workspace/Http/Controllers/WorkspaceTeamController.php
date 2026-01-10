@@ -190,7 +190,7 @@ class WorkspaceTeamController extends Controller
         $workspaceService->clearUserTeamsCache($user);
         $workspaceService->clearWorkspaceMembersCache();
 
-        return redirect()->route('workspace.index')->with('success', 'Vous avez quitté l\'équipe avec succès');
+        return redirect()->route('workspace.my-issues.overview')->with('success', 'Vous avez quitté l\'équipe avec succès');
     }
 
     /**

@@ -12,6 +12,11 @@ use Spatie\Permission\Models\Role;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
+    if (!config('swell.workspace.enabled')) {
+        $this->markTestSkipped('La fonctionnalité workspace est désactivée.');
+        return;
+    }
+    
     $this->seed(\Database\Seeders\RoleSeeder::class);
 
     Role::create(['name' => 'workspace-admin']);
