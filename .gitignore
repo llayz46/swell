@@ -40,6 +40,10 @@ database/migrations/2025_07_12_154708_create_reviews_table.php
 database/migrations/2025_06_23_071253_create_wishlists_table.php
 database/migrations/2025_06_23_071318_create_wishlist_items.php
 
+# Loyalty module migrations
+database/migrations/2025_11_23_000001_create_loyalty_accounts_table.php
+database/migrations/2025_11_23_000002_create_loyalty_transactions_table.php
+
 # Workspace module migrations
 database/migrations/2025_12_12_195518_create_issues_table.php
 database/migrations/2025_12_12_195539_create_issue_statuses_table.php
