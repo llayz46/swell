@@ -1,8 +1,8 @@
-import { useConfirmContext } from '@/contexts/confirm-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useCartContext } from '@/contexts/cart-context';
+import { useConfirmContext } from '@/contexts/confirm-context';
 import { CartItem } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
@@ -14,12 +14,13 @@ export function CartSheet() {
     const handleClearCart = async () => {
         await confirm({
             title: 'Confirmation de la suppression du panier',
-            description: 'Êtes-vous sûr de vouloir vider votre panier ? Cette action est irréversible et supprimera tous les articles de votre panier.',
+            description:
+                'Êtes-vous sûr de vouloir vider votre panier ? Cette action est irréversible et supprimera tous les articles de votre panier.',
             confirmText: 'Vider le panier',
             cancelText: 'Annuler',
             variant: 'destructive',
             icon: <Trash2 className="size-4" />,
-            onConfirm: clearCart
+            onConfirm: clearCart,
         });
     };
 

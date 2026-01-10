@@ -87,12 +87,7 @@ export function AppHeader({ breadcrumbs = [], mainNavItems }: AppHeaderProps) {
                         <NavigationMenu className="flex h-full items-stretch">
                             <NavigationMenuList className="flex h-full items-stretch space-x-2">
                                 {mainNavItems.map((item, index) => {
-                                    return (
-                                        <NavigationMenuItemWithActive 
-                                            key={index} 
-                                            item={item}
-                                        />
-                                    );
+                                    return <NavigationMenuItemWithActive key={index} item={item} />;
                                 })}
                             </NavigationMenuList>
                         </NavigationMenu>
@@ -134,7 +129,7 @@ export function AppHeader({ breadcrumbs = [], mainNavItems }: AppHeaderProps) {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="end">
-                                <UserMenuContent user={auth.user} page={page} />
+                                <UserMenuContent />
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -157,20 +152,11 @@ const NavigationMenuItemWithActive = ({ item }: { item: NavItem }) => {
 
     return (
         <NavigationMenuItem className="relative flex h-full items-center">
-            <Link
-                href={item.href}
-                className={cn(
-                    navigationMenuTriggerStyle(),
-                    isActive && activeItemStyles,
-                    'h-9 cursor-pointer px-3',
-                )}
-            >
+            <Link href={item.href} className={cn(navigationMenuTriggerStyle(), isActive && activeItemStyles, 'h-9 cursor-pointer px-3')}>
                 {item.icon && <Icon iconNode={item.icon} className="mr-2 h-4 w-4" />}
                 {item.title}
             </Link>
-            {isActive && (
-                <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>
-            )}
+            {isActive && <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>}
         </NavigationMenuItem>
     );
-}
+};

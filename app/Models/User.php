@@ -2,23 +2,26 @@
 
 namespace App\Models;
 
- use App\Modules\Review\Models\Review;
- use App\Modules\Wishlist\Models\Wishlist;
- use Illuminate\Contracts\Auth\MustVerifyEmail;
- use Illuminate\Database\Eloquent\Factories\HasFactory;
- use Illuminate\Database\Eloquent\Relations\HasMany;
- use Illuminate\Database\Eloquent\Relations\HasOne;
- use Illuminate\Foundation\Auth\User as Authenticatable;
- use Illuminate\Notifications\Notifiable;
- use Illuminate\Support\Facades\Storage;
- use Laravel\Cashier\Billable;
- use Spatie\Permission\Models\Role;
- use Spatie\Permission\Traits\HasRoles;
+use App\Modules\Review\Models\Review;
+use App\Modules\Wishlist\Models\Wishlist;
+use App\Modules\Workspace\Enums\WorkspaceRole;
+use App\Modules\Workspace\Models\Team;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Cashier\Billable;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 
- class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, Billable, HasRoles;
+    use Billable, HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -29,7 +32,7 @@ namespace App\Models;
         'name',
         'email',
         'password',
-        'avatar'
+        'avatar',
     ];
 
     /**
@@ -55,23 +58,25 @@ namespace App\Models;
         ];
     }
 
-     protected static function booted(): void
-     {
-         static::created(function (User $user) {
-             $userRole = Role::firstOrCreate(['name' => 'user']);
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            $userRole = Role::firstOrCreate(['name' => 'user']);
 
-             $user->roles()->attach($userRole);
-         });
-     }
+            $user->roles()->attach($userRole);
+        });
+    }
 
-     public function getAvatarUrlAttribute(): ?string
-     {
-         if (!$this->avatar) return null;
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (! $this->avatar) {
+            return null;
+        }
 
-         return Storage::url($this->avatar);
-     }
+        return Storage::url($this->avatar);
+    }
 
-     protected $appends = ['avatar_url'];
+    protected $appends = ['avatar_url'];
 
     public function cart(): HasOne
     {
@@ -92,4 +97,26 @@ namespace App\Models;
     {
         return $this->hasMany(Review::class);
     }
- }
+
+    public function teams(): BelongsToMany
+    {
+        return $this->belongsToMany(Team::class)
+            ->withPivot(['role', 'joined_at']);
+    }
+
+    /**
+     * Check if the user is a workspace user (is admin or member of at least one team).
+     */
+    public function isWorkspaceUser(): bool
+    {
+        return $this->hasRole(WorkspaceRole::adminRole()) || $this->teams()->exists();
+    }
+
+    /**
+     * Check if the user is a workspace admin.
+     */
+    public function isWorkspaceAdmin(): bool
+    {
+        return $this->hasRole(WorkspaceRole::adminRole());
+    }
+}

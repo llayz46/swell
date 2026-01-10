@@ -111,9 +111,7 @@ export default function Index({ accounts, stats }: Props) {
                 <SwellCard>
                     <SwellCardHeader>
                         <CardTitle>Comptes de fidélité</CardTitle>
-                        <CardDescription>
-                            Liste de tous les comptes de points de fidélité
-                        </CardDescription>
+                        <CardDescription>Liste de tous les comptes de points de fidélité</CardDescription>
                     </SwellCardHeader>
                     <SwellCardContent>
                         <div className="overflow-x-auto">
@@ -133,23 +131,18 @@ export default function Index({ accounts, stats }: Props) {
                                     {accounts.data.map((account) => (
                                         <TableRow key={account.id}>
                                             <TableCell className="font-medium">{account.user.name}</TableCell>
-                                            <TableCell className="text-muted-foreground">
-                                                {account.user.email}
-                                            </TableCell>
-                                            <TableCell className="text-right font-semibold">
-                                                {account.points.toLocaleString()}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                {account.lifetime_points.toLocaleString()}
-                                            </TableCell>
+                                            <TableCell className="text-muted-foreground">{account.user.email}</TableCell>
+                                            <TableCell className="text-right font-semibold">{account.points.toLocaleString()}</TableCell>
+                                            <TableCell className="text-right">{account.lifetime_points.toLocaleString()}</TableCell>
                                             <TableCell className="text-center">
                                                 <Badge variant="secondary">{account.transactions_count}</Badge>
                                             </TableCell>
-                                            <TableCell className="text-sm text-muted-foreground">
-                                                {account.created_at}
-                                            </TableCell>
+                                            <TableCell className="text-sm text-muted-foreground">{account.created_at}</TableCell>
                                             <TableCell className="text-right">
-                                                <Link className={buttonVariants({ variant: 'link', size: 'sm' })} href={route('admin.loyalty.show', account.id)}>
+                                                <Link
+                                                    className={buttonVariants({ variant: 'link', size: 'sm' })}
+                                                    href={route('admin.loyalty.show', account.id)}
+                                                >
                                                     Voir détails
                                                 </Link>
                                             </TableCell>

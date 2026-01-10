@@ -3,7 +3,7 @@ import { BrandDialog } from '@/components/swell/brand-dialog';
 import { CategoryTree } from '@/components/swell/category-tree';
 import { CollectionDialog } from '@/components/swell/product/collection-dialog';
 import { Button } from '@/components/ui/button';
-import { SwellCard, SwellCardHeader, SwellCardContent, Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

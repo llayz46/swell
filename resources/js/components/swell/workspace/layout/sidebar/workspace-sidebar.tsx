@@ -1,0 +1,88 @@
+import AppLogoIcon from '@/components/app-logo-icon';
+import { NavFooter } from '@/components/nav-footer';
+import { NavUser } from '@/components/nav-user';
+import ThemeToggle from '@/components/theme-toggle';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem } from '@/components/ui/sidebar';
+import { workspaceSidebarConfig } from '@/config/sidebar';
+import type { NavItem, NavItemWithChildren, SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
+import { BookOpen, FolderMinus, Users } from 'lucide-react';
+import { WorkspaceNavGroup } from './workspace-nav-group';
+
+const footerNavItems: NavItem[] = [
+    {
+        title: 'Documentation',
+        href: 'https://swellkit.dev',
+        icon: BookOpen,
+    },
+];
+
+interface SidebarProps {
+    mainNavItems: NavItem[];
+    workspaceNavItems: NavItem[];
+}
+
+export function WorkspaceSidebar({ mainNavItems, workspaceNavItems }: SidebarProps) {
+    const { name, auth } = usePage<SharedData>().props;
+
+    const teamsNavItems: NavItemWithChildren[] = (auth.teams ?? []).map((team) => ({
+        id: team.id,
+        title: team.name,
+        icon: team.icon,
+        color: team.color,
+        description: team.description,
+        team: team, // Stockage des données complètes de l'équipe
+        childrens: [
+            {
+                title: 'Tâches',
+                href: `/workspace/teams/${team.identifier}/issues`,
+                icon: FolderMinus,
+            },
+            {
+                title: 'Membres',
+                href: `/workspace/teams/${team.identifier}/members`,
+                icon: Users,
+            },
+        ],
+    }));
+
+    return (
+        <Sidebar
+            collapsible={workspaceSidebarConfig.collapsible}
+            variant={workspaceSidebarConfig.variant}
+            className="p-0 **:data-[sidebar='sidebar']:bg-background"
+        >
+            <SidebarHeader>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <div className="flex w-full items-center justify-between gap-2 pt-2">
+                            <div className="px-2 w-full">
+                                <div className="flex items-center justify-between gap-2">
+                                    <div className="flex aspect-square size-6 items-center justify-center rounded bg-primary text-sidebar-primary-foreground">
+                                        <AppLogoIcon className="size-4 fill-current text-white dark:text-black" />
+                                    </div>
+                                    <div className="grid flex-1 text-left text-sm leading-tight">
+                                        <span className="truncate font-semibold">{name}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <ThemeToggle />
+                        </div>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarHeader>
+
+            <SidebarContent>
+                <WorkspaceNavGroup items={mainNavItems} />
+                <WorkspaceNavGroup items={workspaceNavItems} label="Workspace" />
+                {teamsNavItems.length > 0 && <WorkspaceNavGroup items={teamsNavItems} label="Mes équipes" />}
+            </SidebarContent>
+
+            <SidebarFooter>
+                <NavFooter items={footerNavItems} className="mt-auto" />
+                <NavUser />
+            </SidebarFooter>
+        </Sidebar>
+    );
+}

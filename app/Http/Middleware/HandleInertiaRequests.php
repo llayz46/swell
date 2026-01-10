@@ -2,18 +2,15 @@
 
 namespace App\Http\Middleware;
 
-use App\Factories\CartFactory;
-use App\Http\Resources\CartResource;
-use App\Http\Resources\CategoryResource;
-use App\Modules\Banner\Models\BannerMessage;
-use App\Models\Category;
+use App\Services\SharedPropsService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
+    public function __construct(private SharedPropsService $sharedPropsService) {}
+
     /**
      * The root template that's loaded on the first page visit.
      *
@@ -42,38 +39,29 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return [
+        $shared = [
             ...parent::share($request),
             'name' => config('app.name'),
-            'swell' => [
-                'wishlist' => [
-                    'enabled' => config('swell.wishlist.enabled', true),
-                ],
-                'banner' => [
-                    'enabled' => config('swell.banner.enabled', true),
-                ],
-                'review' => [
-                    'enabled' => config('swell.review.enabled', true),
-                ],
-                'loyalty' => [
-                    'enabled' => config('swell.loyalty.enabled', false),
-                    'points_per_euro' => config('swell.loyalty.points_per_euro', 10),
-                    'minimum_redeem_points' => config('swell.loyalty.minimum_redeem_points', 100),
-                ]
-            ],
-            'auth' => [
-                'user' => fn () => $request->user()?->load('roles'),
-            ],
+            'swell' => fn () => $this->sharedPropsService->getSwellConfig(),
+            'auth' => fn () => $this->sharedPropsService->getAuthData($request),
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-            'categories' => fn () => Cache::rememberForever('categories', fn () => CategoryResource::collection(Category::with(['childrenRecursive' => fn($q) => $q->withCount('products')])->withCount('products')->whereNull('parent_id')->get())),
-            'cart' => fn () => Cache::remember("cart-" . (auth()->check() ? 'user-' . auth()->id() : 'session-' . session()->getId()), 30, function () {
-                return CartResource::make(CartFactory::make()->load('items.product.images', 'items.product.brand', 'items.product.options.values'));
-            }),
-            'infoBanner' => fn () => config('swell.banner.enabled', true) ? Cache::rememberForever('infoBanner', fn () => BannerMessage::orderBy('order')->get()) : [],
+            'categories' => fn () => $this->sharedPropsService->getCategories(),
+            'cart' => fn () => $this->sharedPropsService->getCart(),
         ];
+
+        if (config('swell.banner.enabled', true)) {
+            $shared['infoBanner'] = fn () => $this->sharedPropsService->getInfoBanner();
+        }
+
+        if (config('swell.workspace.enabled', true)) {
+            $shared['workspaceMembers'] = fn () => $this->sharedPropsService->getWorkspaceMembers($request);
+            $shared['invitableTeams'] = fn () => $this->sharedPropsService->getInvitableTeams($request);
+        }
+
+        return $shared;
     }
 }

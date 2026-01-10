@@ -1,0 +1,533 @@
+import type { Issue, IssueAssignee, IssueLabel, IssuePriority, IssueStatus, Team } from '@/types/workspace';
+import { router } from '@inertiajs/react';
+import { toast } from 'sonner';
+import { create } from 'zustand';
+
+type Filters = {
+    status: number[];
+    assignee: string[];
+    priority: number[];
+    labels: number[];
+};
+
+type InitializeData = {
+    team: Team;
+    issues: Issue[];
+    statuses: IssueStatus[];
+    priorities: IssuePriority[];
+    labels: IssueLabel[];
+    filters?: Partial<Filters>;
+    isLead: boolean;
+    isMember: boolean;
+};
+
+type WorkspaceIssuesStore = {
+    // État
+    team: Team | null;
+    issues: Issue[];
+    statuses: IssueStatus[];
+    priorities: IssuePriority[];
+    labels: IssueLabel[];
+    filters: Filters;
+    isLead: boolean;
+    isMember: boolean;
+    issueDialogOpen: boolean;
+    issueDialogIssue: Issue | null;
+    issueDialogStatusId: number | null;
+    updatingIssues: Set<number>;
+
+    // Actions d'initialisation
+    initialize: (data: InitializeData) => void;
+    setTeam: (team: Team) => void;
+    setIssues: (issues: Issue[]) => void;
+    setStatuses: (statuses: IssueStatus[]) => void;
+    setPriorities: (priorities: IssuePriority[]) => void;
+    setLabels: (labels: IssueLabel[]) => void;
+    setFilters: (filters: Partial<Filters>) => void;
+    setIsLead: (isLead: boolean) => void;
+    setIsMember: (isMember: boolean) => void;
+
+    // Actions du dialog d'issue
+    openIssueDialog: (options?: { statusId?: number; issue?: Issue }) => void;
+    closeIssueDialog: () => void;
+
+    // Actions de manipulation d'issues (état local uniquement)
+    updateIssue: (issue: Issue) => void;
+    updateIssuePriority: (issueId: number, priority: IssuePriority) => void;
+    updateIssueStatus: (issueId: number, status: IssueStatus) => void;
+    updateIssueAssignee: (issueId: number, assignee: IssueAssignee | null) => void;
+    updateIssueLabels: (issueId: number, labels: IssueLabel[]) => void;
+    updateIssueDueDate: (issueId: number, dueDate: string | null) => void;
+    removeIssue: (issueId: number) => void;
+    addIssue: (issue: Issue) => void;
+
+    // Actions avec appels serveur
+    performUpdateStatus: (issueId: number, statusIdOrSlug: number | string, currentStatus: IssueStatus) => void;
+    performUpdatePriority: (issueId: number, priorityId: number, currentPriority: IssuePriority) => void;
+    performUpdateAssignee: (issueId: number, newAssignee: IssueAssignee | null, currentAssignee: IssueAssignee | null) => void;
+    performToggleLabel: (issueId: number, labelId: number, currentLabels: IssueLabel[]) => void;
+    performUpdateDueDate: (issueId: number, dueDate: string | null, currentDueDate: string | null | undefined) => void;
+    performDeleteIssue: (issueId: number, onSuccess?: () => void) => void;
+
+    // Helper pour vérifier si une issue est en cours de mise à jour
+    isIssueUpdating: (issueId: number) => boolean;
+
+    // Actions de filtrage
+    toggleFilter: (filterType: keyof Filters, value: number | string) => void;
+    clearFilters: () => void;
+    getActiveFiltersCount: () => number;
+
+    // Helpers pour filtrer les issues
+    filterByStatus: (statusId: number) => Issue[];
+    filterByAssignee: (assigneeId: string | null) => Issue[];
+    filterByPriority: (priorityId: number) => Issue[];
+    filterByLabel: (labelId: number) => Issue[];
+    hasActiveFilters: () => boolean;
+    getFilteredIssues: () => Issue[];
+
+    // Helper pour grouper les issues par statut
+    getIssuesByStatus: () => Record<string, Issue[]>;
+};
+
+export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) => ({
+    // État initial
+    team: null,
+    issues: [],
+    statuses: [],
+    priorities: [],
+    labels: [],
+    filters: {
+        status: [],
+        assignee: [],
+        priority: [],
+        labels: [],
+    },
+    isLead: false,
+    isMember: false,
+    issueDialogOpen: false,
+    issueDialogIssue: null,
+    issueDialogStatusId: null,
+    updatingIssues: new Set<number>(),
+
+    // Actions d'initialisation
+    initialize: ({ team, issues, statuses, priorities, labels, filters, isLead, isMember }) => {
+        set((state) => ({
+            team,
+            issues,
+            statuses,
+            priorities,
+            labels,
+            filters: { ...state.filters, ...filters },
+            isLead,
+            isMember,
+            issueDialogOpen: state.issueDialogOpen,
+            issueDialogStatusId: state.issueDialogStatusId,
+        }));
+    },
+
+    setTeam: (team) => set({ team }),
+    setIssues: (issues) => set({ issues }),
+    setStatuses: (statuses) => set({ statuses }),
+    setPriorities: (priorities) => set({ priorities }),
+    setLabels: (labels) => set({ labels }),
+    setFilters: (filters) =>
+        set((state) => ({
+            filters: { ...state.filters, ...filters },
+        })),
+    setIsLead: (isLead) => set({ isLead }),
+    setIsMember: (isMember) => set({ isMember }),
+
+    // Actions du dialog d'issue
+    openIssueDialog: (options) => {
+        set({
+            issueDialogOpen: true,
+            issueDialogIssue: options?.issue || null,
+            issueDialogStatusId: options?.statusId || null,
+        });
+    },
+    closeIssueDialog: () => {
+        set({
+            issueDialogOpen: false,
+            issueDialogIssue: null,
+            issueDialogStatusId: null,
+        });
+    },
+
+    updateIssue: (issue) =>
+        set((state) => ({
+            issues: state.issues.map((i) => (i.id === issue.id ? issue : i)),
+        })),
+
+    updateIssuePriority: (issueId, priority) =>
+        set((state) => ({
+            issues: state.issues.map((i) => (i.id === issueId ? { ...i, priority } : i)),
+        })),
+
+    updateIssueStatus: (issueId, status) =>
+        set((state) => ({
+            issues: state.issues.map((i) => (i.id === issueId ? { ...i, status } : i)),
+        })),
+
+    updateIssueAssignee: (issueId, assignee) =>
+        set((state) => ({
+            issues: state.issues.map((i) => (i.id === issueId ? { ...i, assignee } : i)),
+        })),
+
+    updateIssueLabels: (issueId, labels) =>
+        set((state) => ({
+            issues: state.issues.map((i) => (i.id === issueId ? { ...i, labels } : i)),
+        })),
+
+    updateIssueDueDate: (issueId, dueDate) =>
+        set((state) => ({
+            issues: state.issues.map((i) => (i.id === issueId ? { ...i, dueDate: dueDate || undefined } : i)),
+        })),
+
+    removeIssue: (issueId) =>
+        set((state) => ({
+            issues: state.issues.filter((i) => i.id !== issueId),
+        })),
+
+    addIssue: (issue) =>
+        set((state) => ({
+            issues: [...state.issues, issue],
+        })),
+
+    // Actions avec appels serveur
+    performUpdateStatus: (issueId, statusIdOrSlug, currentStatus) => {
+        if (!issueId) return;
+
+        const { statuses, updateIssueStatus, updatingIssues } = get();
+
+        const newStatus =
+            typeof statusIdOrSlug === 'number' ? statuses.find((s) => s.id === statusIdOrSlug) : statuses.find((s) => s.slug === statusIdOrSlug);
+
+        if (!newStatus) {
+            toast.error('Statut invalide');
+            return;
+        }
+
+        if (newStatus.id === currentStatus.id) return;
+
+        updateIssueStatus(issueId, newStatus);
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.patch(
+            route('workspace.issues.update-status', { issue: issueId }),
+            { status_id: newStatus.id },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+                    toast.success('Statut mis à jour avec succès');
+                },
+                onError: (errors) => {
+                    updateIssueStatus(issueId, currentStatus);
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+
+                    const errorMessage = (errors as Record<string, string>).status_id || 'Erreur lors de la mise à jour du statut';
+                    toast.error(errorMessage);
+                },
+            },
+        );
+    },
+
+    performUpdatePriority: (issueId, priorityId, currentPriority) => {
+        if (!issueId) return;
+
+        const { priorities, updateIssuePriority, updatingIssues } = get();
+
+        const newPriority = priorities.find((p) => p.id === priorityId);
+
+        if (!newPriority) {
+            toast.error('Priorité invalide');
+            return;
+        }
+
+        if (newPriority.id === currentPriority.id) return;
+
+        updateIssuePriority(issueId, newPriority);
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.patch(
+            route('workspace.issues.update-priority', { issue: issueId }),
+            { priority_id: newPriority.id },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+                    toast.success('Priorité mise à jour avec succès');
+                },
+                onError: (errors) => {
+                    updateIssuePriority(issueId, currentPriority);
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+
+                    const errorMessage = (errors as Record<string, string>).priority_id || 'Erreur lors de la mise à jour de la priorité';
+                    toast.error(errorMessage);
+                },
+            },
+        );
+    },
+
+    performUpdateAssignee: (issueId, newAssignee, currentAssignee) => {
+        if (!issueId) return;
+
+        const { updateIssueAssignee, updatingIssues } = get();
+
+        updateIssueAssignee(issueId, newAssignee);
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.patch(
+            route('workspace.issues.update-assignee', { issue: issueId }),
+            { assignee_id: newAssignee?.id || null },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+                    toast.success('Assignation mise à jour avec succès');
+                },
+                onError: (errors) => {
+                    updateIssueAssignee(issueId, currentAssignee);
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+
+                    const errorMessage = (errors as Record<string, string>).assignee_id || "Erreur lors de la mise à jour de l'assignation";
+                    toast.error(errorMessage);
+                },
+            },
+        );
+    },
+
+    performToggleLabel: (issueId, labelId, currentLabels) => {
+        if (!issueId) return;
+
+        const { labels, updateIssueLabels, updatingIssues } = get();
+
+        const label = labels.find((l) => l.id === labelId);
+        if (!label) {
+            toast.error('Étiquette invalide');
+            return;
+        }
+
+        const hasLabel = currentLabels.some((l) => l.id === labelId);
+        const newLabels = hasLabel ? currentLabels.filter((l) => l.id !== labelId) : [...currentLabels, label];
+
+        updateIssueLabels(issueId, newLabels);
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.patch(
+            route('workspace.issues.update-label', { issue: issueId }),
+            { label_id: labelId },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+                    toast.success(hasLabel ? 'Étiquette retirée avec succès' : 'Étiquette ajoutée avec succès');
+                },
+                onError: (errors) => {
+                    updateIssueLabels(issueId, currentLabels);
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+
+                    const errorMessage = (errors as Record<string, string>).label_id || "Erreur lors de la mise à jour de l'étiquette";
+                    toast.error(errorMessage);
+                },
+            },
+        );
+    },
+
+    performUpdateDueDate: (issueId, dueDate, currentDueDate) => {
+        if (!issueId) return;
+
+        const { updateIssueDueDate, updatingIssues } = get();
+
+        if (dueDate === currentDueDate) return;
+
+        updateIssueDueDate(issueId, dueDate);
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.patch(
+            route('workspace.issues.update-due-date', { issue: issueId }),
+            { due_date: dueDate },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+                    toast.success("Date d'échéance mise à jour avec succès");
+                },
+                onError: (errors) => {
+                    updateIssueDueDate(issueId, currentDueDate || null);
+                    const { updatingIssues } = get();
+                    const newSet = new Set(updatingIssues);
+                    newSet.delete(issueId);
+                    set({ updatingIssues: newSet });
+
+                    const errorMessage = (errors as Record<string, string>).due_date || "Erreur lors de la mise à jour de la date d'échéance";
+                    toast.error(errorMessage);
+                },
+            },
+        );
+    },
+
+    performDeleteIssue: (issueId, onSuccess) => {
+        if (!issueId) return;
+
+        const { updatingIssues } = get();
+
+        set({ updatingIssues: new Set(updatingIssues).add(issueId) });
+
+        router.delete(route('workspace.issues.destroy', { issue: issueId }), {
+            preserveScroll: true,
+            onSuccess: () => {
+                const { updatingIssues } = get();
+                const newSet = new Set(updatingIssues);
+                newSet.delete(issueId);
+                set({ updatingIssues: newSet });
+                toast.success('Tâche supprimée avec succès');
+
+                if (onSuccess) {
+                    onSuccess();
+                }
+            },
+            onError: (errors) => {
+                const { updatingIssues } = get();
+                const newSet = new Set(updatingIssues);
+                newSet.delete(issueId);
+                set({ updatingIssues: newSet });
+
+                const errorMessage = (errors as Record<string, string>).message || 'Erreur lors de la suppression de la tâche';
+                toast.error(errorMessage);
+            },
+        });
+    },
+
+    // Helper pour vérifier si une issue est en cours de mise à jour
+    isIssueUpdating: (issueId) => {
+        const { updatingIssues } = get();
+        return updatingIssues.has(issueId);
+    },
+
+    // Actions de filtrage
+    toggleFilter: (filterType, value) =>
+        set((state) => {
+            const currentFilters = state.filters[filterType];
+            const newFilters = currentFilters.includes(value) ? currentFilters.filter((v) => v !== value) : [...currentFilters, value];
+
+            return {
+                filters: {
+                    ...state.filters,
+                    [filterType]: newFilters,
+                },
+            };
+        }),
+
+    clearFilters: () =>
+        set({
+            filters: {
+                status: [],
+                assignee: [],
+                priority: [],
+                labels: [],
+            },
+        }),
+
+    getActiveFiltersCount: () => {
+        const { filters } = get();
+        return Object.values(filters).reduce((count, filterArray) => count + filterArray.length, 0);
+    },
+
+    // Helpers pour filtrer les issues
+    filterByStatus: (statusId) => {
+        const { issues } = get();
+        return issues.filter((issue) => issue.status.id === statusId);
+    },
+
+    filterByAssignee: (assigneeId) => {
+        const { issues } = get();
+        if (assigneeId === null) {
+            return issues.filter((issue) => !issue.assignee);
+        }
+        return issues.filter((issue) => issue.assignee?.id.toString() === assigneeId);
+    },
+
+    filterByPriority: (priorityId) => {
+        const { issues } = get();
+        return issues.filter((issue) => issue.priority.id === priorityId);
+    },
+
+    filterByLabel: (labelId) => {
+        const { issues } = get();
+        return issues.filter((issue) => issue.labels.some((label) => label.id === labelId));
+    },
+
+    hasActiveFilters: () => {
+        const { filters } = get();
+        return Object.values(filters).some((filterArray) => filterArray.length > 0);
+    },
+
+    getFilteredIssues: () => {
+        const { issues, filters } = get();
+
+        return issues.filter((issue) => {
+            if (filters.status.length === 0 && filters.assignee.length === 0 && filters.priority.length === 0 && filters.labels.length === 0) {
+                return true;
+            }
+
+            const statusMatch = filters.status.length === 0 || filters.status.includes(issue.status.id);
+            const priorityMatch = filters.priority.length === 0 || filters.priority.includes(issue.priority.id);
+            const labelMatch = filters.labels.length === 0 || issue.labels.some((label) => filters.labels.includes(label.id));
+            const assigneeMatch =
+                filters.assignee.length === 0 ||
+                (issue.assignee && filters.assignee.includes(issue.assignee.id.toString())) ||
+                (filters.assignee.includes('unassigned') && !issue.assignee);
+
+            return statusMatch && priorityMatch && labelMatch && assigneeMatch;
+        });
+    },
+
+    // Helper pour grouper les issues par statut
+    getIssuesByStatus: () => {
+        const { issues } = get();
+        return issues.reduce(
+            (acc, issue) => {
+                const statusId = issue.status.id;
+                if (!acc[statusId]) {
+                    acc[statusId] = [];
+                }
+                acc[statusId].push(issue);
+                return acc;
+            },
+            {} as Record<string, Issue[]>,
+        );
+    },
+}));

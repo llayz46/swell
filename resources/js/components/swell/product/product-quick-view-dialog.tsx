@@ -52,7 +52,7 @@ export function ProductQuickViewDialog({ product, open, onClose }: { product: Pr
                             <Button className="w-full rounded-md max-sm:h-9" size="lg" onClick={() => addToCart(product)}>
                                 Ajouter au panier
                             </Button>
-                            
+
                             <Button className="h-10 max-sm:h-9" variant="outline" onClick={() => addItem(product)}>
                                 <Heart />
                             </Button>

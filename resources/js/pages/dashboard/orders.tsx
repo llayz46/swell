@@ -1,12 +1,12 @@
+import { ProductQuickViewDialog } from '@/components/swell/product/product-quick-view-dialog';
+import SearchInput from '@/components/swell/search-input';
 import { Button } from '@/components/ui/button';
 import { CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import SearchInput from '@/components/swell/search-input';
-import AppLayout from '@/layouts/app-layout';
-import { ProductQuickViewDialog } from '@/components/swell/product/product-quick-view-dialog';
-import type { BreadcrumbItem, Order, Product } from '@/types';
 import { useCartContext } from '@/contexts/cart-context';
 import { useConfirmContext } from '@/contexts/confirm-context';
+import AppLayout from '@/layouts/app-layout';
+import type { BreadcrumbItem, Order, Product } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Head } from '@inertiajs/react';
 import { RotateCcw } from 'lucide-react';
@@ -34,7 +34,7 @@ export default function Orders({ orders }: { orders: Order[] }) {
 
         return order.order_number.toLowerCase().includes(searchTerm.toLowerCase());
     });
-    
+
     const handleReOrder = async (order: Order) => {
         const itemCount = order.items.reduce((total, item) => total + item.quantity, 0);
         const totalAmount = (order.amount_total / 100).toFixed(2);
@@ -64,11 +64,7 @@ export default function Orders({ orders }: { orders: Order[] }) {
                     <p className="text-muted-foreground">Consultez l'historique de vos commandes et leur statut</p>
                 </div>
 
-                <SearchInput 
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Rechercher par numéro de commande..."
-                />
+                <SearchInput value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Rechercher par numéro de commande..." />
 
                 <div className="space-y-4">
                     {filteredOrders.map((order) => (
@@ -97,7 +93,10 @@ export default function Orders({ orders }: { orders: Order[] }) {
                                                 )}
                                             </div>
                                             <div className="min-w-0 flex-1">
-                                                <h3 className="truncate font-medium text-foreground cursor-pointer w-fit hover:underline" onClick={() => item.product && setQuickViewProduct(item.product)}>
+                                                <h3
+                                                    className="w-fit cursor-pointer truncate font-medium text-foreground hover:underline"
+                                                    onClick={() => item.product && setQuickViewProduct(item.product)}
+                                                >
                                                     {item.name}
                                                 </h3>
                                                 <p className="text-sm text-muted-foreground">Quantité: {item.quantity}</p>
@@ -122,7 +121,7 @@ export default function Orders({ orders }: { orders: Order[] }) {
                     ))}
                 </div>
             </div>
-            
+
             <ProductQuickViewDialog product={quickViewProduct} open={!!quickViewProduct} onClose={() => setQuickViewProduct(null)} />
         </AppLayout>
     );

@@ -9,10 +9,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
             <SidebarGroupLabel>Liens</SidebarGroupLabel>
             <SidebarMenu>
                 {items.map((item) => (
-                    <SidebarMenuItemWithActive 
-                        key={item.title} 
-                        item={item} 
-                    />
+                    <SidebarMenuItemWithActive key={item.title} item={item} />
                 ))}
             </SidebarMenu>
         </SidebarGroup>
@@ -32,4 +29,4 @@ const SidebarMenuItemWithActive = ({ item }: { item: NavItem }) => {
             </SidebarMenuButton>
         </SidebarMenuItem>
     );
-}
+};

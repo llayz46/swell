@@ -18,13 +18,19 @@ export function useActiveNav(href: string): boolean {
         return currentUrl === '/admin';
     }
 
+    // Special case for /workspace route - only active when URL is exactly /workspace
+    if (href === '/workspace') {
+        return currentUrl === '/workspace';
+    }
+
+    // Special case for /workspace route - only active when URL is exactly /workspace
+    if (href === '/workspace/teams') {
+        return currentUrl === '/workspace/teams';
+    }
+
     // For other routes, check if:
     // 1. URL matches exactly
     // 2. URL starts with href followed by a slash (subpage)
     // 3. URL starts with href followed by a query string
-    return (
-        currentUrl === href ||
-        currentUrl.startsWith(`${href}/`) ||
-        currentUrl.startsWith(`${href}?`)
-    );
+    return currentUrl === href || currentUrl.startsWith(`${href}/`) || currentUrl.startsWith(`${href}?`);
 }

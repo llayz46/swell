@@ -1,5 +1,6 @@
 import { BrandDialog } from '@/components/swell/brand-dialog';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
+import SearchInput from '@/components/swell/search-input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
@@ -7,7 +8,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AdminLayout from '@/layouts/admin-layout';
-import SearchInput from '@/components/swell/search-input';
 import type { Brand, BreadcrumbItem } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Head } from '@inertiajs/react';
@@ -75,11 +75,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les marques" />
 
-            <SearchInput 
-                placeholder="Rechercher une marque..." 
-                value={searchTerm} 
-                onChange={(e) => setSearchTerm(e.target.value)}
-            >
+            <SearchInput placeholder="Rechercher une marque..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}>
                 <Select value={sortBy} onValueChange={setSortBy}>
                     <SelectTrigger className="border-border bg-background text-foreground sm:w-40">
                         <SelectValue />

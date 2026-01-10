@@ -6,7 +6,7 @@ import { SeoTabContent } from '@/components/swell/product/form-tab/product-form-
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { SwellCard, SwellCardHeader, SwellCardContent, CardTitle } from '@/components/ui/card';
+import { CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
@@ -157,7 +157,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                 leaveTo="opacity-0 scale-95"
             >
                 <Alert className="border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950">
-                    <AlertCircle className="dark:text-orange-400! size-4 text-orange-600!" />
+                    <AlertCircle className="size-4 text-orange-600! dark:text-orange-400!" />
                     <AlertDescription className="text-orange-800 dark:text-orange-200">
                         Vous avez des modifications non enregistrées. N'oubliez pas de sauvegarder vos changements.
                     </AlertDescription>

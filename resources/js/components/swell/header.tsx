@@ -78,7 +78,7 @@ export function Header() {
 
                 <div className="flex items-center gap-2">
                     {auth.user ? (
-                        <UserDropdown user={auth.user} />
+                        <UserDropdown />
                     ) : (
                         <Link prefetch="mount" href="/login" className={buttonVariants({ variant: 'ghost', size: 'icon' })}>
                             <User size={20} />

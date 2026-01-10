@@ -1,0 +1,172 @@
+import type { PriorityIconName } from '@/components/swell/workspace/icons/priority-mapper';
+
+export interface IssueStatus {
+    id: number;
+    slug: string;
+    name: string;
+    color: string;
+    icon_type: string;
+}
+
+export interface IssuePriority {
+    id: number;
+    slug: string;
+    name: string;
+    icon_type: PriorityIconName;
+}
+
+export interface IssueLabel {
+    id: number;
+    name: string;
+    slug: string;
+    color: string;
+}
+
+export interface IssueAssignee {
+    id: number;
+    name: string;
+    email: string;
+    avatar_url?: string;
+}
+
+export interface Issue {
+    id: number;
+    identifier: string;
+    title: string;
+    description?: string;
+    status: IssueStatus;
+    priority: IssuePriority;
+    assignee: IssueAssignee | null;
+    creator: {
+        id: number;
+        name: string;
+        email?: string;
+        avatar_url?: string;
+    };
+    team?: Team;
+    labels: IssueLabel[];
+    dueDate?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface IssueComment {
+    id: number;
+    content: string;
+    user: IssueAssignee;
+    parentId: number | null;
+    replies?: IssueComment[];
+    editedAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export type ActivityType =
+    | 'created'
+    | 'status_changed'
+    | 'priority_changed'
+    | 'assignee_changed'
+    | 'labels_changed'
+    | 'due_date_changed'
+    | 'title_changed'
+    | 'description_changed';
+
+export interface IssueActivity {
+    id: number;
+    type: ActivityType;
+    user: IssueAssignee;
+    oldValue: Record<string, unknown> | null;
+    newValue: Record<string, unknown> | null;
+    createdAt: string;
+}
+
+export interface IssueDetail extends Issue {
+    comments: IssueComment[];
+    activities: IssueActivity[];
+    isSubscribed: boolean;
+    subscribersCount: number;
+}
+
+export type NotificationType = 'comment' | 'mention' | 'assignment' | 'status' | 'reopened' | 'closed' | 'edited' | 'created';
+
+export interface InboxItem {
+    id: number;
+    issue: Issue;
+    type: NotificationType;
+    content?: string;
+    actor: IssueAssignee;
+    read: boolean;
+    readAt?: string;
+    snoozedUntil?: string;
+    createdAt: string;
+}
+
+export interface WorkspaceContextData {
+    statuses: IssueStatus[];
+    priorities: IssuePriority[];
+    labels: IssueLabel[];
+}
+
+interface BaseMember {
+    id: number;
+    name: string;
+    email: string;
+    avatar_url?: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface TeamMember extends BaseMember {
+    role: 'team-lead' | 'team-member';
+    joined_at: string;
+}
+
+export interface WorkspaceMember extends BaseMember {
+    roles: string[];
+    workspaceRole: 'workspace-admin' | 'team-lead' | 'team-member';
+    teams: Team[];
+}
+
+export interface Team {
+    id: number;
+    identifier: string;
+    name: string;
+    icon?: string;
+    color: string;
+    description?: string;
+    members?: TeamMember[];
+    leads?: {
+        id: number;
+        name: string;
+        avatar_url?: string;
+    }[];
+    membersCount?: number;
+    issuesCount?: number;
+    joined?: boolean;
+    role?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface TeamInvitation {
+    id: number;
+    team: {
+        id: number;
+        identifier: string;
+        name: string;
+        icon?: string;
+        color: string;
+    };
+    inviter: {
+        id: number;
+        name: string;
+        avatar_url?: string;
+    };
+    role: string;
+    message?: string;
+    status: 'pending' | 'accepted' | 'declined';
+    is_pending: boolean;
+    is_expired: boolean;
+    expires_at?: string;
+    created_at: string;
+}

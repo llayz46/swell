@@ -10,7 +10,7 @@ const optionsKey = (options?: CartItem['options'] | undefined) => {
     if (!options || options.length === 0) return '';
     const pairs = options.map((o) => [o.option_id, o.option_value_id] as const).sort((a, b) => a[0] - b[0]);
     return pairs.map(([k, v]) => `${k}:${v}`).join('|');
-}
+};
 
 const fillOptionLabels = (items: CartItem[]): CartItem[] => {
     return (items || []).map((item) => {
@@ -24,7 +24,7 @@ const fillOptionLabels = (items: CartItem[]): CartItem[] => {
         });
         return { ...item, options: enriched } as CartItem;
     });
-}
+};
 
 export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
     const [optimisticCart, setOptimisticCart] = useState<Cart | null>(initialCart || null);
@@ -254,19 +254,19 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
         router.post(
             route('cart.buy'),
             {
-                products: productArray.map(item => {
+                products: productArray.map((item) => {
                     if ('product' in item) {
                         return {
                             id: item.product?.id,
-                            quantity: item.quantity
+                            quantity: item.quantity,
                         };
                     }
 
                     return {
                         id: item.id,
-                        quantity: 1
+                        quantity: 1,
                     };
-                })
+                }),
             },
             {
                 preserveScroll: true,
