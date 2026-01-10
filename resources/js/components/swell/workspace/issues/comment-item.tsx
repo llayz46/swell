@@ -56,33 +56,35 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
                         {comment.editedAt && <span className="text-xs text-muted-foreground">(modifié)</span>}
 
                         <div className="ml-auto opacity-0 transition-opacity group-hover:opacity-100">
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="xs" className="h-6 w-6 p-0">
-                                        <MoreHorizontal className="h-4 w-4" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    {!isReply && (
-                                        <DropdownMenuItem onClick={() => setReplyingToCommentId(comment.id)}>
-                                            <Reply className="mr-2 h-4 w-4" />
-                                            Répondre
-                                        </DropdownMenuItem>
-                                    )}
-                                    {isOwner && (
-                                        <>
-                                            <DropdownMenuItem onClick={() => setEditingCommentId(comment.id)}>
-                                                <Pencil className="mr-2 h-4 w-4" />
-                                                Modifier
+                            {!isReply || isOwner ? (
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="xs" className="h-6 w-6 p-0">
+                                            <MoreHorizontal className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        {!isReply && (
+                                            <DropdownMenuItem onClick={() => setReplyingToCommentId(comment.id)}>
+                                                <Reply className="mr-2 h-4 w-4" />
+                                                Répondre
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem className="text-destructive" onClick={() => performDeleteComment(comment.id)}>
-                                                <Trash2 className="mr-2 h-4 w-4" />
-                                                Supprimer
-                                            </DropdownMenuItem>
-                                        </>
-                                    )}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                                        )}
+                                        {isOwner && (
+                                            <>
+                                                <DropdownMenuItem onClick={() => setEditingCommentId(comment.id)}>
+                                                    <Pencil className="mr-2 h-4 w-4" />
+                                                    Modifier
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem className="text-destructive" onClick={() => performDeleteComment(comment.id)}>
+                                                    <Trash2 className="mr-2 h-4 w-4" />
+                                                    Supprimer
+                                                </DropdownMenuItem>
+                                            </>
+                                        )}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            ) : null}
                         </div>
                     </div>
 
