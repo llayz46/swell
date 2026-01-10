@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useWorkspaceMembersStore } from '@/stores/workspace-members-store';
-import type { TeamMember, WorkspaceMember } from '@/types/workspace';
 import { ArrowUpDown, CheckIcon, ChevronRight, ListFilter, Shield } from 'lucide-react';
 import { useState } from 'react';
 
@@ -14,7 +13,7 @@ const ROLES: Array<{ value: 'workspace-admin' | 'team-lead' | 'team-member'; lab
     { value: 'team-member', label: 'Membre' },
 ];
 
-export function Filter({ members }: { members: TeamMember[] | WorkspaceMember[] }) {
+export function Filter() {
     const [open, setOpen] = useState(false);
     const [active, setActive] = useState<FilterType | null>(null);
 
