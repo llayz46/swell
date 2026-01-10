@@ -10,7 +10,7 @@ beforeEach(function () {
         $this->markTestSkipped('La fonctionnalité workspace est désactivée.');
         return;
     }
-})
+});
 
 test('removing a team member unassigns their issues', function () {
     $team = Team::factory()->create();
