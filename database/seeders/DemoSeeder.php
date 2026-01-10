@@ -45,7 +45,7 @@ class DemoSeeder extends Seeder
     protected function seedModules(): void
     {
         if (config('swell.workspace.enabled', false)) {
-            $this->call(\App\Modules\Workspace\Database\Seeders\WorkspaceModuleSeeder::class);
+            $this->call(\App\Modules\Workspace\database\seeders\WorkspaceModuleSeeder::class);
         }
     }
 }

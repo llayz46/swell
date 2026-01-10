@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Workspace\Database\Seeders;
+namespace App\Modules\Workspace\database\seeders;
 
 use App\Models\User;
 use App\Modules\Workspace\Enums\WorkspaceRole;
