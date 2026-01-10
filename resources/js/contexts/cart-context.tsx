@@ -1,5 +1,5 @@
 import { useCart } from '@/hooks/use-cart';
-import { Cart, Product, OrderItems } from '@/types';
+import { Cart, OrderItems, Product } from '@/types';
 import { createContext, ReactNode, useContext } from 'react';
 
 type CartContextType = {

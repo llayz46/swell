@@ -11,10 +11,10 @@ import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
 import { Transition } from '@headlessui/react';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import { AlertCircle, CheckCircle, Edit, Eye, EyeOff, Info, Megaphone, MoreHorizontal, Trash2 } from 'lucide-react';
 import { FormEventHandler, useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -322,7 +322,9 @@ function SortableBannerItem({ item, setEditBanner, setOpenBannerDialog, onDelete
 
                             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                                 <span>Créé le {format(item.created_at, 'dd MMMM yyyy', { locale: fr })}</span>
-                                {item.updated_at !== item.created_at && <span>Modifié le {format(item.updated_at, 'dd MMMM yyyy', { locale: fr })}</span>}
+                                {item.updated_at !== item.created_at && (
+                                    <span>Modifié le {format(item.updated_at, 'dd MMMM yyyy', { locale: fr })}</span>
+                                )}
                             </div>
                         </div>
 

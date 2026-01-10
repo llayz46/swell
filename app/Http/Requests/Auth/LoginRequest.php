@@ -35,6 +35,15 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'Oups ! Veuillez saisir votre adresse email.',
+            'email.email' => 'Hmm, cette adresse email ne semble pas valide.',
+            'password.required' => 'Oups ! N\'oubliez pas votre mot de passe.',
+        ];
+    }
+
     /**
      * Attempt to authenticate the request's credentials.
      *

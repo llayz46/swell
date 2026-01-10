@@ -125,7 +125,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; on
 
                 <div className="mt-3 flex items-center justify-between">
                     {product.isNew && (
-                        <Badge variant="secondary" className="rounded-sm bg-yellow-500 dark:bg-yellow-700 text-xs text-white">
+                        <Badge variant="secondary" className="rounded-sm bg-yellow-500 text-xs text-white dark:bg-yellow-700">
                             Nouveauté
                         </Badge>
                     )}

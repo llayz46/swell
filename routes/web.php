@@ -10,6 +10,12 @@ use App\Http\Controllers\PromotionController;
 use App\Modules\Loyalty\Http\Controllers\LoyaltyController;
 use App\Modules\Review\Http\Controllers\ReviewController;
 use App\Modules\Wishlist\Http\Controllers\WishlistController;
+use App\Modules\Workspace\Http\Controllers\IssueCommentController;
+use App\Modules\Workspace\Http\Controllers\WorkspaceInboxController;
+use App\Modules\Workspace\Http\Controllers\WorkspaceIssueController;
+use App\Modules\Workspace\Http\Controllers\WorkspaceMembersController;
+use App\Modules\Workspace\Http\Controllers\WorkspaceMyIssuesController;
+use App\Modules\Workspace\Http\Controllers\WorkspaceTeamController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,7 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard/dashboard');
     })->name('dashboard');
-    
+
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 });
 
@@ -45,6 +51,91 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('feature:loyalty')->prefix('loyalty')->group(function () {
         Route::get('/', [LoyaltyController::class, 'index'])->name('loyalty.index');
     });
+
+    Route::middleware(['feature:workspace', 'workspace.access'])
+        ->prefix('workspace')->name('workspace.')->group(function () {
+            Route::prefix('inbox')->name('inbox.')->group(function () {
+                Route::get('/', [WorkspaceInboxController::class, 'index'])->name('index');
+                Route::post('/read-all', [WorkspaceInboxController::class, 'markAllAsRead'])->name('read-all');
+                Route::delete('/all', [WorkspaceInboxController::class, 'destroyAll'])->name('destroy-all');
+                Route::delete('/read', [WorkspaceInboxController::class, 'destroyRead'])->name('destroy-read');
+                Route::patch('/{inboxItem}/read', [WorkspaceInboxController::class, 'markAsRead'])->name('read');
+                Route::patch('/{inboxItem}/unread', [WorkspaceInboxController::class, 'markAsUnread'])->name('unread');
+                Route::patch('/{inboxItem}/snooze', [WorkspaceInboxController::class, 'snooze'])->name('snooze');
+                Route::delete('/{inboxItem}/snooze', [WorkspaceInboxController::class, 'unsnooze']);
+                Route::delete('/{inboxItem}', [WorkspaceInboxController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::name('my-issues.')->group(function () {
+                Route::get('/', fn () => redirect()->route('workspace.my-issues.overview'));
+                Route::get('/overview', [WorkspaceMyIssuesController::class, 'overview'])->name('overview');
+                Route::get('/focus', [WorkspaceMyIssuesController::class, 'focus'])->name('focus');
+            });
+
+            Route::get('/members', WorkspaceMembersController::class)->name('members');
+
+            Route::prefix('teams')->name('teams.')->group(function () {
+                Route::get('/', [WorkspaceTeamController::class, 'index'])->name('index');
+                Route::post('/', [WorkspaceTeamController::class, 'store'])->name('store');
+
+                Route::get('/{team:identifier}/issues', [WorkspaceTeamController::class, 'issues'])->name('issues');
+                Route::get('/{team:identifier}/members', [WorkspaceTeamController::class, 'members'])->name('members');
+                Route::put('/{team}', [WorkspaceTeamController::class, 'update'])->name('update');
+                // Route::delete('/{team}', [WorkspaceTeamController::class, 'destroy'])->name('destroy');
+                Route::post('/{team}/invite', [WorkspaceTeamController::class, 'invite'])->name('invite');
+                Route::post('/{team}/leave', [WorkspaceTeamController::class, 'leave'])->name('leave');
+                Route::delete('/{team}/remove/{user}', [WorkspaceTeamController::class, 'removeMember'])->name('remove-member');
+                Route::post('/{team}/promote/{user}', [WorkspaceTeamController::class, 'promoteMember'])->name('promote-member');
+                Route::post('/{team}/demote/{user}', [WorkspaceTeamController::class, 'demoteMember'])->name('demote-member');
+
+                // // Transfert de lead (team-lead uniquement)
+                // Route::post('/{team}/transfer-lead', [WorkspaceTeamController::class, 'transferLead'])
+                //     ->middleware('permission:workspace.teams.transfer-lead')
+                //     ->name('transfer-lead');
+
+                // // Routes admin uniquement (workspace-admin)
+                // Route::post('/{team}/add-member', [WorkspaceTeamController::class, 'addMemberAsAdmin'])
+                //     ->name('add-member-admin');
+            });
+
+            Route::prefix('team-invitations')->name('team-invitations.')->group(function () {
+                Route::post('/{invitation}/accept', [\App\Modules\Workspace\Http\Controllers\TeamInvitationController::class, 'accept'])->name('accept');
+                Route::post('/{invitation}/decline', [\App\Modules\Workspace\Http\Controllers\TeamInvitationController::class, 'decline'])->name('decline');
+            });
+
+            Route::prefix('issues')->name('issues.')->group(function () {
+                Route::get('/{issue:identifier}', [WorkspaceIssueController::class, 'show'])
+                    ->name('show');
+                Route::patch('/{issue}/priority', [WorkspaceIssueController::class, 'updatePriority'])
+                    ->name('update-priority');
+                Route::patch('/{issue}/status', [WorkspaceIssueController::class, 'updateStatus'])
+                    ->name('update-status');
+                Route::patch('/{issue}/assignee', [WorkspaceIssueController::class, 'updateAssignee'])
+                    ->name('update-assignee');
+                Route::patch('/{issue}/label', [WorkspaceIssueController::class, 'updateLabel'])
+                    ->name('update-label');
+                Route::patch('/{issue}/due-date', [WorkspaceIssueController::class, 'updateDueDate'])
+                    ->name('update-due-date');
+                Route::patch('/{issue}', [WorkspaceIssueController::class, 'update'])
+                    ->name('update');
+                Route::delete('/{issue}', [WorkspaceIssueController::class, 'destroy'])
+                    ->name('destroy');
+                Route::post('/', [WorkspaceIssueController::class, 'store'])
+                    ->name('store');
+
+                Route::post('/{issue}/subscribe', [WorkspaceIssueController::class, 'subscribe'])
+                    ->name('subscribe');
+                Route::delete('/{issue}/subscribe', [WorkspaceIssueController::class, 'unsubscribe'])
+                    ->name('unsubscribe');
+
+                Route::post('/{issue}/comments', [IssueCommentController::class, 'store'])
+                    ->name('comments.store');
+                Route::patch('/{issue}/comments/{comment}', [IssueCommentController::class, 'update'])
+                    ->name('comments.update');
+                Route::delete('/{issue}/comments/{comment}', [IssueCommentController::class, 'destroy'])
+                    ->name('comments.destroy');
+            });
+        });
 });
 
 Route::prefix('categories')->group(function () {
@@ -60,7 +151,6 @@ Route::prefix('cart')->group(function () {
     Route::post('/item/remove', [CartController::class, 'removeItemById'])->name('cart.item.remove');
     Route::put('/item/update', [CartController::class, 'handleItemQuantityById'])->name('cart.item.update');
 });
-
 
 Route::get('/brands', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/brands/{brand:slug}', [BrandController::class, 'show'])->name('brand.show');

@@ -1,12 +1,12 @@
 import { CategoryDialog } from '@/components/swell/category-dialog';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
+import SearchInput from '@/components/swell/search-input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AdminLayout from '@/layouts/admin-layout';
-import SearchInput from '@/components/swell/search-input';
 import type { BreadcrumbItem, Category, SharedData } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { ChevronDown, ChevronRight, Edit, Folder, FolderOpen, Folders, MoreHorizontal, Plus, Trash2 } from 'lucide-react';
@@ -193,11 +193,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
         <AdminLayout breadcrumbs={localBreadcrumbs}>
             <Head title="Gérer les catégories" />
 
-            <SearchInput
-                placeholder="Rechercher une catégorie..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            >
+            <SearchInput placeholder="Rechercher une catégorie..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}>
                 <div className="flex gap-2 max-sm:flex-wrap">
                     <Button
                         variant="outline"

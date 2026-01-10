@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Modules\Workspace;
+
+use App\Modules\Workspace\Models\InboxItem;
+use App\Modules\Workspace\Models\Issue;
+use App\Modules\Workspace\Models\IssueComment;
+use App\Modules\Workspace\Models\Team;
+use App\Modules\Workspace\Observers\IssueObserver;
+use App\Modules\Workspace\Policies\InboxItemPolicy;
+use App\Modules\Workspace\Policies\IssueCommentPolicy;
+use App\Modules\Workspace\Policies\IssuePolicy;
+use App\Modules\Workspace\Policies\TeamPolicy;
+use App\Modules\Workspace\Services\WorkspaceService;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
+
+class WorkspaceServiceProvider extends ServiceProvider
+{
+    public function boot(): void
+    {
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+
+        $this->publishes([
+            __DIR__.'/database/migrations' => database_path('migrations'),
+        ], 'swell-workspace');
+
+        if (! config('swell.workspace.enabled', false)) {
+            return;
+        }
+
+        $this->registerPolicies();
+
+        $this->registerObservers();
+
+        $this->registerServices();
+    }
+
+    /**
+     * Register the workspace policies.
+     */
+    protected function registerPolicies(): void
+    {
+        Gate::policy(Issue::class, IssuePolicy::class);
+        Gate::policy(IssueComment::class, IssueCommentPolicy::class);
+        Gate::policy(Team::class, TeamPolicy::class);
+        Gate::policy(InboxItem::class, InboxItemPolicy::class);
+    }
+
+    protected function registerObservers(): void
+    {
+        Issue::observe(IssueObserver::class);
+    }
+
+    public function registerServices(): void
+    {
+        $this->app->singleton(WorkspaceService::class);
+    }
+}

@@ -10,15 +10,15 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useInitials } from '@/hooks/use-initials';
-import type { SharedData, User } from '@/types';
+import type { SharedData } from '@/types';
 import { getStorageUrl } from '@/utils/format-storage-url';
 import { Link, router, usePage } from '@inertiajs/react';
-import { CalendarIcon, GiftIcon, HeartIcon, LayoutGridIcon, LogOutIcon, SettingsIcon, ShieldCheckIcon, UserIcon } from 'lucide-react';
+import { CalendarIcon, GiftIcon, HeartIcon, LayoutGridIcon, LayoutListIcon, LogOutIcon, SettingsIcon, ShieldCheckIcon, UserIcon } from 'lucide-react';
 
-export function UserDropdown({ user }: { user: User }) {
-    const { swell } = usePage<SharedData>().props;
+export function UserDropdown() {
+    const { swell, auth } = usePage<SharedData>().props;
     const getInitials = useInitials();
-    const isAdmin = user.roles.some((role) => role.name === 'admin');
+    const isAdmin = auth.user.roles.some((role) => role.name === 'admin');
 
     return (
         <DropdownMenu>
@@ -31,14 +31,14 @@ export function UserDropdown({ user }: { user: User }) {
             <DropdownMenuContent className="max-w-64" align="end">
                 <DropdownMenuLabel className="flex items-center gap-3">
                     <Avatar>
-                        <AvatarImage src={getStorageUrl(user.avatar_url)} alt={user.name} />
+                        <AvatarImage src={getStorageUrl(auth.user.avatar_url)} alt={auth.user.name} />
                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                            {getInitials(user.name)}
+                            {getInitials(auth.user.name)}
                         </AvatarFallback>
                     </Avatar>
                     <div className="flex min-w-0 flex-col">
-                        <span className="truncate text-sm font-medium text-foreground">{user.name}</span>
-                        <span className="truncate text-xs font-normal text-muted-foreground">{user.email}</span>
+                        <span className="truncate text-sm font-medium text-foreground">{auth.user.name}</span>
+                        <span className="truncate text-xs font-normal text-muted-foreground">{auth.user.email}</span>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -73,6 +73,20 @@ export function UserDropdown({ user }: { user: User }) {
                     )}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
+                {auth.isWorkspaceUser && (
+                    <>
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem asChild>
+                                <Link href="/workspace" className="flex items-center gap-2">
+                                    <LayoutListIcon size={16} className="opacity-60" aria-hidden="true" />
+                                    <span>Workspace</span>
+                                </Link>
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+
+                        <DropdownMenuSeparator />
+                    </>
+                )}
                 <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
                         <Link href="/settings" className="flex items-center gap-2">

@@ -1,18 +1,12 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { appSidebarConfig } from '@/config/sidebar';
+import { getCookieBoolean } from '@/lib/cookies';
 import { SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 
 interface AppShellProps {
     children: React.ReactNode;
     variant?: 'header' | 'sidebar';
-}
-
-function getSidebarStateFromCookie(): boolean | undefined {
-    const cookies = document.cookie.split(';');
-    const sidebarCookie = cookies.find((c) => c.trim().startsWith('sidebar_state='));
-    if (!sidebarCookie) return undefined;
-    const value = sidebarCookie.split('=')[1];
-    return value === 'true';
 }
 
 export function AppShell({ children, variant = 'header' }: AppShellProps) {
@@ -23,8 +17,12 @@ export function AppShell({ children, variant = 'header' }: AppShellProps) {
     }
 
     // Read the sidebar state from cookie if it exists, otherwise use the fallback from the backend
-    const cookieState = getSidebarStateFromCookie();
+    const cookieState = getCookieBoolean(appSidebarConfig.cookieName);
     const defaultOpen = cookieState !== undefined ? cookieState : fallbackOpen;
 
-    return <SidebarProvider defaultOpen={defaultOpen}>{children}</SidebarProvider>;
+    return (
+        <SidebarProvider defaultOpen={defaultOpen} cookieName={appSidebarConfig.cookieName}>
+            {children}
+        </SidebarProvider>
+    );
 }

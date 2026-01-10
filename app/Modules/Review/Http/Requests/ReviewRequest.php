@@ -19,18 +19,18 @@ class ReviewRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'Le titre est obligatoire.',
-            'title.string' => 'Le titre doit être une chaîne de caractères.',
-            'title.max' => 'Le titre ne doit pas dépasser 255 caractères.',
+            'title.required' => 'Oups ! N\'oubliez pas de donner un titre à votre avis.',
+            'title.string' => 'Hmm, le titre doit être du texte.',
+            'title.max' => 'Désolé, le titre est trop long (255 caractères maximum).',
 
-            'comment.string' => 'Le commentaire doit être une chaîne de caractères.',
+            'comment.string' => 'Hmm, le commentaire doit être du texte.',
 
-            'rating.required' => 'La note est obligatoire.',
-            'rating.integer' => 'La note doit être un entier.',
-            'rating.between' => 'La note doit être comprise entre 1 et 5.',
+            'rating.required' => 'Oups ! Veuillez donner une note au produit.',
+            'rating.integer' => 'Hmm, la note doit être un nombre entier.',
+            'rating.between' => 'La note doit être entre 1 et 5 étoiles.',
 
-            'product_id.required' => 'L\'ID du produit est obligatoire.',
-            'product_id.exists' => 'Le produit sélectionné n\'existe pas.',
+            'product_id.required' => 'Oups ! L\'identifiant du produit est requis.',
+            'product_id.exists' => 'Désolé, ce produit est introuvable.',
         ];
     }
 }

@@ -23,8 +23,8 @@ class DeleteProductRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom du produit est requis.',
-            'name.in' => 'Le nom saisi ne correspond pas au nom du produit à supprimer.',
+            'name.required' => 'Oups ! Veuillez saisir le nom du produit pour confirmer.',
+            'name.in' => 'Hmm, le nom saisi ne correspond pas. Veuillez réessayer.',
         ];
     }
 }

@@ -16,9 +16,7 @@ export default function AppSidebarLayout({
             <AppSidebar mainNavItems={mainNavItems} />
             <AppContent variant="sidebar" className="overflow-x-hidden">
                 <AppSidebarHeader breadcrumbs={breadcrumbs} />
-                <div className="flex flex-col gap-4 my-4 px-4">
-                    {children}
-                </div>
+                <div className="my-4 flex flex-col gap-4 px-4">{children}</div>
                 <ToasterWrapper />
             </AppContent>
         </AppShell>

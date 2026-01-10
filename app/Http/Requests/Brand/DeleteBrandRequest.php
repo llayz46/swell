@@ -21,8 +21,8 @@ class DeleteBrandRequest extends BaseBrandRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom de la marque est requis.',
-            'name.in' => 'Le nom saisi ne correspond pas au nom de la marque à supprimer.',
+            'name.required' => 'Oups ! Veuillez saisir le nom de la marque pour confirmer.',
+            'name.in' => 'Hmm, le nom saisi ne correspond pas. Veuillez réessayer.',
         ];
     }
 }

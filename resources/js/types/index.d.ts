@@ -1,9 +1,12 @@
 import { LucideIcon } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
 import type { Config } from 'ziggy-js';
+import { Team } from './workspace';
 
 export interface Auth {
     user: User;
+    isWorkspaceUser: boolean;
+    teams: Team[];
 }
 
 export interface BreadcrumbItem {
@@ -21,6 +24,16 @@ export interface NavItem {
     href: string;
     icon?: LucideIcon | null;
     isActive?: boolean;
+}
+
+export interface NavItemWithChildren {
+    id?: number;
+    title: string;
+    icon?: LucideIcon | string | undefined;
+    color?: string;
+    description?: string;
+    childrens: NavItem[];
+    team?: Team;
 }
 
 export type BannerItem = {
@@ -65,21 +78,26 @@ export interface User {
     email: string;
     avatar?: string;
     avatar_url?: string;
-    roles: {
-        id: number;
-        name: string;
-        guard_name: string;
-        created_at: string;
-        updated_at: string;
-        pivot: {
-            model_type: string;
-            model_id: number;
-            role_id: number;
-        };
-    }[];
-    email_verified_at: string | null;
-    created_at: string;
-    updated_at: string;
+    roles:
+        | string[]
+        | {
+              id: number;
+              name: string;
+              guard_name: string;
+              created_at: string;
+              updated_at: string;
+              pivot: {
+                  model_type: string;
+                  model_id: number;
+                  role_id: number;
+              };
+          }[];
+    teams?: Team[];
+    email_verified_at?: string | null;
+    created_at?: string;
+    createdAt?: string; // API Resource format
+    updated_at?: string;
+    updatedAt?: string; // API Resource format
     [key: string]: unknown; // This allows for additional properties...
 }
 

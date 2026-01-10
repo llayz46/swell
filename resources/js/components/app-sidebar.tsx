@@ -2,6 +2,7 @@ import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { appSidebarConfig } from '@/config/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen } from 'lucide-react';
@@ -16,8 +17,8 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar({ mainNavItems }: { mainNavItems: NavItem[] }) {
-        return (
-        <Sidebar collapsible="icon" variant="sidebar">
+    return (
+        <Sidebar collapsible={appSidebarConfig.collapsible} variant={appSidebarConfig.variant}>
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>

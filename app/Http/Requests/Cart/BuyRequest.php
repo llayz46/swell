@@ -29,18 +29,18 @@ class BuyRequest extends BaseCartRequest
     public function messages(): array
     {
         return array_merge(parent::messages(), [
-            'products.required' => 'Au moins un produit est requis',
-            'products.array' => 'Les produits doivent être un tableau',
-            'products.min' => 'Au moins un produit est requis',
+            'products.required' => 'Oups ! Veuillez sélectionner au moins un produit.',
+            'products.array' => 'Hmm, les produits doivent être un tableau.',
+            'products.min' => 'Oups ! Vous devez sélectionner au moins un produit.',
 
-            'products.*.id.required' => "L'identifiant du produit est requis",
-            'products.*.id.exists' => "Le produit n'existe pas",
+            'products.*.id.required' => 'Oups ! L\'identifiant du produit est requis.',
+            'products.*.id.exists' => 'Désolé, ce produit est introuvable.',
 
-            'products.*.quantity.required' => 'La quantité est requise',
-            'products.*.quantity.integer' => 'La quantité doit être un nombre entier',
-            'products.*.quantity.min' => 'La quantité doit être au moins 1',
+            'products.*.quantity.required' => 'Oups ! La quantité est requise.',
+            'products.*.quantity.integer' => 'Hmm, la quantité doit être un nombre entier.',
+            'products.*.quantity.min' => 'La quantité doit être d\'au moins 1.',
 
-            'products.*.options.array' => 'Les options doivent être un tableau',
+            'products.*.options.array' => 'Hmm, les options doivent être un tableau.',
         ]);
     }
 
