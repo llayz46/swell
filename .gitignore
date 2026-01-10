@@ -29,10 +29,33 @@ CLAUDE.md
 boost.json
 .mcp.json
 .claude
-/database/migrations/2025_07_09_100742_create_banner_messages_table.php
-/database/migrations/2025_07_12_154708_create_reviews_table.php
-/database/migrations/2025_06_23_071253_create_wishlists_table.php
-/database/migrations/2025_06_23_071318_create_wishlist_items.php
+
+# Banners module migrations
+database/migrations/2025_07_09_100742_create_banner_messages_table.php
+
+# Reviews module migrations
+database/migrations/2025_07_12_154708_create_reviews_table.php
+
+# Wishlist module migrations
+database/migrations/2025_06_23_071253_create_wishlists_table.php
+database/migrations/2025_06_23_071318_create_wishlist_items.php
+
+# Workspace module migrations
+database/migrations/2025_12_12_195518_create_issues_table.php
+database/migrations/2025_12_12_195539_create_issue_statuses_table.php
+database/migrations/2025_12_12_195555_create_issue_labels_table.php
+database/migrations/2025_12_12_195605_create_issue_priorities_table.php
+database/migrations/2025_12_12_195623_create_inbox_items_table.php
+database/migrations/2025_12_12_195630_create_issue_assignments_table.php
+database/migrations/2025_12_12_200301_create_teams_table.php
+database/migrations/2025_12_12_200447_create_team_user_table.php
+database/migrations/2025_12_12_201000_create_issue_label_table.php
+database/migrations/2025_12_26_110328_create_team_invitations_table.php
+database/migrations/2026_01_09_075913_create_issue_comments_table.php
+database/migrations/2026_01_09_075917_create_issue_activities_table.php
+database/migrations/2026_01_09_075920_create_issue_subscriptions_table.php
+
+# Local personal seeders
 database/seeders/LocalSeeder.php
 database/seeders/LocalProductSeeder.php
 database/seeders/LocalDashboardAdminSeeder.php
