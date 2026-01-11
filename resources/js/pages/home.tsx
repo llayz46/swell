@@ -13,7 +13,7 @@ import { useAppearance } from '@/hooks/use-appearance';
 import BaseLayout from '@/layouts/base-layout';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowRight, BookOpenText, Monitor, Package, Puzzle, ShoppingCartIcon, Star, BookOpen } from 'lucide-react';
 import { ReactNode, useState } from 'react';
@@ -156,6 +156,7 @@ export default function Home({ products }: { products: Product[] }) {
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
     const getInitials = useInitials();
     const { appearance } = useAppearance();
+    const getStorageUrl = useStorageUrl();
 
     return (
         <BaseLayout>

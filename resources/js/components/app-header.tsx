@@ -11,7 +11,7 @@ import { useActiveNav } from '@/hooks/use-active-nav';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Menu } from 'lucide-react';
 import AppLogo from './app-logo';
@@ -36,6 +36,7 @@ export function AppHeader({ breadcrumbs = [], mainNavItems }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
+    const getStorageUrl = useStorageUrl();
 
     return (
         <>

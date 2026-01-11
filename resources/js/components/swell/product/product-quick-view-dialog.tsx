@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { useCartContext } from '@/contexts/cart-context';
 import { useWishlist } from '@/hooks/use-wishlist';
 import { Product, type SharedData } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { Link, usePage } from '@inertiajs/react';
 import { Heart } from 'lucide-react';
 
@@ -11,6 +11,7 @@ export function ProductQuickViewDialog({ product, open, onClose }: { product: Pr
     const { swell } = usePage<SharedData>().props;
     const { addToCart } = useCartContext();
     const { addItem } = useWishlist();
+    const getStorageUrl = useStorageUrl();
 
     if (!product) return null;
 

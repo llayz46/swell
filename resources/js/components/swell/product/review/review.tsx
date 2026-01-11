@@ -1,6 +1,6 @@
 import { useInitials } from '@/hooks/use-initials';
 import type { Review as ReviewType } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { Star } from 'lucide-react';
@@ -14,6 +14,7 @@ export function Review({ review }: { review: ReviewType }) {
     const shouldTruncate = review.comment.length > 300;
 
     const getInitials = useInitials();
+    const getStorageUrl = useStorageUrl();
 
     const toggleCommentExpansion = (reviewId: number) => {
         setExpandedComments((prev) => {

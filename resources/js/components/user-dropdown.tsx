@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useInitials } from '@/hooks/use-initials';
 import type { SharedData } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
 import { Link, router, usePage } from '@inertiajs/react';
 import { CalendarIcon, GiftIcon, HeartIcon, LayoutGridIcon, LayoutListIcon, LogOutIcon, SettingsIcon, ShieldCheckIcon, UserIcon } from 'lucide-react';
 
@@ -31,7 +30,7 @@ export function UserDropdown() {
             <DropdownMenuContent className="max-w-64" align="end">
                 <DropdownMenuLabel className="flex items-center gap-3">
                     <Avatar>
-                        <AvatarImage src={getStorageUrl(auth.user.avatar_url)} alt={auth.user.name} />
+                        <AvatarImage src={auth.user.avatar_url} alt={auth.user.name} />
                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                             {getInitials(auth.user.name)}
                         </AvatarFallback>

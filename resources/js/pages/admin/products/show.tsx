@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, Product } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { calculateMargin, calculateProfit } from '@/utils/product-price-calculating';
 import { Head, Link } from '@inertiajs/react';
 import { Boxes, Building2, Calendar, Copy, Edit, ExternalLink, FolderOpen, Package, Trash2, TrendingUp } from 'lucide-react';
@@ -20,6 +20,7 @@ interface ProductType {
 export default function Show({ breadcrumbs, product }: ProductType) {
     const [selectedImage, setSelectedImage] = useState<number>(0);
     const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
+    const getStorageUrl = useStorageUrl();
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>

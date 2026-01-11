@@ -5,7 +5,7 @@ import { useCartContext } from '@/contexts/cart-context';
 import { useWishlistContext } from '@/contexts/wishlist-context';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type Product } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { Deferred, Head, Link } from '@inertiajs/react';
 import { LoaderCircle, Plus, ShoppingCart, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -84,6 +84,8 @@ export default function Wishlist({ items }: { items: Product[] }) {
 }
 
 function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; onRemove: () => void; onAddToCart: () => void }) {
+    const getStorageUrl = useStorageUrl();
+
     return (
         <div className="flex items-center gap-4 rounded-md border p-3">
             <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm bg-neutral-700">

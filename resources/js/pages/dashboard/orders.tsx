@@ -7,7 +7,7 @@ import { useCartContext } from '@/contexts/cart-context';
 import { useConfirmContext } from '@/contexts/confirm-context';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, Order, Product } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head } from '@inertiajs/react';
 import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
@@ -28,6 +28,7 @@ export default function Orders({ orders }: { orders: Order[] }) {
     const { buyNow } = useCartContext();
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+    const getStorageUrl = useStorageUrl();
 
     const filteredOrders = orders.filter((order) => {
         if (!searchTerm) return true;
