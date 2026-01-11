@@ -107,9 +107,7 @@ function CardItem({
 
                 <div className="relative flex items-start gap-4 pr-8">
                     <div className="relative size-18 shrink-0 overflow-hidden rounded-sm border border-slate-light-alpha bg-slate-light">
-                        {item.product.image && (
-                            <img src={getStorageUrl(item.product.image.url)} alt={item.product.image.alt_text} className="size-full object-cover" />
-                        )}
+                        <img src={getStorageUrl(item.product.image?.url)} alt={item.product.image?.alt_text} className="size-full object-cover" />
                     </div>
 
                     <div className="flex h-18 min-w-0 flex-col">

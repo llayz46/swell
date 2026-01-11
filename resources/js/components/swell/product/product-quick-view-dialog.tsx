@@ -18,15 +18,11 @@ export function ProductQuickViewDialog({ product, open, onClose }: { product: Pr
     return (
         <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
             <DialogContent className="shadow-dialog flex gap-5 rounded-2xl border-transparent p-5 max-sm:flex-col md:max-w-3xl">
-                {product.featured_image ? (
-                    <img
-                        className="block aspect-square h-72 rounded-md border border-slate-light-alpha object-cover"
-                        src={getStorageUrl(product.featured_image.url)}
-                        alt={product.featured_image.alt_text}
-                    />
-                ) : (
-                    <span className="block aspect-square h-72 rounded-md border border-slate-light-alpha bg-slate-light"></span>
-                )}
+                <img
+                    className="block aspect-square h-72 rounded-md border border-slate-light-alpha object-cover"
+                    src={getStorageUrl(product.featured_image?.url)}
+                    alt={product.featured_image?.alt_text}
+                />
 
                 <DialogHeader className="gap-2 sm:gap-4">
                     <DialogTitle className="mr-4 hover:underline max-sm:text-left">
