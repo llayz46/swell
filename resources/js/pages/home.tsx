@@ -343,8 +343,8 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* CTA Section */}
-            <section className="relative rounded-xl bg-muted/90 py-10 md:mx-4 md:py-20 dark:bg-muted/40">
-                <div className="container mx-auto px-4">
+            <section className="container mx-auto">
+                <div className="rounded-xl bg-muted/90 py-10 md:mx-4 md:py-20 dark:bg-muted/40">
                     <div className="mx-auto mb-8 max-w-2xl text-center">
                         <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
                             Prêt à lancer votre projet grâce à Swell ?
