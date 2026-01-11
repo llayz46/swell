@@ -4,7 +4,7 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 import { useCartContext } from '@/contexts/cart-context';
 import { useConfirmContext } from '@/contexts/confirm-context';
 import { CartItem } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 
 export function CartSheet() {
@@ -91,6 +91,8 @@ function CardItem({
     removeItemOfCart: (itemId: number) => void;
     handleQuantity: (type: 'inc' | 'dec', itemId: number) => void;
 }) {
+    const getStorageUrl = useStorageUrl();
+
     return (
         <Card className="relative overflow-hidden py-0">
             <CardContent className="p-3">
@@ -105,9 +107,7 @@ function CardItem({
 
                 <div className="relative flex items-start gap-4 pr-8">
                     <div className="relative size-18 shrink-0 overflow-hidden rounded-sm border border-slate-light-alpha bg-slate-light">
-                        {item.product.image && (
-                            <img src={getStorageUrl(item.product.image.url)} alt={item.product.image.alt_text} className="size-full object-cover" />
-                        )}
+                        <img src={getStorageUrl(item.product.image?.url)} alt={item.product.image?.alt_text} className="size-full object-cover" />
                     </div>
 
                     <div className="flex h-18 min-w-0 flex-col">

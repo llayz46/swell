@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useWishlist } from '@/hooks/use-wishlist';
 import { cn } from '@/lib/utils';
 import { Product, type SharedData } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { Link, usePage } from '@inertiajs/react';
 import { Heart, Star } from 'lucide-react';
 import { useState } from 'react';
@@ -14,6 +14,7 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
     const [, setIsClicked] = useState(false);
     const { addItem } = useWishlist();
     const { swell } = usePage<SharedData>().props;
+    const getStorageUrl = useStorageUrl();
 
     const handleImageClick = () => {
         if (!onQuickView) return;
@@ -76,7 +77,7 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
                             <span className="mb-auto text-sm text-muted-foreground line-through">{product.price.toFixed(2)} €</span>
                         </div>
                     ) : (
-                        <span className="text-sm font-bold">{product.price.toFixed(2)} €</span>
+                        <span className="text-base font-bold">{product.price.toFixed(2)} €</span>
                     )}
                 </div>
 

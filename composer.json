@@ -66,7 +66,7 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74,#86efac\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" \"stripe listen --forward-to http://localhost:8000/stripe/webhook --format JSON\" --names='server,queue,vite,stripe'"
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74,#86efac\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"pnpm run dev\" \"stripe listen --forward-to http://localhost:8000/stripe/webhook --format JSON\" --names='server,queue,vite,stripe'"
         ],
         "dev:ssr": [
             "npm run build:ssr",

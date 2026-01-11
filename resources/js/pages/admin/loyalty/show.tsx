@@ -98,7 +98,7 @@ export default function Show({ breadcrumbs, account, transactions }: Props) {
                     <SwellCardContent>
                         <form onSubmit={handleAdjust} className="space-y-4">
                             <div className="grid gap-4 md:grid-cols-2">
-                                <div className="space-y-2">
+                                <div className="*:not-first:mt-2">
                                     <Label htmlFor="points">Points</Label>
                                     <Input
                                         id="points"
@@ -111,7 +111,7 @@ export default function Show({ breadcrumbs, account, transactions }: Props) {
                                     {errors.points && <p className="text-sm text-destructive">{errors.points}</p>}
                                 </div>
 
-                                <div className="space-y-2">
+                                <div className="*:not-first:mt-2">
                                     <Label htmlFor="reason">Raison</Label>
                                     <Textarea
                                         id="reason"

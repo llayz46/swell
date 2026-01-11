@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { TabsContent } from '@/components/ui/tabs';
 import { useFileUpload } from '@/hooks/use-file-upload';
 import { FormTabContentProps, ProductForm } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { DndContext, DragEndEvent, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { SortableContext, arrayMove, useSortable } from '@dnd-kit/sortable';
@@ -209,6 +209,7 @@ function ImageSortableItem({
     removeImage: (id: number) => void;
     handleImageAltChange: (id: number, altText: string) => void;
 }) {
+    const getStorageUrl = useStorageUrl();
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: image.alt_text,
         transition: {

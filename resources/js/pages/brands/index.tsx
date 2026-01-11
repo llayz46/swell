@@ -1,7 +1,7 @@
 import { PaginationComponent } from '@/components/swell/pagination-component';
 import BaseLayout from '@/layouts/base-layout';
 import { Brand, PaginatedResponse } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head, Link } from '@inertiajs/react';
 
 interface IndexProps {
@@ -9,6 +9,8 @@ interface IndexProps {
 }
 
 export default function Index({ brands }: IndexProps) {
+    const getStorageUrl = useStorageUrl();
+
     return (
         <BaseLayout>
             <Head title="Marques" />

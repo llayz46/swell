@@ -13,7 +13,7 @@ import { useWishlist } from '@/hooks/use-wishlist';
 import BaseLayout from '@/layouts/base-layout';
 import { cn } from '@/lib/utils';
 import type { Product, ProductImage, Review, SharedData } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head, Link, usePage, WhenVisible } from '@inertiajs/react';
 import { Heart, Loader2, RotateCcw, Shield, ShoppingCart, Star, Truck } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -32,6 +32,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
     const { addItem } = useWishlist();
     const { addToCart, buyNow } = useCartContext();
+    const getStorageUrl = useStorageUrl();
 
     const initialSelections = useMemo(() => {
         const selections: Record<number, number> = {};
@@ -297,6 +298,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
 
 function RelatedProduct({ product, currentProductId }: { product: Product; currentProductId: number }) {
     const current = product.id === currentProductId;
+    const getStorageUrl = useStorageUrl();
 
     return (
         <article className={cn('rounded-md border bg-card px-4 py-2', !current ? 'transition-colors hover:bg-secondary/10' : 'border-ring')}>

@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AdminLayout from '@/layouts/admin-layout';
 import type { Brand, BreadcrumbItem } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head } from '@inertiajs/react';
 import { Edit, MoreHorizontal, Tags, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -20,6 +20,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
     const [openBrandDialog, setOpenBrandDialog] = useState<boolean>(false);
     const [editBrand, setEditBrand] = useState<Brand | null>(null);
     const [sortBy, setSortBy] = useState('name');
+    const getStorageUrl = useStorageUrl();
 
     const localBreadcrumbs = useMemo(() => {
         if (openBrandDialog) {

@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { useFileUpload } from '@/hooks/use-file-upload';
-import { getStorageUrl } from '@/utils/format-storage-url';
 import { CircleUserRoundIcon, XIcon } from 'lucide-react';
 
 export default function AvatarProfileInput({ onFileChange, value }: { onFileChange: (file: File | null) => void; value: string | null }) {
@@ -33,7 +32,7 @@ export default function AvatarProfileInput({ onFileChange, value }: { onFileChan
                     {previewUrl || value ? (
                         <img
                             className="size-full object-cover"
-                            src={previewUrl ? previewUrl : getStorageUrl(value)}
+                            src={previewUrl ? previewUrl : value}
                             alt={files[0]?.file?.name || 'Uploaded image'}
                             width={64}
                             height={64}

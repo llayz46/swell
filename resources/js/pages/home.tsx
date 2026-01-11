@@ -1,3 +1,6 @@
+import { GithubLight } from '@/components/ui/svgs/githubLight';
+import { GithubDark } from '@/components/ui/svgs/githubDark';
+import AppLogoIcon from '@/components/app-logo-icon';
 import { BoxReveal } from '@/components/magicui/box-reveal';
 import { TextAnimate } from '@/components/magicui/text-animate';
 import { ProductCard } from '@/components/swell/product/product-card';
@@ -6,13 +9,16 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { useInitials } from '@/hooks/use-initials';
+import { useAppearance } from '@/hooks/use-appearance';
 import BaseLayout from '@/layouts/base-layout';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
-import { getStorageUrl } from '@/utils/format-storage-url';
+import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowRight, BookOpenText, Monitor, Package, Puzzle, ShoppingCartIcon, Star } from 'lucide-react';
+import { ArrowRight, BookOpenText, Monitor, Package, Puzzle, ShoppingCartIcon, Star, BookOpen } from 'lucide-react';
 import { ReactNode, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Tooltip,TooltipContent,TooltipTrigger } from "@/components/ui/tooltip"
 
 const BENEFITS = [
     {
@@ -149,6 +155,8 @@ const FAQ = [
 export default function Home({ products }: { products: Product[] }) {
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
     const getInitials = useInitials();
+    const { appearance } = useAppearance();
+    const getStorageUrl = useStorageUrl();
 
     return (
         <BaseLayout>
@@ -236,8 +244,8 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* Join Section */}
-            <section className="rounded-xl bg-muted/90 py-24 sm:mx-4 md:mx-6 dark:bg-muted/40">
-                <div className="container mx-auto max-w-5xl px-4">
+            <section className="container mx-auto">
+                <div className="rounded-xl bg-muted/90 dark:bg-muted/40 py-24 mx-4">
                     <div className="mx-auto mb-16 max-w-2xl text-center">
                         <h2 className="mb-3 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
                             Conçevez des projets <span className="text-primary">ambitieux</span> avec{' '}
@@ -249,8 +257,8 @@ export default function Home({ products }: { products: Product[] }) {
                             <span className="text-3xl font-bold text-primary italic"> intégrer facilement vos produits.</span>
                         </p>
                     </div>
-
-                    <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
+    
+                    <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
                         {CATEGORIES.map((category, index) => (
                             <div
                                 key={index}
@@ -343,8 +351,8 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* CTA Section */}
-            <section className="relative rounded-xl bg-muted/90 py-10 md:mx-4 md:py-20 dark:bg-muted/40">
-                <div className="container mx-auto px-4">
+            <section className="container mx-auto">
+                <div className="rounded-xl bg-muted/90 py-10 mx-4 md:py-20 dark:bg-muted/40">
                     <div className="mx-auto mb-8 max-w-2xl text-center">
                         <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
                             Prêt à lancer votre projet grâce à Swell ?
@@ -383,83 +391,246 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* Footer Section */}
-            <section className="mx-auto mt-12 max-w-6xl pb-8 sm:px-4">
-                <footer className="relative w-full overflow-hidden rounded-2xl bg-black tracking-tighter dark:bg-white">
-                    <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
-                        <div className="grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-4">
-                            <div className="col-span-1 md:col-span-8">
-                                <Link href="/" className="text-lg font-bold text-secondary">
+            <section className="container mx-auto mt-12 mb-8 px-4">
+                <footer className="bg-slate-light p-1.5 shadow-inner rounded-4xl">
+                    <div className="shadow-xs-with-border bg-muted/90 dark:bg-muted/40 rounded-3xl">
+                        <div className="p-5 md:p-12 grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-4">
+                            <div className="flex flex-col gap-4 col-span-1 md:col-span-8">
+                                <Link href="/" className="flex items-center gap-1 text-lg font-bold">
+                                    <AppLogoIcon className="size-5 fill-current dark:text-white" />
                                     Swell
                                 </Link>
-                                <p className="mb-6 max-w-xs text-sm text-muted-foreground">
+                                <p className="max-w-xs text-sm text-muted-foreground">
                                     Un starter-kit simple et flexible pour démarrer vos projets e-commerce.
                                 </p>
-                                <span className="text-sm text-muted-foreground">Free to contribute.</span>
+                                <div className="flex items-center gap-2">
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Button size="icon" variant="outline" className="bg-transparent hover:bg-muted/20" asChild>
+                                                <a
+                                                    href="https://github.com/llayz46/swell"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    {appearance === 'dark' ? (
+                                                        <GithubDark className="size-5" />
+                                                    ): (
+                                                        <GithubLight className="size-5" />
+                                                    )}
+                                                </a>
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>Swell GitHub</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                    
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Button size="icon" variant="outline" className="bg-transparent hover:bg-muted/20" asChild>
+                                                <a
+                                                    href="https://github.com/llayz46/swell"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    <BookOpen className="size-5" />
+                                                </a>
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>Swell Documentation</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </div>
                             </div>
-                            <div className="col-span-1 flex flex-col items-start md:col-span-2 md:items-end">
-                                <h3 className="mb-3 font-medium text-white dark:text-black">Boutique</h3>
+                            
+                            <div className="md:hidden flex justify-between">
+                                <div className="w-1/2 col-span-1 flex flex-col items-start">
+                                    <h3 className="mb-3 font-medium">Boutique</h3>
+                                    <ul className="w-full space-y-2 md:text-right">
+                                        <li>
+                                            <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                                <Link
+                                                    className="text-muted-foreground"
+                                                    href="/promotions"
+                                                >
+                                                    Promotions
+                                                </Link>
+                                            </Button>
+                                        </li>
+                                        <li>
+                                            <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                                <Link
+                                                    className="text-muted-foreground"
+                                                    href="/brands"
+                                                >
+                                                    Marques
+                                                </Link>
+                                            </Button>
+                                        </li>
+                                        <li>
+                                            <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                                <Link
+                                                    className="text-muted-foreground"
+                                                    href="/products?sort=news"
+                                                >
+                                                    Nouveautés
+                                                </Link>
+                                            </Button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div className="w-1/2 col-span-1 flex flex-col items-start">
+                                    <h3 className="mb-3 font-medium">Ressources</h3>
+                                    <ul className="w-full space-y-2 md:text-right">
+                                        <li>
+                                            <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                                <a
+                                                    className="text-muted-foreground"
+                                                    href="https://swellkit.dev"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    Documentation
+                                                </a>
+                                            </Button>
+                                        </li>
+                                        <li>
+                                            <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                                <a
+                                                    className="text-muted-foreground"
+                                                    href="https://github.com/llayz46/swell"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    Discussion
+                                                </a>
+                                            </Button>
+                                        </li>
+                                        <li>
+                                            <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                                <a
+                                                    className="text-muted-foreground"
+                                                    href="https://github.com/llayz46/swell"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    Roadmap
+                                                </a>
+                                            </Button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div className="hidden col-span-1 md:flex flex-col items-start md:col-span-2 md:items-end">
+                                <h3 className="mb-3 font-medium">Boutique</h3>
                                 <ul className="w-full space-y-2 md:text-right">
                                     <li>
-                                        <Link
-                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
-                                            href="/promotions"
-                                        >
-                                            Promotions
-                                        </Link>
+                                        <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                            <Link
+                                                className="text-muted-foreground"
+                                                href="/promotions"
+                                            >
+                                                Promotions
+                                            </Link>
+                                        </Button>
                                     </li>
                                     <li>
-                                        <Link
-                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
-                                            href="/brands"
-                                        >
-                                            Marques
-                                        </Link>
+                                        <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                            <Link
+                                                className="text-muted-foreground"
+                                                href="/brands"
+                                            >
+                                                Marques
+                                            </Link>
+                                        </Button>
                                     </li>
                                     <li>
-                                        <Link
-                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
-                                            href="/products?sort=news"
-                                        >
-                                            Nouveautés
-                                        </Link>
+                                        <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                            <Link
+                                                className="text-muted-foreground"
+                                                href="/products?sort=news"
+                                            >
+                                                Nouveautés
+                                            </Link>
+                                        </Button>
                                     </li>
                                 </ul>
                             </div>
-                            <div className="col-span-1 flex flex-col items-start md:col-span-2 md:items-end">
-                                <h3 className="mb-3 font-medium text-white dark:text-black">Ressources</h3>
+                            <div className="hidden col-span-1 md:flex flex-col items-start md:col-span-2 md:items-end">
+                                <h3 className="mb-3 font-medium">Ressources</h3>
                                 <ul className="w-full space-y-2 md:text-right">
                                     <li>
-                                        <a
-                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
-                                            href="https://swellkit.dev"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            Documentation
-                                        </a>
+                                        <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                            <a
+                                                className="text-muted-foreground"
+                                                href="https://swellkit.dev"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                Documentation
+                                            </a>
+                                        </Button>
                                     </li>
                                     <li>
-                                        <a
-                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
-                                            href="https://github.com/llayz46/swell"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            Discussion
-                                        </a>
+                                        <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                            <a
+                                                className="text-muted-foreground"
+                                                href="https://github.com/llayz46/swell"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                Discussion
+                                            </a>
+                                        </Button>
                                     </li>
                                     <li>
-                                        <Link
-                                            className="text-sm text-secondary/70 transition-colors duration-200 hover:text-secondary"
-                                            href="https://github.com/llayz46/swell"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            Roadmap
-                                        </Link>
+                                        <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                            <a
+                                                className="text-muted-foreground"
+                                                href="https://github.com/llayz46/swell"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                Roadmap
+                                            </a>
+                                        </Button>
                                     </li>
                                 </ul>
                             </div>
+                        </div>
+                    </div>
+                    <div className="flex max-md:flex-col max-md:text-center items-center justify-between mx-2 md:mx-12 my-3 md:my-5 text-sm text-muted-foreground">
+                        <p>
+                            © {new Date().getFullYear()} Swell. Built with Laravel. Contributions welcome.
+                        </p>
+                        
+                        <div className="flex items-center gap-4">
+                            <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                <a
+                                    className="text-muted-foreground"
+                                    href="https://github.com/llayz46/swell"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Star on GitHub
+                                </a>
+                            </Button>
+                            
+                            |
+                            
+                            <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
+                                <a
+                                    className="text-muted-foreground"
+                                    href="https://github.com/llayz46/swell"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Contribuer
+                                </a>
+                            </Button>
                         </div>
                     </div>
                 </footer>
