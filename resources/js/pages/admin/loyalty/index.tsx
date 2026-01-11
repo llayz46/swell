@@ -3,9 +3,10 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { CardDescription, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AdminLayout from '@/layouts/admin-layout';
+import { useConfirmContext } from '@/contexts/confirm-context';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { Award, TrendingUp, Users } from 'lucide-react';
+import { Award, TrendingUp, Users, Trash2 } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -56,10 +57,20 @@ interface Props {
 }
 
 export default function Index({ accounts, stats }: Props) {
-    const handleExpirePoints = () => {
-        if (confirm('Êtes-vous sûr de vouloir expirer les points obsolètes ?')) {
-            router.post(route('admin.loyalty.expire'));
-        }
+    const { confirm } = useConfirmContext();
+
+    const handleExpirePoints = async () => {
+        await confirm({
+            title: 'Confirmer',
+            description: 'Êtes-vous sûr de vouloir expirer les points obsolètes ?',
+            confirmText: 'Confirmer',
+            cancelText: 'Annuler',
+            variant: 'destructive',
+            icon: <Trash2 className="size-4" />,
+            onConfirm: () => {
+                router.post(route('admin.loyalty.expire'));;
+            }
+        });
     };
 
     return (
@@ -85,7 +96,7 @@ export default function Index({ accounts, stats }: Props) {
                             <Award className="size-4 text-muted-foreground" />
                         </SwellCardHeader>
                         <SwellCardContent>
-                            <div className="text-2xl font-bold">{stats.total_points.toLocaleString()}</div>
+                            <div className="text-2xl font-bold">{stats.total_points ? stats.total_points.toLocaleString() : '0'}</div>
                             <p className="text-xs text-muted-foreground">Points actuellement disponibles</p>
                         </SwellCardContent>
                     </SwellCard>
@@ -96,7 +107,7 @@ export default function Index({ accounts, stats }: Props) {
                             <TrendingUp className="size-4 text-muted-foreground" />
                         </SwellCardHeader>
                         <SwellCardContent>
-                            <div className="text-2xl font-bold">{stats.total_lifetime_points.toLocaleString()}</div>
+                            <div className="text-2xl font-bold">{stats.total_lifetime_points ? stats.total_lifetime_points.toLocaleString() : '0'}</div>
                             <p className="text-xs text-muted-foreground">Total depuis le début</p>
                         </SwellCardContent>
                     </SwellCard>
