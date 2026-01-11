@@ -236,8 +236,8 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* Join Section */}
-            <section className="rounded-xl bg-muted/90 py-24 sm:mx-4 md:mx-6 dark:bg-muted/40">
-                <div className="container mx-auto max-w-5xl px-4">
+            <section className="container mx-auto">
+                <div className="rounded-xl bg-muted/90 dark:bg-muted/40 py-24 mx-4">
                     <div className="mx-auto mb-16 max-w-2xl text-center">
                         <h2 className="mb-3 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
                             Conçevez des projets <span className="text-primary">ambitieux</span> avec{' '}
@@ -249,8 +249,8 @@ export default function Home({ products }: { products: Product[] }) {
                             <span className="text-3xl font-bold text-primary italic"> intégrer facilement vos produits.</span>
                         </p>
                     </div>
-
-                    <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
+    
+                    <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
                         {CATEGORIES.map((category, index) => (
                             <div
                                 key={index}
