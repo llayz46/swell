@@ -406,7 +406,7 @@ export default function Home({ products }: { products: Product[] }) {
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <Button size="icon" variant="outline" className="bg-transparent hover:bg-muted/20" asChild>
-                                                <Link
+                                                <a
                                                     href="https://github.com/llayz46/swell"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
@@ -416,7 +416,7 @@ export default function Home({ products }: { products: Product[] }) {
                                                     ): (
                                                         <GithubLight className="size-5" />
                                                     )}
-                                                </Link>
+                                                </a>
                                             </Button>
                                         </TooltipTrigger>
                                         <TooltipContent>
@@ -427,13 +427,13 @@ export default function Home({ products }: { products: Product[] }) {
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <Button size="icon" variant="outline" className="bg-transparent hover:bg-muted/20" asChild>
-                                                <Link
+                                                <a
                                                     href="https://github.com/llayz46/swell"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
                                                     <BookOpen className="size-5" />
-                                                </Link>
+                                                </a>
                                             </Button>
                                         </TooltipTrigger>
                                         <TooltipContent>
@@ -485,38 +485,38 @@ export default function Home({ products }: { products: Product[] }) {
                                     <ul className="w-full space-y-2 md:text-right">
                                         <li>
                                             <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
-                                                <Link
+                                                <a
                                                     className="text-muted-foreground"
                                                     href="https://swellkit.dev"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
                                                     Documentation
-                                                </Link>
+                                                </a>
                                             </Button>
                                         </li>
                                         <li>
                                             <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
-                                                <Link
+                                                <a
                                                     className="text-muted-foreground"
                                                     href="https://github.com/llayz46/swell"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
                                                     Discussion
-                                                </Link>
+                                                </a>
                                             </Button>
                                         </li>
                                         <li>
                                             <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
-                                                <Link
+                                                <a
                                                     className="text-muted-foreground"
                                                     href="https://github.com/llayz46/swell"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
                                                     Roadmap
-                                                </Link>
+                                                </a>
                                             </Button>
                                         </li>
                                     </ul>
@@ -563,38 +563,38 @@ export default function Home({ products }: { products: Product[] }) {
                                 <ul className="w-full space-y-2 md:text-right">
                                     <li>
                                         <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
-                                            <Link
+                                            <a
                                                 className="text-muted-foreground"
                                                 href="https://swellkit.dev"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                             >
                                                 Documentation
-                                            </Link>
+                                            </a>
                                         </Button>
                                     </li>
                                     <li>
                                         <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
-                                            <Link
+                                            <a
                                                 className="text-muted-foreground"
                                                 href="https://github.com/llayz46/swell"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                             >
                                                 Discussion
-                                            </Link>
+                                            </a>
                                         </Button>
                                     </li>
                                     <li>
                                         <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
-                                            <Link
+                                            <a
                                                 className="text-muted-foreground"
                                                 href="https://github.com/llayz46/swell"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                             >
                                                 Roadmap
-                                            </Link>
+                                            </a>
                                         </Button>
                                     </li>
                                 </ul>
@@ -608,27 +608,27 @@ export default function Home({ products }: { products: Product[] }) {
                         
                         <div className="flex items-center gap-4">
                             <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
-                                <Link
+                                <a
                                     className="text-muted-foreground"
                                     href="https://github.com/llayz46/swell"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
                                     Star on GitHub
-                                </Link>
+                                </a>
                             </Button>
                             
                             |
                             
                             <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
-                                <Link
+                                <a
                                     className="text-muted-foreground"
                                     href="https://github.com/llayz46/swell"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
                                     Contribuer
-                                </Link>
+                                </a>
                             </Button>
                         </div>
                     </div>
