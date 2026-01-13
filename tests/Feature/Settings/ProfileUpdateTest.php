@@ -18,7 +18,7 @@ test('profile information can be updated', function () {
 
     $response = $this
         ->actingAs($user)
-        ->post('/settings/profile', [
+        ->patch(route('profile.update'), [
             'avatar' => UploadedFile::fake()->image('avatar.jpg'),
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -26,7 +26,7 @@ test('profile information can be updated', function () {
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/settings/profile');
+        ->assertRedirect(route('profile.update'));
 
     $user->refresh();
 
@@ -40,7 +40,7 @@ test('email verification status is unchanged when the email address is unchanged
 
     $response = $this
         ->actingAs($user)
-        ->post('/settings/profile', [
+        ->patch(route('profile.update'), [
             'avatar' => UploadedFile::fake()->image('avatar.jpg'),
             'name' => 'Test User',
             'email' => $user->email,
@@ -48,7 +48,7 @@ test('email verification status is unchanged when the email address is unchanged
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/settings/profile');
+        ->assertRedirect(route('profile.update'));
 
     expect($user->refresh()->email_verified_at)->not->toBeNull();
 });

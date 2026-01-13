@@ -63,7 +63,6 @@ export default function Password() {
                     >
                         {({ errors, processing, recentlySuccessful }) => (
                             <>
-                                
                                 <div className="grid gap-2">
                                     <Label htmlFor="current_password">Mot de passe actuel</Label>
         
