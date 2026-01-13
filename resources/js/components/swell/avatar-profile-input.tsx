@@ -1,17 +1,39 @@
 import { Button } from '@/components/ui/button';
 import { useFileUpload } from '@/hooks/use-file-upload';
 import { CircleUserRoundIcon, XIcon } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
-export default function AvatarProfileInput({ onFileChange, value }: { onFileChange: (file: File | null) => void; value: string | null }) {
-    const [{ files, isDragging }, { removeFile, openFileDialog, getInputProps, handleDragEnter, handleDragLeave, handleDragOver, handleDrop }] =
-        useFileUpload({
-            accept: 'image/*',
-            maxFiles: 1,
-            maxSize: 5 * 1024 * 1024,
-            onFilesChange: (files) => {
-                onFileChange(files[0]?.file instanceof File ? files[0].file : null);
-            },
-        });
+interface AvatarProfileInputProps {
+    name?: string;
+    defaultValue?: string | null;
+    onFileChange?: (file: File | null) => void;
+}
+
+export default function AvatarProfileInput({ name = 'avatar', defaultValue, onFileChange }: AvatarProfileInputProps) {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const [{ files, isDragging }, { removeFile, addFiles, handleDragEnter, handleDragLeave, handleDragOver, handleDrop }] = useFileUpload({
+        accept: 'image/*',
+        maxFiles: 1,
+        maxSize: 5 * 1024 * 1024,
+        onFilesChange: (files) => {
+            onFileChange?.(files[0]?.file instanceof File ? files[0].file : null);
+        },
+    });
+
+    const openFileDialog = () => inputRef.current?.click();
+
+    useEffect(() => {
+        if (!inputRef.current) return;
+
+        if (files[0]?.file instanceof File) {
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(files[0].file);
+            inputRef.current.files = dataTransfer.files;
+        } else {
+            inputRef.current.value = '';
+        }
+    }, [files]);
 
     const previewUrl = files[0]?.preview || null;
 
@@ -29,10 +51,10 @@ export default function AvatarProfileInput({ onFileChange, value }: { onFileChan
                     data-dragging={isDragging || undefined}
                     aria-label={previewUrl ? 'Change image' : 'Upload image'}
                 >
-                    {previewUrl || value ? (
+                    {previewUrl || defaultValue ? (
                         <img
                             className="size-full object-cover"
-                            src={previewUrl ? previewUrl : value}
+                            src={previewUrl ?? defaultValue ?? undefined}
                             alt={files[0]?.file?.name || 'Uploaded image'}
                             width={64}
                             height={64}
@@ -55,7 +77,16 @@ export default function AvatarProfileInput({ onFileChange, value }: { onFileChan
                         <XIcon className="size-3.5" />
                     </Button>
                 )}
-                <input {...getInputProps()} className="sr-only" aria-label="Upload image file" tabIndex={-1} />
+                <input
+                    ref={inputRef}
+                    type="file"
+                    name={name}
+                    accept="image/*"
+                    onChange={(e) => e.target.files?.length && addFiles(e.target.files)}
+                    className="sr-only"
+                    aria-label="Upload image file"
+                    tabIndex={-1}
+                />
             </div>
         </div>
     );
