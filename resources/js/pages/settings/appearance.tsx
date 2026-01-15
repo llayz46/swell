@@ -1,20 +1,20 @@
 import { Head } from '@inertiajs/react';
-
+import { dashboard } from '@/routes';
+import { edit } from '@/routes/appearance';
 import AppearanceTabs from '@/components/appearance-tabs';
 import HeadingSmall from '@/components/heading-small';
 import { type BreadcrumbItem } from '@/types';
-
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: dashboard().url,
     },
     {
         title: 'Thème',
-        href: '/settings/appearance',
+        href: edit().url,
     },
 ];
 
