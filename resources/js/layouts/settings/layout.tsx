@@ -23,7 +23,7 @@ const sidebarNavItems: NavItem[] = [
         icon: null,
     },
     {
-        title: 'Two-Factor Authentication',
+        title: '2FA',
         href: showTwoFactor(),
         icon: null,
     },
