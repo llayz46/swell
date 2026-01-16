@@ -145,7 +145,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                             <TableCell>
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-muted">
+                                                        <Button variant="ghost" size="sm" className="size-8 p-0 hover:bg-muted">
                                                             <MoreHorizontal className="size-4 text-muted-foreground" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
@@ -215,7 +215,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                             </div>
                             <Badge
                                 variant="secondary"
-                                className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
+                                className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
                             >
                                 #
                             </Badge>
@@ -232,7 +232,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                     {countBrandsWithFilter(brands, (brand) => !brand.products_count)}
                                 </p>
                             </div>
-                            <Badge className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                            <Badge className="flex size-8 items-center justify-center rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
                                 !
                             </Badge>
                         </div>

@@ -128,11 +128,11 @@ function CardItem({
                     </div>
 
                     <div className="absolute right-0 bottom-0 flex items-center gap-1">
-                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => handleQuantity('dec', item.id)}>
+                        <Button variant="outline" size="icon" className="size-6" onClick={() => handleQuantity('dec', item.id)}>
                             <Minus className="size-3" />
                         </Button>
                         <span className="w-6 text-center text-sm font-medium">{item.quantity}</span>
-                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => handleQuantity('inc', item.id)}>
+                        <Button variant="outline" size="icon" className="size-6" onClick={() => handleQuantity('inc', item.id)}>
                             <Plus className="size-3" />
                         </Button>
                     </div>

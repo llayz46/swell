@@ -87,7 +87,7 @@ export default function Success({ order }: { order: Order }) {
                         <SwellCardContent>
                             <div className="space-y-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                                    <div className="mt-0.5 flex size-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
                                         <Mail className="size-4 text-primary" />
                                     </div>
                                     <div>
@@ -99,7 +99,7 @@ export default function Success({ order }: { order: Order }) {
                                 </div>
 
                                 <div className="flex items-center gap-3">
-                                    <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                                    <div className="mt-0.5 flex size-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
                                         <Package className="size-4 text-primary" />
                                     </div>
                                     <div>
@@ -109,7 +109,7 @@ export default function Success({ order }: { order: Order }) {
                                 </div>
 
                                 <div className="flex items-center gap-3">
-                                    <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                                    <div className="mt-0.5 flex size-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
                                         <Receipt className="size-4 text-primary" />
                                     </div>
                                     <div>

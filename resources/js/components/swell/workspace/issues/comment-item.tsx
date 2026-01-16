@@ -44,7 +44,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
     return (
         <div className={`group ${isReply ? 'mt-3 ml-10' : ''}`}>
             <div className="flex gap-3">
-                <Avatar className="h-8 w-8 shrink-0">
+                <Avatar className="size-8 shrink-0">
                     <AvatarImage src={comment.user.avatar_url} alt={comment.user.name} />
                     <AvatarFallback className="text-xs">{userInitials}</AvatarFallback>
                 </Avatar>
@@ -59,7 +59,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
                             {!isReply || isOwner ? (
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" size="xs" className="h-6 w-6 p-0">
+                                        <Button variant="ghost" size="xs" className="size-6 p-0">
                                             <MoreHorizontal className="size-4" />
                                         </Button>
                                     </DropdownMenuTrigger>
@@ -113,7 +113,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
                             className="mt-2 text-muted-foreground hover:text-foreground"
                             onClick={() => setReplyingToCommentId(comment.id)}
                         >
-                            <Reply className="mr-1 h-3 w-3" />
+                            <Reply className="mr-1 size-3" />
                             Répondre
                         </Button>
                     )}

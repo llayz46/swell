@@ -117,7 +117,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; on
 
                         <div className="mt-1 flex items-center">
                             <span
-                                className={`mr-2 inline-block h-2 w-2 rounded-full ${product.stock === 0 ? 'bg-red-500' : product.stock < 11 ? 'bg-orange-500' : 'bg-green-500'}`}
+                                className={`mr-2 inline-block size-2 rounded-full ${product.stock === 0 ? 'bg-red-500' : product.stock < 11 ? 'bg-orange-500' : 'bg-green-500'}`}
                             />
                             <span className="text-xs text-gray-500 dark:text-gray-400">
                                 {product.stock === 0 ? 'Indisponible' : product.stock < 11 ? `Reste ${product.stock}` : 'En stock'}

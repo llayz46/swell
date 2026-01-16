@@ -93,7 +93,7 @@ export function NavCategories() {
                             className="rounded-md hover:bg-accent"
                             aria-label="Fermer le menu"
                         >
-                            <X className="h-5 w-5" />
+                            <X className="size-5" />
                         </Button>
                     </div>
 

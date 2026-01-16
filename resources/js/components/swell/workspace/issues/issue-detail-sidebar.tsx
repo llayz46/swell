@@ -241,7 +241,7 @@ function AssigneePopover({
                 <Button variant="ghost" size="sm" className="h-8 gap-2">
                     {currentAssignee ? (
                         <>
-                            <Avatar className="h-5 w-5">
+                            <Avatar className="size-5">
                                 <AvatarImage src={currentAssignee.avatar_url} />
                                 <AvatarFallback className="text-[10px]">{currentAssignee.name.slice(0, 2).toUpperCase()}</AvatarFallback>
                             </Avatar>
@@ -278,7 +278,7 @@ function AssigneePopover({
                                         setOpen(false);
                                     }}
                                 >
-                                    <Avatar className="mr-2 h-5 w-5">
+                                    <Avatar className="mr-2 size-5">
                                         <AvatarImage src={member.avatar_url} />
                                         <AvatarFallback className="text-[10px]">{member.name.slice(0, 2).toUpperCase()}</AvatarFallback>
                                     </Avatar>
@@ -330,7 +330,7 @@ function LabelsPopover({
                         <CommandGroup>
                             {allLabels.map((label) => (
                                 <CommandItem key={label.id} value={label.name} onSelect={() => onToggle(label.id)}>
-                                    <div className="mr-2 h-3 w-3 rounded-full" style={{ backgroundColor: label.color }} />
+                                    <div className="mr-2 size-3 rounded-full" style={{ backgroundColor: label.color }} />
                                     {label.name}
                                     {currentLabelIds.has(label.id) && <Check className="ml-auto size-4" />}
                                 </CommandItem>

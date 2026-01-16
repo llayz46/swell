@@ -304,7 +304,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                     <Card className="border-border bg-card max-sm:py-4">
                                         <CardHeader className="max-sm:px-4">
                                             <CardTitle className="flex items-center gap-2 text-foreground">
-                                                <TrendingUp className="h-5 w-5" />
+                                                <TrendingUp className="size-5" />
                                                 Performances
                                             </CardTitle>
                                         </CardHeader>
@@ -329,7 +329,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                     <Card className="border-border bg-card max-sm:py-4">
                                         <CardHeader className="max-sm:px-4">
                                             <CardTitle className="flex items-center gap-2 text-foreground">
-                                                <Calendar className="h-5 w-5" />
+                                                <Calendar className="size-5" />
                                                 Dates importantes
                                             </CardTitle>
                                         </CardHeader>

@@ -170,7 +170,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                     <TableCell>
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger asChild>
-                                                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-muted">
+                                                                <Button variant="ghost" size="sm" className="size-8 p-0 hover:bg-muted">
                                                                     <MoreHorizontal className="size-4 text-muted-foreground" />
                                                                 </Button>
                                                             </DropdownMenuTrigger>

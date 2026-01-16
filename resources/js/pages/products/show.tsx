@@ -139,7 +139,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                         <div className="flex items-center gap-2">
                             <div
                                 className={cn(
-                                    'h-2 w-2 rounded-full',
+                                    'size-2 rounded-full',
                                     product.stock === 0 ? 'bg-red-500' : product.stock < 11 ? 'bg-orange-500' : 'bg-green-500',
                                 )}
                             ></div>
@@ -392,7 +392,7 @@ function ReviewSectionFallback() {
                                 <div key={rating} className="flex items-center gap-3">
                                     <div className="flex w-12 items-center gap-1">
                                         <span className="text-sm text-foreground">{rating}</span>
-                                        <Star className="h-3 w-3 fill-primary text-primary" />
+                                        <Star className="size-3 fill-primary text-primary" />
                                     </div>
                                     <div className="h-2 flex-1 rounded-full bg-muted">
                                         <div className="h-2 w-full rounded-full bg-primary transition-all duration-300" />

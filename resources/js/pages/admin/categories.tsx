@@ -58,7 +58,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                 <TableCell className="font-medium">
                     <div className="flex items-center" style={{ paddingLeft: `${paddingLeft}px` }}>
                         {hasChildren ? (
-                            <Button variant="ghost" size="sm" className="mr-2 h-6 w-6 p-0 hover:bg-muted" onClick={() => toggleExpanded(category.id)}>
+                            <Button variant="ghost" size="sm" className="mr-2 size-6 p-0 hover:bg-muted" onClick={() => toggleExpanded(category.id)}>
                                 {isExpanded ? (
                                     <ChevronDown className="size-4 text-muted-foreground" />
                                 ) : (
@@ -100,7 +100,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                 <TableCell>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-muted">
+                            <Button variant="ghost" size="sm" className="size-8 p-0 hover:bg-muted">
                                 <MoreHorizontal className="size-4 text-muted-foreground" />
                             </Button>
                         </DropdownMenuTrigger>
@@ -281,7 +281,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                                     {countCategoriesWithFilter(categories, 'is_active')}
                                 </p>
                             </div>
-                            <Badge className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                            <Badge className="flex size-8 items-center justify-center rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                                 ✓
                             </Badge>
                         </div>
@@ -299,7 +299,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                             </div>
                             <Badge
                                 variant="secondary"
-                                className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
+                                className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
                             >
                                 #
                             </Badge>
@@ -316,7 +316,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                                     {countCategoriesWithFilter(categories, (cat) => !cat.total_products_count && !cat.products_count)}
                                 </p>
                             </div>
-                            <Badge className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                            <Badge className="flex size-8 items-center justify-center rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
                                 !
                             </Badge>
                         </div>

@@ -337,14 +337,14 @@ function SortableBannerItem({ item, setEditBanner, setOpenBannerDialog, onDelete
                                 </Badge>
                             ) : (
                                 <Badge variant="secondary" className="dark:bg-gray-900 dark:text-gray-200">
-                                    <EyeOff className="mr-1 h-3 w-3" />
+                                    <EyeOff className="mr-1 size-3" />
                                     Inactif
                                 </Badge>
                             )}
 
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                    <Button variant="ghost" size="sm" className="size-8 p-0">
                                         <MoreHorizontal className="size-4" />
                                     </Button>
                                 </DropdownMenuTrigger>
