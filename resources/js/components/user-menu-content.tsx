@@ -1,3 +1,9 @@
+import AdminController from '@/actions/App/Http/Controllers/AdminController';
+import HomeController from '@/actions/App/Http/Controllers/HomeController';
+import { index as ordersIndex } from '@/actions/App/Http/Controllers/OrderController';
+import { edit as profileEdit } from '@/actions/App/Http/Controllers/Settings/ProfileController';
+import { index as loyaltyIndex } from '@/actions/App/Modules/Loyalty/Http/Controllers/LoyaltyController';
+import { destroy as logout } from '@/actions/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
 import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
@@ -26,20 +32,20 @@ export function UserMenuContent() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                    <Link className="block w-full" href={route('home')} as="button" prefetch onClick={cleanup}>
+                    <Link className="block w-full" href={HomeController.url()} as="button" prefetch onClick={cleanup}>
                         <House className="mr-2" />
                         Accueil
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link className="block w-full" href={route('orders.index')} as="button" onClick={cleanup}>
+                    <Link className="block w-full" href={ordersIndex.url()} as="button" onClick={cleanup}>
                         <Calendar className="mr-2" />
                         Commandes
                     </Link>
                 </DropdownMenuItem>
                 {swell.loyalty.enabled && (
                     <DropdownMenuItem asChild>
-                        <Link className="block w-full" href={route('loyalty.index')} as="button" onClick={cleanup}>
+                        <Link className="block w-full" href={loyaltyIndex.url()} as="button" onClick={cleanup}>
                             <Gift className="mr-2" />
                             Fidélité
                         </Link>
@@ -47,7 +53,7 @@ export function UserMenuContent() {
                 )}
                 {page && page.url.startsWith('/admin') && (
                     <DropdownMenuItem asChild>
-                        <Link className="block w-full" href={route('dashboard')} as="button" prefetch onClick={cleanup}>
+                        <Link className="block w-full" href="/dashboard" as="button" prefetch onClick={cleanup}>
                             <LayoutGrid className="mr-2" />
                             Dashboard
                         </Link>
@@ -71,7 +77,7 @@ export function UserMenuContent() {
             )}
             <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                    <Link className="block w-full" href={route('profile.edit')} as="button" prefetch onClick={cleanup}>
+                    <Link className="block w-full" href={profileEdit.url()} as="button" prefetch onClick={cleanup}>
                         <Settings className="mr-2" />
                         Paramètres
                     </Link>
@@ -82,7 +88,7 @@ export function UserMenuContent() {
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem asChild>
-                            <Link className="block w-full" href={route('admin.dashboard')} as="button" prefetch onClick={cleanup}>
+                            <Link className="block w-full" href={AdminController.url()} as="button" prefetch onClick={cleanup}>
                                 <ShieldCheckIcon className="mr-2" />
                                 Admin Dashboard
                             </Link>
@@ -92,7 +98,7 @@ export function UserMenuContent() {
             )}
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-                <Link className="block w-full" method="post" href={route('logout')} as="button" onClick={handleLogout}>
+                <Link className="block w-full" method="post" href={logout.url()} as="button" onClick={handleLogout}>
                     <LogOut className="mr-2" />
                     Déconnexion
                 </Link>

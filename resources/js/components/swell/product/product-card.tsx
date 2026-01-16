@@ -1,3 +1,4 @@
+import { show } from '@/actions/App/Http/Controllers/ProductController';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -65,7 +66,7 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
             <CardContent className="flex flex-1 flex-col p-3">
                 <div className="mb-2">
                     <Link
-                        href={route('product.show', product.slug)}
+                        href={show.url(product.slug)}
                         className="mb-1 line-clamp-1 text-base leading-tight font-semibold hover:underline"
                     >
                         {product.brand.name} {product.name}

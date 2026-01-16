@@ -1,3 +1,4 @@
+import { focus, overview } from '@/actions/App/Modules/Workspace/Http/Controllers/WorkspaceMyIssuesController';
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
 import { LayoutDashboard, Target } from 'lucide-react';
@@ -16,11 +17,11 @@ export function MyIssuesLayout({ children, activeTab }: MyIssuesLayoutProps) {
                     <h1 className="text-2xl font-bold tracking-tight">Mes tâches</h1>
                 </div>
                 <div className="flex gap-0">
-                    <TabLink href={route('workspace.my-issues.overview')} active={activeTab === 'overview'}>
+                    <TabLink href={overview.url()} active={activeTab === 'overview'}>
                         <LayoutDashboard className="size-4" />
                         Aperçu
                     </TabLink>
-                    <TabLink href={route('workspace.my-issues.focus')} active={activeTab === 'focus'}>
+                    <TabLink href={focus.url()} active={activeTab === 'focus'}>
                         <Target className="size-4" />
                         Focus
                     </TabLink>

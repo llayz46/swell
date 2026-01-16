@@ -1,3 +1,4 @@
+import { index, show } from '@/actions/App/Http/Controllers/ProductController';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
@@ -71,7 +72,7 @@ export default function Wishlist({ items }: { items: Product[] }) {
                             <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
                                 <h3 className="mb-2 text-xl font-semibold">Votre liste de souhaits est vide</h3>
                                 <p className="mb-4 text-muted-foreground">Parcourez notre catalogue et ajoutez des produits à votre wishlist</p>
-                                <Link href={route('product.index')} className={buttonVariants()}>
+                                <Link href={index.url()} className={buttonVariants()}>
                                     Découvrir nos produits
                                 </Link>
                             </div>
@@ -99,7 +100,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; on
             <div className="flex-grow">
                 <div className="flex items-start justify-between">
                     <div>
-                        <Link href={route('product.show', product.slug)} className="font-medium hover:underline">
+                        <Link href={show.url(product.slug)} className="font-medium hover:underline">
                             {product.brand.name} {product.name}
                         </Link>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{product.short_description}</p>

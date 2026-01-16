@@ -1,3 +1,5 @@
+import { destroy } from '@/actions/App/Http/Controllers/Admin/CollectionController';
+import { index as productsIndex } from '@/actions/App/Http/Controllers/Admin/ProductController';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import { CollectionDialog } from '@/components/swell/product/collection-dialog';
 import SearchInput from '@/components/swell/search-input';
@@ -137,7 +139,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                                     <DropdownMenuContent align="end" className="border-border bg-popover">
                                                         <DropdownMenuItem className="cursor-pointer text-foreground hover:bg-muted">
                                                             <Link
-                                                                href={route('admin.products.index', { collection_id: collection.id })}
+                                                                href={productsIndex.url({ query: { collection_id: collection.id } })}
                                                                 className="flex items-center gap-2"
                                                             >
                                                                 <Eye className="mr-2 size-4" />
@@ -239,7 +241,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                 open={!!deleteCollection}
                 onClose={() => setDeleteCollection(null)}
                 itemNameKey="title"
-                deleteRoute={(item) => route('admin.collections.destroy', item.id)}
+                deleteRoute={(item) => destroy.url(item.id)}
                 itemLabel="collection"
                 icon={<Box className="size-4" />}
                 prefix="La"

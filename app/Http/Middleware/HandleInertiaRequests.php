@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Services\SharedPropsService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -44,10 +43,6 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'swell' => fn () => $this->sharedPropsService->getSwellConfig(),
             'auth' => fn () => $this->sharedPropsService->getAuthData($request),
-            'ziggy' => fn (): array => [
-                ...(new Ziggy)->toArray(),
-                'location' => $request->url(),
-            ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'categories' => fn () => $this->sharedPropsService->getCategories(),
             'cart' => fn () => $this->sharedPropsService->getCart(),

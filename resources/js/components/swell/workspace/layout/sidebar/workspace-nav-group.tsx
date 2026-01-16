@@ -1,3 +1,4 @@
+import { leave } from '@/actions/App/Modules/Workspace/Http/Controllers/WorkspaceTeamController';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import {
@@ -89,7 +90,7 @@ const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
 
     const leaveTeam = (teamId: number) => {
         router.post(
-            route('workspace.teams.leave', teamId),
+            leave.url(teamId),
             {},
             {
                 onSuccess: () => {

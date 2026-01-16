@@ -1,3 +1,4 @@
+import { index } from '@/actions/App/Http/Controllers/ProductController';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { CartSheet } from '@/components/swell/cart-sheet';
 import { buttonVariants } from '@/components/ui/button';
@@ -18,8 +19,8 @@ export function Header() {
         () =>
             debounce((value) => {
                 router.get(
-                    route('product.index'),
-                    { search: value },
+                    index.url({ query: { search: value } }),
+                    {},
                     {
                         preserveState: true,
                         replace: true,

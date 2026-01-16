@@ -1,3 +1,4 @@
+import { store, update } from '@/actions/App/Http/Controllers/Admin/CategoryController';
 import InputError from '@/components/input-error';
 import { CategoryTree } from '@/components/swell/category-tree';
 import { Button } from '@/components/ui/button';
@@ -72,7 +73,7 @@ export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDi
         e.preventDefault();
 
         if (!category) {
-            post(route('admin.categories.store'), {
+            post(store.url(), {
                 preserveScroll: true,
                 onSuccess: () => {
                     reset('name', 'description', 'status');
@@ -92,7 +93,7 @@ export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDi
                 },
             });
         } else {
-            put(route('admin.categories.update', category.id), {
+            put(update.url(category.id), {
                 preserveScroll: true,
                 onSuccess: () => {
                     reset('name', 'description', 'status');

@@ -26,8 +26,7 @@
         "laravel/tinker": "^2.10.1",
         "laravel/wayfinder": "^0.1.12",
         "league/flysystem-aws-s3-v3": "3.0",
-        "spatie/laravel-permission": "^6.20",
-        "tightenco/ziggy": "^2.4"
+        "spatie/laravel-permission": "^6.20"
     },
     "require-dev": {
         "laravel/boost": "^1.8",

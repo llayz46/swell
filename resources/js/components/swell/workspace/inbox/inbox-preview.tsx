@@ -1,3 +1,4 @@
+import { issues } from '@/actions/App/Modules/Workspace/Http/Controllers/WorkspaceTeamController';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -162,11 +163,7 @@ export function InboxPreview({ item }: InboxPreviewProps) {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuItem asChild>
-                                <Link
-                                    href={route('workspace.teams.issues', {
-                                        team: item.issue.team?.identifier,
-                                    })}
-                                >
+                                <Link href={issues.url(item.issue.team?.identifier ?? '')}>
                                     <ExternalLink className="mr-2 size-4" />
                                     Voir l'issue
                                 </Link>
@@ -226,12 +223,7 @@ export function InboxPreview({ item }: InboxPreviewProps) {
                             {item.issue.description && <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{item.issue.description}</p>}
                         </div>
 
-                        <Link
-                            href={route('workspace.teams.issues', {
-                                team: item.issue.team?.identifier,
-                            })}
-                            className="shrink-0"
-                        >
+                        <Link href={issues.url(item.issue.team?.identifier ?? '')} className="shrink-0">
                             <Button variant="ghost" size="sm">
                                 <ArrowUpRight className="size-4" />
                             </Button>

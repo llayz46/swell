@@ -1,3 +1,4 @@
+import { destroy } from '@/actions/App/Http/Controllers/Admin/CategoryController';
 import { CategoryDialog } from '@/components/swell/category-dialog';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import SearchInput from '@/components/swell/search-input';
@@ -328,7 +329,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                 open={!!deleteCategory}
                 onClose={() => setDeleteCategory(null)}
                 itemNameKey="name"
-                deleteRoute={(item) => route('admin.categories.destroy', item.id)}
+                deleteRoute={(item) => destroy.url(item.id)}
                 itemLabel="catégorie"
                 icon={<Folders className="size-4" />}
                 prefix="La"

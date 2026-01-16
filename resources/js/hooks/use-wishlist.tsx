@@ -1,3 +1,4 @@
+import { destroy, store, update } from '@/actions/App/Modules/Wishlist/Http/Controllers/WishlistController';
 import { Product, WishlistType } from '@/types';
 import { router } from '@inertiajs/react';
 import { Heart, ShoppingCart } from 'lucide-react';
@@ -6,7 +7,7 @@ import { toast } from 'sonner';
 export function useWishlist() {
     const addItem = (product: Product) => {
         router.post(
-            route('wishlist.add'),
+            store.url(),
             { product_id: product.id },
             {
                 preserveScroll: true,
@@ -30,7 +31,7 @@ export function useWishlist() {
         setWishlist((prev) => prev.filter((item) => item.id !== product.id));
 
         router.post(
-            route('wishlist.remove'),
+            update.url(),
             {
                 product_id: product.id,
             },
@@ -53,7 +54,7 @@ export function useWishlist() {
         setWishlist([]);
 
         router.post(
-            route('wishlist.clear'),
+            destroy.url(),
             {},
             {
                 preserveScroll: true,

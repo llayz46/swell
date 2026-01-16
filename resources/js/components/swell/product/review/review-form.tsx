@@ -1,3 +1,4 @@
+import { store, update } from '@/actions/App/Modules/Review/Http/Controllers/ReviewController';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -48,7 +49,7 @@ export function ReviewForm() {
         e.preventDefault();
 
         if (!review) {
-            post(route('reviews.store'), {
+            post(store.url(), {
                 preserveScroll: true,
                 onSuccess: () => {
                     toast.success('Commentaire ajouté avec succès', {
@@ -64,7 +65,7 @@ export function ReviewForm() {
                 },
             });
         } else {
-            put(route('reviews.update', review.id), {
+            put(update.url(review.id), {
                 preserveScroll: true,
                 onSuccess: () => {
                     toast.success('Commentaire modifié avec succès', {

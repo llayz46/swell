@@ -1,3 +1,4 @@
+import { create, destroy, edit, index, show } from '@/actions/App/Http/Controllers/Admin/ProductController';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import { PaginationComponent } from '@/components/swell/pagination-component';
 import SearchInput from '@/components/swell/search-input';
@@ -9,7 +10,7 @@ import AdminLayout from '@/layouts/admin-layout';
 import { cn } from '@/lib/utils';
 import type { BreadcrumbItem, PaginatedResponse, Product } from '@/types';
 import { Deferred, Head, Link, router } from '@inertiajs/react';
-import { Edit, Eye, Loader2, MoreHorizontal, MoveUp, Package, Plus, Trash2 } from 'lucide-react';
+import { Edit as EditIcon, Eye, Loader2, MoreHorizontal, MoveUp, Package, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface ProductsType {
@@ -35,7 +36,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
         const delayDebounce = setTimeout(() => {
             const params = searchTerm.trim() !== '' ? { search: searchTerm } : {};
 
-            router.get(route('admin.products.index'), params, {
+            router.get(index.url(), params, {
                 preserveState: true,
                 replace: true,
             });
@@ -59,7 +60,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
 
     const handleCollectionProducts = (collection_id: number) => {
         router.get(
-            route('admin.products.index'),
+            index.url(),
             { collection_id },
             {
                 preserveState: true,
@@ -78,7 +79,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
         setSorting(newSorting);
 
         router.get(
-            route('admin.products.index'),
+            index.url(),
             { sort: newSorting },
             {
                 preserveState: true,
@@ -101,7 +102,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                 <div className="text-lg text-foreground">Liste des produits ({products && products.meta && products.meta.total})</div>
 
                                 <Link
-                                    href={route('admin.products.create', collectionId ? { collection_id: collectionId } : {})}
+                                    href={create.url(collectionId ? { query: { collection_id: collectionId } } : undefined)}
                                     className={buttonVariants({ size: 'sm' })}
                                 >
                                     <Plus />
@@ -176,7 +177,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                             <DropdownMenuContent align="end" className="border-border bg-popover">
                                                                 <DropdownMenuItem asChild>
                                                                     <Link
-                                                                        href={route('admin.products.show', product.slug)}
+                                                                        href={show.url(product.slug)}
                                                                         className="cursor-pointer text-foreground hover:bg-muted"
                                                                     >
                                                                         <Eye className="mr-1 h-4 w-4" />
@@ -196,10 +197,10 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                                 )}
                                                                 <DropdownMenuItem asChild>
                                                                     <Link
-                                                                        href={route('admin.products.edit', product.slug)}
+                                                                        href={edit.url(product.slug)}
                                                                         className="cursor-pointer text-foreground hover:bg-muted"
                                                                     >
-                                                                        <Edit className="mr-1 h-4 w-4" />
+                                                                        <EditIcon className="mr-1 h-4 w-4" />
                                                                         Modifier
                                                                     </Link>
                                                                 </DropdownMenuItem>
@@ -240,7 +241,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                 open={!!deleteProduct}
                 onClose={() => setDeleteProduct(null)}
                 itemNameKey="name"
-                deleteRoute={(product) => route('admin.products.destroy', product.slug)}
+                deleteRoute={(product) => destroy.url(product.slug)}
                 itemLabel="produit"
                 icon={<Package className="size-4" />}
                 prefix="Le"
@@ -256,7 +257,7 @@ function DeferredFallback() {
                 <CardTitle className="flex w-full justify-between max-sm:flex-col max-sm:gap-2 sm:items-center">
                     <div className="text-lg text-foreground">Liste des produits</div>
 
-                    <Link href={route('admin.products.create')} className={buttonVariants({ size: 'sm' })}>
+                    <Link href={create.url()} className={buttonVariants({ size: 'sm' })}>
                         <Plus />
                         Ajouter un produit
                     </Link>

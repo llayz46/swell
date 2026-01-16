@@ -1,3 +1,4 @@
+import { destroy } from '@/actions/App/Http/Controllers/Admin/BrandController';
 import { BrandDialog } from '@/components/swell/brand-dialog';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import SearchInput from '@/components/swell/search-input';
@@ -244,7 +245,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                 open={!!deleteBrand}
                 onClose={() => setDeleteBrand(null)}
                 itemNameKey="name"
-                deleteRoute={(item) => route('admin.brands.destroy', item.id)}
+                deleteRoute={(item) => destroy.url(item.id)}
                 itemLabel="marque"
                 icon={<Tags className="size-4" />}
                 prefix="La"

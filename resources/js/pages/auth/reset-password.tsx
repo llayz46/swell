@@ -1,3 +1,4 @@
+import { store as resetPassword } from '@/actions/Laravel/Fortify/Http/Controllers/NewPasswordController';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
@@ -30,7 +31,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('password.store'), {
+        post(resetPassword.url(), {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };

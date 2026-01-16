@@ -1,6 +1,5 @@
 import { LucideIcon } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
-import type { Config } from 'ziggy-js';
 import { Team } from './workspace';
 
 export interface Auth {
@@ -64,7 +63,6 @@ export interface SharedData {
         };
     };
     auth: Auth;
-    ziggy: Config & { location: string };
     sidebarOpen: boolean;
     [key: string]: unknown;
     categories: Category[];

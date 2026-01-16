@@ -1,3 +1,4 @@
+import CategoryController from '@/actions/App/Http/Controllers/CategoryController';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Link } from '@inertiajs/react';
 
@@ -13,7 +14,7 @@ export function ProductBreadcrumb({ category, product }: { category: { name: str
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                     <BreadcrumbLink asChild>
-                        <Link href={route('category.show', category.slug)}>{category.name}</Link>
+                        <Link href={CategoryController.url(category.slug)}>{category.name}</Link>
                     </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />

@@ -1,3 +1,4 @@
+import { adjust } from '@/actions/App/Modules/Loyalty/Http/Controllers/Admin/AdminLoyaltyController';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
@@ -37,7 +38,7 @@ export default function Show({ breadcrumbs, account, transactions }: Props) {
 
     const handleAdjust = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('admin.loyalty.adjust', account.user.id), {
+        post(adjust.url(account.user.id), {
             onSuccess: () => {
                 reset();
             },

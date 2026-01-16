@@ -1,3 +1,7 @@
+import { create, destroy, edit } from '@/actions/App/Http/Controllers/Admin/ProductController';
+import { show as brandShow } from '@/actions/App/Http/Controllers/BrandController';
+import CategoryController from '@/actions/App/Http/Controllers/CategoryController';
+import { show as productShow } from '@/actions/App/Http/Controllers/ProductController';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -9,7 +13,7 @@ import type { BreadcrumbItem, Product } from '@/types';
 import { useStorageUrl } from '@/utils/format-storage-url';
 import { calculateMargin, calculateProfit } from '@/utils/product-price-calculating';
 import { Head, Link } from '@inertiajs/react';
-import { Boxes, Building2, Calendar, Copy, Edit, ExternalLink, FolderOpen, Package, Trash2, TrendingUp } from 'lucide-react';
+import { Boxes, Building2, Calendar, Copy, Edit as EditIcon, ExternalLink, FolderOpen, Package, Trash2, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 
 interface ProductType {
@@ -34,15 +38,15 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                     </div>
                     <div className="flex flex-wrap gap-2 max-sm:mb-4">
                         <Link
-                            href={route('admin.products.create')}
+                            href={create.url()}
                             data={{ duplicate: product.id }}
                             className={buttonVariants({ variant: 'outline' })}
                         >
                             <Copy className="size-4" />
                             Dupliquer
                         </Link>
-                        <Link href={route('admin.products.edit', product.slug)} className={buttonVariants({ variant: 'outline' })}>
-                            <Edit className="size-4" />
+                        <Link href={edit.url(product.slug)} className={buttonVariants({ variant: 'outline' })}>
+                            <EditIcon className="size-4" />
                             Modifier
                         </Link>
                         <Button variant="destructive" onClick={() => setDeleteProduct(product)}>
@@ -131,7 +135,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                 <label className="text-sm font-medium text-muted-foreground">Marque</label>
                                                 <div className="flex items-center gap-2">
                                                     <Building2 className="size-4 text-muted-foreground" />
-                                                    <Link href={route('brand.show', product.brand.slug)} className="text-primary hover:underline">
+                                                    <Link href={brandShow.url(product.brand.slug)} className="text-primary hover:underline">
                                                         {product.brand.name}
                                                     </Link>
                                                 </div>
@@ -141,7 +145,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                 <div className="flex items-center gap-2">
                                                     <FolderOpen className="size-4 text-muted-foreground" />
                                                     <Link
-                                                        href={route('category.show', product.category?.slug)}
+                                                        href={CategoryController.url(product.category?.slug || '')}
                                                         className="text-primary hover:underline"
                                                     >
                                                         {product.category?.name}
@@ -283,7 +287,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                     /products/{product.slug}
                                                 </code>
                                                 <Link
-                                                    href={route('product.show', product.slug)}
+                                                    href={productShow.url(product.slug)}
                                                     prefetch
                                                     className={buttonVariants({ variant: 'ghost', size: 'icon' })}
                                                 >
@@ -354,7 +358,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                 open={!!deleteProduct}
                 onClose={() => setDeleteProduct(null)}
                 itemNameKey="name"
-                deleteRoute={(item) => route('admin.products.destroy', item.slug)}
+                deleteRoute={(item) => destroy.url(item.slug)}
                 itemLabel="produit"
                 icon={<Package className="size-4" />}
                 prefix="Le"

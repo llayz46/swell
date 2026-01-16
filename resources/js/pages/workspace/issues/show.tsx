@@ -1,3 +1,4 @@
+import { issues } from '@/actions/App/Modules/Workspace/Http/Controllers/WorkspaceTeamController';
 import { Button } from '@/components/ui/button';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -11,7 +12,7 @@ import WorkspaceLayout from '@/layouts/workspace-layout';
 import { useIssueDetailStore } from '@/stores/issue-detail-store';
 import type { IssueAssignee, IssueDetail, IssueLabel, IssuePriority, IssueStatus } from '@/types/workspace';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { ArrowLeft, MessageSquare, Activity } from 'lucide-react';
+import { Activity, ArrowLeft, MessageSquare } from 'lucide-react';
 import { useEffect } from 'react';
 
 type PageProps = {
@@ -45,7 +46,7 @@ export default function Show() {
                     <div className="flex h-full flex-col">
                         <div className="flex h-12 items-center gap-3 border-b border-border px-4">
                             <Button variant="ghost" size="sm" asChild>
-                                <Link href={route('workspace.teams.issues', { team: issue.team?.identifier })}>
+                                <Link href={issues.url(issue.team?.identifier ?? '')}>
                                     <ArrowLeft className="mr-1 h-4 w-4" />
                                     {issue.team?.name}
                                 </Link>

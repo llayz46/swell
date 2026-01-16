@@ -1,3 +1,4 @@
+import { addItem, buy, checkout, clear, handleItemQuantityById, removeItemById } from '@/actions/App/Http/Controllers/CartController';
 import { Cart, CartItem, OrderItems, Product, ProductOption, ProductOptionValue } from '@/types';
 import { Page } from '@inertiajs/core';
 import { router } from '@inertiajs/react';
@@ -95,7 +96,7 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
         const payload: { product_id: number; quantity: number; options?: CartItem['options'] } = { product_id: product.id, quantity };
         if (options.length > 0) payload.options = options;
 
-        router.post(route('cart.add'), payload, {
+        router.post(addItem.url(), payload, {
             preserveScroll: true,
             onSuccess: (page) => {
                 const serverCart = (page as Page<{ cart: Cart }>).props.cart;
@@ -131,7 +132,7 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
         setOptimisticCart((prev) => ({ ...prev!, items: updatedItems, total }));
 
         router.post(
-            route('cart.item.remove'),
+            removeItemById.url(),
             { item_id: itemId },
             {
                 preserveScroll: true,
@@ -153,7 +154,7 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
         setOptimisticCart({ ...cart, items: [], total: 0 });
 
         router.post(
-            route('cart.clear', optimisticCart.id),
+            clear.url(optimisticCart.id),
             {},
             {
                 preserveScroll: true,
@@ -187,7 +188,7 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
             }));
 
             router.put(
-                route('cart.item.update'),
+                handleItemQuantityById.url(),
                 {
                     item_id: itemId,
                     action: 'increase',
@@ -216,7 +217,7 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
                 }));
 
                 router.put(
-                    route('cart.item.update'),
+                    handleItemQuantityById.url(),
                     {
                         item_id: itemId,
                         action: 'decrease',
@@ -238,9 +239,9 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
         }
     };
 
-    const checkout = () => {
+    const goToCheckout = () => {
         router.get(
-            route('cart.checkout'),
+            checkout.url(),
             {},
             {
                 preserveScroll: true,
@@ -252,7 +253,7 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
         const productArray = Array.isArray(products) ? products : [products];
 
         router.post(
-            route('cart.buy'),
+            buy.url(),
             {
                 products: productArray.map((item) => {
                     if ('product' in item) {
@@ -281,7 +282,7 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
         removeItemOfCart,
         clearCart,
         handleQuantity,
-        checkout,
+        checkout: goToCheckout,
         buyNow,
     };
 }

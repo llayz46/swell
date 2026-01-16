@@ -1,3 +1,4 @@
+import { store, update } from '@/actions/App/Modules/Workspace/Http/Controllers/WorkspaceIssueController';
 import InputError from '@/components/input-error';
 import { DatePickerInput } from '@/components/swell/date-picker-input';
 import { PriorityIcon, StatusIcon } from '@/components/swell/workspace/icons';
@@ -87,7 +88,7 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
         e.preventDefault();
 
         if (isEditMode && issueDialogIssue) {
-            patch(route('workspace.issues.update', { issue: issueDialogIssue.id }), {
+            patch(update.url(issueDialogIssue.id), {
                 preserveScroll: true,
                 onSuccess: () => {
                     reset();
@@ -102,7 +103,7 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
                 },
             });
         } else {
-            post(route('workspace.issues.store'), {
+            post(store.url(), {
                 preserveScroll: true,
                 onSuccess: () => {
                     reset();

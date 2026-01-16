@@ -1,3 +1,4 @@
+import { store, update } from '@/actions/App/Modules/Workspace/Http/Controllers/WorkspaceTeamController';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -115,7 +116,7 @@ export function TeamDialog() {
 
         if (!isEditing && !isAdmin) return toast.error("Vous n'avez pas les droits pour " + (isEditing ? 'modifier' : 'créer') + ' une équipe');
 
-        const submitRoute = isEditing ? route('workspace.teams.update', selectedTeamDialog!.id) : route('workspace.teams.store');
+        const submitRoute = isEditing ? update.url(selectedTeamDialog!.id) : store.url();
 
         submitMethod(submitRoute, {
             preserveScroll: true,

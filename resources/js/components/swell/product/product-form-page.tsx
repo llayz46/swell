@@ -1,3 +1,5 @@
+import { show as adminProductShow, store, update } from '@/actions/App/Http/Controllers/Admin/ProductController';
+import { show as productShow } from '@/actions/App/Http/Controllers/ProductController';
 import { GeneralTabContent } from '@/components/swell/product/form-tab/product-form-tab-general';
 import { ImagesTabContent } from '@/components/swell/product/form-tab/product-form-tab-images';
 import { InventoryTabContent } from '@/components/swell/product/form-tab/product-form-tab-inventory';
@@ -91,7 +93,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
         e.preventDefault();
 
         if (!isDuplicate && product) {
-            post(route('admin.products.update', product.id), {
+            post(update.url(product.id), {
                 method: 'put',
                 preserveScroll: true,
                 onSuccess: () => {
@@ -110,7 +112,7 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                 },
             });
         } else {
-            post(route('admin.products.store'), {
+            post(store.url(), {
                 preserveScroll: true,
                 onSuccess: () => {
                     toast.success('Produit créer avec succès', {
@@ -291,14 +293,14 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                             <SwellCardContent className="flex flex-col gap-2">
                                 <Link
                                     className={`${buttonVariants({ variant: 'outline' })} justify-start`}
-                                    href={route('admin.products.show', product.slug)}
+                                    href={adminProductShow.url(product.slug)}
                                 >
                                     <Eye />
                                     Voir le produit
                                 </Link>
                                 <Link
                                     className={`${buttonVariants({ variant: 'outline' })} justify-start`}
-                                    href={route('product.show', product.slug)}
+                                    href={productShow.url(product.slug)}
                                 >
                                     <ExternalLink />
                                     Voir sur le site

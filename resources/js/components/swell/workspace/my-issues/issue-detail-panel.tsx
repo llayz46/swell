@@ -1,22 +1,23 @@
+import { show } from '@/actions/App/Modules/Workspace/Http/Controllers/WorkspaceIssueController';
 import { StatusIcon } from '@/components/swell/workspace/icons';
 import { PriorityIcon } from '@/components/swell/workspace/icons/priority-mapper';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { buttonVariants } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 import { useMyIssuesStore } from '@/stores/my-issues-store';
+import { Link } from '@inertiajs/react';
 import { format, formatDistanceToNow, isPast, isToday, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { Calendar as CalendarIcon, CheckIcon, ExternalLink, Tag, User, X } from 'lucide-react';
-import { Link } from "@inertiajs/react";
-import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import type { MyIssue } from './types';
-import { buttonVariants } from '@/components/ui/button';
 
 interface IssueDetailPanelProps {
     issue: MyIssue | null;
@@ -123,7 +124,7 @@ export function IssueDetailPanel({ issue }: IssueDetailPanelProps) {
                 <div className="mt-6">
                     <Link
                         className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'w-full gap-2')}
-                        href={route('workspace.issues.show', { issue: issue.identifier })}
+                        href={show.url(issue.identifier)}
                     >
                         <ExternalLink className="size-4" />
                         Voir la tâche

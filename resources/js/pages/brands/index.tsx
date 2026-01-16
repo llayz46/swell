@@ -1,3 +1,4 @@
+import { show } from '@/actions/App/Http/Controllers/BrandController';
 import { PaginationComponent } from '@/components/swell/pagination-component';
 import BaseLayout from '@/layouts/base-layout';
 import { Brand, PaginatedResponse } from '@/types';
@@ -33,7 +34,7 @@ export default function Index({ brands }: IndexProps) {
                                         <span>{brand.name}</span>
                                     )}
                                 </div>
-                                <Link href={route('brand.show', brand.slug)} className="text-center text-lg font-semibold hover:underline">
+                                <Link href={show.url(brand.slug)} className="text-center text-lg font-semibold hover:underline">
                                     {brand.name}
                                 </Link>
                             </div>

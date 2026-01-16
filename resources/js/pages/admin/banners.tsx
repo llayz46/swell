@@ -1,3 +1,4 @@
+import { destroy, ordering, update } from '@/actions/App/Modules/Banner/Http/Controllers/BannerController';
 import { BannerDialog } from '@/components/swell/banner-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -35,7 +36,7 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
         isDirty,
         processing,
         put,
-        delete: destroy,
+        delete: destroyBanner,
         setDefaults,
     } = useForm({
         infoBanner: infoBanner
@@ -53,7 +54,7 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
     const handleOrdering: FormEventHandler = (e) => {
         e.preventDefault();
 
-        put(route('admin.banners.ordering'), {
+        put(ordering.url(), {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success('Bannières mises à jour avec succès !', {
@@ -78,7 +79,7 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
         );
         setDefaults({ infoBanner: data.infoBanner.filter((banner) => banner.id !== id) });
 
-        destroy(route('admin.banners.destroy', id), {
+        destroyBanner(destroy.url(id), {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success('Bannière supprimée avec succès', {
@@ -107,7 +108,7 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
         );
         setDefaults({ infoBanner: data.infoBanner.map((b) => (b.id === id ? updatedBanner : b)) });
 
-        router.put(route('admin.banners.update', id), updatedBanner, {
+        router.put(update.url(id), updatedBanner, {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success(`Bannière ${updatedBanner.is_active ? 'activée' : 'désactivée'} avec succès`, {

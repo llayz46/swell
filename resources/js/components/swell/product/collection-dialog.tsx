@@ -1,3 +1,4 @@
+import { store, update } from '@/actions/App/Http/Controllers/Admin/CollectionController';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
@@ -53,7 +54,7 @@ export function CollectionDialog({ open, setOpen, collection, inputValue }: Coll
         e.stopPropagation();
 
         if (!collection) {
-            post(route('admin.collections.store'), {
+            post(store.url(), {
                 preserveScroll: true,
                 onSuccess: () => {
                     reset('title');
@@ -73,7 +74,7 @@ export function CollectionDialog({ open, setOpen, collection, inputValue }: Coll
                 },
             });
         } else {
-            put(route('admin.collections.update', collection.id), {
+            put(update.url(collection.id), {
                 preserveScroll: true,
                 onSuccess: () => {
                     reset('title');

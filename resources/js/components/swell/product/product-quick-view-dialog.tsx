@@ -1,3 +1,4 @@
+import { show } from '@/actions/App/Http/Controllers/ProductController';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useCartContext } from '@/contexts/cart-context';
@@ -26,7 +27,7 @@ export function ProductQuickViewDialog({ product, open, onClose }: { product: Pr
 
                 <DialogHeader className="gap-2 sm:gap-4">
                     <DialogTitle className="mr-4 hover:underline max-sm:text-left">
-                        <Link href={route('product.show', product.slug)}>
+                        <Link href={show.url(product.slug)}>
                             {product.brand.name} {product.name}
                         </Link>
                     </DialogTitle>

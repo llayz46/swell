@@ -1,3 +1,4 @@
+import { show } from '@/actions/App/Http/Controllers/ProductController';
 import { ProductBreadcrumb } from '@/components/swell/product/product-breadcrumb';
 import { ProductCard } from '@/components/swell/product/product-card';
 import { ProductQuickViewDialog } from '@/components/swell/product/product-quick-view-dialog';
@@ -315,7 +316,7 @@ function RelatedProduct({ product, currentProductId }: { product: Product; curre
                         {current ? (
                             <h4 className="font-medium text-foreground">{product.name}</h4>
                         ) : (
-                            <Link prefetch href={route('product.show', product.slug)} className="font-medium text-foreground hover:underline">
+                            <Link prefetch href={show.url(product.slug)} className="font-medium text-foreground hover:underline">
                                 {product.name}
                             </Link>
                         )}

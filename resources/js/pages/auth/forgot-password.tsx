@@ -1,4 +1,5 @@
-// Components
+import { create as loginPage } from '@/actions/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
+import { store as forgotPassword } from '@/actions/Laravel/Fortify/Http/Controllers/PasswordResetLinkController';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
@@ -18,7 +19,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('password.email'));
+        post(forgotPassword.url());
     };
 
     return (
@@ -55,7 +56,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
                 <div className="space-x-1 text-center text-sm text-muted-foreground">
                     <span>Ou retourner à la page</span>
-                    <TextLink href={route('login')}>de connexion</TextLink>
+                    <TextLink href={loginPage.url()}>de connexion</TextLink>
                 </div>
             </div>
         </AuthLayout>

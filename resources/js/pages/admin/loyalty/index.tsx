@@ -1,12 +1,13 @@
+import { expirePoints, show } from '@/actions/App/Modules/Loyalty/Http/Controllers/Admin/AdminLoyaltyController';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { CardDescription, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import AdminLayout from '@/layouts/admin-layout';
 import { useConfirmContext } from '@/contexts/confirm-context';
+import AdminLayout from '@/layouts/admin-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { Award, TrendingUp, Users, Trash2 } from 'lucide-react';
+import { Award, Trash2, TrendingUp, Users } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -68,7 +69,7 @@ export default function Index({ accounts, stats }: Props) {
             variant: 'destructive',
             icon: <Trash2 className="size-4" />,
             onConfirm: () => {
-                router.post(route('admin.loyalty.expire'));;
+                router.post(expirePoints.url());
             }
         });
     };
@@ -152,7 +153,7 @@ export default function Index({ accounts, stats }: Props) {
                                             <TableCell className="text-right">
                                                 <Link
                                                     className={buttonVariants({ variant: 'link', size: 'sm' })}
-                                                    href={route('admin.loyalty.show', account.id)}
+                                                    href={show.url(account.id)}
                                                 >
                                                     Voir détails
                                                 </Link>
