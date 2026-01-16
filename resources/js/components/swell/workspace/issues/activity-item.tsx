@@ -77,7 +77,7 @@ export function ActivityItem({ activity }: ActivityItemProps) {
     return (
         <div className="flex gap-3 py-3">
             <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted ${config.color}`}>
-                <Icon className="h-4 w-4" />
+                <Icon className="size-4" />
             </div>
 
             <div className="flex-1 min-w-0">

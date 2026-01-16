@@ -133,7 +133,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
                                                         <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-muted">
-                                                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                                                            <MoreHorizontal className="size-4 text-muted-foreground" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end" className="border-border bg-popover">
@@ -161,7 +161,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                                             className="cursor-pointer text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950"
                                                             onClick={() => setDeleteCollection(collection)}
                                                         >
-                                                            <Trash2 className="mr-2 h-4 w-4" />
+                                                            <Trash2 className="mr-2 size-4" />
                                                             Supprimer
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>

@@ -50,7 +50,7 @@ export function IssueDetailSidebar() {
         <div className="flex h-full flex-col">
             <div className="flex h-12 items-center justify-between border-b border-border px-4">
                 <h3 className="font-semibold">Détails</h3>
-                {isUpdating && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+                {isUpdating && <Loader2 className="size-4 animate-spin text-muted-foreground" />}
             </div>
 
             <div className="flex-1 space-y-4 overflow-y-auto p-4">
@@ -58,19 +58,19 @@ export function IssueDetailSidebar() {
                     <StatusPopover currentStatus={issue.status} statuses={statuses} onSelect={(slug) => performUpdateStatus(slug)} />
                 </SidebarField>
 
-                <SidebarField label="Priorité" icon={<Flag className="h-4 w-4" />}>
+                <SidebarField label="Priorité" icon={<Flag className="size-4" />}>
                     <PriorityPopover currentPriority={issue.priority} priorities={priorities} onSelect={(id) => performUpdatePriority(id)} />
                 </SidebarField>
 
-                <SidebarField label="Assigné" icon={<User className="h-4 w-4" />}>
+                <SidebarField label="Assigné" icon={<User className="size-4" />}>
                     <AssigneePopover currentAssignee={issue.assignee} teamMembers={teamMembers} onSelect={(id) => performUpdateAssignee(id)} />
                 </SidebarField>
 
-                <SidebarField label="Étiquettes" icon={<Tag className="h-4 w-4" />}>
+                <SidebarField label="Étiquettes" icon={<Tag className="size-4" />}>
                     <LabelsPopover currentLabels={issue.labels} allLabels={labels} onToggle={(id) => performToggleLabel(id)} />
                 </SidebarField>
 
-                <SidebarField label="Échéance" icon={<CalendarIcon className="h-4 w-4" />}>
+                <SidebarField label="Échéance" icon={<CalendarIcon className="size-4" />}>
                     <DueDatePopover currentDate={issue.dueDate} onSelect={(date) => performUpdateDueDate(date)} />
                 </SidebarField>
 
@@ -78,18 +78,18 @@ export function IssueDetailSidebar() {
 
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-sm">
-                        <Eye className="h-4 w-4 text-muted-foreground" />
+                        <Eye className="size-4 text-muted-foreground" />
                         <span className="text-muted-foreground">{issue.subscribersCount} abonnés</span>
                     </div>
                     <Button variant={issue.isSubscribed ? 'secondary' : 'outline'} size="sm" onClick={performToggleSubscription}>
                         {issue.isSubscribed ? (
                             <>
-                                <BellOff className="mr-2 h-4 w-4" />
+                                <BellOff className="mr-2 size-4" />
                                 Se désabonner
                             </>
                         ) : (
                             <>
-                                <Bell className="mr-2 h-4 w-4" />
+                                <Bell className="mr-2 size-4" />
                                 S'abonner
                             </>
                         )}
@@ -100,7 +100,7 @@ export function IssueDetailSidebar() {
 
                 <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-muted-foreground" />
+                        <Users className="size-4 text-muted-foreground" />
                         <span className="text-muted-foreground">Créé par</span>
                         <span className="font-medium">{issue.creator.name}</span>
                     </div>
@@ -166,7 +166,7 @@ function StatusPopover({
                                 >
                                     <StatusIcon iconType={status.icon_type} color={status.color} size={14} />
                                     <span className="ml-2">{status.name}</span>
-                                    {currentStatus.slug === status.slug && <Check className="ml-auto h-4 w-4" />}
+                                    {currentStatus.slug === status.slug && <Check className="ml-auto size-4" />}
                                 </CommandItem>
                             ))}
                         </CommandGroup>
@@ -212,7 +212,7 @@ function PriorityPopover({
                                 >
                                     <PriorityIcon iconType={priority.icon_type} size={14} />
                                     <span className="ml-2">{priority.name}</span>
-                                    {currentPriority.id === priority.id && <Check className="ml-auto h-4 w-4" />}
+                                    {currentPriority.id === priority.id && <Check className="ml-auto size-4" />}
                                 </CommandItem>
                             ))}
                         </CommandGroup>
@@ -265,9 +265,9 @@ function AssigneePopover({
                                     setOpen(false);
                                 }}
                             >
-                                <User className="mr-2 h-4 w-4 text-muted-foreground" />
+                                <User className="mr-2 size-4 text-muted-foreground" />
                                 Non assigné
-                                {!currentAssignee && <Check className="ml-auto h-4 w-4" />}
+                                {!currentAssignee && <Check className="ml-auto size-4" />}
                             </CommandItem>
                             {teamMembers.map((member) => (
                                 <CommandItem
@@ -283,7 +283,7 @@ function AssigneePopover({
                                         <AvatarFallback className="text-[10px]">{member.name.slice(0, 2).toUpperCase()}</AvatarFallback>
                                     </Avatar>
                                     {member.name}
-                                    {currentAssignee?.id === member.id && <Check className="ml-auto h-4 w-4" />}
+                                    {currentAssignee?.id === member.id && <Check className="ml-auto size-4" />}
                                 </CommandItem>
                             ))}
                         </CommandGroup>
@@ -332,7 +332,7 @@ function LabelsPopover({
                                 <CommandItem key={label.id} value={label.name} onSelect={() => onToggle(label.id)}>
                                     <div className="mr-2 h-3 w-3 rounded-full" style={{ backgroundColor: label.color }} />
                                     {label.name}
-                                    {currentLabelIds.has(label.id) && <Check className="ml-auto h-4 w-4" />}
+                                    {currentLabelIds.has(label.id) && <Check className="ml-auto size-4" />}
                                 </CommandItem>
                             ))}
                         </CommandGroup>

@@ -171,7 +171,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger asChild>
                                                                 <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-muted">
-                                                                    <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                                                                    <MoreHorizontal className="size-4 text-muted-foreground" />
                                                                 </Button>
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="end" className="border-border bg-popover">
@@ -180,7 +180,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                                         href={show.url(product.slug)}
                                                                         className="cursor-pointer text-foreground hover:bg-muted"
                                                                     >
-                                                                        <Eye className="mr-1 h-4 w-4" />
+                                                                        <Eye className="mr-1 size-4" />
                                                                         Voir détails
                                                                     </Link>
                                                                 </DropdownMenuItem>
@@ -200,7 +200,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                                         href={edit.url(product.slug)}
                                                                         className="cursor-pointer text-foreground hover:bg-muted"
                                                                     >
-                                                                        <EditIcon className="mr-1 h-4 w-4" />
+                                                                        <EditIcon className="mr-1 size-4" />
                                                                         Modifier
                                                                     </Link>
                                                                 </DropdownMenuItem>
@@ -209,7 +209,7 @@ export default function Index({ breadcrumbs: initialBreadcrumbs, products, searc
                                                                     className="cursor-pointer text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950"
                                                                     onClick={() => setDeleteProduct(product)}
                                                                 >
-                                                                    <Trash2 className="mr-1 h-4 w-4" />
+                                                                    <Trash2 className="mr-1 size-4" />
                                                                     Supprimer
                                                                 </DropdownMenuItem>
                                                             </DropdownMenuContent>

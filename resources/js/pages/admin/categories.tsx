@@ -60,16 +60,16 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                         {hasChildren ? (
                             <Button variant="ghost" size="sm" className="mr-2 h-6 w-6 p-0 hover:bg-muted" onClick={() => toggleExpanded(category.id)}>
                                 {isExpanded ? (
-                                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                                    <ChevronDown className="size-4 text-muted-foreground" />
                                 ) : (
-                                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                                    <ChevronRight className="size-4 text-muted-foreground" />
                                 )}
                             </Button>
                         ) : (
                             <div className="mr-2 w-6" />
                         )}
                         <div className="flex items-center gap-2">
-                            {hasChildren ? <FolderOpen className="h-4 w-4 text-primary" /> : <Folder className="h-4 w-4 text-muted-foreground" />}
+                            {hasChildren ? <FolderOpen className="size-4 text-primary" /> : <Folder className="size-4 text-muted-foreground" />}
                             <span className="text-foreground">{category.name}</span>
                         </div>
                     </div>
@@ -101,7 +101,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-muted">
-                                <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                                <MoreHorizontal className="size-4 text-muted-foreground" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="border-border bg-popover">
@@ -112,7 +112,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                                     setEditCategory(category);
                                 }}
                             >
-                                <Edit className="mr-2 h-4 w-4" />
+                                <Edit className="mr-2 size-4" />
                                 Modifier
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -122,7 +122,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                                     setOpenCategoryDialog(true);
                                 }}
                             >
-                                <Plus className="mr-2 h-4 w-4" />
+                                <Plus className="mr-2 size-4" />
                                 Ajouter sous-catégorie
                             </DropdownMenuItem>
                             <DropdownMenuSeparator className="bg-border" />
@@ -130,7 +130,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs }: { breadc
                                 className="cursor-pointer text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950"
                                 onClick={onCategoryDelete}
                             >
-                                <Trash2 className="mr-2 h-4 w-4" />
+                                <Trash2 className="mr-2 size-4" />
                                 Supprimer
                             </DropdownMenuItem>
                         </DropdownMenuContent>

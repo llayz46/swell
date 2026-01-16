@@ -60,24 +60,24 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button variant="ghost" size="xs" className="h-6 w-6 p-0">
-                                            <MoreHorizontal className="h-4 w-4" />
+                                            <MoreHorizontal className="size-4" />
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
                                         {!isReply && (
                                             <DropdownMenuItem onClick={() => setReplyingToCommentId(comment.id)}>
-                                                <Reply className="mr-2 h-4 w-4" />
+                                                <Reply className="mr-2 size-4" />
                                                 Répondre
                                             </DropdownMenuItem>
                                         )}
                                         {isOwner && (
                                             <>
                                                 <DropdownMenuItem onClick={() => setEditingCommentId(comment.id)}>
-                                                    <Pencil className="mr-2 h-4 w-4" />
+                                                    <Pencil className="mr-2 size-4" />
                                                     Modifier
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem className="text-destructive" onClick={() => performDeleteComment(comment.id)}>
-                                                    <Trash2 className="mr-2 h-4 w-4" />
+                                                    <Trash2 className="mr-2 size-4" />
                                                     Supprimer
                                                 </DropdownMenuItem>
                                             </>

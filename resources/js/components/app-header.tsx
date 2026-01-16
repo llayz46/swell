@@ -154,7 +154,7 @@ const NavigationMenuItemWithActive = ({ item }: { item: NavItem }) => {
     return (
         <NavigationMenuItem className="relative flex h-full items-center">
             <Link href={item.href} className={cn(navigationMenuTriggerStyle(), isActive && activeItemStyles, 'h-9 cursor-pointer px-3')}>
-                {item.icon && <Icon iconNode={item.icon} className="mr-2 h-4 w-4" />}
+                {item.icon && <Icon iconNode={item.icon} className="mr-2 size-4" />}
                 {item.title}
             </Link>
             {isActive && <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>}

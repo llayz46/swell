@@ -47,7 +47,7 @@ export default function Show() {
                         <div className="flex h-12 items-center gap-3 border-b border-border px-4">
                             <Button variant="ghost" size="sm" asChild>
                                 <Link href={issues.url(issue.team?.identifier ?? '')}>
-                                    <ArrowLeft className="mr-1 h-4 w-4" />
+                                    <ArrowLeft className="mr-1 size-4" />
                                     {issue.team?.name}
                                 </Link>
                             </Button>
@@ -76,7 +76,7 @@ export default function Show() {
                                     <Tabs defaultValue="comments">
                                         <TabsList>
                                             <TabsTrigger value="comments" className="gap-2">
-                                                <MessageSquare className="h-4 w-4" />
+                                                <MessageSquare className="size-4" />
                                                 Commentaires
                                                 {commentsCount > 0 && (
                                                     <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs">
@@ -85,7 +85,7 @@ export default function Show() {
                                                 )}
                                             </TabsTrigger>
                                             <TabsTrigger value="activity" className="gap-2">
-                                                <Activity className="h-4 w-4" />
+                                                <Activity className="size-4" />
                                                 Activité
                                                 {activitiesCount > 0 && (
                                                     <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs">

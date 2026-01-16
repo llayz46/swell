@@ -81,20 +81,20 @@ export default function Index() {
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" size="xs">
-                                        <MoreHorizontal className="h-4 w-4" />
+                                        <MoreHorizontal className="size-4" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="start">
                                     <DropdownMenuItem onClick={performDeleteAll}>
-                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        <Trash2 className="mr-2 size-4" />
                                         Supprimer toutes les notifications
                                     </DropdownMenuItem>
                                     <DropdownMenuItem onClick={performDeleteRead}>
-                                        <CheckCheck className="mr-2 h-4 w-4" />
+                                        <CheckCheck className="mr-2 size-4" />
                                         Supprimer les notifications lues
                                     </DropdownMenuItem>
                                     <DropdownMenuItem disabled>
-                                        <Archive className="mr-2 h-4 w-4" />
+                                        <Archive className="mr-2 size-4" />
                                         Supprimer pour les issues terminées
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
@@ -109,17 +109,17 @@ export default function Index() {
                                 disabled={unreadCount === 0}
                                 title="Tout marquer comme lu"
                             >
-                                <CheckCheck className="h-4 w-4" />
+                                <CheckCheck className="size-4" />
                             </Button>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" size="xs">
-                                        <SlidersHorizontal className="h-4 w-4" />
+                                        <SlidersHorizontal className="size-4" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-64">
                                     <DropdownMenuLabel className="flex items-center gap-2">
-                                        <ArrowUpDown className="h-4 w-4" />
+                                        <ArrowUpDown className="size-4" />
                                         Tri
                                     </DropdownMenuLabel>
                                     <DropdownMenuCheckboxItem

@@ -99,9 +99,9 @@ export function CommentEditor({
                     )}
                     <Button size="sm" onClick={handleSubmit} disabled={!content.trim() || isSubmitting}>
                         {isSubmitting ? (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            <Loader2 className="mr-2 size-4 animate-spin" />
                         ) : (
-                            <Send className="mr-2 h-4 w-4" />
+                            <Send className="mr-2 size-4" />
                         )}
                         {submitLabel}
                     </Button>

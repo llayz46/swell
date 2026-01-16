@@ -222,7 +222,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                                     className="flex-1"
                                     onClick={() => addToCart(product, selectedOptions as unknown as Record<number, number>)}
                                 >
-                                    <ShoppingCart className="mr-2 h-4 w-4" />
+                                    <ShoppingCart className="mr-2 size-4" />
                                     Ajouter au panier
                                 </Button>
                                 {swell.wishlist.enabled && (
@@ -252,15 +252,15 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                         <div className="space-y-4">
                             <div className="grid gap-3">
                                 <div className="flex items-center gap-3 text-sm">
-                                    <Truck className="h-4 w-4 text-muted-foreground" />
+                                    <Truck className="size-4 text-muted-foreground" />
                                     <span className="text-foreground">Livraison gratuite dès 50€</span>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm">
-                                    <Shield className="h-4 w-4 text-muted-foreground" />
+                                    <Shield className="size-4 text-muted-foreground" />
                                     <span className="text-foreground">Garantie 2 ans</span>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm">
-                                    <RotateCcw className="h-4 w-4 text-muted-foreground" />
+                                    <RotateCcw className="size-4 text-muted-foreground" />
                                     <span className="text-foreground">Retour gratuit sous 30 jours</span>
                                 </div>
                             </div>

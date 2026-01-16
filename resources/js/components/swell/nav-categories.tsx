@@ -106,7 +106,7 @@ export function NavCategories() {
                                         <details className="group w-full">
                                             <summary className="flex cursor-pointer list-none items-center justify-between rounded-lg p-3 font-medium transition-colors hover:bg-accent">
                                                 <span>{mainCategory.name}</span>
-                                                <ChevronRight className="h-4 w-4 transition-transform group-open:rotate-90" />
+                                                <ChevronRight className="size-4 transition-transform group-open:rotate-90" />
                                             </summary>
                                             <ul className="mt-1 space-y-1 pr-2 pb-2 pl-2">
                                                 {mainCategory.children.map((category) => (
