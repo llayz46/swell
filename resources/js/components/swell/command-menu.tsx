@@ -159,6 +159,8 @@ export function CommandMenu() {
         return value.toLowerCase().includes(cleanSearch) ? 1 : 0;
     }, []);
 
+    const shouldAlwaysRenderSeparator = !isCommandMode || !searchQuery;
+
     const CommandMenuItems = () => (
         <>
             <CommandGroup heading="Navigation">
@@ -182,11 +184,11 @@ export function CommandMenu() {
                 </CommandItem>
             </CommandGroup>
 
-            <CommandSeparator alwaysRender className="my-2" />
+            <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
             {isAuthenticated ? (
                 <CommandGroup heading="Compte">
-                    <CommandItem asChild className="cursor-pointer" value="paramètres settings configuration">
+                    <CommandItem asChild className="cursor-pointer" value="parametres paramètres settings configuration">
                         <Link prefetch href={profileEdit()}>
                             <Settings className="size-4" />
                             <span>Paramètres</span>
@@ -207,7 +209,7 @@ export function CommandMenu() {
                         </CommandItem>
                     )}
                     {swell.loyalty.enabled && (
-                        <CommandItem asChild className="cursor-pointer" value="fidélité loyalty points récompenses">
+                        <CommandItem asChild className="cursor-pointer" value="fidelite fidélité loyalty points recompenses récompenses">
                             <Link href={loyaltyIndex()}>
                                 <Gift className="size-4" />
                                 <span>Fidélité</span>
@@ -223,7 +225,7 @@ export function CommandMenu() {
                             <span>Connexion</span>
                         </Link>
                     </CommandItem>
-                    <CommandItem asChild className="cursor-pointer" value="inscription register créer compte">
+                    <CommandItem asChild className="cursor-pointer" value="inscription register creer créer compte">
                         <Link href={register()}>
                             <UserPlus className="size-4" />
                             <span>Inscription</span>
@@ -232,10 +234,10 @@ export function CommandMenu() {
                 </CommandGroup>
             )}
 
-            <CommandSeparator alwaysRender className="my-2" />
+            <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
             <CommandGroup heading="Préférences">
-                <CommandItem onSelect={() => handleOpenTheme()} className="cursor-pointer" value="thème theme apparence dark light">
+                <CommandItem onSelect={() => handleOpenTheme()} className="cursor-pointer" value="thème theme apparence appearance dark light">
                     {appearance === 'light' ? (
                         <Sun className="size-4" />
                     ) : appearance === 'dark' ? (
@@ -250,7 +252,7 @@ export function CommandMenu() {
 
             {isAdmin && (
                 <>
-                    <CommandSeparator alwaysRender className="my-2" />
+                    <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
                     <CommandGroup heading="Administration">
                         <CommandItem asChild className="cursor-pointer" value="admin dashboard administration panel">
@@ -265,10 +267,10 @@ export function CommandMenu() {
 
             {auth.isWorkspaceUser && (
                 <>
-                    <CommandSeparator alwaysRender className="my-2" />
+                    <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
                     <CommandGroup heading="Gestion de projet">
-                        <CommandItem asChild className="cursor-pointer" value="workspace projet gestion tâches">
+                        <CommandItem asChild className="cursor-pointer" value="workspace projet gestion taches tâches">
                             <Link href={overview()}>
                                 <LayoutGrid className="size-4" />
                                 <span>Workspace</span>
@@ -280,7 +282,7 @@ export function CommandMenu() {
 
             {isAuthenticated && (
                 <>
-                    <CommandSeparator alwaysRender className="my-2" />
+                    <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
                     <CommandGroup>
                         <CommandItem asChild className="w-full cursor-pointer" value="deconnexion déconnexion logout se déconnecter deconnecter">
@@ -442,7 +444,7 @@ export function CommandMenu() {
                                     </CommandGroup>
                                 )}
 
-                                {!isCommandMode && !loading && !isSearching && <CommandSeparator alwaysRender className="my-2" />}
+                                {!isCommandMode && !loading && !isSearching && <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />}
 
                                 {(isCommandMode || (!loading && !isSearching)) && <CommandMenuItems />}
                             </CommandList>
