@@ -1,6 +1,6 @@
 import { index as brandIndex } from '@/routes/brand';
 import { index as ordersIndex } from '@/routes/orders';
-import { index as productIndex } from '@/routes/product';
+import { index as productIndex, show as productShow } from '@/routes/product';
 import { edit as profileEdit } from '@/routes/profile';
 import { index as loyaltyIndex } from '@/routes/loyalty';
 import { index as wishlistIndex } from '@/routes/wishlist';
@@ -123,11 +123,6 @@ export function CommandMenu() {
         },
         [searchProducts],
     );
-
-    const handleSelectProduct = (slug: string) => {
-        setOpen(false);
-        router.visit(`/products/${slug}`);
-    };
 
     const handleThemeChange = (theme: Appearance) => {
         updateAppearance(theme);
@@ -387,64 +382,68 @@ export function CommandMenu() {
                                     >
                                         {products.map((product) => (
                                             <CommandItem
+                                                asChild
                                                 key={product.id}
                                                 value={`product-${product.id}`}
-                                                onSelect={() => handleSelectProduct(product.slug)}
                                                 className="flex cursor-pointer items-center gap-3 py-2"
                                             >
-                                                <Package className="size-4" />
-
-                                                <div className="flex-1 overflow-hidden">
-                                                    <p className="truncate">
-                                                        <span className="font-medium">{product.brand?.name}</span> - {product.name}
-                                                    </p>
-                                                </div>
-                                                <div className="text-right">
-                                                    {product.discount_price != null ? (
-                                                        <div className="flex items-baseline gap-2">
-                                                            <span className="text-sm font-medium">{product.discount_price.toFixed(2)} €</span>
-                                                            <span className="text-muted-foreground mb-auto text-xs line-through">
-                                                                {product.price.toFixed(2)} €
-                                                            </span>
-                                                        </div>
-                                                    ) : (
-                                                        <span className="text-sm font-medium">{product.price.toFixed(2)} €</span>
-                                                    )}
-                                                </div>
+                                                <Link href={productShow(product.slug)}>
+                                                    <Package className="size-4" />
+    
+                                                    <div className="flex-1 overflow-hidden">
+                                                        <p className="truncate">
+                                                            <span className="font-medium">{product.brand?.name}</span> - {product.name}
+                                                        </p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        {product.discount_price != null ? (
+                                                            <div className="flex items-baseline gap-2">
+                                                                <span className="text-sm font-medium">{product.discount_price.toFixed(2)} €</span>
+                                                                <span className="text-muted-foreground mb-auto text-xs line-through">
+                                                                    {product.price.toFixed(2)} €
+                                                                </span>
+                                                            </div>
+                                                        ) : (
+                                                            <span className="text-sm font-medium">{product.price.toFixed(2)} €</span>
+                                                        )}
+                                                    </div>
+                                                </Link>
                                             </CommandItem>
                                         ))}
-                                    </CommandGroup>
+   a                                 </CommandGroup>
                                 )}
 
                                 {!isCommandMode && !loading && !isSearching && defaultSearchProducts.length > 0 && (
                                     <CommandGroup heading="Suggestions" className="px-1">
                                         {defaultSearchProducts.map((product) => (
                                             <CommandItem
+                                                asChild
                                                 key={product.id}
                                                 value={`suggestion-${product.id}`}
-                                                onSelect={() => handleSelectProduct(product.slug)}
                                                 className="flex cursor-pointer items-center gap-3 py-2"
                                             >
-                                                <Package className="size-4" />
-
-                                                <div className="flex-1 overflow-hidden">
-                                                    <p className="truncate">
-                                                        <span className="font-medium">{product.brand?.name}</span> - {product.name}
-                                                    </p>
-                                                </div>
-
-                                                <div className="text-right">
-                                                    {product.discount_price != null ? (
-                                                        <div className="flex items-baseline gap-2">
-                                                            <span className="text-sm font-medium">{product.discount_price.toFixed(2)} €</span>
-                                                            <span className="text-muted-foreground mb-auto text-xs line-through">
-                                                                {product.price.toFixed(2)} €
-                                                            </span>
-                                                        </div>
-                                                    ) : (
-                                                        <span className="text-sm font-medium">{product.price.toFixed(2)} €</span>
-                                                    )}
-                                                </div>
+                                                <Link href={productShow(product.slug)}>
+                                                    <Package className="size-4" />
+    
+                                                    <div className="flex-1 overflow-hidden">
+                                                        <p className="truncate">
+                                                            <span className="font-medium">{product.brand?.name}</span> - {product.name}
+                                                        </p>
+                                                    </div>
+    
+                                                    <div className="text-right">
+                                                        {product.discount_price != null ? (
+                                                            <div className="flex items-baseline gap-2">
+                                                                <span className="text-sm font-medium">{product.discount_price.toFixed(2)} €</span>
+                                                                <span className="text-muted-foreground mb-auto text-xs line-through">
+                                                                    {product.price.toFixed(2)} €
+                                                                </span>
+                                                            </div>
+                                                        ) : (
+                                                            <span className="text-sm font-medium">{product.price.toFixed(2)} €</span>
+                                                        )}
+                                                    </div>
+                                                </Link>
                                             </CommandItem>
                                         ))}
                                     </CommandGroup>
