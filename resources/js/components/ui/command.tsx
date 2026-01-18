@@ -110,21 +110,50 @@ function CommandEmpty({
   )
 }
 
-function CommandGroup({
-  className,
-  ...props
-}: React.ComponentProps<typeof CommandPrimitive.Group>) {
-  return (
-    <CommandPrimitive.Group
-      data-slot="command-group"
-      className={cn(
-        "text-foreground [&_[cmdk-group-heading]]:text-muted-foreground overflow-hidden p-1 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium",
-        className
-      )}
-      {...props}
-    />
-  )
-}
+type CommandGroupProps =
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Group> & {
+    headingAction?: React.ReactNode
+    }
+    
+    const CommandGroup = React.forwardRef<
+      React.ElementRef<typeof CommandPrimitive.Group>,
+      CommandGroupProps
+    >(({ heading, headingAction, children, className, ...props }, ref) => {
+      return (
+        <CommandPrimitive.Group
+          ref={ref}
+          className={cn("overflow-hidden", className)}
+          {...props}
+        >
+          {heading && (
+            <div className="flex items-center justify-between px-2 py-1.5 text-sm font-medium text-muted-foreground">
+              <span>{heading}</span>
+              {headingAction && <div>{headingAction}</div>}
+            </div>
+          )}
+    
+          <div className="px-1">
+            {children}
+          </div>
+        </CommandPrimitive.Group>
+      )
+    })
+  
+// function CommandGroup({
+//   className,
+//   ...props
+// }: React.ComponentProps<typeof CommandPrimitive.Group>) {
+//   return (
+//     <CommandPrimitive.Group
+//       data-slot="command-group"
+//       className={cn(
+//         "text-foreground [&_[cmdk-group-heading]]:text-muted-foreground overflow-hidden p-1 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium",
+//         className
+//       )}
+//       {...props}
+//     />
+//   )
+// }
 
 function CommandSeparator({
   className,

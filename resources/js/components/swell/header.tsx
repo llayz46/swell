@@ -1,39 +1,14 @@
-import { index } from '@/actions/App/Http/Controllers/ProductController';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { CartSheet } from '@/components/swell/cart-sheet';
+import { CommandMenu } from '@/components/swell/command-menu';
 import { buttonVariants } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { UserDropdown } from '@/components/user-dropdown';
 import type { SharedData } from '@/types';
-import { Link, router, usePage } from '@inertiajs/react';
-import debounce from 'lodash.debounce';
-import { Heart, SearchIcon, User } from 'lucide-react';
-import { SetStateAction, useMemo, useState } from 'react';
+import { Link, usePage } from '@inertiajs/react';
+import { Heart, User } from 'lucide-react';
 
 export function Header() {
     const { auth, swell } = usePage<SharedData>().props;
-
-    const [search, setSearch] = useState<string>(() => new URLSearchParams(window.location.search).get('search') || '');
-
-    const debouncedSearch = useMemo(
-        () =>
-            debounce((value) => {
-                router.get(
-                    index.url({ query: { search: value } }),
-                    {},
-                    {
-                        preserveState: true,
-                        replace: true,
-                    },
-                );
-            }, 300),
-        [],
-    );
-
-    const handleChange = (e: { target: { value: SetStateAction<string> } }) => {
-        setSearch(e.target.value);
-        debouncedSearch(e.target.value);
-    };
 
     return (
         <header className="layout-container flex items-center justify-between gap-6 border-b py-6 lg:gap-12">
@@ -49,18 +24,8 @@ export function Header() {
                     </div>
                 </Link>
 
-                <div className="w-full *:not-first:mt-2">
-                    <form className="relative w-full" onSubmit={(e) => e.preventDefault()}>
-                        <Input
-                            className="peer ps-9 sm:min-w-60 sm:pe-9"
-                            placeholder="Rechercher un produit..."
-                            value={search}
-                            onChange={handleChange}
-                        />
-                        <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
-                            <SearchIcon size={16} />
-                        </div>
-                    </form>
+                <div className="w-full">
+                    <CommandMenu />
                 </div>
             </div>
 
