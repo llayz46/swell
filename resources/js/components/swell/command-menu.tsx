@@ -5,6 +5,7 @@ import { edit as profileEdit } from '@/routes/profile';
 import { index as loyaltyIndex } from '@/routes/loyalty';
 import { index as wishlistIndex } from '@/routes/wishlist';
 import { home, login, register, logout } from '@/routes';
+import { overview } from '@/routes/workspace/my-issues';
 import { dashboard } from '@/routes/admin';
 import { index as indexProduct } from '@/routes/product';
 import { Button } from '@/components/ui/button';
@@ -317,7 +318,6 @@ export function CommandMenu() {
 
                                         <CommandSeparator className="my-2" />
 
-                                        {/* Préférences */}
                                         <CommandGroup heading="Préférences">
                                             <CommandItem onSelect={() => setCurrentPage('theme')} className="cursor-pointer">
                                                 {appearance === 'light' ? (
@@ -341,6 +341,21 @@ export function CommandMenu() {
                                                         <Link href={dashboard()}>
                                                             <ShieldCheck className="size-4" />
                                                             <span>Admin Dashboard</span>
+                                                        </Link>
+                                                    </CommandItem>
+                                                </CommandGroup>
+                                            </>
+                                        )}
+                                        
+                                        {auth.isWorkspaceUser && (
+                                            <>
+                                                <CommandSeparator className="my-2" />
+                                                
+                                                <CommandGroup heading="Gestion de projet">
+                                                    <CommandItem asChild className="cursor-pointer">
+                                                        <Link href={overview()}>
+                                                            <ShieldCheck className="size-4" />
+                                                            <span>Workspace</span>
                                                         </Link>
                                                     </CommandItem>
                                                 </CommandGroup>
