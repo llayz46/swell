@@ -399,7 +399,6 @@ export function CommandMenu() {
                                                 </Link>
                                             </CommandItem>
                                         ))}
-                                        a{' '}
                                     </CommandGroup>
                                 )}
 
