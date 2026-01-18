@@ -1,23 +1,22 @@
-import { index as brandIndex } from '@/routes/brand';
-import { index as ordersIndex } from '@/routes/orders';
-import { index as productIndex, show as productShow } from '@/routes/product';
-import { edit as profileEdit } from '@/routes/profile';
-import { index as loyaltyIndex } from '@/routes/loyalty';
-import { index as wishlistIndex } from '@/routes/wishlist';
-import { home, login, register, logout } from '@/routes';
-import { overview } from '@/routes/workspace/my-issues';
-import { dashboard } from '@/routes/admin';
-import { index as indexProduct } from '@/routes/product';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
-import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Kbd } from '@/components/ui/kbd';
 import { Spinner } from '@/components/ui/spinner';
 import { Appearance, useAppearance } from '@/hooks/use-appearance';
 import { cn } from '@/lib/utils';
+import { home, login, logout, register } from '@/routes';
+import { dashboard } from '@/routes/admin';
+import { index as brandIndex } from '@/routes/brand';
+import { index as loyaltyIndex } from '@/routes/loyalty';
+import { index as ordersIndex } from '@/routes/orders';
+import { index as indexProduct, index as productIndex, show as productShow } from '@/routes/product';
+import { edit as profileEdit } from '@/routes/profile';
+import { index as wishlistIndex } from '@/routes/wishlist';
+import { overview } from '@/routes/workspace/my-issues';
 import { Product, SharedData } from '@/types';
-import { Link, router, usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import debounce from 'lodash.debounce';
 import {
     ArrowLeft,
@@ -137,16 +136,16 @@ export function CommandMenu() {
             setCurrentPage('home');
         }
     };
-    
+
     const handleOpenTheme = async () => {
-        const queryCommandMode = query.startsWith('>')
+        const queryCommandMode = query.startsWith('>');
 
-        await setQuery('')
+        await setQuery('');
 
-        setCurrentPage('theme')
-        
-        if (queryCommandMode) setQuery('>')
-    }
+        setCurrentPage('theme');
+
+        if (queryCommandMode) setQuery('>');
+    };
 
     const customFilter = useCallback((value: string, search: string) => {
         const cleanSearch = search.startsWith('>') ? search.slice(1).trim().toLowerCase() : search.toLowerCase();
@@ -298,7 +297,7 @@ export function CommandMenu() {
                 <Button
                     variant="outline"
                     className={cn(
-                        'text-foreground dark:bg-card hover:bg-muted/50 relative h-8 min-w-full justify-start pl-3 font-normal shadow-none sm:pr-12 md:w-48 lg:w-56 xl:w-64',
+                        'relative h-8 min-w-full justify-start pl-3 font-normal text-foreground shadow-none hover:bg-muted/50 sm:pr-12 md:w-48 lg:w-56 xl:w-64 dark:bg-card',
                     )}
                 >
                     <span className="inline-flex text-muted-foreground">Rechercher un produit, une page...</span>
@@ -311,28 +310,21 @@ export function CommandMenu() {
             <DialogContent showCloseButton={false} className="border-none bg-transparent p-0">
                 <DialogTitle className="sr-only">Rechercher un produit, une page...</DialogTitle>
                 <DialogDescription className="sr-only">Rechercher un produit, une page...</DialogDescription>
-                
+
                 <Command
                     filter={isCommandMode ? customFilter : () => 1}
-                    className="bg-background shadow-dialog rounded-2xl py-2 **:data-[slot=command-input-wrapper]:border-input **:data-[slot=command-input-wrapper]:bg-input/50 **:data-[slot=command-input-wrapper]:mb-0 **:data-[slot=command-input-wrapper]:h-9! **:data-[slot=command-input-wrapper]:rounded-md **:data-[slot=command-input-wrapper]:border **:data-[slot=command-input]:py-0"
+                    className="shadow-dialog rounded-2xl bg-background py-2 **:data-[slot=command-input]:py-0 **:data-[slot=command-input-wrapper]:mb-0 **:data-[slot=command-input-wrapper]:h-9! **:data-[slot=command-input-wrapper]:rounded-md **:data-[slot=command-input-wrapper]:border **:data-[slot=command-input-wrapper]:border-input **:data-[slot=command-input-wrapper]:bg-input/50"
                 >
                     {currentPage === 'home' && (
                         <>
                             <div className="px-2">
-                                <CommandInput
-                                    placeholder="Rechercher un produit..."
-                                    value={query}
-                                    onValueChange={handleSearch}
-                                />
+                                <CommandInput placeholder="Rechercher un produit..." value={query} onValueChange={handleSearch} />
                             </div>
 
                             <div className="flex items-center gap-2 border-b px-3 py-1.5">
                                 <Badge
                                     variant={isCommandMode ? 'default' : 'secondary'}
-                                    className={cn(
-                                        'cursor-pointer gap-1 text-xs transition-colors',
-                                        isCommandMode && 'bg-primary',
-                                    )}
+                                    className={cn('cursor-pointer gap-1 text-xs transition-colors', isCommandMode && 'bg-primary')}
                                     onClick={() => setQuery(isCommandMode ? '' : '>')}
                                 >
                                     <Terminal className="size-3" />
@@ -340,16 +332,13 @@ export function CommandMenu() {
                                 </Badge>
                                 <Badge
                                     variant={!isCommandMode ? 'default' : 'secondary'}
-                                    className={cn(
-                                        'cursor-pointer gap-1 text-xs transition-colors',
-                                        !isCommandMode && 'bg-primary',
-                                    )}
+                                    className={cn('cursor-pointer gap-1 text-xs transition-colors', !isCommandMode && 'bg-primary')}
                                     onClick={() => setQuery('')}
                                 >
                                     <Search className="size-3" />
                                     Produits
                                 </Badge>
-                                <span className="text-muted-foreground ml-auto text-xs">
+                                <span className="ml-auto text-xs text-muted-foreground">
                                     {isCommandMode ? 'Tapez pour filtrer' : 'Tapez pour chercher'}
                                 </span>
                             </div>
@@ -389,7 +378,7 @@ export function CommandMenu() {
                                             >
                                                 <Link href={productShow(product.slug)}>
                                                     <Package className="size-4" />
-    
+
                                                     <div className="flex-1 overflow-hidden">
                                                         <p className="truncate">
                                                             <span className="font-medium">{product.brand?.name}</span> - {product.name}
@@ -399,7 +388,7 @@ export function CommandMenu() {
                                                         {product.discount_price != null ? (
                                                             <div className="flex items-baseline gap-2">
                                                                 <span className="text-sm font-medium">{product.discount_price.toFixed(2)} €</span>
-                                                                <span className="text-muted-foreground mb-auto text-xs line-through">
+                                                                <span className="mb-auto text-xs text-muted-foreground line-through">
                                                                     {product.price.toFixed(2)} €
                                                                 </span>
                                                             </div>
@@ -410,7 +399,8 @@ export function CommandMenu() {
                                                 </Link>
                                             </CommandItem>
                                         ))}
-   a                                 </CommandGroup>
+                                        a{' '}
+                                    </CommandGroup>
                                 )}
 
                                 {!isCommandMode && !loading && !isSearching && defaultSearchProducts.length > 0 && (
@@ -424,18 +414,18 @@ export function CommandMenu() {
                                             >
                                                 <Link href={productShow(product.slug)}>
                                                     <Package className="size-4" />
-    
+
                                                     <div className="flex-1 overflow-hidden">
                                                         <p className="truncate">
                                                             <span className="font-medium">{product.brand?.name}</span> - {product.name}
                                                         </p>
                                                     </div>
-    
+
                                                     <div className="text-right">
                                                         {product.discount_price != null ? (
                                                             <div className="flex items-baseline gap-2">
                                                                 <span className="text-sm font-medium">{product.discount_price.toFixed(2)} €</span>
-                                                                <span className="text-muted-foreground mb-auto text-xs line-through">
+                                                                <span className="mb-auto text-xs text-muted-foreground line-through">
                                                                     {product.price.toFixed(2)} €
                                                                 </span>
                                                             </div>
@@ -449,7 +439,9 @@ export function CommandMenu() {
                                     </CommandGroup>
                                 )}
 
-                                {!isCommandMode && !loading && !isSearching && <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />}
+                                {!isCommandMode && !loading && !isSearching && (
+                                    <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
+                                )}
 
                                 {(isCommandMode || (!loading && !isSearching)) && <CommandMenuItems />}
                             </CommandList>
@@ -463,14 +455,14 @@ export function CommandMenu() {
                                     onClick={() => {
                                         setCurrentPage('home');
                                     }}
-                                    className="hover:bg-muted rounded-md p-1 transition-colors"
+                                    className="rounded-md p-1 transition-colors hover:bg-muted"
                                 >
                                     <ArrowLeft className="size-4" />
                                 </button>
                                 <span className="text-sm font-medium">Choisir un thème</span>
                             </div>
 
-                            <CommandList className="mt-2 no-scrollbar">
+                            <CommandList className="no-scrollbar mt-2">
                                 <CommandGroup className="px-1">
                                     {themeItems.map(({ value, icon: Icon, label }) => (
                                         <CommandItem key={value} onSelect={() => handleThemeChange(value)} className="cursor-pointer">
