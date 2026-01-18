@@ -297,10 +297,10 @@ export function CommandMenu() {
                 <Button
                     variant="outline"
                     className={cn(
-                        'relative h-8 min-w-full justify-start pl-3 font-normal text-foreground shadow-none hover:bg-muted/50 sm:pr-12 md:w-48 lg:w-56 xl:w-64 dark:bg-card',
+                        'relative h-8 min-w-full justify-start pl-3 font-normal text-foreground shadow-none hover:bg-muted/50 sm:pr-12 w-36 md:w-48 lg:w-56 xl:w-64 dark:bg-card',
                     )}
                 >
-                    <span className="inline-flex text-muted-foreground">Rechercher un produit, une page...</span>
+                    <span className="inline-flex text-muted-foreground truncate">Rechercher un produit, une page...</span>
                     <div className="absolute top-1.5 right-1.5 hidden gap-1 group-has-data-[slot=designer]/body:hidden sm:flex">
                         <Kbd>⌘K</Kbd>
                     </div>
