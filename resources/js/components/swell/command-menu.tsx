@@ -303,7 +303,7 @@ export function CommandMenu() {
 
             <DialogContent showCloseButton={false} className="border-none bg-transparent p-0">
                 <Command
-                    filter={customFilter}
+                    filter={isCommandMode ? customFilter : () => 1}
                     className="bg-background shadow-dialog rounded-2xl p-2 **:data-[slot=command-input-wrapper]:border-input **:data-[slot=command-input-wrapper]:bg-input/50 **:data-[slot=command-input-wrapper]:mb-0 **:data-[slot=command-input-wrapper]:h-9! **:data-[slot=command-input-wrapper]:rounded-md **:data-[slot=command-input-wrapper]:border **:data-[slot=command-input]:py-0"
                 >
                     {currentPage === 'home' && (
