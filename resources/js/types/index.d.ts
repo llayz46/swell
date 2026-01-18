@@ -64,10 +64,11 @@ export interface SharedData {
     };
     auth: Auth;
     sidebarOpen: boolean;
-    [key: string]: unknown;
+    defaultSearchProducts: Product[];
     categories: Category[];
     cart: Cart;
     infoBanner: BannerItem[];
+    [key: string]: unknown;
 }
 
 export interface User {

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Factories\CartFactory;
 use App\Http\Resources\CartResource;
+use App\Models\Product;
 use App\Modules\Banner\Models\BannerMessage;
 use App\Modules\Workspace\Services\WorkspaceService;
 use Illuminate\Http\Request;
@@ -59,6 +60,21 @@ class SharedPropsService
                 : [],
         ];
     }
+    
+    /**
+     * Get cached most sold products.
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function getDefaultSearchProducts()
+    {
+        return Cache::remember('default-search-products', 3600, fn () => Product::with('brand:id,name')
+            ->popular()
+            ->take(5)
+            ->get()
+            ->toResourceCollection()
+        );
+    }
 
     /**
      * Get cached categories.
@@ -93,9 +109,7 @@ class SharedPropsService
      */
     public function getInfoBanner()
     {
-        if (! config('swell.banner.enabled', true)) {
-            return [];
-        }
+        if (! config('swell.banner.enabled', true)) return [];
 
         return Cache::rememberForever('infoBanner', function () {
             return BannerMessage::orderBy('order')->get();
@@ -109,9 +123,7 @@ class SharedPropsService
      */
     public function getWorkspaceMembers(Request $request)
     {
-        if (! $request->routeIs('workspace.*')) {
-            return null;
-        }
+        if (! $request->routeIs('workspace.*')) return null;
 
         return $this->workspaceService->getWorkspaceMembers();
     }
@@ -123,9 +135,7 @@ class SharedPropsService
      */
     public function getInvitableTeams(Request $request)
     {
-        if (! $request->routeIs('workspace.*')) {
-            return null;
-        }
+        if (! $request->routeIs('workspace.*')) return null;
 
         return $this->workspaceService->getInvitableTeams($request->user());
     }
@@ -137,6 +147,7 @@ class SharedPropsService
     {
         Cache::forget('swell_config');
         Cache::forget('infoBanner');
+        Cache::forget('default-search-products');
         $this->categoryCacheService->clearCache();
         $this->workspaceService->clearWorkspaceMembersCache();
     }

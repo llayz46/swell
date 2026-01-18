@@ -1,28 +1,21 @@
 import { index as indexProduct } from "@/routes/product";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
 import { Kbd } from '@/components/ui/kbd';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { Link, router } from '@inertiajs/react';
+import { Product, SharedData } from "@/types";
+import { Link, router, usePage } from '@inertiajs/react';
 import { cn } from "@/lib/utils"
 import debounce from 'lodash.debounce';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-interface SearchProduct {
-    id: number;
-    name: string;
-    slug: string;
-    price: number;
-    discount_price: number | null;
-    image: string | null;
-    brand: string | null;
-}
-
 export function CommandMenu() {
-    const [_, setOpen] = useState<boolean>(false);
+    const { defaultSearchProducts } = usePage<SharedData>().props;
+    
+    const [open, setOpen] = useState<boolean>(false);
     const [query, setQuery] = useState('');
-    const [products, setProducts] = useState<SearchProduct[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -127,7 +120,32 @@ export function CommandMenu() {
                             <div className="text-muted-foreground py-6 text-center text-sm">
                                 Aucun produit trouvé.
                             </div>
-                        )}          
+                        )}
+                      
+                        <CommandGroup heading="Produits">
+                            {defaultSearchProducts.map(product => (
+                                <CommandItem
+                                    key={product.id}
+                                    value={product.name}
+                                    onSelect={() => handleSelectProduct(product.slug)}
+                                    className="flex cursor-pointer items-center gap-3 py-2"
+                                >
+                                    <div className="flex-1 overflow-hidden">
+                                        <p className="truncate font-medium">{product.brand?.name} - {product.name}</p>
+                                    </div>
+                                    <div className="text-right">
+                                        {product.discount_price != null ? (
+                                            <div className="flex items-baseline gap-2">
+                                                <span className="text-sm font-medium">{product.discount_price.toFixed(2)} €</span>
+                                                <span className="mb-auto text-xs text-muted-foreground line-through">{product.price.toFixed(2)} €</span>
+                                            </div>
+                                        ) : (
+                                            <span className="text-sm font-medium">{product.price.toFixed(2)} €</span>
+                                        )}
+                                    </div>
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>  
                         
                         {!loading && products.length > 0 && (
                             <CommandGroup
@@ -167,8 +185,6 @@ export function CommandMenu() {
                                 ))}
                             </CommandGroup>
                         )}
-                        
-                        <CommandSeparator />
                         
                         <CommandGroup heading="Settings">
                             <CommandItem>Profile</CommandItem>

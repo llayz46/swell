@@ -44,6 +44,7 @@ class HandleInertiaRequests extends Middleware
             'swell' => fn () => $this->sharedPropsService->getSwellConfig(),
             'auth' => fn () => $this->sharedPropsService->getAuthData($request),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'defaultSearchProducts' => fn () => $this->sharedPropsService->getDefaultSearchProducts(),
             'categories' => fn () => $this->sharedPropsService->getCategories(),
             'cart' => fn () => $this->sharedPropsService->getCart(),
         ];
