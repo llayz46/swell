@@ -163,7 +163,7 @@ export function CommandMenu() {
 
     const CommandMenuItems = () => (
         <>
-            <CommandGroup heading="Navigation">
+            <CommandGroup heading="Navigation" className="px-1">
                 <CommandItem asChild className="cursor-pointer" value="accueil home">
                     <Link prefetch href={home()}>
                         <Home className="size-4" />
@@ -187,7 +187,7 @@ export function CommandMenu() {
             <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
             {isAuthenticated ? (
-                <CommandGroup heading="Compte">
+                <CommandGroup heading="Compte" className="px-1">
                     <CommandItem asChild className="cursor-pointer" value="parametres paramètres settings configuration">
                         <Link prefetch href={profileEdit()}>
                             <Settings className="size-4" />
@@ -218,7 +218,7 @@ export function CommandMenu() {
                     )}
                 </CommandGroup>
             ) : (
-                <CommandGroup heading="Compte">
+                <CommandGroup heading="Compte" className="px-1">
                     <CommandItem asChild className="cursor-pointer" value="connexion login se connecter">
                         <Link href={login()}>
                             <LogIn className="size-4" />
@@ -236,7 +236,7 @@ export function CommandMenu() {
 
             <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
-            <CommandGroup heading="Préférences">
+            <CommandGroup heading="Préférences" className="px-1">
                 <CommandItem onSelect={() => handleOpenTheme()} className="cursor-pointer" value="thème theme apparence appearance dark light">
                     {appearance === 'light' ? (
                         <Sun className="size-4" />
@@ -254,7 +254,7 @@ export function CommandMenu() {
                 <>
                     <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
-                    <CommandGroup heading="Administration">
+                    <CommandGroup heading="Administration" className="px-1">
                         <CommandItem asChild className="cursor-pointer" value="admin dashboard administration panel">
                             <Link href={dashboard()}>
                                 <ShieldCheck className="size-4" />
@@ -269,7 +269,7 @@ export function CommandMenu() {
                 <>
                     <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
-                    <CommandGroup heading="Gestion de projet">
+                    <CommandGroup heading="Gestion de projet" className="px-1">
                         <CommandItem asChild className="cursor-pointer" value="workspace projet gestion taches tâches">
                             <Link href={overview()}>
                                 <LayoutGrid className="size-4" />
@@ -284,7 +284,7 @@ export function CommandMenu() {
                 <>
                     <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
-                    <CommandGroup>
+                    <CommandGroup className="px-1">
                         <CommandItem asChild className="w-full cursor-pointer" value="deconnexion déconnexion logout se déconnecter deconnecter">
                             <Link href={logout()}>
                                 <LogOut className="size-4" />
@@ -306,7 +306,7 @@ export function CommandMenu() {
                         'text-foreground dark:bg-card hover:bg-muted/50 relative h-8 min-w-full justify-start pl-3 font-normal shadow-none sm:pr-12 md:w-48 lg:w-56 xl:w-64',
                     )}
                 >
-                    <span className="inline-flex">Rechercher...</span>
+                    <span className="inline-flex">Rechercher un produit, une page...</span>
                     <div className="absolute top-1.5 right-1.5 hidden gap-1 group-has-data-[slot=designer]/body:hidden sm:flex">
                         <Kbd>⌘K</Kbd>
                     </div>
@@ -316,15 +316,17 @@ export function CommandMenu() {
             <DialogContent showCloseButton={false} className="border-none bg-transparent p-0">
                 <Command
                     filter={isCommandMode ? customFilter : () => 1}
-                    className="bg-background shadow-dialog rounded-2xl p-2 **:data-[slot=command-input-wrapper]:border-input **:data-[slot=command-input-wrapper]:bg-input/50 **:data-[slot=command-input-wrapper]:mb-0 **:data-[slot=command-input-wrapper]:h-9! **:data-[slot=command-input-wrapper]:rounded-md **:data-[slot=command-input-wrapper]:border **:data-[slot=command-input]:py-0"
+                    className="bg-background shadow-dialog rounded-2xl py-2 **:data-[slot=command-input-wrapper]:border-input **:data-[slot=command-input-wrapper]:bg-input/50 **:data-[slot=command-input-wrapper]:mb-0 **:data-[slot=command-input-wrapper]:h-9! **:data-[slot=command-input-wrapper]:rounded-md **:data-[slot=command-input-wrapper]:border **:data-[slot=command-input]:py-0"
                 >
                     {currentPage === 'home' && (
                         <>
-                            <CommandInput
-                                placeholder="Rechercher un produit..."
-                                value={query}
-                                onValueChange={handleSearch}
-                            />
+                            <div className="px-2">
+                                <CommandInput
+                                    placeholder="Rechercher un produit..."
+                                    value={query}
+                                    onValueChange={handleSearch}
+                                />
+                            </div>
 
                             <div className="flex items-center gap-2 border-b px-3 py-1.5">
                                 <Badge
@@ -368,6 +370,7 @@ export function CommandMenu() {
                                 {!isCommandMode && !loading && products.length > 0 && (
                                     <CommandGroup
                                         heading="Produits"
+                                        className="px-1"
                                         headingAction={
                                             <Link
                                                 href={indexProduct.url({
@@ -411,7 +414,7 @@ export function CommandMenu() {
                                 )}
 
                                 {!isCommandMode && !loading && !isSearching && defaultSearchProducts.length > 0 && (
-                                    <CommandGroup heading="Suggestions">
+                                    <CommandGroup heading="Suggestions" className="px-1">
                                         {defaultSearchProducts.map((product) => (
                                             <CommandItem
                                                 key={product.id}
@@ -466,7 +469,7 @@ export function CommandMenu() {
                             </div>
 
                             <CommandList className="mt-2 no-scrollbar">
-                                <CommandGroup>
+                                <CommandGroup className="px-1">
                                     {themeItems.map(({ value, icon: Icon, label }) => (
                                         <CommandItem key={value} onSelect={() => handleThemeChange(value)} className="cursor-pointer">
                                             <Icon className="size-4" />
