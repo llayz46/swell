@@ -142,6 +142,16 @@ export function CommandMenu() {
             setCurrentPage('home');
         }
     };
+    
+    const handleOpenTheme = async () => {
+        const queryCommandMode = query.startsWith('>')
+
+        await setQuery('')
+
+        setCurrentPage('theme')
+        
+        if (queryCommandMode) setQuery('>')
+    }
 
     const customFilter = useCallback((value: string, search: string) => {
         const cleanSearch = search.startsWith('>') ? search.slice(1).trim().toLowerCase() : search.toLowerCase();
@@ -225,7 +235,7 @@ export function CommandMenu() {
             <CommandSeparator alwaysRender className="my-2" />
 
             <CommandGroup heading="Préférences">
-                <CommandItem onSelect={() => setCurrentPage('theme')} className="cursor-pointer" value="thème theme apparence dark light">
+                <CommandItem onSelect={() => handleOpenTheme()} className="cursor-pointer" value="thème theme apparence dark light">
                     {appearance === 'light' ? (
                         <Sun className="size-4" />
                     ) : appearance === 'dark' ? (
@@ -273,7 +283,7 @@ export function CommandMenu() {
                     <CommandSeparator alwaysRender className="my-2" />
 
                     <CommandGroup>
-                        <CommandItem asChild className="w-full cursor-pointer" value="déconnexion logout se déconnecter">
+                        <CommandItem asChild className="w-full cursor-pointer" value="deconnexion déconnexion logout se déconnecter deconnecter">
                             <Link href={logout()}>
                                 <LogOut className="size-4" />
                                 <span>Déconnexion</span>
@@ -443,7 +453,9 @@ export function CommandMenu() {
                         <>
                             <div className="flex items-center gap-2 border-b px-3 py-2">
                                 <button
-                                    onClick={() => setCurrentPage('home')}
+                                    onClick={() => {
+                                        setCurrentPage('home');
+                                    }}
                                     className="hover:bg-muted rounded-md p-1 transition-colors"
                                 >
                                     <ArrowLeft className="size-4" />
