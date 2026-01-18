@@ -1,12 +1,12 @@
 import { index, show } from '@/actions/App/Http/Controllers/ProductController';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { useCartContext } from '@/contexts/cart-context';
 import { useWishlistContext } from '@/contexts/wishlist-context';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type Product } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { Deferred, Head, Link } from '@inertiajs/react';
 import { LoaderCircle, Plus, ShoppingCart, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -85,16 +85,18 @@ export default function Wishlist({ items }: { items: Product[] }) {
 }
 
 function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; onRemove: () => void; onAddToCart: () => void }) {
-    const getStorageUrl = useStorageUrl();
-
     return (
         <div className="flex items-center gap-4 rounded-md border p-3">
             <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm bg-neutral-700">
-                <img
-                    src={product.featured_image && getStorageUrl(product.featured_image.url)}
-                    alt={product.featured_image ? product.featured_image.alt_text : product.name}
-                    className="size-full object-cover"
-                />
+                {product.featured_image?.url ? (
+                    <img
+                        src={product.featured_image.url}
+                        alt={product.featured_image.alt_text}
+                        className="size-full object-cover"
+                    />
+                ) : (
+                    <PlaceholderImage className="size-full" />
+                )}
             </div>
 
             <div className="flex-grow">

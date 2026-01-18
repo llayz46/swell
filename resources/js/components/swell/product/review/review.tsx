@@ -1,6 +1,5 @@
 import { useInitials } from '@/hooks/use-initials';
 import type { Review as ReviewType } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { Star } from 'lucide-react';
@@ -14,7 +13,6 @@ export function Review({ review }: { review: ReviewType }) {
     const shouldTruncate = review.comment.length > 300;
 
     const getInitials = useInitials();
-    const getStorageUrl = useStorageUrl();
 
     const toggleCommentExpansion = (reviewId: number) => {
         setExpandedComments((prev) => {
@@ -34,7 +32,7 @@ export function Review({ review }: { review: ReviewType }) {
                 <div className="space-y-4">
                     <div className="flex items-center gap-4">
                         <Avatar className="h-10 w-10">
-                            <AvatarImage src={getStorageUrl(review.user?.avatar_url)} alt="User avatar" />
+                            <AvatarImage src={review.user?.avatar_url} alt="User avatar" />
                             <AvatarFallback className="bg-muted text-muted-foreground">{getInitials(review.user?.name || '')}</AvatarFallback>
                         </Avatar>
                         <div>

@@ -2,10 +2,10 @@ import { show } from '@/actions/App/Http/Controllers/ProductController';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import { useWishlist } from '@/hooks/use-wishlist';
 import { cn } from '@/lib/utils';
 import { Product, type SharedData } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { Link, usePage } from '@inertiajs/react';
 import { Heart, Star } from 'lucide-react';
 import { useState } from 'react';
@@ -15,7 +15,6 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
     const [, setIsClicked] = useState(false);
     const { addItem } = useWishlist();
     const { swell } = usePage<SharedData>().props;
-    const getStorageUrl = useStorageUrl();
 
     const handleImageClick = () => {
         if (!onQuickView) return;
@@ -36,13 +35,17 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
-                <img
-                    onClick={handleImageClick}
-                    src={getStorageUrl(product.featured_image?.url)}
-                    alt={product.featured_image?.alt_text}
-                    className="size-full cursor-pointer rounded-lg bg-muted object-cover transition-transform duration-300 ease-in-out hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
+                {product.featured_image?.url ? (
+                    <img
+                        onClick={handleImageClick}
+                        src={product.featured_image.url}
+                        alt={product.featured_image.alt_text}
+                        className="size-full cursor-pointer rounded-lg bg-muted object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                ) : (
+                    <PlaceholderImage className="size-full cursor-pointer rounded-lg" onClick={handleImageClick} />
+                )}
 
                 <div
                     className={`absolute top-3 right-3 flex flex-col gap-2 transition-all duration-300 ${

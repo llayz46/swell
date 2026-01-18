@@ -307,7 +307,7 @@ export function CommandMenu() {
                 </Button>
             </DialogTrigger>
 
-            <DialogContent showCloseButton={false} className="border-none bg-transparent p-0">
+            <DialogContent showCloseButton={false} className="border-none bg-transparent p-0" onCloseAutoFocus={(e) => e.preventDefault()}>
                 <DialogTitle className="sr-only">Rechercher un produit, une page...</DialogTitle>
                 <DialogDescription className="sr-only">Rechercher un produit, une page...</DialogDescription>
 

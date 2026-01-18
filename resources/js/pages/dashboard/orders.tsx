@@ -2,12 +2,12 @@ import { ProductQuickViewDialog } from '@/components/swell/product/product-quick
 import SearchInput from '@/components/swell/search-input';
 import { Button } from '@/components/ui/button';
 import { CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import { Separator } from '@/components/ui/separator';
 import { useCartContext } from '@/contexts/cart-context';
 import { useConfirmContext } from '@/contexts/confirm-context';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, Order, Product } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head } from '@inertiajs/react';
 import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
@@ -28,7 +28,6 @@ export default function Orders({ orders }: { orders: Order[] }) {
     const { buyNow } = useCartContext();
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-    const getStorageUrl = useStorageUrl();
 
     const filteredOrders = orders.filter((order) => {
         if (!searchTerm) return true;
@@ -83,14 +82,14 @@ export default function Orders({ orders }: { orders: Order[] }) {
                                     {order.items.map((item) => (
                                         <div key={item.id} className="flex items-center gap-4">
                                             <div className="size-16 shrink-0 overflow-hidden rounded-md border border-slate-light-alpha bg-slate-light">
-                                                {item.product?.featured_image ? (
+                                                {item.product?.featured_image?.url ? (
                                                     <img
-                                                        src={getStorageUrl(item.product.featured_image.url)}
+                                                        src={item.product.featured_image.url}
                                                         alt={item.product.featured_image.alt_text}
                                                         className="size-full object-cover"
                                                     />
                                                 ) : (
-                                                    <span className="flex size-full items-center justify-center text-muted-foreground"></span>
+                                                    <PlaceholderImage className="size-full" />
                                                 )}
                                             </div>
                                             <div className="min-w-0 flex-1">

@@ -8,9 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent }
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import AdminLayout from '@/layouts/admin-layout';
 import type { Brand, BreadcrumbItem } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head } from '@inertiajs/react';
 import { Edit, MoreHorizontal, Tags, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -21,7 +21,6 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
     const [openBrandDialog, setOpenBrandDialog] = useState<boolean>(false);
     const [editBrand, setEditBrand] = useState<Brand | null>(null);
     const [sortBy, setSortBy] = useState('name');
-    const getStorageUrl = useStorageUrl();
 
     const localBreadcrumbs = useMemo(() => {
         if (openBrandDialog) {
@@ -123,12 +122,12 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                                 {brand.logo_url ? (
                                                     <img
                                                         className="aspect-square size-8 truncate rounded-md object-cover"
-                                                        src={getStorageUrl(brand.logo_url)}
+                                                        src={brand.logo_url}
                                                         alt={brand.name}
                                                         loading="lazy"
                                                     />
                                                 ) : (
-                                                    <span className="block size-8 rounded-md bg-muted"></span>
+                                                    <PlaceholderImage className="size-8 rounded-md" />
                                                 )}
                                             </TableCell>
                                             <TableCell className="font-medium">

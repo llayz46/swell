@@ -13,7 +13,6 @@ import { useAppearance } from '@/hooks/use-appearance';
 import BaseLayout from '@/layouts/base-layout';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowRight, BookOpenText, Monitor, Package, Puzzle, ShoppingCartIcon, Star, BookOpen } from 'lucide-react';
 import { ReactNode, useState } from 'react';
@@ -156,7 +155,6 @@ export default function Home({ products }: { products: Product[] }) {
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
     const getInitials = useInitials();
     const { appearance } = useAppearance();
-    const getStorageUrl = useStorageUrl();
 
     return (
         <BaseLayout>
@@ -330,7 +328,7 @@ export default function Home({ products }: { products: Product[] }) {
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <Avatar className="size-8 overflow-hidden rounded-full">
-                                                <AvatarImage src={getStorageUrl(review.user?.avatar)} alt={review.user?.name} />
+                                                <AvatarImage src={review.user?.avatar} alt={review.user?.name} />
                                                 <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                                     {getInitials(review.user ? review.user.name : 'Anonyme')}
                                                 </AvatarFallback>
@@ -412,7 +410,7 @@ export default function Home({ products }: { products: Product[] }) {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
-                                                    {appearance === 'dark' ? (
+                                                    {appearance === 'dark' || appearance === 'system' ? (
                                                         <GithubDark className="size-5" />
                                                     ): (
                                                         <GithubLight className="size-5" />

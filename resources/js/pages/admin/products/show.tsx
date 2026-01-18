@@ -8,9 +8,9 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, Product } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { calculateMargin, calculateProfit } from '@/utils/product-price-calculating';
 import { Head, Link } from '@inertiajs/react';
 import { Boxes, Building2, Calendar, Copy, Edit as EditIcon, ExternalLink, FolderOpen, Package, Trash2, TrendingUp } from 'lucide-react';
@@ -24,7 +24,6 @@ interface ProductType {
 export default function Show({ breadcrumbs, product }: ProductType) {
     const [selectedImage, setSelectedImage] = useState<number>(0);
     const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
-    const getStorageUrl = useStorageUrl();
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
@@ -74,13 +73,17 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                             <CardContent className="p-4">
                                 <div className={product.images?.length ? 'space-y-4' : ''}>
                                     <div className="aspect-square overflow-hidden rounded-sm bg-muted">
-                                        <img
-                                            src={getStorageUrl(product.images?.[selectedImage]?.url)}
-                                            alt={product.images?.[selectedImage]?.alt_text || product.name}
-                                            width={400}
-                                            height={400}
-                                            className="h-full w-full object-cover"
-                                        />
+                                        {product.images?.[selectedImage]?.url ? (
+                                            <img
+                                                src={product.images[selectedImage].url}
+                                                alt={product.images[selectedImage].alt_text || product.name}
+                                                width={400}
+                                                height={400}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        ) : (
+                                            <PlaceholderImage className="size-full" />
+                                        )}
                                     </div>
                                     <div className="grid grid-cols-3 gap-2">
                                         {product.images?.map((image, index) => (
@@ -91,13 +94,17 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                     selectedImage === index && 'border border-muted-foreground'
                                                 }`}
                                             >
-                                                <img
-                                                    src={getStorageUrl(image.url)}
-                                                    alt={image.alt_text}
-                                                    width={100}
-                                                    height={100}
-                                                    className="h-full w-full object-cover"
-                                                />
+                                                {image.url ? (
+                                                    <img
+                                                        src={image.url}
+                                                        alt={image.alt_text}
+                                                        width={100}
+                                                        height={100}
+                                                        className="h-full w-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <PlaceholderImage className="size-full" />
+                                                )}
                                             </button>
                                         ))}
                                     </div>
