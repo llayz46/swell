@@ -11,7 +11,7 @@ import { index as indexProduct } from '@/routes/product';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Kbd } from '@/components/ui/kbd';
 import { Spinner } from '@/components/ui/spinner';
 import { Appearance, useAppearance } from '@/hooks/use-appearance';
@@ -306,7 +306,7 @@ export function CommandMenu() {
                         'text-foreground dark:bg-card hover:bg-muted/50 relative h-8 min-w-full justify-start pl-3 font-normal shadow-none sm:pr-12 md:w-48 lg:w-56 xl:w-64',
                     )}
                 >
-                    <span className="inline-flex">Rechercher un produit, une page...</span>
+                    <span className="inline-flex text-muted-foreground">Rechercher un produit, une page...</span>
                     <div className="absolute top-1.5 right-1.5 hidden gap-1 group-has-data-[slot=designer]/body:hidden sm:flex">
                         <Kbd>⌘K</Kbd>
                     </div>
@@ -314,6 +314,9 @@ export function CommandMenu() {
             </DialogTrigger>
 
             <DialogContent showCloseButton={false} className="border-none bg-transparent p-0">
+                <DialogTitle className="sr-only">Rechercher un produit, une page...</DialogTitle>
+                <DialogDescription className="sr-only">Rechercher un produit, une page...</DialogDescription>
+                
                 <Command
                     filter={isCommandMode ? customFilter : () => 1}
                     className="bg-background shadow-dialog rounded-2xl py-2 **:data-[slot=command-input-wrapper]:border-input **:data-[slot=command-input-wrapper]:bg-input/50 **:data-[slot=command-input-wrapper]:mb-0 **:data-[slot=command-input-wrapper]:h-9! **:data-[slot=command-input-wrapper]:rounded-md **:data-[slot=command-input-wrapper]:border **:data-[slot=command-input]:py-0"
