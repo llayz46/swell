@@ -4,9 +4,9 @@ import { CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/compo
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { TabsContent } from '@/components/ui/tabs';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import { useFileUpload } from '@/hooks/use-file-upload';
 import { FormTabContentProps, ProductForm } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { DndContext, DragEndEvent, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { SortableContext, arrayMove, useSortable } from '@dnd-kit/sortable';
@@ -209,7 +209,6 @@ function ImageSortableItem({
     removeImage: (id: number) => void;
     handleImageAltChange: (id: number, altText: string) => void;
 }) {
-    const getStorageUrl = useStorageUrl();
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: image.alt_text,
         transition: {
@@ -233,12 +232,16 @@ function ImageSortableItem({
     return (
         <div ref={setNodeRef} style={style} className="space-y-3 rounded-lg border bg-muted/20 p-4 transition-shadow duration-200 hover:shadow-md">
             <div className="relative aspect-square overflow-hidden rounded-md bg-muted">
-                <img
-                    src={getStorageUrl(image.image_url)}
-                    alt={image.alt_text}
-                    className={`size-full object-cover ${isDragging ? 'pointer-events-none' : ''}`}
-                    draggable={false}
-                />
+                {image.image_url ? (
+                    <img
+                        src={image.image_url}
+                        alt={image.alt_text}
+                        className={`size-full object-cover ${isDragging ? 'pointer-events-none' : ''}`}
+                        draggable={false}
+                    />
+                ) : (
+                    <PlaceholderImage className="size-full" />
+                )}
                 <div className="absolute top-2 left-2 flex gap-1">
                     <Button
                         type="button"

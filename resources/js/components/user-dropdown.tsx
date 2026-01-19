@@ -1,3 +1,4 @@
+import { destroy as logout } from '@/actions/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -110,7 +111,7 @@ export function UserDropdown() {
                 )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                    <Link className="flex items-center gap-2" method="post" href={route('logout')} as="button" onClick={() => router.flushAll()}>
+                    <Link className="flex items-center gap-2" method="post" href={logout.url()} as="button" onClick={() => router.flushAll()}>
                         <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
                         <span>Se déconnecter</span>
                     </Link>

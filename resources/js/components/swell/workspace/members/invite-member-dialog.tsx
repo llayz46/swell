@@ -1,3 +1,4 @@
+import { invite } from '@/actions/App/Modules/Workspace/Http/Controllers/WorkspaceTeamController';
 import InputError from '@/components/input-error';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -69,7 +70,7 @@ export function InviteMemberDialog() {
             return;
         }
 
-        post(route('workspace.teams.invite', { team: data.team_id }), {
+        post(invite.url(data.team_id!), {
             preserveScroll: true,
             onSuccess: () => {
                 reset();

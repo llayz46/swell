@@ -161,5 +161,4 @@ Route::get('/products', [ProductController::class, 'index'])->name('product.inde
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
 require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';

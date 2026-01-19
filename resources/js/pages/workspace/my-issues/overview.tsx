@@ -1,3 +1,4 @@
+import { focus } from '@/actions/App/Modules/Workspace/Http/Controllers/WorkspaceMyIssuesController';
 import { MyIssuesLayout } from '@/components/swell/workspace/my-issues/my-issues-layout';
 import { OverviewTab } from '@/components/swell/workspace/my-issues/overview-tab';
 import type { MyIssue, MyIssuesStats } from '@/components/swell/workspace/my-issues/types';
@@ -11,7 +12,7 @@ interface OverviewProps {
 
 export default function Overview({ issues, stats }: OverviewProps) {
     const handleIssueClick = (issue: MyIssue) => {
-        router.visit(route('workspace.my-issues.focus', { issue: issue.id }));
+        router.visit(focus.url({ query: { issue: issue.id } }));
     };
 
     return (

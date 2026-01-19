@@ -2,16 +2,20 @@ import WorkspaceLayoutTemplate from '@/layouts/workspace/layout';
 import { NavItem } from '@/types';
 import { Contact, FolderKanban, Inbox, User } from 'lucide-react';
 import { type PropsWithChildren, type ReactNode } from 'react';
+import { index as inboxIndex } from '@/routes/workspace/inbox';
+import { overview } from '@/routes/workspace/my-issues';
+import { index as teamsIndex } from '@/routes/workspace/teams';
+import { members } from '@/routes/workspace';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Boîte de réception',
-        href: '/workspace/inbox',
+        href: inboxIndex().url,
         icon: Inbox,
     },
     {
         title: 'Mes tâches',
-        href: '/workspace/overview',
+        href: overview().url,
         icon: FolderKanban,
     },
 ];
@@ -19,12 +23,12 @@ const mainNavItems: NavItem[] = [
 const workspaceNavItems: NavItem[] = [
     {
         title: 'Teams',
-        href: '/workspace/teams',
+        href: teamsIndex().url,
         icon: Contact,
     },
     {
         title: 'Membres',
-        href: '/workspace/members',
+        href: members().url,
         icon: User,
     },
 ];

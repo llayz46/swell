@@ -1,3 +1,4 @@
+import { show } from '@/actions/App/Http/Controllers/ProductController';
 import { ProductBreadcrumb } from '@/components/swell/product/product-breadcrumb';
 import { ProductCard } from '@/components/swell/product/product-card';
 import { ProductQuickViewDialog } from '@/components/swell/product/product-quick-view-dialog';
@@ -5,6 +6,7 @@ import { ReviewSection } from '@/components/swell/product/review/review-section'
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCartContext } from '@/contexts/cart-context';
@@ -13,7 +15,6 @@ import { useWishlist } from '@/hooks/use-wishlist';
 import BaseLayout from '@/layouts/base-layout';
 import { cn } from '@/lib/utils';
 import type { Product, ProductImage, Review, SharedData } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head, Link, usePage, WhenVisible } from '@inertiajs/react';
 import { Heart, Loader2, RotateCcw, Shield, ShoppingCart, Star, Truck } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -32,7 +33,6 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
     const { addItem } = useWishlist();
     const { addToCart, buyNow } = useCartContext();
-    const getStorageUrl = useStorageUrl();
 
     const initialSelections = useMemo(() => {
         const selections: Record<number, number> = {};
@@ -69,11 +69,15 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                 <div className="mx-auto mb-4 grid max-w-7xl gap-6 lg:grid-cols-2">
                     <div className="space-y-4">
                         <div className="relative aspect-square overflow-hidden rounded-md border bg-card">
-                            <img
-                                src={getStorageUrl(imageToShow?.url)}
-                                alt={imageToShow?.alt_text || product.name}
-                                className="size-full object-cover"
-                            />
+                            {imageToShow?.url ? (
+                                <img
+                                    src={imageToShow.url}
+                                    alt={imageToShow.alt_text || product.name}
+                                    className="size-full object-cover"
+                                />
+                            ) : (
+                                <PlaceholderImage className="size-full" />
+                            )}
                             {product.isNew && (
                                 <Badge className="absolute top-4 left-4 rounded-sm bg-orange-400/90 text-primary-foreground">Nouveau</Badge>
                             )}
@@ -83,14 +87,14 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                             {product.images?.map((image) => (
                                 <div
                                     key={image.id}
-                                    className="flex aspect-16/11 items-center justify-center overflow-hidden rounded-md border bg-card"
+                                    className="flex aspect-16/11 cursor-pointer items-center justify-center overflow-hidden rounded-md border bg-card"
+                                    onClick={() => setImageToShow(image)}
                                 >
-                                    <img
-                                        src={getStorageUrl(image.url)}
-                                        alt={image.alt_text}
-                                        className="size-full object-cover"
-                                        onClick={() => setImageToShow(image)}
-                                    />
+                                    {image.url ? (
+                                        <img src={image.url} alt={image.alt_text} className="size-full object-cover" />
+                                    ) : (
+                                        <PlaceholderImage className="size-full" />
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -138,7 +142,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                         <div className="flex items-center gap-2">
                             <div
                                 className={cn(
-                                    'h-2 w-2 rounded-full',
+                                    'size-2 rounded-full',
                                     product.stock === 0 ? 'bg-red-500' : product.stock < 11 ? 'bg-orange-500' : 'bg-green-500',
                                 )}
                             ></div>
@@ -221,7 +225,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                                     className="flex-1"
                                     onClick={() => addToCart(product, selectedOptions as unknown as Record<number, number>)}
                                 >
-                                    <ShoppingCart className="mr-2 h-4 w-4" />
+                                    <ShoppingCart className="mr-2 size-4" />
                                     Ajouter au panier
                                 </Button>
                                 {swell.wishlist.enabled && (
@@ -251,15 +255,15 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                         <div className="space-y-4">
                             <div className="grid gap-3">
                                 <div className="flex items-center gap-3 text-sm">
-                                    <Truck className="h-4 w-4 text-muted-foreground" />
+                                    <Truck className="size-4 text-muted-foreground" />
                                     <span className="text-foreground">Livraison gratuite dès 50€</span>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm">
-                                    <Shield className="h-4 w-4 text-muted-foreground" />
+                                    <Shield className="size-4 text-muted-foreground" />
                                     <span className="text-foreground">Garantie 2 ans</span>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm">
-                                    <RotateCcw className="h-4 w-4 text-muted-foreground" />
+                                    <RotateCcw className="size-4 text-muted-foreground" />
                                     <span className="text-foreground">Retour gratuit sous 30 jours</span>
                                 </div>
                             </div>
@@ -298,24 +302,27 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
 
 function RelatedProduct({ product, currentProductId }: { product: Product; currentProductId: number }) {
     const current = product.id === currentProductId;
-    const getStorageUrl = useStorageUrl();
 
     return (
         <article className={cn('rounded-md border bg-card px-4 py-2', !current ? 'transition-colors hover:bg-secondary/10' : 'border-ring')}>
             <div className="flex items-center gap-4">
                 <div className="relative h-16 w-16 overflow-hidden rounded-sm">
-                    <img
-                        src={getStorageUrl(product.featured_image?.url)}
-                        alt={product.featured_image?.alt_text}
-                        className="size-full bg-muted object-cover"
-                    />{' '}
+                    {product.featured_image?.url ? (
+                        <img
+                            src={product.featured_image.url}
+                            alt={product.featured_image.alt_text}
+                            className="size-full bg-muted object-cover"
+                        />
+                    ) : (
+                        <PlaceholderImage className="size-full" />
+                    )}
                 </div>
                 <div className="flex-1">
                     <div className="mb-1 flex items-center gap-2">
                         {current ? (
                             <h4 className="font-medium text-foreground">{product.name}</h4>
                         ) : (
-                            <Link prefetch href={route('product.show', product.slug)} className="font-medium text-foreground hover:underline">
+                            <Link prefetch href={show.url(product.slug)} className="font-medium text-foreground hover:underline">
                                 {product.name}
                             </Link>
                         )}
@@ -391,7 +398,7 @@ function ReviewSectionFallback() {
                                 <div key={rating} className="flex items-center gap-3">
                                     <div className="flex w-12 items-center gap-1">
                                         <span className="text-sm text-foreground">{rating}</span>
-                                        <Star className="h-3 w-3 fill-primary text-primary" />
+                                        <Star className="size-3 fill-primary text-primary" />
                                     </div>
                                     <div className="h-2 flex-1 rounded-full bg-muted">
                                         <div className="h-2 w-full rounded-full bg-primary transition-all duration-300" />

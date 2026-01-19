@@ -1,3 +1,4 @@
+import { accept } from '@/actions/App/Modules/Workspace/Http/Controllers/TeamInvitationController';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { TeamInvitation } from '@/types/workspace';
@@ -14,7 +15,7 @@ export function PendingInvitationsSection({ invitations }: { invitations: TeamIn
         setLoadingInvitationId(invitationId);
 
         router.post(
-            route('workspace.team-invitations.accept', { invitation: invitationId }),
+            accept.url(invitationId),
             {},
             {
                 preserveScroll: true,

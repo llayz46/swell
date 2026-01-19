@@ -1,11 +1,12 @@
+import { index, show } from '@/actions/App/Http/Controllers/ProductController';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { useCartContext } from '@/contexts/cart-context';
 import { useWishlistContext } from '@/contexts/wishlist-context';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type Product } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { Deferred, Head, Link } from '@inertiajs/react';
 import { LoaderCircle, Plus, ShoppingCart, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -71,7 +72,7 @@ export default function Wishlist({ items }: { items: Product[] }) {
                             <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
                                 <h3 className="mb-2 text-xl font-semibold">Votre liste de souhaits est vide</h3>
                                 <p className="mb-4 text-muted-foreground">Parcourez notre catalogue et ajoutez des produits à votre wishlist</p>
-                                <Link href={route('product.index')} className={buttonVariants()}>
+                                <Link href={index.url()} className={buttonVariants()}>
                                     Découvrir nos produits
                                 </Link>
                             </div>
@@ -84,22 +85,24 @@ export default function Wishlist({ items }: { items: Product[] }) {
 }
 
 function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; onRemove: () => void; onAddToCart: () => void }) {
-    const getStorageUrl = useStorageUrl();
-
     return (
         <div className="flex items-center gap-4 rounded-md border p-3">
             <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm bg-neutral-700">
-                <img
-                    src={product.featured_image && getStorageUrl(product.featured_image.url)}
-                    alt={product.featured_image ? product.featured_image.alt_text : product.name}
-                    className="size-full object-cover"
-                />
+                {product.featured_image?.url ? (
+                    <img
+                        src={product.featured_image.url}
+                        alt={product.featured_image.alt_text}
+                        className="size-full object-cover"
+                    />
+                ) : (
+                    <PlaceholderImage className="size-full" />
+                )}
             </div>
 
             <div className="flex-grow">
                 <div className="flex items-start justify-between">
                     <div>
-                        <Link href={route('product.show', product.slug)} className="font-medium hover:underline">
+                        <Link href={show.url(product.slug)} className="font-medium hover:underline">
                             {product.brand.name} {product.name}
                         </Link>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{product.short_description}</p>
@@ -116,7 +119,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; on
 
                         <div className="mt-1 flex items-center">
                             <span
-                                className={`mr-2 inline-block h-2 w-2 rounded-full ${product.stock === 0 ? 'bg-red-500' : product.stock < 11 ? 'bg-orange-500' : 'bg-green-500'}`}
+                                className={`mr-2 inline-block size-2 rounded-full ${product.stock === 0 ? 'bg-red-500' : product.stock < 11 ? 'bg-orange-500' : 'bg-green-500'}`}
                             />
                             <span className="text-xs text-gray-500 dark:text-gray-400">
                                 {product.stock === 0 ? 'Indisponible' : product.stock < 11 ? `Reste ${product.stock}` : 'En stock'}

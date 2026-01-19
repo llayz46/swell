@@ -1,3 +1,6 @@
+import { store as login } from '@/actions/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
+import { create as forgotPassword } from '@/actions/Laravel/Fortify/Http/Controllers/PasswordResetLinkController';
+import { create as registerPage } from '@/actions/Laravel/Fortify/Http/Controllers/RegisteredUserController';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
@@ -30,7 +33,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('login'), {
+        post(login.url(), {
             onFinish: () => reset('password'),
         });
     };
@@ -61,7 +64,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         <div className="flex items-center">
                             <Label htmlFor="password">Mot de passe</Label>
                             {canResetPassword && (
-                                <TextLink href={route('password.request')} className="ml-auto text-sm" tabIndex={5}>
+                                <TextLink href={forgotPassword.url()} className="ml-auto text-sm" tabIndex={5}>
                                     Mot de passe oublié&nbsp;?
                                 </TextLink>
                             )}
@@ -91,14 +94,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     </div>
 
                     <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                        {processing && <LoaderCircle className="size-4 animate-spin" />}
                         Se connecter
                     </Button>
                 </div>
 
                 <div className="text-center text-sm text-muted-foreground">
                     Vous n&apos;avez pas de compte&nbsp;?{' '}
-                    <TextLink href={route('register')} tabIndex={5}>
+                    <TextLink href={registerPage.url()} tabIndex={5}>
                         S&apos;inscrire
                     </TextLink>
                 </div>

@@ -1,3 +1,4 @@
+import HomeController from '@/actions/App/Http/Controllers/HomeController';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Head, Link } from '@inertiajs/react';
 
@@ -6,7 +7,7 @@ export default function FeatureDisabled({ feature }: { feature: string }) {
         <div className="container mx-auto flex h-screen flex-col items-center justify-center px-4">
             <Head title="Fonctionnalité désactivée" />
 
-            <Link href={route('home')} className="mx-auto mb-12 flex w-fit items-center gap-1 font-medium">
+            <Link href={HomeController.url()} className="mx-auto mb-12 flex w-fit items-center gap-1 font-medium">
                 <div className="flex size-9 items-center justify-center">
                     <AppLogoIcon className="size-9 fill-current text-black dark:text-white" />
                 </div>

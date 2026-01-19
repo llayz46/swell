@@ -1,3 +1,4 @@
+import { destroy } from '@/actions/App/Http/Controllers/Admin/BrandController';
 import { BrandDialog } from '@/components/swell/brand-dialog';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import SearchInput from '@/components/swell/search-input';
@@ -7,9 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle, SwellCard, SwellCardContent }
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import AdminLayout from '@/layouts/admin-layout';
 import type { Brand, BreadcrumbItem } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head } from '@inertiajs/react';
 import { Edit, MoreHorizontal, Tags, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -20,7 +21,6 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
     const [openBrandDialog, setOpenBrandDialog] = useState<boolean>(false);
     const [editBrand, setEditBrand] = useState<Brand | null>(null);
     const [sortBy, setSortBy] = useState('name');
-    const getStorageUrl = useStorageUrl();
 
     const localBreadcrumbs = useMemo(() => {
         if (openBrandDialog) {
@@ -122,12 +122,12 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                                 {brand.logo_url ? (
                                                     <img
                                                         className="aspect-square size-8 truncate rounded-md object-cover"
-                                                        src={getStorageUrl(brand.logo_url)}
+                                                        src={brand.logo_url}
                                                         alt={brand.name}
                                                         loading="lazy"
                                                     />
                                                 ) : (
-                                                    <span className="block size-8 rounded-md bg-muted"></span>
+                                                    <PlaceholderImage className="size-8 rounded-md" />
                                                 )}
                                             </TableCell>
                                             <TableCell className="font-medium">
@@ -144,8 +144,8 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                             <TableCell>
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-muted">
-                                                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                                                        <Button variant="ghost" size="sm" className="size-8 p-0 hover:bg-muted">
+                                                            <MoreHorizontal className="size-4 text-muted-foreground" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end" className="border-border bg-popover">
@@ -156,7 +156,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                                                 setEditBrand(brand);
                                                             }}
                                                         >
-                                                            <Edit className="mr-2 h-4 w-4" />
+                                                            <Edit className="mr-2 size-4" />
                                                             Modifier
                                                         </DropdownMenuItem>
                                                         <DropdownMenuSeparator className="bg-border" />
@@ -164,7 +164,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                                             className="cursor-pointer text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950"
                                                             onClick={() => setDeleteBrand(brand)}
                                                         >
-                                                            <Trash2 className="mr-2 h-4 w-4" />
+                                                            <Trash2 className="mr-2 size-4" />
                                                             Supprimer
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
@@ -214,7 +214,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                             </div>
                             <Badge
                                 variant="secondary"
-                                className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
+                                className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
                             >
                                 #
                             </Badge>
@@ -231,7 +231,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                                     {countBrandsWithFilter(brands, (brand) => !brand.products_count)}
                                 </p>
                             </div>
-                            <Badge className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                            <Badge className="flex size-8 items-center justify-center rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
                                 !
                             </Badge>
                         </div>
@@ -244,7 +244,7 @@ export default function Brands({ breadcrumbs: initialBreadcrumbs, brands }: { br
                 open={!!deleteBrand}
                 onClose={() => setDeleteBrand(null)}
                 itemNameKey="name"
-                deleteRoute={(item) => route('admin.brands.destroy', item.id)}
+                deleteRoute={(item) => destroy.url(item.id)}
                 itemLabel="marque"
                 icon={<Tags className="size-4" />}
                 prefix="La"

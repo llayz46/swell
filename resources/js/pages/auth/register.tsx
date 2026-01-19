@@ -1,3 +1,5 @@
+import { create as loginPage } from '@/actions/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
+import { store as register } from '@/actions/Laravel/Fortify/Http/Controllers/RegisteredUserController';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
@@ -26,7 +28,7 @@ export default function Register() {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('register'), {
+        post(register.url(), {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };
@@ -102,14 +104,14 @@ export default function Register() {
                     </div>
 
                     <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                        {processing && <LoaderCircle className="size-4 animate-spin" />}
                         Créer un compte
                     </Button>
                 </div>
 
                 <div className="text-center text-sm text-muted-foreground">
                     Vous avez déjà un compte?{' '}
-                    <TextLink href={route('login')} tabIndex={6}>
+                    <TextLink href={loginPage.url()} tabIndex={6}>
                         Se connecter
                     </TextLink>
                 </div>

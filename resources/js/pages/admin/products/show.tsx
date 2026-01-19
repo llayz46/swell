@@ -1,15 +1,19 @@
+import { create, destroy, edit } from '@/actions/App/Http/Controllers/Admin/ProductController';
+import { show as brandShow } from '@/actions/App/Http/Controllers/BrandController';
+import CategoryController from '@/actions/App/Http/Controllers/CategoryController';
+import { show as productShow } from '@/actions/App/Http/Controllers/ProductController';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, Product } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { calculateMargin, calculateProfit } from '@/utils/product-price-calculating';
 import { Head, Link } from '@inertiajs/react';
-import { Boxes, Building2, Calendar, Copy, Edit, ExternalLink, FolderOpen, Package, Trash2, TrendingUp } from 'lucide-react';
+import { Boxes, Building2, Calendar, Copy, Edit as EditIcon, ExternalLink, FolderOpen, Package, Trash2, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 
 interface ProductType {
@@ -20,7 +24,6 @@ interface ProductType {
 export default function Show({ breadcrumbs, product }: ProductType) {
     const [selectedImage, setSelectedImage] = useState<number>(0);
     const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
-    const getStorageUrl = useStorageUrl();
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
@@ -34,15 +37,15 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                     </div>
                     <div className="flex flex-wrap gap-2 max-sm:mb-4">
                         <Link
-                            href={route('admin.products.create')}
+                            href={create.url()}
                             data={{ duplicate: product.id }}
                             className={buttonVariants({ variant: 'outline' })}
                         >
                             <Copy className="size-4" />
                             Dupliquer
                         </Link>
-                        <Link href={route('admin.products.edit', product.slug)} className={buttonVariants({ variant: 'outline' })}>
-                            <Edit className="size-4" />
+                        <Link href={edit.url(product.slug)} className={buttonVariants({ variant: 'outline' })}>
+                            <EditIcon className="size-4" />
                             Modifier
                         </Link>
                         <Button variant="destructive" onClick={() => setDeleteProduct(product)}>
@@ -70,13 +73,17 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                             <CardContent className="p-4">
                                 <div className={product.images?.length ? 'space-y-4' : ''}>
                                     <div className="aspect-square overflow-hidden rounded-sm bg-muted">
-                                        <img
-                                            src={getStorageUrl(product.images?.[selectedImage]?.url)}
-                                            alt={product.images?.[selectedImage]?.alt_text || product.name}
-                                            width={400}
-                                            height={400}
-                                            className="h-full w-full object-cover"
-                                        />
+                                        {product.images?.[selectedImage]?.url ? (
+                                            <img
+                                                src={product.images[selectedImage].url}
+                                                alt={product.images[selectedImage].alt_text || product.name}
+                                                width={400}
+                                                height={400}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        ) : (
+                                            <PlaceholderImage className="size-full" />
+                                        )}
                                     </div>
                                     <div className="grid grid-cols-3 gap-2">
                                         {product.images?.map((image, index) => (
@@ -87,13 +94,17 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                     selectedImage === index && 'border border-muted-foreground'
                                                 }`}
                                             >
-                                                <img
-                                                    src={getStorageUrl(image.url)}
-                                                    alt={image.alt_text}
-                                                    width={100}
-                                                    height={100}
-                                                    className="h-full w-full object-cover"
-                                                />
+                                                {image.url ? (
+                                                    <img
+                                                        src={image.url}
+                                                        alt={image.alt_text}
+                                                        width={100}
+                                                        height={100}
+                                                        className="h-full w-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <PlaceholderImage className="size-full" />
+                                                )}
                                             </button>
                                         ))}
                                     </div>
@@ -131,7 +142,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                 <label className="text-sm font-medium text-muted-foreground">Marque</label>
                                                 <div className="flex items-center gap-2">
                                                     <Building2 className="size-4 text-muted-foreground" />
-                                                    <Link href={route('brand.show', product.brand.slug)} className="text-primary hover:underline">
+                                                    <Link href={brandShow.url(product.brand.slug)} className="text-primary hover:underline">
                                                         {product.brand.name}
                                                     </Link>
                                                 </div>
@@ -141,7 +152,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                 <div className="flex items-center gap-2">
                                                     <FolderOpen className="size-4 text-muted-foreground" />
                                                     <Link
-                                                        href={route('category.show', product.category?.slug)}
+                                                        href={CategoryController.url(product.category?.slug || '')}
                                                         className="text-primary hover:underline"
                                                     >
                                                         {product.category?.name}
@@ -283,7 +294,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                                     /products/{product.slug}
                                                 </code>
                                                 <Link
-                                                    href={route('product.show', product.slug)}
+                                                    href={productShow.url(product.slug)}
                                                     prefetch
                                                     className={buttonVariants({ variant: 'ghost', size: 'icon' })}
                                                 >
@@ -300,7 +311,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                     <Card className="border-border bg-card max-sm:py-4">
                                         <CardHeader className="max-sm:px-4">
                                             <CardTitle className="flex items-center gap-2 text-foreground">
-                                                <TrendingUp className="h-5 w-5" />
+                                                <TrendingUp className="size-5" />
                                                 Performances
                                             </CardTitle>
                                         </CardHeader>
@@ -325,7 +336,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                                     <Card className="border-border bg-card max-sm:py-4">
                                         <CardHeader className="max-sm:px-4">
                                             <CardTitle className="flex items-center gap-2 text-foreground">
-                                                <Calendar className="h-5 w-5" />
+                                                <Calendar className="size-5" />
                                                 Dates importantes
                                             </CardTitle>
                                         </CardHeader>
@@ -354,7 +365,7 @@ export default function Show({ breadcrumbs, product }: ProductType) {
                 open={!!deleteProduct}
                 onClose={() => setDeleteProduct(null)}
                 itemNameKey="name"
-                deleteRoute={(item) => route('admin.products.destroy', item.slug)}
+                deleteRoute={(item) => destroy.url(item.slug)}
                 itemLabel="produit"
                 icon={<Package className="size-4" />}
                 prefix="Le"

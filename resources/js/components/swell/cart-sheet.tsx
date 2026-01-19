@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useCartContext } from '@/contexts/cart-context';
 import { useConfirmContext } from '@/contexts/confirm-context';
 import { CartItem } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 
 export function CartSheet() {
@@ -91,8 +91,6 @@ function CardItem({
     removeItemOfCart: (itemId: number) => void;
     handleQuantity: (type: 'inc' | 'dec', itemId: number) => void;
 }) {
-    const getStorageUrl = useStorageUrl();
-
     return (
         <Card className="relative overflow-hidden py-0">
             <CardContent className="p-3">
@@ -107,7 +105,11 @@ function CardItem({
 
                 <div className="relative flex items-start gap-4 pr-8">
                     <div className="relative size-18 shrink-0 overflow-hidden rounded-sm border border-slate-light-alpha bg-slate-light">
-                        <img src={getStorageUrl(item.product.image?.url)} alt={item.product.image?.alt_text} className="size-full object-cover" />
+                        {item.product.image?.url ? (
+                            <img src={item.product.image.url} alt={item.product.image.alt_text} className="size-full object-cover" />
+                        ) : (
+                            <PlaceholderImage className="size-full" />
+                        )}
                     </div>
 
                     <div className="flex h-18 min-w-0 flex-col">
@@ -128,11 +130,11 @@ function CardItem({
                     </div>
 
                     <div className="absolute right-0 bottom-0 flex items-center gap-1">
-                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => handleQuantity('dec', item.id)}>
+                        <Button variant="outline" size="icon" className="size-6" onClick={() => handleQuantity('dec', item.id)}>
                             <Minus className="size-3" />
                         </Button>
                         <span className="w-6 text-center text-sm font-medium">{item.quantity}</span>
-                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => handleQuantity('inc', item.id)}>
+                        <Button variant="outline" size="icon" className="size-6" onClick={() => handleQuantity('inc', item.id)}>
                             <Plus className="size-3" />
                         </Button>
                     </div>

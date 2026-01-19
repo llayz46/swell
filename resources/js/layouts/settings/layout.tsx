@@ -1,36 +1,46 @@
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+import { cn, toUrl } from '@/lib/utils';
+import { useActiveUrl } from '@/hooks/use-active-url';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
+import { show as showTwoFactor } from '@/routes/two-factor';
+import { edit as editProfile } from '@/routes/profile';
+import { edit as editAppearance } from '@/routes/appearance';
+import { edit as editPassword } from '@/routes/user-password';
 import { type PropsWithChildren } from 'react';
 
 const sidebarNavItems: NavItem[] = [
     {
         title: 'Profile',
-        href: '/settings/profile',
+        href: editProfile(),
         icon: null,
     },
     {
         title: 'Mot de passe',
-        href: '/settings/password',
+        href: editPassword(),
+        icon: null,
+    },
+    {
+        title: '2FA',
+        href: showTwoFactor(),
         icon: null,
     },
     {
         title: 'Thème',
-        href: '/settings/appearance',
+        href: editAppearance(),
         icon: null,
     },
 ];
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
+    const { urlIsActive } = useActiveUrl();
+
     // When server-side rendering, we only render the layout on the client...
     if (typeof window === 'undefined') {
         return null;
     }
-
-    const currentPath = window.location.pathname;
 
     return (
         <div className="px-4 py-6">
@@ -41,15 +51,18 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                     <nav className="flex flex-col space-y-1 space-x-0">
                         {sidebarNavItems.map((item, index) => (
                             <Button
-                                key={`${item.href}-${index}`}
+                                key={`${toUrl(item.href)}-${index}`}
                                 size="sm"
                                 variant="ghost"
                                 asChild
                                 className={cn('w-full justify-start', {
-                                    'bg-muted': currentPath === item.href,
+                                    'bg-muted': urlIsActive(item.href),
                                 })}
                             >
-                                <Link href={item.href} prefetch>
+                                <Link href={item.href}>
+                                    {item.icon && (
+                                        <item.icon className="size-4" />
+                                    )}
                                     {item.title}
                                 </Link>
                             </Button>

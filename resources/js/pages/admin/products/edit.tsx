@@ -1,3 +1,4 @@
+import { destroy } from '@/actions/App/Http/Controllers/Admin/ProductController';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import { ProductFormPage } from '@/components/swell/product/product-form-page';
 import AdminLayout from '@/layouts/admin-layout';
@@ -37,7 +38,7 @@ export default function Edit({ breadcrumbs, product, brands, collections }: Prod
                 open={!!deleteProduct}
                 onClose={() => setDeleteProduct(null)}
                 itemNameKey="name"
-                deleteRoute={(item) => route('admin.products.destroy', item.slug)}
+                deleteRoute={(item) => destroy.url(item.slug)}
                 itemLabel="produit"
                 icon={<Package className="size-4" />}
                 prefix="Le"

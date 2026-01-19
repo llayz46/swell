@@ -36,7 +36,7 @@ export function ReviewSection() {
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <Star
                                         key={star}
-                                        className={`h-5 w-5 ${
+                                        className={`size-5 ${
                                             star <=
                                             Math.round(
                                                 Number.parseFloat(
@@ -59,7 +59,7 @@ export function ReviewSection() {
                                 <div key={rating} className="flex items-center gap-3">
                                     <div className="flex w-12 items-center gap-1">
                                         <span className="text-sm text-foreground">{rating}</span>
-                                        <Star className="h-3 w-3 fill-primary text-primary" />
+                                        <Star className="size-3 fill-primary text-primary" />
                                     </div>
                                     <div className="h-2 flex-1 rounded-full bg-muted">
                                         <div

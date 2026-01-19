@@ -1,3 +1,5 @@
+import { index as productsIndex } from '@/actions/App/Http/Controllers/Admin/ProductController';
+import { show as productShow } from '@/actions/App/Http/Controllers/ProductController';
 import { CardDescription, CardTitle, SwellCard, SwellCardContent, SwellCardHeader } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -178,7 +180,7 @@ export default function Dashboard({
                                             <div key={product.id} className="flex items-center justify-between">
                                                 <div className="flex items-center gap-3">
                                                     <span className="w-2 text-sm font-medium text-muted-foreground">{index + 1}.</span>
-                                                    <Link href={route('product.show', product.slug)} className="font-medium hover:underline">
+                                                    <Link href={productShow.url(product.slug)} className="font-medium hover:underline">
                                                         {product.brand?.name} {product.name}
                                                     </Link>
                                                 </div>
@@ -278,7 +280,7 @@ export default function Dashboard({
                                 <div className="mt-4 flex justify-end">
                                     <Link
                                         className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-                                        href={route('admin.products.index')}
+                                        href={productsIndex.url()}
                                     >
                                         Voir tous les produits
                                         <ArrowRight size={16} />

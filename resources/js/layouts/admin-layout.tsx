@@ -3,41 +3,48 @@ import { type BreadcrumbItem, type NavItem, SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { Boxes, Folders, Gift, LayoutGrid, Megaphone, Package, Tags } from 'lucide-react';
 import { type PropsWithChildren } from 'react';
+import { dashboard } from '@/routes/admin';
+import { index as loyaltyIndex } from '@/routes/admin/loyalty';
+import { index as bannersIndex } from '@/routes/admin/banners';
+import { index as categoriesIndex } from '@/routes/admin/categories';
+import { index as collectionsIndex } from '@/routes/admin/collections';
+import { index as brandsIndex } from '@/routes/admin/brands';
+import { index as productsIndex } from '@/routes/admin/products';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/admin',
+        href: dashboard().url,
         icon: LayoutGrid,
     },
     {
         title: 'Bannières',
-        href: '/admin/banners',
+        href: bannersIndex().url,
         icon: Megaphone,
     },
     {
         title: 'Catégories',
-        href: '/admin/categories',
+        href: categoriesIndex().url,
         icon: Folders,
     },
     {
         title: 'Collections',
-        href: '/admin/collections',
+        href: collectionsIndex().url,
         icon: Boxes,
     },
     {
         title: 'Fidélité',
-        href: '/admin/loyalty',
+        href: loyaltyIndex().url,
         icon: Gift,
     },
     {
         title: 'Marques',
-        href: '/admin/brands',
+        href: brandsIndex().url,
         icon: Tags,
     },
     {
         title: 'Produits',
-        href: '/admin/products',
+        href: productsIndex().url,
         icon: Package,
     },
 ];

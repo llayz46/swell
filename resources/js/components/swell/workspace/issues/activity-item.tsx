@@ -68,7 +68,7 @@ export function ActivityItem({ activity }: ActivityItemProps) {
         return (
             <div className="mt-1 flex items-center gap-2 text-sm">
                 <span className="text-muted-foreground line-through">{oldStr}</span>
-                <ArrowRight className="h-3 w-3 text-muted-foreground" />
+                <ArrowRight className="size-3 text-muted-foreground" />
                 <span className="font-medium">{newStr}</span>
             </div>
         );
@@ -76,13 +76,13 @@ export function ActivityItem({ activity }: ActivityItemProps) {
 
     return (
         <div className="flex gap-3 py-3">
-            <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted ${config.color}`}>
-                <Icon className="h-4 w-4" />
+            <div className={`flex size-8 shrink-0 items-center justify-center rounded-full bg-muted ${config.color}`}>
+                <Icon className="size-4" />
             </div>
 
             <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                    <Avatar className="h-5 w-5">
+                    <Avatar className="size-5">
                         <AvatarImage src={activity.user.avatar_url} alt={activity.user.name} />
                         <AvatarFallback className="text-[10px]">{userInitials}</AvatarFallback>
                     </Avatar>

@@ -1,3 +1,5 @@
+import { destroy } from '@/actions/App/Http/Controllers/Admin/CollectionController';
+import { index as productsIndex } from '@/actions/App/Http/Controllers/Admin/ProductController';
 import { ConfirmDeleteDialog } from '@/components/swell/confirm-delete-dialog';
 import { CollectionDialog } from '@/components/swell/product/collection-dialog';
 import SearchInput from '@/components/swell/search-input';
@@ -130,14 +132,14 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                             <TableCell>
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-muted">
-                                                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                                                        <Button variant="ghost" size="sm" className="size-8 p-0 hover:bg-muted">
+                                                            <MoreHorizontal className="size-4 text-muted-foreground" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end" className="border-border bg-popover">
                                                         <DropdownMenuItem className="cursor-pointer text-foreground hover:bg-muted">
                                                             <Link
-                                                                href={route('admin.products.index', { collection_id: collection.id })}
+                                                                href={productsIndex.url({ query: { collection_id: collection.id } })}
                                                                 className="flex items-center gap-2"
                                                             >
                                                                 <Eye className="mr-2 size-4" />
@@ -159,7 +161,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                                                             className="cursor-pointer text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950"
                                                             onClick={() => setDeleteCollection(collection)}
                                                         >
-                                                            <Trash2 className="mr-2 h-4 w-4" />
+                                                            <Trash2 className="mr-2 size-4" />
                                                             Supprimer
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
@@ -239,7 +241,7 @@ export default function Categories({ breadcrumbs: initialBreadcrumbs, collection
                 open={!!deleteCollection}
                 onClose={() => setDeleteCollection(null)}
                 itemNameKey="title"
-                deleteRoute={(item) => route('admin.collections.destroy', item.id)}
+                deleteRoute={(item) => destroy.url(item.id)}
                 itemLabel="collection"
                 icon={<Box className="size-4" />}
                 prefix="La"

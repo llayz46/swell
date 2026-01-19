@@ -1,4 +1,5 @@
-// Components
+import { destroy as logout } from '@/actions/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
+import { store as verificationSend } from '@/actions/Laravel/Fortify/Http/Controllers/EmailVerificationNotificationController';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
@@ -13,7 +14,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('verification.send'));
+        post(verificationSend.url());
     };
 
     return (
@@ -31,11 +32,11 @@ export default function VerifyEmail({ status }: { status?: string }) {
 
             <form onSubmit={submit} className="space-y-6 text-center">
                 <Button disabled={processing} variant="secondary">
-                    {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                    {processing && <LoaderCircle className="size-4 animate-spin" />}
                     Recevoir un nouveau lien de vérification
                 </Button>
 
-                <TextLink href={route('logout')} method="post" className="mx-auto block text-sm">
+                <TextLink href={logout.url()} method="post" className="mx-auto block text-sm">
                     Se déconnecter
                 </TextLink>
             </form>

@@ -3,26 +3,30 @@ import { type BreadcrumbItem, type NavItem, SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { Calendar, Gift, Heart, LayoutGrid } from 'lucide-react';
 import { type ReactNode } from 'react';
+import { dashboard } from '@/routes';
+import { index as wishlistIndex } from '@/routes/wishlist';
+import { index as ordersIndex } from '@/routes/orders';
+import { index as loyaltyIndex } from '@/routes/loyalty';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: dashboard().url,
         icon: LayoutGrid,
     },
     {
         title: 'Wishlist',
-        href: '/wishlist',
+        href: wishlistIndex().url,
         icon: Heart,
     },
     {
         title: 'Commandes',
-        href: '/orders',
+        href: ordersIndex().url,
         icon: Calendar,
     },
     {
         title: 'Fidélité',
-        href: '/loyalty',
+        href: loyaltyIndex().url,
         icon: Gift,
     },
 ];

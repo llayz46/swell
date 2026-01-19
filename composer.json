@@ -19,13 +19,14 @@
         "fakerphp/faker": "^1.24",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/cashier": "^15.7",
+        "laravel/fortify": "^1.33",
         "laravel/framework": "^12.0",
         "laravel/nightwatch": "^1.18",
         "laravel/scout": "^10.15",
         "laravel/tinker": "^2.10.1",
+        "laravel/wayfinder": "^0.1.12",
         "league/flysystem-aws-s3-v3": "3.0",
-        "spatie/laravel-permission": "^6.20",
-        "tightenco/ziggy": "^2.4"
+        "spatie/laravel-permission": "^6.20"
     },
     "require-dev": {
         "laravel/boost": "^1.8",
@@ -73,8 +74,15 @@
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74,#86efac\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan inertia:start-ssr\" \"stripe listen --forward-to http://localhost:8000/stripe/webhook --format JSON\" --names='server,queue,logs,ssr,stripe' --kill-others"
         ],
+        "lint": [
+            "pint --parallel"
+        ],
+        "test:lint": [
+            "pint --parallel --test"
+        ],
         "test": [
             "@php artisan config:clear --ansi",
+            "@test:lint",
             "@php artisan test"
         ]
     },

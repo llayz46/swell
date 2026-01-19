@@ -1,3 +1,4 @@
+import { store, update } from '@/actions/App/Modules/Banner/Http/Controllers/BannerController';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
@@ -54,7 +55,7 @@ export function BannerDialog({ open, setOpen, banner, onCreated }: BannerDialogP
         e.preventDefault();
 
         if (!banner) {
-            post(route('admin.banners.store'), {
+            post(store.url(), {
                 preserveScroll: true,
                 onSuccess: (page) => {
                     reset('message');
@@ -83,7 +84,7 @@ export function BannerDialog({ open, setOpen, banner, onCreated }: BannerDialogP
                 },
             });
         } else {
-            put(route('admin.banners.update', banner.id), {
+            put(update.url(banner.id), {
                 preserveScroll: true,
                 onSuccess: () => {
                     reset('message');

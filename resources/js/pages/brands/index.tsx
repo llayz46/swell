@@ -1,7 +1,8 @@
+import { show } from '@/actions/App/Http/Controllers/BrandController';
 import { PaginationComponent } from '@/components/swell/pagination-component';
+import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import BaseLayout from '@/layouts/base-layout';
 import { Brand, PaginatedResponse } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head, Link } from '@inertiajs/react';
 
 interface IndexProps {
@@ -9,8 +10,6 @@ interface IndexProps {
 }
 
 export default function Index({ brands }: IndexProps) {
-    const getStorageUrl = useStorageUrl();
-
     return (
         <BaseLayout>
             <Head title="Marques" />
@@ -25,15 +24,15 @@ export default function Index({ brands }: IndexProps) {
                                 <div className="mb-4 flex h-32 w-32 items-center justify-center">
                                     {brand.logo_url ? (
                                         <img
-                                            src={getStorageUrl(brand.logo_url)}
+                                            src={brand.logo_url}
                                             alt={`Logo ${brand.name}`}
                                             className="max-h-full max-w-full object-contain"
                                         />
                                     ) : (
-                                        <span>{brand.name}</span>
+                                        <PlaceholderImage className="size-full" />
                                     )}
                                 </div>
-                                <Link href={route('brand.show', brand.slug)} className="text-center text-lg font-semibold hover:underline">
+                                <Link href={show.url(brand.slug)} className="text-center text-lg font-semibold hover:underline">
                                     {brand.name}
                                 </Link>
                             </div>

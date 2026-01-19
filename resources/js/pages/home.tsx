@@ -13,7 +13,6 @@ import { useAppearance } from '@/hooks/use-appearance';
 import BaseLayout from '@/layouts/base-layout';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
-import { useStorageUrl } from '@/utils/format-storage-url';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowRight, BookOpenText, Monitor, Package, Puzzle, ShoppingCartIcon, Star, BookOpen } from 'lucide-react';
 import { ReactNode, useState } from 'react';
@@ -156,7 +155,6 @@ export default function Home({ products }: { products: Product[] }) {
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
     const getInitials = useInitials();
     const { appearance } = useAppearance();
-    const getStorageUrl = useStorageUrl();
 
     return (
         <BaseLayout>
@@ -166,7 +164,7 @@ export default function Home({ products }: { products: Product[] }) {
 
             {/* Hero Section */}
             <section className="pt-10 sm:pt-20">
-                <div className="relative w-full rounded-xl px-4 py-8 sm:px-8 sm:py-12">
+                <div className="relative w-full rounded-xl py-8 sm:px-8 sm:py-12">
                     <div className="container mx-auto pt-8 sm:pt-16">
                         <div className="mx-auto max-w-7xl text-center">
                             <h1 className="sm:leading-tighter mb-4 text-4xl leading-tight font-semibold tracking-tight text-black sm:mb-6 sm:text-5xl md:text-7xl dark:text-white">
@@ -245,20 +243,20 @@ export default function Home({ products }: { products: Product[] }) {
 
             {/* Join Section */}
             <section className="container mx-auto">
-                <div className="rounded-xl bg-muted/90 dark:bg-muted/40 py-24 mx-4">
-                    <div className="mx-auto mb-16 max-w-2xl text-center">
-                        <h2 className="mb-3 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
+                <div className="rounded-xl bg-muted/90 dark:bg-muted/40 py-4 sm:py-24 sm:mx-4">
+                    <div className="mx-4 sm:mx-auto mb-8 sm:mb-16 max-w-2xl text-center">
+                        <h2 className="mb-3 text-lg sm:text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
                             Conçevez des projets <span className="text-primary">ambitieux</span> avec{' '}
                             <span className="font-bold italic underline">Swell</span>
                         </h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
                             Un <span className="font-bold text-primary">starter-kit e-commerce</span> complet et évolutif, pensé pour accélérer vos
                             projets et
-                            <span className="text-3xl font-bold text-primary italic"> intégrer facilement vos produits.</span>
+                            <span className="text-xl sm:text-3xl font-bold text-primary italic"> intégrer facilement vos produits.</span>
                         </p>
                     </div>
     
-                    <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
+                    <div className="max-w-5xl xl:mx-auto grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2 mx-4">
                         {CATEGORIES.map((category, index) => (
                             <div
                                 key={index}
@@ -285,8 +283,8 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* Top Products Section */}
-            <section className="py-24">
-                <div className="container mx-auto px-4">
+            <section className="pt-12 sm:pt-16 md:pt-24">
+                <div className="container mx-auto sm:px-4">
                     <div className="mx-auto mt-3 mb-8 max-w-2xl text-center md:mb-12">
                         <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Exemples de produits</h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
@@ -305,14 +303,14 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* Last Review Section */}
-            <section className="pt-24 pb-36">
+            <section className="pt-12 sm:pt-16 md:pt-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-8 max-w-2xl text-center md:mb-12">
                         <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Ce que nos clients disent</h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">Des avis authentiques de joueurs satisfaits.</p>
                     </div>
 
-                    <Carousel className="mx-auto w-[calc(100%-48px)] max-w-3xl sm:w-full">
+                    <Carousel className="relative mx-auto w-[calc(100%-48px)] max-w-3xl sm:w-full">
                         <CarouselContent>
                             {REVIEWS.map((review) => (
                                 <CarouselItem key={review.id}>
@@ -330,7 +328,7 @@ export default function Home({ products }: { products: Product[] }) {
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <Avatar className="size-8 overflow-hidden rounded-full">
-                                                <AvatarImage src={getStorageUrl(review.user?.avatar)} alt={review.user?.name} />
+                                                <AvatarImage src={review.user?.avatar} alt={review.user?.name} />
                                                 <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                                     {getInitials(review.user ? review.user.name : 'Anonyme')}
                                                 </AvatarFallback>
@@ -344,15 +342,15 @@ export default function Home({ products }: { products: Product[] }) {
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        <CarouselPrevious />
-                        <CarouselNext />
+                        <CarouselPrevious className="max-[900px]:-bottom-12 max-[900px]:translate-y-0 max-[900px]:top-auto max-[900px]:left-2" />
+                        <CarouselNext className="max-[900px]:-bottom-12 max-[900px]:translate-y-0 max-[900px]:top-auto max-[900px]:right-2" />
                     </Carousel>
                 </div>
             </section>
 
             {/* CTA Section */}
-            <section className="container mx-auto">
-                <div className="rounded-xl bg-muted/90 py-10 mx-4 md:py-20 dark:bg-muted/40">
+            <section className="container mx-auto pt-24">
+                <div className="rounded-xl bg-muted/90 max-sm:p-4 sm:py-10 sm:mx-4 md:py-20 dark:bg-muted/40">
                     <div className="mx-auto mb-8 max-w-2xl text-center">
                         <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
                             Prêt à lancer votre projet grâce à Swell ?
@@ -369,7 +367,7 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* FAQ Section */}
-            <section className="mx-auto mt-12 max-w-6xl py-24 sm:px-4">
+            <section className="mx-auto max-w-6xl pt-12 sm:pt-16 md:pt-24 sm:px-4">
                 <div className="mx-auto mb-8 max-w-2xl text-center md:mb-16">
                     <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Questions Fréquemment Posées</h2>
                     <p className="text-sm tracking-tighter text-foreground/70 md:text-base">Vous avez des questions ? Nous avons les réponses.</p>
@@ -391,7 +389,7 @@ export default function Home({ products }: { products: Product[] }) {
             </section>
 
             {/* Footer Section */}
-            <section className="container mx-auto mt-12 mb-8 px-4">
+            <section className="container mx-auto pt-12 sm:pt-16 md:pt-24 mb-8 sm:px-4">
                 <footer className="bg-slate-light p-1.5 shadow-inner rounded-4xl">
                     <div className="shadow-xs-with-border bg-muted/90 dark:bg-muted/40 rounded-3xl">
                         <div className="p-5 md:p-12 grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-4">
@@ -412,7 +410,7 @@ export default function Home({ products }: { products: Product[] }) {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
-                                                    {appearance === 'dark' ? (
+                                                    {appearance === 'dark' || appearance === 'system' ? (
                                                         <GithubDark className="size-5" />
                                                     ): (
                                                         <GithubLight className="size-5" />

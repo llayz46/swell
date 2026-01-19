@@ -1,3 +1,4 @@
+import { store, update } from '@/actions/App/Http/Controllers/Admin/BrandController';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
@@ -57,7 +58,7 @@ export function BrandDialog({ open, setOpen, brand, inputValue }: BrandDialogPro
         e.stopPropagation();
 
         if (!brand) {
-            post(route('admin.brands.store'), {
+            post(store.url(), {
                 preserveScroll: true,
                 forceFormData: true,
                 onSuccess: () => {
@@ -78,7 +79,7 @@ export function BrandDialog({ open, setOpen, brand, inputValue }: BrandDialogPro
                 },
             });
         } else {
-            post(route('admin.brands.update', brand.id), {
+            post(update.url(brand.id), {
                 method: 'put',
                 preserveScroll: true,
                 onSuccess: () => {

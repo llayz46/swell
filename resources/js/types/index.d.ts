@@ -1,6 +1,5 @@
 import { LucideIcon } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
-import type { Config } from 'ziggy-js';
 import { Team } from './workspace';
 
 export interface Auth {
@@ -21,7 +20,7 @@ export interface NavGroup {
 
 export interface NavItem {
     title: string;
-    href: string;
+    href: NonNullable<InertiaLinkProps['href']>;
     icon?: LucideIcon | null;
     isActive?: boolean;
 }
@@ -64,12 +63,12 @@ export interface SharedData {
         };
     };
     auth: Auth;
-    ziggy: Config & { location: string };
     sidebarOpen: boolean;
-    [key: string]: unknown;
+    defaultSearchProducts: Product[];
     categories: Category[];
     cart: Cart;
     infoBanner: BannerItem[];
+    [key: string]: unknown;
 }
 
 export interface User {

@@ -22,8 +22,8 @@ export default function Notifications() {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative h-8 w-8" aria-label="Notifications">
-                    <Bell className="h-4 w-4" />
+                <Button variant="ghost" size="icon" className="relative size-8" aria-label="Notifications">
+                    <Bell className="size-4" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 p-0" align="end">
