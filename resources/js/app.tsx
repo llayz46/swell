@@ -16,8 +16,8 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        const cart = (props.initialPage.props as unknown as { cart: Cart | null }).cart;
-        const wishlistEnabled = (props.initialPage.props as unknown as { swell: { wishlist: { enabled: boolean } } }).swell.wishlist.enabled;
+        const cart = (props.initialPage.props as unknown as { cart?: Cart | null }).cart ?? null;
+        const wishlistEnabled = (props.initialPage.props as unknown as { swell?: { wishlist?: { enabled?: boolean } } }).swell?.wishlist?.enabled ?? false;
 
         root.render(
             <ConfirmProvider>
