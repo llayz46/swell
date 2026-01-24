@@ -41,6 +41,8 @@ class HandleInertiaRequests extends Middleware
         $shared = [
             ...parent::share($request),
             'name' => config('app.name'),
+            'locale' => app()->getLocale(),
+            'availableLocales' => config('app.available_locales', ['fr', 'en']),
             'swell' => fn () => $this->sharedPropsService->getSwellConfig(),
             'auth' => fn () => $this->sharedPropsService->getAuthData($request),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',

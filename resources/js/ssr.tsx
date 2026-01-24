@@ -1,3 +1,4 @@
+import { initI18n } from '@/i18n';
 import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -12,6 +13,9 @@ createServer((page) =>
         title: (title) => `${title} - ${appName}`,
         resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),
         setup: ({ App, props }) => {
+            const locale = (props.initialPage.props as unknown as { locale?: string }).locale ?? 'fr';
+            initI18n(locale);
+
             return <App {...props} />;
         },
     }),

@@ -1,6 +1,7 @@
 import { CartProvider } from '@/contexts/cart-context';
 import { ConfirmProvider } from '@/contexts/confirm-context';
 import { WishlistProvider } from '@/contexts/wishlist-context';
+import { initI18n } from '@/i18n';
 import { Cart } from '@/types';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -18,6 +19,9 @@ createInertiaApp({
 
         const cart = (props.initialPage.props as unknown as { cart?: Cart | null }).cart ?? null;
         const wishlistEnabled = (props.initialPage.props as unknown as { swell?: { wishlist?: { enabled?: boolean } } }).swell?.wishlist?.enabled ?? false;
+        const locale = (props.initialPage.props as unknown as { locale?: string }).locale ?? 'fr';
+
+        initI18n(locale);
 
         root.render(
             <ConfirmProvider>
