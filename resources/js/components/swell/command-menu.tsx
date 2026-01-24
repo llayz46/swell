@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } 
 import { Kbd } from '@/components/ui/kbd';
 import { Spinner } from '@/components/ui/spinner';
 import { Appearance, useAppearance } from '@/hooks/use-appearance';
+import { useLocale } from '@/hooks/use-locale';
 import { cn } from '@/lib/utils';
 import { home, login, logout, register } from '@/routes';
 import { dashboard } from '@/routes/admin';
@@ -23,6 +24,7 @@ import {
     Check,
     ChevronRight,
     Gift,
+    Globe,
     Heart,
     Home,
     LayoutGrid,
@@ -42,7 +44,7 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-type Page = 'home' | 'theme';
+type Page = 'home' | 'theme' | 'locale';
 
 const themeItems: { value: Appearance; icon: typeof Sun; label: string }[] = [
     { value: 'light', icon: Sun, label: 'Clair' },
@@ -50,10 +52,16 @@ const themeItems: { value: Appearance; icon: typeof Sun; label: string }[] = [
     { value: 'system', icon: Monitor, label: 'Système' },
 ];
 
+const localeItems: { value: string; label: string; flag: string }[] = [
+    { value: 'fr', label: 'Français', flag: '🇫🇷' },
+    { value: 'en', label: 'English', flag: '🇬🇧' },
+];
+
 export function CommandMenu() {
     const page = usePage<SharedData>();
     const { defaultSearchProducts, swell, auth } = page.props;
     const { appearance, updateAppearance } = useAppearance();
+    const { locale, setLocale } = useLocale();
 
     const [open, setOpen] = useState<boolean>(false);
     const [query, setQuery] = useState('');
@@ -128,6 +136,11 @@ export function CommandMenu() {
         setCurrentPage('home');
     };
 
+    const handleLocaleChange = (newLocale: string) => {
+        setLocale(newLocale);
+        setCurrentPage('home');
+    };
+
     const handleOpenChange = (isOpen: boolean) => {
         setOpen(isOpen);
         if (!isOpen) {
@@ -137,13 +150,10 @@ export function CommandMenu() {
         }
     };
 
-    const handleOpenTheme = async () => {
+    const handleOpenSubPage = async (targetPage: Page) => {
         const queryCommandMode = query.startsWith('>');
-
         await setQuery('');
-
-        setCurrentPage('theme');
-
+        setCurrentPage(targetPage);
         if (queryCommandMode) setQuery('>');
     };
 
@@ -154,6 +164,8 @@ export function CommandMenu() {
     }, []);
 
     const shouldAlwaysRenderSeparator = !isCommandMode || !searchQuery;
+
+    const currentLocaleItem = localeItems.find((item) => item.value === locale);
 
     const CommandMenuItems = () => (
         <>
@@ -231,7 +243,7 @@ export function CommandMenu() {
             <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
             <CommandGroup heading="Préférences" className="px-1">
-                <CommandItem onSelect={() => handleOpenTheme()} className="cursor-pointer" value="thème theme apparence appearance dark light">
+                <CommandItem onSelect={() => handleOpenSubPage('theme')} className="cursor-pointer" value="thème theme apparence appearance dark light">
                     {appearance === 'light' ? (
                         <Sun className="size-4" />
                     ) : appearance === 'dark' ? (
@@ -241,6 +253,12 @@ export function CommandMenu() {
                     )}
                     <span>Thème</span>
                     <ChevronRight className="ml-auto size-4" />
+                </CommandItem>
+                <CommandItem onSelect={() => handleOpenSubPage('locale')} className="cursor-pointer" value="langue language locale francais français english anglais">
+                    <Globe className="size-4" />
+                    <span>Langue</span>
+                    <span className="ml-auto text-xs text-muted-foreground">{currentLocaleItem?.flag}</span>
+                    <ChevronRight className="size-4" />
                 </CommandItem>
             </CommandGroup>
 
@@ -289,6 +307,15 @@ export function CommandMenu() {
                 </>
             )}
         </>
+    );
+
+    const SubPageHeader = ({ title, onBack }: { title: string; onBack: () => void }) => (
+        <div className="flex items-center gap-2 border-b px-3 py-2">
+            <button onClick={onBack} className="rounded-md p-1 transition-colors hover:bg-muted">
+                <ArrowLeft className="size-4" />
+            </button>
+            <span className="text-sm font-medium">{title}</span>
+        </div>
     );
 
     return (
@@ -449,17 +476,7 @@ export function CommandMenu() {
 
                     {currentPage === 'theme' && (
                         <>
-                            <div className="flex items-center gap-2 border-b px-3 py-2">
-                                <button
-                                    onClick={() => {
-                                        setCurrentPage('home');
-                                    }}
-                                    className="rounded-md p-1 transition-colors hover:bg-muted"
-                                >
-                                    <ArrowLeft className="size-4" />
-                                </button>
-                                <span className="text-sm font-medium">Choisir un thème</span>
-                            </div>
+                            <SubPageHeader title="Choisir un thème" onBack={() => setCurrentPage('home')} />
 
                             <CommandList className="no-scrollbar mt-2">
                                 <CommandGroup className="px-1">
@@ -468,6 +485,24 @@ export function CommandMenu() {
                                             <Icon className="size-4" />
                                             <span>{label}</span>
                                             {appearance === value && <Check className="ml-auto size-4" />}
+                                        </CommandItem>
+                                    ))}
+                                </CommandGroup>
+                            </CommandList>
+                        </>
+                    )}
+
+                    {currentPage === 'locale' && (
+                        <>
+                            <SubPageHeader title="Choisir une langue" onBack={() => setCurrentPage('home')} />
+
+                            <CommandList className="no-scrollbar mt-2">
+                                <CommandGroup className="px-1">
+                                    {localeItems.map(({ value, label, flag }) => (
+                                        <CommandItem key={value} onSelect={() => handleLocaleChange(value)} className="cursor-pointer">
+                                            <span className="text-base">{flag}</span>
+                                            <span>{label}</span>
+                                            {locale === value && <Check className="ml-auto size-4" />}
                                         </CommandItem>
                                     ))}
                                 </CommandGroup>

@@ -1,22 +1,13 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-const loadTranslations = () => {
-    const translations: Record<string, Record<string, string>> = {};
+import en from '@lang/en.json';
+import fr from '@lang/fr.json';
 
-    const modules = import.meta.glob<Record<string, string>>('/lang/*.json', { eager: true });
-
-    for (const path in modules) {
-        const locale = path.match(/\/lang\/(\w+)\.json$/)?.[1];
-        if (locale) {
-            translations[locale] = modules[path];
-        }
-    }
-
-    return translations;
+const resources = {
+    fr: { translation: fr },
+    en: { translation: en },
 };
-
-const translations = loadTranslations();
 
 export const initI18n = (locale: string = 'fr') => {
     if (i18n.isInitialized) {
@@ -25,14 +16,12 @@ export const initI18n = (locale: string = 'fr') => {
     }
 
     i18n.use(initReactI18next).init({
-        resources: Object.fromEntries(
-            Object.entries(translations).map(([lang, trans]) => [lang, { translation: trans }]),
-        ),
+        resources,
         lng: locale,
         fallbackLng: 'fr',
         interpolation: {
             escapeValue: false,
-        }
+        },
     });
 
     return i18n;

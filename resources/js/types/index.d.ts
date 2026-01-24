@@ -46,6 +46,8 @@ export type BannerItem = {
 
 export interface SharedData {
     name: string;
+    locale: string;
+    availableLocales: string[];
     swell: {
         wishlist: {
             enabled: boolean;
@@ -70,6 +72,8 @@ export interface SharedData {
     infoBanner: BannerItem[];
     [key: string]: unknown;
 }
+
+export type SharedProps = SharedData;
 
 export interface User {
     id: number;

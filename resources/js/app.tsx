@@ -1,9 +1,9 @@
 import { CartProvider } from '@/contexts/cart-context';
 import { ConfirmProvider } from '@/contexts/confirm-context';
 import { WishlistProvider } from '@/contexts/wishlist-context';
-import { initI18n } from '@/i18n';
+import i18n, { initI18n } from '@/i18n';
 import { Cart } from '@/types';
-import { createInertiaApp } from '@inertiajs/react';
+import { createInertiaApp, router } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import '../css/app.css';
@@ -22,6 +22,13 @@ createInertiaApp({
         const locale = (props.initialPage.props as unknown as { locale?: string }).locale ?? 'fr';
 
         initI18n(locale);
+
+        router.on('navigate', (event) => {
+            const newLocale = (event.detail.page.props as { locale?: string }).locale;
+            if (newLocale && i18n.language !== newLocale) {
+                i18n.changeLanguage(newLocale);
+            }
+        });
 
         root.render(
             <ConfirmProvider>

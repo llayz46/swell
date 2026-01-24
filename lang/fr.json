@@ -1,5 +1,12 @@
 {
     "The provided password was incorrect.": "Le mot de passe fourni est incorrect.",
     "The provided two factor authentication code was invalid.": "Le code d'authentification à deux facteurs est invalide.",
-    "The provided two factor recovery code was invalid.": "Le code de récupération à deux facteurs est invalide."
+    "The provided two factor recovery code was invalid.": "Le code de récupération à deux facteurs est invalide.",
+    "dashboard.welcome": "Bienvenue sur votre tableau de bord",
+    "dashboard.description": "Ceci est un exemple de traduction avec react-i18next.",
+    "dashboard.current_locale": "Langue actuelle",
+    "dashboard.change_language": "Changer de langue",
+    "dashboard.greeting": "Bonjour, {{name}} !",
+    "dashboard.items_count_one": "{{count}} article",
+    "dashboard.items_count_other": "{{count}} articles"
 }
