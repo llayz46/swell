@@ -12,153 +12,156 @@ import { useInitials } from '@/hooks/use-initials';
 import { useAppearance } from '@/hooks/use-appearance';
 import BaseLayout from '@/layouts/base-layout';
 import { cn } from '@/lib/utils';
-import type { Product } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import type { Product, SharedData } from '@/types';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { ArrowRight, BookOpenText, Monitor, Package, Puzzle, ShoppingCartIcon, Star, BookOpen } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Tooltip,TooltipContent,TooltipTrigger } from "@/components/ui/tooltip"
-
-const BENEFITS = [
-    {
-        icon: Monitor,
-        title: 'UI Simple et intuitive',
-        description: 'Des composants faciles à utiliser et à personnaliser',
-    },
-    {
-        icon: ShoppingCartIcon,
-        title: 'Panier, paiement...',
-        description: 'Logique clé en main pour une UX fluide',
-    },
-    {
-        icon: Package,
-        title: 'Performances optimisées',
-        description: 'Un code léger, optimisé et rapide à charger',
-    },
-    {
-        icon: Puzzle,
-        title: 'Structure modulaire',
-        description: 'Architecture claire : contrôleurs légers, isolation.',
-    },
-];
-
-const CATEGORIES = [
-    {
-        title: 'Authentification',
-        description: 'Sécurisez l’accès des utilisateurs avec des outils modernes.',
-        items: [
-            { name: 'Laravel Built-in' },
-            { name: 'Auth 2FA' },
-            { name: 'Profil personnalisable', className: 'text-violet-400' },
-            { name: "Vérification d'email" },
-        ],
-    },
-    {
-        title: 'Modélisation',
-        description: 'Des modèles Eloquent pour une gestion efficace des données.',
-        items: [
-            { name: 'Produits : collections, images' },
-            { name: 'Catégories et Marques' },
-            { name: 'Panier et Commandes' },
-            { name: 'Entièrement personnalisable', className: 'text-green-400' },
-        ],
-    },
-    {
-        title: 'Interface Utilisateur',
-        description: 'Grâce à Tailwind CSS et Shadcn UI.',
-        items: [
-            { name: 'Composants UI', className: 'text-blue-400' },
-            { name: 'Personnalisation facile' },
-            { name: 'Dark mode' },
-            { name: 'Responsive et accessible' },
-        ],
-    },
-    {
-        title: 'Développement',
-        description: 'Un code propre, modulaire et facile à maintenir.',
-        items: [
-            { name: 'Laravel 12', className: 'text-[#F05340]' },
-            { name: 'Tests unitaires inclus' },
-            { name: 'Documentation complète' },
-            { name: 'Contribution' },
-        ],
-    },
-];
-
-const REVIEWS = [
-    {
-        id: 1,
-        user: {
-            name: 'Alice Dupont',
-            avatar: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Alice',
-        },
-        product: {
-            name: 'Produit A',
-        },
-        comment: "J'adore ce produit ! Il a vraiment changé ma façon de travailler.",
-        rating: 5,
-    },
-    {
-        id: 2,
-        user: {
-            name: 'Bob Martin',
-            avatar: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Bob',
-        },
-        product: {
-            name: 'Produit B',
-        },
-        comment: "Très bon produit, mais j'aurais aimé plus de documentation.",
-        rating: 4,
-    },
-    {
-        id: 3,
-        user: {
-            name: 'Claire Dubois',
-            avatar: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Claire',
-        },
-        product: {
-            name: 'Produit C',
-        },
-        comment: "Le support client est excellent, ils m'ont aidé rapidement.",
-        rating: 5,
-    },
-];
-
-const FAQ = [
-    {
-        question: "Qu'est-ce que le starter kit Swell ?",
-        answer: "Swell est un starter kit e-commerce complet, prêt à l'emploi, conçu pour accélérer le développement de vos projets web.",
-    },
-    {
-        question: "À qui s'adresse ce starter kit ?",
-        answer: "Il s'adresse aux développeurs souhaitant démarrer rapidement un projet e-commerce moderne avec une base technique solide.",
-    },
-    {
-        question: 'Quels frameworks et technologies sont utilisés ?',
-        answer: "Le starter kit utilise Laravel pour le backend, React et TypeScript pour le frontend, ainsi que Tailwind CSS et Shadcn UI pour l'interface.",
-    },
-    {
-        question: 'Puis-je personnaliser les composants et la structure ?',
-        answer: "Oui, tous les composants et la structure du projet sont entièrement personnalisables pour s'adapter à vos besoins.",
-    },
-    {
-        question: 'Le kit inclut-il des pages produits et autres ?',
-        answer: 'Oui, des pages sont directement fournies pour vous aider à démarrer rapidement.',
-    },
-    {
-        question: "Comment obtenir de l'aide ou contribuer au projet ?",
-        answer: 'Vous pouvez consulter la documentation, rejoindre la discussion sur GitHub ou proposer des contributions directement sur le dépôt.',
-    },
-];
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { useTranslation } from 'react-i18next';
 
 export default function Home({ products }: { products: Product[] }) {
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
     const getInitials = useInitials();
+    const props = usePage<SharedData>().props;
     const { appearance } = useAppearance();
+    const { t } = useTranslation();
+    
+    const BENEFITS = [
+        {
+            icon: Monitor,
+            title: t('home.benefits.ui.title'),
+            description: t('home.benefits.ui.description'),
+        },
+        {
+            icon: ShoppingCartIcon,
+            title: t('home.benefits.cart.title'),
+            description: t('home.benefits.cart.description'),
+        },
+        {
+            icon: Package,
+            title: t('home.benefits.performance.title'),
+            description: t('home.benefits.performance.description'),
+        },
+        {
+            icon: Puzzle,
+            title: t('home.benefits.modular.title'),
+            description: t('home.benefits.modular.description'),
+        },
+    ];
+    
+    const CATEGORIES = [
+        {
+            title: t('home.categories.auth.title'),
+            description: t('home.categories.auth.description'),
+            items: [
+                { name: t('home.categories.auth.item1') },
+                { name: t('home.categories.auth.item2') },
+                { name: t('home.categories.auth.item3'), className: 'text-violet-400' },
+                { name: t('home.categories.auth.item4') },
+            ],
+        },
+        {
+            title: t('home.categories.models.title'),
+            description: t('home.categories.models.description'),
+            items: [
+                { name: t('home.categories.models.item1') },
+                { name: t('home.categories.models.item1') },
+                { name: t('home.categories.models.item1') },
+                { name: t('home.categories.models.item1'), className: 'text-green-400' },
+            ],
+        },
+        {
+            title: t('home.categories.ui.title'),
+            description: t('home.categories.ui.description'),
+            items: [
+                { name: t('home.categories.ui.item1'), className: 'text-blue-400' },
+                { name: t('home.categories.ui.item1') },
+                { name: t('home.categories.ui.item1') },
+                { name: t('home.categories.ui.item1') },
+            ],
+        },
+        {
+            title: t('home.categories.dev.title'),
+            description: t('home.categories.dev.description'),
+            items: [
+                { name: t('home.categories.dev.item1'), className: 'text-[#F05340]' },
+                { name: t('home.categories.dev.item1') },
+                { name: t('home.categories.dev.item1') },
+                { name: t('home.categories.dev.item1') },
+            ],
+        },
+    ];
+    
+    const REVIEWS = [
+        {
+            id: 1,
+            user: {
+                name: 'Alice Dupont',
+                avatar: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Alice',
+            },
+            product: {
+                name: 'Produit A',
+            },
+            comment: "J'adore ce produit ! Il a vraiment changé ma façon de travailler.",
+            rating: 5,
+        },
+        {
+            id: 2,
+            user: {
+                name: 'Bob Martin',
+                avatar: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Bob',
+            },
+            product: {
+                name: 'Produit B',
+            },
+            comment: "Très bon produit, mais j'aurais aimé plus de documentation.",
+            rating: 4,
+        },
+        {
+            id: 3,
+            user: {
+                name: 'Claire Dubois',
+                avatar: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Claire',
+            },
+            product: {
+                name: 'Produit C',
+            },
+            comment: "Le support client est excellent, ils m'ont aidé rapidement.",
+            rating: 5,
+        },
+    ];
+    
+    const FAQ = [
+        {
+            question: t('home.faq.q1'),
+            answer: t('home.faq.a1'),
+        },
+        {
+            question: t('home.faq.q2'),
+            answer: t('home.faq.a2'),
+        },
+        {
+            question: t('home.faq.q3'),
+            answer: t('home.faq.a3'),
+        },
+        {
+            question: t('home.faq.q4'),
+            answer: t('home.faq.a4'),
+        },
+        {
+            question: t('home.faq.q5'),
+            answer: t('home.faq.a5'),
+        },
+        {
+            question: t('home.faq.q6'),
+            answer: t('home.faq.a6'),
+        },
+    ];
 
     return (
         <BaseLayout>
-            <Head title="Accueil" />
+            <Head title={t('home.title')} />
 
             <div className="absolute top-30 right-0 left-0 -z-10 h-250 w-full bg-[radial-gradient(#e5e7eb_1px,#ffffff_1px)] mask-[radial-gradient(ellipse_100%_50%_at_50%_100%,#000_100%,transparent_220%)] bg-size-[20px_20px] after:absolute after:bottom-0 after:h-72 after:w-full after:bg-linear-to-t after:from-background after:to-transparent dark:bg-[radial-gradient(#262626FF_1px,#0A0A0AFF_1px)]"></div>
 
@@ -169,13 +172,13 @@ export default function Home({ products }: { products: Product[] }) {
                         <div className="mx-auto max-w-7xl text-center">
                             <h1 className="sm:leading-tighter mb-4 text-4xl leading-tight font-semibold tracking-tight text-black sm:mb-6 sm:text-5xl md:text-7xl dark:text-white">
                                 <BoxReveal boxColor="#3b82f6" duration={0.5}>
-                                    <span className="text-center">Le starter-kit</span>
+                                    <span className="text-center">{t('home.hero.title_line1')}</span>
                                 </BoxReveal>
                                 <BoxReveal boxColor="#3b82f6" duration={0.5}>
                                     <span className="text-primary italic">
-                                        — pour{' '}
+                                        {t('home.hero.title_line2')}{' '}
                                         <span className="relative">
-                                            vous lancer
+                                            {t('home.hero.title_highlight')}
                                             <span className="absolute bottom-1 left-0 h-0.5 w-full bg-primary" />
                                         </span>
                                         .
@@ -189,17 +192,17 @@ export default function Home({ products }: { products: Product[] }) {
                                 delay={0.3}
                                 once
                             >
-                                Pensé pour les développeurs : flexible, performant, scalable et prêt à l'emploi.
+                                {t('home.hero.subtitle')}
                             </TextAnimate>
                             <div className="mt-6 flex flex-col items-center justify-center gap-3 px-4 sm:mt-8 sm:flex-row sm:px-0">
-                                <PrimaryButton href="/products">Voir nos produits</PrimaryButton>
+                                <PrimaryButton href="/products">{t('home.hero.cta')}</PrimaryButton>
                                 <a
                                     href="https://swellkit.dev"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex w-full items-center justify-center rounded-md border border-foreground/10 px-5 py-3 text-sm font-medium transition-colors hover:bg-foreground/5 sm:w-auto"
                                 >
-                                    <BookOpenText className="mr-1.5 size-3.5" /> Documentation
+                                    <BookOpenText className="mr-1.5 size-3.5" /> {t('common.documentation')}
                                 </a>
                             </div>
                         </div>
@@ -218,7 +221,7 @@ export default function Home({ products }: { products: Product[] }) {
                                     delay={0.4}
                                     once
                                 >
-                                    Une base technique solide, prête à utiliser pour vos projets.
+                                    {t('home.benefits.title')}
                                 </TextAnimate>
 
                                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
@@ -246,13 +249,12 @@ export default function Home({ products }: { products: Product[] }) {
                 <div className="rounded-xl bg-muted/90 dark:bg-muted/40 py-4 sm:py-24 sm:mx-4">
                     <div className="mx-4 sm:mx-auto mb-8 sm:mb-16 max-w-2xl text-center">
                         <h2 className="mb-3 text-lg sm:text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
-                            Conçevez des projets <span className="text-primary">ambitieux</span> avec{' '}
-                            <span className="font-bold italic underline">Swell</span>
+                            {t('home.join.title')} <span className="text-primary">{t('home.join.title_highlight')}</span> {t('home.join.title_suffix')}{' '}
+                            <span className="font-bold italic underline">{props.name}</span>
                         </h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
-                            Un <span className="font-bold text-primary">starter-kit e-commerce</span> complet et évolutif, pensé pour accélérer vos
-                            projets et
-                            <span className="text-xl sm:text-3xl font-bold text-primary italic"> intégrer facilement vos produits.</span>
+                            {t('home.join.description_line1')} <span className="font-bold text-primary">{t('home.join.description_line2')}</span> {t('home.join.description_line3')}
+                            <span className="text-xl sm:text-3xl font-bold text-primary italic"> {t('home.join.description_highlight')}</span>
                         </p>
                     </div>
     
@@ -286,10 +288,9 @@ export default function Home({ products }: { products: Product[] }) {
             <section className="pt-12 sm:pt-16 md:pt-24">
                 <div className="container mx-auto sm:px-4">
                     <div className="mx-auto mt-3 mb-8 max-w-2xl text-center md:mb-12">
-                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Exemples de produits</h2>
+                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">{t('home.products.title')}</h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
-                            Découvrez une sélection de produits <span className="font-bold text-primary">populaires</span> pour vous inspirer dans vos
-                            projets.
+                            {t('home.products.description_line1')} <span className="font-bold text-primary">{t('home.products.description_highlight')}</span> {t('home.products.description_line2')}
                         </p>
                     </div>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
@@ -306,8 +307,8 @@ export default function Home({ products }: { products: Product[] }) {
             <section className="pt-12 sm:pt-16 md:pt-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-8 max-w-2xl text-center md:mb-12">
-                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Ce que nos clients disent</h2>
-                        <p className="text-sm tracking-tighter text-foreground/70 md:text-base">Des avis authentiques de joueurs satisfaits.</p>
+                        <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">{t('home.reviews.title')}</h2>
+                        <p className="text-sm tracking-tighter text-foreground/70 md:text-base">{t('home.reviews.description')}</p>
                     </div>
 
                     <Carousel className="relative mx-auto w-[calc(100%-48px)] max-w-3xl sm:w-full">
@@ -353,15 +354,14 @@ export default function Home({ products }: { products: Product[] }) {
                 <div className="rounded-xl bg-muted/90 max-sm:p-4 sm:py-10 sm:mx-4 md:py-20 dark:bg-muted/40">
                     <div className="mx-auto mb-8 max-w-2xl text-center">
                         <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">
-                            Prêt à lancer votre projet grâce à Swell ?
+                            {t('home.cta.title')}
                         </h2>
                         <p className="text-sm tracking-tighter text-foreground/70 md:text-base">
-                            Lancez vous rapidement avec Swell, conçu pour simplifier le développement et vous permettre de vous concentrer sur
-                            l'essentiel.
+                            {t('home.cta.description')}
                         </p>
                     </div>
                     <div className="flex justify-center">
-                        <PrimaryButton href="https://swellkit.dev">Voir la documentation</PrimaryButton>
+                        <PrimaryButton href="https://swellkit.dev">{t('home.cta.button')}</PrimaryButton>
                     </div>
                 </div>
             </section>
@@ -369,8 +369,8 @@ export default function Home({ products }: { products: Product[] }) {
             {/* FAQ Section */}
             <section className="mx-auto max-w-6xl pt-12 sm:pt-16 md:pt-24 sm:px-4">
                 <div className="mx-auto mb-8 max-w-2xl text-center md:mb-16">
-                    <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">Questions Fréquemment Posées</h2>
-                    <p className="text-sm tracking-tighter text-foreground/70 md:text-base">Vous avez des questions ? Nous avons les réponses.</p>
+                    <h2 className="mb-2 text-2xl font-semibold tracking-tighter text-foreground md:text-4xl">{t('home.faq.title')}</h2>
+                    <p className="text-sm tracking-tighter text-foreground/70 md:text-base">{t('home.faq.description')}</p>
                 </div>
                 <Accordion type="single" collapsible className="w-full space-y-3" defaultValue="item-1">
                     {FAQ.map((item, index) => (
@@ -396,10 +396,10 @@ export default function Home({ products }: { products: Product[] }) {
                             <div className="flex flex-col gap-4 col-span-1 md:col-span-8">
                                 <Link href="/" className="flex items-center gap-1 text-lg font-bold">
                                     <AppLogoIcon className="size-5 fill-current dark:text-white" />
-                                    Swell
+                                    {props.name}
                                 </Link>
                                 <p className="max-w-xs text-sm text-muted-foreground">
-                                    Un starter-kit simple et flexible pour démarrer vos projets e-commerce.
+                                    {t('home.footer.description')}
                                 </p>
                                 <div className="flex items-center gap-2">
                                     <Tooltip>
@@ -444,7 +444,7 @@ export default function Home({ products }: { products: Product[] }) {
                             
                             <div className="md:hidden flex justify-between">
                                 <div className="w-1/2 col-span-1 flex flex-col items-start">
-                                    <h3 className="mb-3 font-medium">Boutique</h3>
+                                    <h3 className="mb-3 font-medium">{t('home.footer.shop')}</h3>
                                     <ul className="w-full space-y-2 md:text-right">
                                         <li>
                                             <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
@@ -480,7 +480,7 @@ export default function Home({ products }: { products: Product[] }) {
                                 </div>
                                 
                                 <div className="w-1/2 col-span-1 flex flex-col items-start">
-                                    <h3 className="mb-3 font-medium">Ressources</h3>
+                                    <h3 className="mb-3 font-medium">{t('home.footer.resources')}</h3>
                                     <ul className="w-full space-y-2 md:text-right">
                                         <li>
                                             <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
@@ -523,7 +523,7 @@ export default function Home({ products }: { products: Product[] }) {
                             </div>
                             
                             <div className="hidden col-span-1 md:flex flex-col items-start md:col-span-2 md:items-end">
-                                <h3 className="mb-3 font-medium">Boutique</h3>
+                                <h3 className="mb-3 font-medium">{t('home.footer.shop')}</h3>
                                 <ul className="w-full space-y-2 md:text-right">
                                     <li>
                                         <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
@@ -558,7 +558,7 @@ export default function Home({ products }: { products: Product[] }) {
                                 </ul>
                             </div>
                             <div className="hidden col-span-1 md:flex flex-col items-start md:col-span-2 md:items-end">
-                                <h3 className="mb-3 font-medium">Ressources</h3>
+                                <h3 className="mb-3 font-medium">{t('home.footer.resources')}</h3>
                                 <ul className="w-full space-y-2 md:text-right">
                                     <li>
                                         <Button variant="link" size="sm" className="text-muted-foreground p-0" asChild>
@@ -580,7 +580,7 @@ export default function Home({ products }: { products: Product[] }) {
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                             >
-                                                Discussion
+                                                {t('home.footer.discussion')}
                                             </a>
                                         </Button>
                                     </li>
@@ -592,7 +592,7 @@ export default function Home({ products }: { products: Product[] }) {
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                             >
-                                                Roadmap
+                                                {t('home.footer.roadmap')}
                                             </a>
                                         </Button>
                                     </li>
@@ -602,7 +602,7 @@ export default function Home({ products }: { products: Product[] }) {
                     </div>
                     <div className="flex max-md:flex-col max-md:text-center items-center justify-between mx-2 md:mx-12 my-3 md:my-5 text-sm text-muted-foreground">
                         <p>
-                            © {new Date().getFullYear()} Swell. Built with Laravel. Contributions welcome.
+                            {t('home.footer.copyright', { year: new Date().getFullYear() })}
                         </p>
                         
                         <div className="flex items-center gap-4">
@@ -613,7 +613,7 @@ export default function Home({ products }: { products: Product[] }) {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    Star on GitHub
+                                    {t('home.footer.star_on_github')}
                                 </a>
                             </Button>
                             
@@ -626,7 +626,7 @@ export default function Home({ products }: { products: Product[] }) {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    Contribuer
+                                    {t('common.contribute')}
                                 </a>
                             </Button>
                         </div>
