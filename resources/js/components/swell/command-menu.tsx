@@ -43,14 +43,9 @@ import {
     UserPlus,
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Page = 'home' | 'theme' | 'locale';
-
-const themeItems: { value: Appearance; icon: typeof Sun; label: string }[] = [
-    { value: 'light', icon: Sun, label: 'Clair' },
-    { value: 'dark', icon: Moon, label: 'Sombre' },
-    { value: 'system', icon: Monitor, label: 'Système' },
-];
 
 const localeItems: { value: string; label: string; flag: string }[] = [
     { value: 'fr', label: 'Français', flag: '🇫🇷' },
@@ -62,12 +57,19 @@ export function CommandMenu() {
     const { defaultSearchProducts, swell, auth } = page.props;
     const { appearance, updateAppearance } = useAppearance();
     const { locale, setLocale } = useLocale();
+    const { t } = useTranslation();
 
     const [open, setOpen] = useState<boolean>(false);
     const [query, setQuery] = useState('');
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState<Page>('home');
+
+    const themeItems: { value: Appearance; icon: typeof Sun; label: string }[] = [
+        { value: 'light', icon: Sun, label: t('command.theme_light') },
+        { value: 'dark', icon: Moon, label: t('command.theme_dark') },
+        { value: 'system', icon: Monitor, label: t('command.theme_system') },
+    ];
 
     const isAuthenticated = !!auth.user;
     const isAdmin = isAuthenticated && auth.user.roles.some((role) => (typeof role === 'string' ? role === 'admin' : role.name === 'admin'));
@@ -169,23 +171,23 @@ export function CommandMenu() {
 
     const CommandMenuItems = () => (
         <>
-            <CommandGroup heading="Navigation" className="px-1">
+            <CommandGroup heading={t('command.group_navigation')} className="px-1">
                 <CommandItem asChild className="cursor-pointer" value="accueil home">
                     <Link prefetch href={home()}>
                         <Home className="size-4" />
-                        <span>Accueil</span>
+                        <span>{t('nav.home')}</span>
                     </Link>
                 </CommandItem>
                 <CommandItem asChild className="cursor-pointer" value="produits products catalogue">
                     <Link href={productIndex()}>
                         <ShoppingBag className="size-4" />
-                        <span>Produits</span>
+                        <span>{t('nav.products')}</span>
                     </Link>
                 </CommandItem>
                 <CommandItem asChild className="cursor-pointer" value="marques brands">
                     <Link href={brandIndex()}>
                         <Tag className="size-4" />
-                        <span>Marques</span>
+                        <span>{t('nav.brands')}</span>
                     </Link>
                 </CommandItem>
             </CommandGroup>
@@ -193,24 +195,24 @@ export function CommandMenu() {
             <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
             {isAuthenticated ? (
-                <CommandGroup heading="Compte" className="px-1">
+                <CommandGroup heading={t('command.group_account')} className="px-1">
                     <CommandItem asChild className="cursor-pointer" value="parametres paramètres settings configuration">
                         <Link prefetch href={profileEdit()}>
                             <Settings className="size-4" />
-                            <span>Paramètres</span>
+                            <span>{t('nav.settings')}</span>
                         </Link>
                     </CommandItem>
                     <CommandItem asChild className="cursor-pointer" value="mes commandes orders historique">
                         <Link href={ordersIndex()}>
                             <LayoutGrid className="size-4" />
-                            <span>Mes commandes</span>
+                            <span>{t('nav.orders')}</span>
                         </Link>
                     </CommandItem>
                     {swell.wishlist.enabled && (
                         <CommandItem asChild className="cursor-pointer" value="wishlist favoris liste souhaits">
                             <Link href={wishlistIndex()}>
                                 <Heart className="size-4" />
-                                <span>Ma wishlist</span>
+                                <span>{t('nav.wishlist')}</span>
                             </Link>
                         </CommandItem>
                     )}
@@ -218,23 +220,23 @@ export function CommandMenu() {
                         <CommandItem asChild className="cursor-pointer" value="fidelite fidélité loyalty points recompenses récompenses">
                             <Link href={loyaltyIndex()}>
                                 <Gift className="size-4" />
-                                <span>Fidélité</span>
+                                <span>{t('nav.loyalty')}</span>
                             </Link>
                         </CommandItem>
                     )}
                 </CommandGroup>
             ) : (
-                <CommandGroup heading="Compte" className="px-1">
+                <CommandGroup heading={t('command.group_account')} className="px-1">
                     <CommandItem asChild className="cursor-pointer" value="connexion login se connecter">
                         <Link href={login()}>
                             <LogIn className="size-4" />
-                            <span>Connexion</span>
+                            <span>{t('nav.login')}</span>
                         </Link>
                     </CommandItem>
                     <CommandItem asChild className="cursor-pointer" value="inscription register creer créer compte">
                         <Link href={register()}>
                             <UserPlus className="size-4" />
-                            <span>Inscription</span>
+                            <span>{t('nav.register')}</span>
                         </Link>
                     </CommandItem>
                 </CommandGroup>
@@ -242,7 +244,7 @@ export function CommandMenu() {
 
             <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
-            <CommandGroup heading="Préférences" className="px-1">
+            <CommandGroup heading={t('command.group_preferences')} className="px-1">
                 <CommandItem onSelect={() => handleOpenSubPage('theme')} className="cursor-pointer" value="thème theme apparence appearance dark light">
                     {appearance === 'light' ? (
                         <Sun className="size-4" />
@@ -251,12 +253,12 @@ export function CommandMenu() {
                     ) : (
                         <Monitor className="size-4" />
                     )}
-                    <span>Thème</span>
+                    <span>{t('command.theme')}</span>
                     <ChevronRight className="ml-auto size-4" />
                 </CommandItem>
                 <CommandItem onSelect={() => handleOpenSubPage('locale')} className="cursor-pointer" value="langue language locale francais français english anglais">
                     <Globe className="size-4" />
-                    <span>Langue</span>
+                    <span>{t('command.language')}</span>
                     <span className="ml-auto text-xs text-muted-foreground">{currentLocaleItem?.flag}</span>
                     <ChevronRight className="size-4" />
                 </CommandItem>
@@ -266,11 +268,11 @@ export function CommandMenu() {
                 <>
                     <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
-                    <CommandGroup heading="Administration" className="px-1">
+                    <CommandGroup heading={t('command.group_admin')} className="px-1">
                         <CommandItem asChild className="cursor-pointer" value="admin dashboard administration panel">
                             <Link href={dashboard()}>
                                 <ShieldCheck className="size-4" />
-                                <span>Admin Dashboard</span>
+                                <span>{t('nav.admin')}</span>
                             </Link>
                         </CommandItem>
                     </CommandGroup>
@@ -281,11 +283,11 @@ export function CommandMenu() {
                 <>
                     <CommandSeparator alwaysRender={shouldAlwaysRenderSeparator} className="my-2" />
 
-                    <CommandGroup heading="Gestion de projet" className="px-1">
+                    <CommandGroup heading={t('command.group_workspace')} className="px-1">
                         <CommandItem asChild className="cursor-pointer" value="workspace projet gestion taches tâches">
                             <Link href={overview()}>
                                 <LayoutGrid className="size-4" />
-                                <span>Workspace</span>
+                                <span>{t('nav.workspace')}</span>
                             </Link>
                         </CommandItem>
                     </CommandGroup>
@@ -300,7 +302,7 @@ export function CommandMenu() {
                         <CommandItem asChild className="w-full cursor-pointer" value="deconnexion déconnexion logout se déconnecter deconnecter">
                             <Link href={logout()}>
                                 <LogOut className="size-4" />
-                                <span>Déconnexion</span>
+                                <span>{t('nav.logout')}</span>
                             </Link>
                         </CommandItem>
                     </CommandGroup>
@@ -327,7 +329,7 @@ export function CommandMenu() {
                         'relative h-8 min-w-full justify-start pl-3 font-normal text-foreground shadow-none hover:bg-muted/50 sm:pr-12 w-36 md:w-48 lg:w-56 xl:w-64 dark:bg-card',
                     )}
                 >
-                    <span className="inline-flex text-muted-foreground truncate">Rechercher un produit, une page...</span>
+                    <span className="inline-flex text-muted-foreground truncate">{t('command.placeholder')}</span>
                     <div className="absolute top-1.5 right-1.5 hidden gap-1 group-has-data-[slot=designer]/body:hidden sm:flex">
                         <Kbd>⌘K</Kbd>
                     </div>
@@ -335,8 +337,8 @@ export function CommandMenu() {
             </DialogTrigger>
 
             <DialogContent showCloseButton={false} className="border-none bg-transparent p-0" onCloseAutoFocus={(e) => e.preventDefault()}>
-                <DialogTitle className="sr-only">Rechercher un produit, une page...</DialogTitle>
-                <DialogDescription className="sr-only">Rechercher un produit, une page...</DialogDescription>
+                <DialogTitle className="sr-only">{t('command.placeholder')}</DialogTitle>
+                <DialogDescription className="sr-only">{t('command.placeholder')}</DialogDescription>
 
                 <Command
                     filter={isCommandMode ? customFilter : () => 1}
@@ -345,7 +347,7 @@ export function CommandMenu() {
                     {currentPage === 'home' && (
                         <>
                             <div className="px-2">
-                                <CommandInput placeholder="Rechercher un produit..." value={query} onValueChange={handleSearch} />
+                                <CommandInput placeholder={t('command.placeholder')} value={query} onValueChange={handleSearch} />
                             </div>
 
                             <div className="flex items-center gap-2 border-b px-3 py-1.5">
@@ -355,7 +357,7 @@ export function CommandMenu() {
                                     onClick={() => setQuery(isCommandMode ? '' : '>')}
                                 >
                                     <Terminal className="size-3" />
-                                    Commandes
+                                    {t('command.mode_commands')}
                                 </Badge>
                                 <Badge
                                     variant={!isCommandMode ? 'default' : 'secondary'}
@@ -363,10 +365,10 @@ export function CommandMenu() {
                                     onClick={() => setQuery('')}
                                 >
                                     <Search className="size-3" />
-                                    Produits
+                                    {t('command.mode_products')}
                                 </Badge>
                                 <span className="ml-auto text-xs text-muted-foreground">
-                                    {isCommandMode ? 'Tapez pour filtrer' : 'Tapez pour chercher'}
+                                    {isCommandMode ? t('command.type_to_filter') : t('command.type_to_search')}
                                 </span>
                             </div>
 
@@ -378,12 +380,12 @@ export function CommandMenu() {
                                 )}
 
                                 {!isCommandMode && !loading && isSearching && products.length === 0 && (
-                                    <CommandEmpty>Aucun produit trouvé pour "{searchQuery}"</CommandEmpty>
+                                    <CommandEmpty>{t('command.no_results', {query: searchQuery})}</CommandEmpty>
                                 )}
 
                                 {!isCommandMode && !loading && products.length > 0 && (
                                     <CommandGroup
-                                        heading="Produits"
+                                        heading={t('command.mode_products')}
                                         className="px-1"
                                         headingAction={
                                             <Link
@@ -392,7 +394,7 @@ export function CommandMenu() {
                                                 })}
                                                 className="text-xs hover:underline"
                                             >
-                                                Voir tout
+                                                {t('command.see_all')}
                                             </Link>
                                         }
                                     >
@@ -430,7 +432,7 @@ export function CommandMenu() {
                                 )}
 
                                 {!isCommandMode && !loading && !isSearching && defaultSearchProducts.length > 0 && (
-                                    <CommandGroup heading="Suggestions" className="px-1">
+                                    <CommandGroup heading={t('command.group_suggestions')} className="px-1">
                                         {defaultSearchProducts.map((product) => (
                                             <CommandItem
                                                 asChild
@@ -476,7 +478,7 @@ export function CommandMenu() {
 
                     {currentPage === 'theme' && (
                         <>
-                            <SubPageHeader title="Choisir un thème" onBack={() => setCurrentPage('home')} />
+                            <SubPageHeader title={t('command.theme_choose')} onBack={() => setCurrentPage('home')} />
 
                             <CommandList className="no-scrollbar mt-2">
                                 <CommandGroup className="px-1">
@@ -494,7 +496,7 @@ export function CommandMenu() {
 
                     {currentPage === 'locale' && (
                         <>
-                            <SubPageHeader title="Choisir une langue" onBack={() => setCurrentPage('home')} />
+                            <SubPageHeader title={t('command.language_choose')} onBack={() => setCurrentPage('home')} />
 
                             <CommandList className="no-scrollbar mt-2">
                                 <CommandGroup className="px-1">
