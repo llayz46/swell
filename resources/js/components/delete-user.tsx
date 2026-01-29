@@ -10,10 +10,12 @@ import { Label } from '@/components/ui/label';
 import HeadingSmall from '@/components/heading-small';
 
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useTranslation } from 'react-i18next';
 
 export default function DeleteUser() {
     const passwordInput = useRef<HTMLInputElement>(null);
     const { data, setData, delete: deleteAction, processing, reset, errors, clearErrors } = useForm<Required<{ password: string }>>({ password: '' });
+    const { t } = useTranslation();
 
     const deleteUser: FormEventHandler = (e) => {
         e.preventDefault();
@@ -33,27 +35,26 @@ export default function DeleteUser() {
 
     return (
         <div className="space-y-6">
-            <HeadingSmall title="Supprimer votre compte" description="Supprimez votre compte et toutes ses ressources" />
+            <HeadingSmall title={t('settings.delete.title')} description={t('settings.delete.description')} />
             <div className="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4 dark:border-red-200/10 dark:bg-red-700/10">
                 <div className="relative space-y-0.5 text-red-600 dark:text-red-100">
-                    <p className="font-medium">Attention</p>
-                    <p className="text-sm">Procéder avec prudence, cette action est irréversible.</p>
+                    <p className="font-medium">{t('common.warning')}</p>
+                    <p className="text-sm">{t('common.warning_irreversible')}</p>
                 </div>
 
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button variant="destructive">Supprimer votre compte</Button>
+                        <Button variant="destructive">{t('settings.delete.title')}</Button>
                     </DialogTrigger>
                     <DialogContent>
-                        <DialogTitle>Êtes-vous sûr de vouloir supprimer votre compte ?</DialogTitle>
+                        <DialogTitle>{t('settings.delete.confirm_title')}</DialogTitle>
                         <DialogDescription>
-                            Une fois votre compte supprimé, toutes ses ressources et données seront également définitivement supprimées. Veuillez
-                            entrer votre mot de passe pour confirmer que vous souhaitez supprimer définitivement votre compte.
+                            {t('settings.delete.confirm_description')}
                         </DialogDescription>
                         <form className="space-y-6" onSubmit={deleteUser}>
                             <div className="grid gap-2">
                                 <Label htmlFor="password" className="sr-only">
-                                    Mot de passe
+                                    {t('settings.delete.password')}
                                 </Label>
 
                                 <Input
@@ -63,7 +64,7 @@ export default function DeleteUser() {
                                     ref={passwordInput}
                                     value={data.password}
                                     onChange={(e) => setData('password', e.target.value)}
-                                    placeholder="Mot de passe"
+                                    placeholder={t('settings.delete.password')}
                                     autoComplete="current-password"
                                 />
 
@@ -73,12 +74,12 @@ export default function DeleteUser() {
                             <DialogFooter className="gap-2">
                                 <DialogClose asChild>
                                     <Button variant="secondary" onClick={closeModal}>
-                                        Annuler
+                                        {t('common.cancel')}
                                     </Button>
                                 </DialogClose>
 
                                 <Button variant="destructive" disabled={processing}>
-                                    Supprimer votre compte
+                                    {t('settings.delete.title')}
                                 </Button>
                             </DialogFooter>
                         </form>

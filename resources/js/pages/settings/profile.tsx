@@ -15,28 +15,30 @@ import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
 import { dashboard } from '@/routes';
 import { toast } from 'sonner';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard().url,
-    },
-    {
-        title: 'Paramètres du compte',
-        href: edit().url,
-    },
-];
+import { useTranslation } from 'react-i18next';
 
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage<SharedData>().props;
+    const { t } = useTranslation();
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: t('nav.dashboard'),
+            href: dashboard().url,
+        },
+        {
+            title: t('settings.profile.title'),
+            href: edit().url,
+        },
+    ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Paramètres du compte" />
+            <Head title={t('settings.profile.title')} />
 
             <SettingsLayout>
                 <div className="space-y-6">
-                    <HeadingSmall title="Information du profile" description="Modifier votre avatar, nom et adresse email" />
+                    <HeadingSmall title={t('settings.profile.heading')} description={t('settings.profile.heading_description')} />
 
                     <Form
                         {...ProfileController.update.form()}
@@ -44,9 +46,9 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                             preserveScroll: true,
                         }}
                         onError={(errors) => {
-                            const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
+                            const allErrors = Object.values(errors).join('\n') || t('settings.profile.error_check');
 
-                            toast.error('Erreur lors de la mise à jour du profil.', {
+                            toast.error(t('settings.profile.error_update'), {
                                 description: allErrors,
                             });
                         }}
@@ -55,10 +57,10 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
                                 <AvatarProfileInput name="avatar" defaultValue={auth.user.avatar_url} />
-        
+
                                 <div className="grid gap-2">
-                                    <Label htmlFor="name">Nom</Label>
-        
+                                    <Label htmlFor="name">{t('settings.profile.name')}</Label>
+
                                     <Input
                                         id="name"
                                         className="mt-1 block w-full"
@@ -66,15 +68,15 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                         name="name"
                                         required
                                         autoComplete="name"
-                                        placeholder="Nom"
+                                        placeholder={t('settings.profile.name')}
                                     />
-        
+
                                     <InputError className="mt-2" message={errors.name} />
                                 </div>
-        
+
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">Adresse email</Label>
-        
+                                    <Label htmlFor="email">{t('settings.profile.email')}</Label>
+
                                     <Input
                                         id="email"
                                         type="email"
@@ -83,37 +85,37 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                         name="email"
                                         required
                                         autoComplete="username"
-                                        placeholder="Adresse email"
+                                        placeholder={t('settings.profile.email')}
                                     />
-        
+
                                     <InputError className="mt-2" message={errors.email} />
                                 </div>
-        
+
                                 {mustVerifyEmail && auth.user.email_verified_at === null && (
                                     <div>
                                         <p className="-mt-4 text-sm text-muted-foreground">
-                                            Votre adresse email n'est pas vérifiée.{' '}
+                                            {t('settings.profile.email_not_verified')}{' '}
                                             <Link
                                                 href={send()}
                                                 method="post"
                                                 as="button"
                                                 className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                                             >
-                                                Cliquez ici pour renvoyer l'email de vérification.
+                                                {t('settings.profile.resend_verification')}
                                             </Link>
                                         </p>
-        
+
                                         {status === 'verification-link-sent' && (
                                             <div className="mt-2 text-sm font-medium text-green-600">
-                                                Un nouvel email de vérification a été envoyé à votre adresse email.
+                                                {t('settings.profile.verification_sent')}
                                             </div>
                                         )}
                                     </div>
                                 )}
-        
+
                                 <div className="flex items-center gap-4">
-                                    <Button disabled={processing}>Modifier</Button>
-        
+                                    <Button disabled={processing}>{t('common.save')}</Button>
+
                                     <Transition
                                         show={recentlySuccessful}
                                         enter="transition ease-in-out"
@@ -121,7 +123,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                         leave="transition ease-in-out"
                                         leaveTo="opacity-0"
                                     >
-                                        <p className="text-sm text-neutral-600">Sauvegardé</p>
+                                        <p className="text-sm text-neutral-600">{t('common.saved')}</p>
                                     </Transition>
                                 </div>
                             </>

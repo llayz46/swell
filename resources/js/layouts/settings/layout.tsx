@@ -10,32 +10,34 @@ import { edit as editProfile } from '@/routes/profile';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit as editPassword } from '@/routes/user-password';
 import { type PropsWithChildren } from 'react';
-
-const sidebarNavItems: NavItem[] = [
-    {
-        title: 'Profile',
-        href: editProfile(),
-        icon: null,
-    },
-    {
-        title: 'Mot de passe',
-        href: editPassword(),
-        icon: null,
-    },
-    {
-        title: '2FA',
-        href: showTwoFactor(),
-        icon: null,
-    },
-    {
-        title: 'Thème',
-        href: editAppearance(),
-        icon: null,
-    },
-];
+import { useTranslation } from 'react-i18next';
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
     const { urlIsActive } = useActiveUrl();
+    const { t } = useTranslation();
+
+    const sidebarNavItems: NavItem[] = [
+        {
+            title: t('settings.nav_profile'),
+            href: editProfile(),
+            icon: null,
+        },
+        {
+            title: t('settings.nav_password'),
+            href: editPassword(),
+            icon: null,
+        },
+        {
+            title: t('settings.nav_2fa'),
+            href: showTwoFactor(),
+            icon: null,
+        },
+        {
+            title: t('settings.nav_theme'),
+            href: editAppearance(),
+            icon: null,
+        },
+    ];
 
     // When server-side rendering, we only render the layout on the client...
     if (typeof window === 'undefined') {
@@ -44,7 +46,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
     return (
         <div className="px-4 py-6">
-            <Heading title="Paramètres" description="Gérer votre profile et les paramètres de votre compte" />
+            <Heading title={t('settings.title')} description={t('settings.description')} />
 
             <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
                 <aside className="w-full max-w-xl lg:w-48">

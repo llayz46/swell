@@ -11,6 +11,7 @@ import { Form } from '@inertiajs/react';
 import { Eye, EyeOff, LockKeyhole, RefreshCw } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import AlertError from './alert-error';
+import { useTranslation } from 'react-i18next';
 
 interface TwoFactorRecoveryCodesProps {
     recoveryCodesList: string[];
@@ -26,6 +27,7 @@ export default function TwoFactorRecoveryCodes({
     const [codesAreVisible, setCodesAreVisible] = useState<boolean>(false);
     const codesSectionRef = useRef<HTMLDivElement | null>(null);
     const canRegenerateCodes = recoveryCodesList.length > 0 && codesAreVisible;
+    const { t } = useTranslation();
 
     const toggleCodesVisibility = useCallback(async () => {
         if (!codesAreVisible && !recoveryCodesList.length) {
@@ -57,10 +59,10 @@ export default function TwoFactorRecoveryCodes({
             <CardHeader>
                 <CardTitle className="flex gap-3">
                     <LockKeyhole className="size-4" aria-hidden="true" />
-                    Codes de récupération 2FA
+                    {t('settings.2fa.recovery_title')}
                 </CardTitle>
                 <CardDescription>
-                    Les codes de récupération vous permettent de retrouver l'accès si vous perdez votre appareil 2FA. Stockez-les dans un gestionnaire de mots de passe sécurisé.
+                    {t('settings.2fa.recovery_description')}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -75,7 +77,7 @@ export default function TwoFactorRecoveryCodes({
                             className="size-4"
                             aria-hidden="true"
                         />
-                        {codesAreVisible ? 'Masquer' : 'Afficher'} les codes de récupération
+                        {codesAreVisible ? t('settings.2fa.hide_codes') : t('settings.2fa.show_codes')}
                     </Button>
 
                     {canRegenerateCodes && (
@@ -91,7 +93,7 @@ export default function TwoFactorRecoveryCodes({
                                     disabled={processing}
                                     aria-describedby="regenerate-warning"
                                 >
-                                    <RefreshCw /> Régénérer les codes
+                                    <RefreshCw /> {t('settings.2fa.regenerate')}
                                 </Button>
                             )}
                         </Form>
@@ -142,15 +144,10 @@ export default function TwoFactorRecoveryCodes({
                                     )}
                                 </div>
 
-                                <div className="text-xs text-muted-foreground select-none">
-                                    <p id="regenerate-warning">
-                                        Chaque code de récupération ne peut être utilisé qu'une seule fois pour accéder à votre compte et sera supprimé après utilisation. Si vous en avez besoin de plus, cliquez sur{' '}
-                                        <span className="font-bold">
-                                            Régénérer les codes
-                                        </span>{' '}
-                                        ci-dessus.
-                                    </p>
-                                </div>
+                                <div
+                                    className="text-xs text-muted-foreground select-none"
+                                    dangerouslySetInnerHTML={{ __html: t('settings.2fa.recovery_warning') }}
+                                />
                             </>
                         )}
                     </div>

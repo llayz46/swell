@@ -10,22 +10,18 @@ import { type BreadcrumbItem, type Product } from '@/types';
 import { Deferred, Head, Link } from '@inertiajs/react';
 import { LoaderCircle, Plus, ShoppingCart, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-    {
-        title: 'Wishlist',
-        href: '/wishlist',
-    },
-];
+import { useTranslation } from 'react-i18next';
 
 export default function Wishlist({ items }: { items: Product[] }) {
+    const { t } = useTranslation();
     const { addToCart } = useCartContext();
     const { removeItem, removeItems, addItems } = useWishlistContext();
     const [optimisticWishlist, setOptimisticWishlist] = useState<Product[]>([]);
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: t('nav.dashboard'), href: '/dashboard' },
+        { title: t('nav.wishlist'), href: '/wishlist' },
+    ];
 
     useEffect(() => {
         if (items && items.length > 0) {
@@ -35,17 +31,17 @@ export default function Wishlist({ items }: { items: Product[] }) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Wishlist" />
+            <Head title={t('nav.wishlist')} />
 
             <Deferred data="items" fallback={<WishlistFallback />}>
                 <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                     <div className="mb-2 flex items-center justify-between">
-                        <h1 className="text-2xl font-bold">Ma liste de souhaits</h1>
+                        <h1 className="text-2xl font-bold">{t('wishlist.title')}</h1>
                         {optimisticWishlist && optimisticWishlist.length > 0 && (
                             <div className="flex items-center justify-center gap-2">
                                 <Button variant="outline" onClick={() => addItems(addToCart, optimisticWishlist)}>
                                     <ShoppingCart className="size-4" />
-                                    Tout ajouter au panier
+                                    {t('wishlist.add_all_to_cart')}
                                 </Button>
 
                                 <Button variant="destructive" size="icon" onClick={() => removeItems([optimisticWishlist, setOptimisticWishlist])}>
@@ -70,10 +66,10 @@ export default function Wishlist({ items }: { items: Product[] }) {
                         <div className="relative min-h-[50vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border md:min-h-min">
                             <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-100/20" />
                             <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
-                                <h3 className="mb-2 text-xl font-semibold">Votre liste de souhaits est vide</h3>
-                                <p className="mb-4 text-muted-foreground">Parcourez notre catalogue et ajoutez des produits à votre wishlist</p>
+                                <h3 className="mb-2 text-xl font-semibold">{t('wishlist.empty')}</h3>
+                                <p className="mb-4 text-muted-foreground">{t('wishlist.empty_description')}</p>
                                 <Link href={index.url()} className={buttonVariants()}>
-                                    Découvrir nos produits
+                                    {t('common.discover_products')}
                                 </Link>
                             </div>
                         </div>
@@ -85,6 +81,8 @@ export default function Wishlist({ items }: { items: Product[] }) {
 }
 
 function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; onRemove: () => void; onAddToCart: () => void }) {
+    const { t } = useTranslation();
+
     return (
         <div className="flex items-center gap-4 rounded-md border p-3">
             <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-sm bg-neutral-700">
@@ -122,7 +120,7 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; on
                                 className={`mr-2 inline-block size-2 rounded-full ${product.stock === 0 ? 'bg-red-500' : product.stock < 11 ? 'bg-orange-500' : 'bg-green-500'}`}
                             />
                             <span className="text-xs text-gray-500 dark:text-gray-400">
-                                {product.stock === 0 ? 'Indisponible' : product.stock < 11 ? `Reste ${product.stock}` : 'En stock'}
+                                {product.stock === 0 ? t('product.out_of_stock') : product.stock < 11 ? t('product.low_stock', { count: product.stock }) : t('product.in_stock')}
                             </span>
                         </div>
                     </div>
@@ -131,12 +129,12 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; on
                 <div className="mt-3 flex items-center justify-between">
                     {product.isNew && (
                         <Badge variant="secondary" className="rounded-sm bg-yellow-500 text-xs text-white dark:bg-yellow-700">
-                            Nouveauté
+                            {t('product.new')}
                         </Badge>
                     )}
                     <div className="ml-auto flex items-center gap-2">
                         <Button variant="outline" size="sm" disabled={product.stock === 0} onClick={onAddToCart}>
-                            <Plus className="size-3.5" /> Panier
+                            <Plus className="size-3.5" /> {t('nav.cart')}
                         </Button>
                         <Button variant="destructive" size="icon" className="size-8" onClick={onRemove}>
                             <Trash2 className="size-3.5" />
@@ -149,15 +147,17 @@ function WishlistItem({ product, onRemove, onAddToCart }: { product: Product; on
 }
 
 function WishlistFallback() {
+    const { t } = useTranslation();
+
     return (
         <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
             <div className="mb-4 flex items-center justify-between">
-                <h1 className="text-2xl font-bold">Ma liste de souhaits</h1>
+                <h1 className="text-2xl font-bold">{t('wishlist.title')}</h1>
 
                 <div className="flex items-center justify-center gap-2">
                     <Button variant="outline">
                         <ShoppingCart className="size-4" />
-                        Tout ajouter au panier
+                        {t('wishlist.add_all_to_cart')}
                     </Button>
 
                     <Button variant="destructive" size="icon">
