@@ -7,6 +7,7 @@ import BaseLayout from '@/layouts/base-layout';
 import type { PaginatedResponse, Product } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type SortType = 'news' | 'price_asc' | 'price_desc';
 
@@ -19,6 +20,7 @@ interface ProductListPageProps {
 }
 
 export function ProductListPage({ title, products, sort = 'news', stock, price }: ProductListPageProps) {
+    const { t } = useTranslation();
     const [selectedSort, setSelectedSort] = useState<SortType>(sort);
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
@@ -59,9 +61,9 @@ export function ProductListPage({ title, products, sort = 'news', stock, price }
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="news">Nouveautés</SelectItem>
-                            <SelectItem value="price_asc">Prix ordre croissant</SelectItem>
-                            <SelectItem value="price_desc">Prix ordre décroissant</SelectItem>
+                            <SelectItem value="news">{t('sort.new_arrivals')}</SelectItem>
+                            <SelectItem value="price_asc">{t('sort.price_asc')}</SelectItem>
+                            <SelectItem value="price_desc">{t('sort.price_desc')}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -75,7 +77,7 @@ export function ProductListPage({ title, products, sort = 'news', stock, price }
                         ))}
                     </ul>
 
-                    {products.data.length === 0 && <div className="text-center text-muted-foreground">Aucun produit trouvé.</div>}
+                    {products.data.length === 0 && <div className="text-center text-muted-foreground">{t('product.no_results')}</div>}
 
                     <PaginationComponent
                         pagination={{ links: products.links, meta: products.meta }}

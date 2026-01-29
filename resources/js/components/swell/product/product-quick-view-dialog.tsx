@@ -7,8 +7,10 @@ import { useWishlist } from '@/hooks/use-wishlist';
 import { Product, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { Heart } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function ProductQuickViewDialog({ product, open, onClose }: { product: Product | null; open: boolean; onClose: () => void }) {
+    const { t } = useTranslation();
     const { swell } = usePage<SharedData>().props;
     const { addToCart } = useCartContext();
     const { addItem } = useWishlist();
@@ -51,7 +53,7 @@ export function ProductQuickViewDialog({ product, open, onClose }: { product: Pr
                     {swell.wishlist.enabled ? (
                         <div className="mt-auto flex items-center justify-between gap-2">
                             <Button className="w-full rounded-md max-sm:h-9" size="lg" onClick={() => addToCart(product)}>
-                                Ajouter au panier
+                                {t('product.add_to_cart')}
                             </Button>
 
                             <Button className="h-10 max-sm:h-9" variant="outline" onClick={() => addItem(product)}>

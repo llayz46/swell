@@ -9,8 +9,10 @@ import { Product, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { Heart, Star } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export function ProductCard({ product, onQuickView }: { product: Product; onQuickView?: () => void }) {
+    const { t } = useTranslation();
     const [isHovered, setIsHovered] = useState(false);
     const [, setIsClicked] = useState(false);
     const { addItem } = useWishlist();
@@ -60,7 +62,7 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
                             onClick={() => addItem(product)}
                         >
                             <Heart className="size-4" />
-                            <span className="sr-only">Ajouter à la wishlist</span>
+                            <span className="sr-only">{t('product.add_to_wishlist')}</span>
                         </Button>
                     )}
                 </div>
@@ -94,7 +96,7 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
                             )}
                         />
                         <span className="text-xs font-medium text-muted-foreground">
-                            {product.stock === 0 ? 'Indisponible' : product.stock < 11 ? `Reste ${product.stock}` : 'En stock'}
+                            {product.stock === 0 ? t('product.out_of_stock') : product.stock < 11 ? t('product.low_stock', { count: product.stock }) : t('product.in_stock')}
                         </span>
                     </div>
                     {product.isNew && (
@@ -103,7 +105,7 @@ export function ProductCard({ product, onQuickView }: { product: Product; onQuic
                             className="flex w-fit items-center gap-1.5 rounded-md bg-muted px-1.5 py-0.75 text-[10px] font-semibold dark:text-white"
                         >
                             <Star size={16} className="fill-yellow-400 text-yellow-400" />
-                            Nouveauté
+                            {t('product.new')}
                         </Badge>
                     )}
                 </div>

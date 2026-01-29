@@ -6,6 +6,7 @@ import { Slider } from '@/components/ui/slider';
 import { router } from '@inertiajs/react';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface FilterSheetProps {
     stock: { in: boolean; out: boolean };
@@ -13,6 +14,7 @@ interface FilterSheetProps {
 }
 
 export function FilterSheet({ stock, price }: FilterSheetProps) {
+    const { t } = useTranslation();
     const maxPrice = price?.max_available ?? 1000;
     const [priceRange, setPriceRange] = useState<[number, number]>([price?.min ?? 0, price?.max ?? maxPrice]);
     const [disponibilityFilter, setDisponibilityFilter] = useState<{ in: boolean; out: boolean }>({
@@ -93,31 +95,31 @@ export function FilterSheet({ stock, price }: FilterSheetProps) {
         <Sheet>
             <SheetTrigger asChild>
                 <Button variant="outline" size="sm">
-                    Filtrer
+                    {t('filter.button')}
                 </Button>
             </SheetTrigger>
             <SheetContent side="left">
                 <SheetHeader>
-                    <SheetTitle>Filtres</SheetTitle>
-                    <SheetDescription>Affinez votre recherche avec les filtres ci-dessous</SheetDescription>
+                    <SheetTitle>{t('filter.title')}</SheetTitle>
+                    <SheetDescription>{t('filter.description')}</SheetDescription>
                 </SheetHeader>
                 <div className="grid flex-1 auto-rows-min gap-6 px-4">
                     <div className="w-full *:not-first:mt-2">
-                        <Label>Disponibilité</Label>
+                        <Label>{t('filter.availability')}</Label>
                         <div className="flex flex-col gap-2">
                             <div className="flex items-center gap-2">
                                 <Checkbox id="in-stock" onCheckedChange={(e) => handleDisponibilityChange('in', e)} defaultChecked={stock.in} />
-                                <Label htmlFor="in-stock">Disponible</Label>
+                                <Label htmlFor="in-stock">{t('filter.in_stock')}</Label>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Checkbox id="out-stock" onCheckedChange={(e) => handleDisponibilityChange('out', e)} defaultChecked={stock.out} />
-                                <Label htmlFor="out-stock">Indisponible</Label>
+                                <Label htmlFor="out-stock">{t('filter.out_of_stock')}</Label>
                             </div>
                         </div>
                     </div>
                     <div className="w-full space-y-3 *:not-first:mt-2">
                         <div className="flex items-center justify-between">
-                            <Label>Prix</Label>
+                            <Label>{t('filter.price')}</Label>
                             <span className="text-sm text-muted-foreground">
                                 {priceRange[0]}€ - {priceRange[1]}€
                             </span>
@@ -126,13 +128,13 @@ export function FilterSheet({ stock, price }: FilterSheetProps) {
                         <Slider value={priceRange} onValueChange={handlePriceChange} max={maxPrice} min={0} step={1} />
 
                         <Button onClick={applyPriceFilter} variant="outline" size="sm" className="w-full">
-                            Appliquer le filtre de prix
+                            {t('filter.apply_price')}
                         </Button>
                     </div>
                 </div>
                 <SheetFooter className="flex-row-reverse justify-between">
                     <SheetClose asChild>
-                        <Button variant="outline">Fermer</Button>
+                        <Button variant="outline">{t('common.close')}</Button>
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>

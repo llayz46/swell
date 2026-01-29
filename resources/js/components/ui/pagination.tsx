@@ -7,6 +7,7 @@ import {
 import { Link } from '@inertiajs/react';
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
+import { useTranslation } from "react-i18next"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -86,15 +87,16 @@ function PaginationPrevious({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const { t } = useTranslation()
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label={t("pagination.go_to_previous")}
       size="default"
       className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
       {...props}
     >
       <ChevronLeftIcon />
-      <span>Préc.</span>
+      <span>{t("pagination.previous")}</span>
     </PaginationLink>
   )
 }
@@ -103,14 +105,15 @@ function PaginationNext({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const { t } = useTranslation()
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label={t("pagination.go_to_next")}
       size="default"
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
       {...props}
     >
-      <span>Suiv.</span>
+      <span>{t("pagination.next")}</span>
       <ChevronRightIcon />
     </PaginationLink>
   )

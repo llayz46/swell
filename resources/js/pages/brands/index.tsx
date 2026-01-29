@@ -4,18 +4,21 @@ import { PlaceholderImage } from '@/components/ui/placeholder-image';
 import BaseLayout from '@/layouts/base-layout';
 import { Brand, PaginatedResponse } from '@/types';
 import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 
 interface IndexProps {
     brands: PaginatedResponse<Brand>;
 }
 
 export default function Index({ brands }: IndexProps) {
+    const { t } = useTranslation();
+
     return (
         <BaseLayout>
-            <Head title="Marques" />
+            <Head title={t('nav.brands')} />
 
             <main className="layout-container">
-                <h1 className="mb-6 text-2xl font-bold">Marques</h1>
+                <h1 className="mb-6 text-2xl font-bold">{t('nav.brands')}</h1>
 
                 <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {brands.data.map((brand) => (

@@ -1,5 +1,6 @@
 import { ProductListPage } from '@/components/swell/product/product-list-page';
 import type { PaginatedResponse, Product } from '@/types';
+import { useTranslation } from 'react-i18next';
 
 interface IndexProductProps {
     data: PaginatedResponse<Product>;
@@ -12,9 +13,11 @@ interface IndexProductProps {
 type SortType = 'news' | 'price_asc' | 'price_desc';
 
 export default function Index({ data, sort = 'news', search, stock, price }: IndexProductProps) {
+    const { t } = useTranslation();
+
     return (
         <ProductListPage
-            title={search ? `Résultats de recherche pour "${search}"` : 'Tous les produits'}
+            title={search ? t('product.search_results', { query: search }) : t('product.all')}
             products={data}
             sort={sort}
             stock={stock}
