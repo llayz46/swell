@@ -6,18 +6,19 @@ import { useCartContext } from '@/contexts/cart-context';
 import { useConfirmContext } from '@/contexts/confirm-context';
 import { CartItem } from '@/types';
 import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function CartSheet() {
+    const { t } = useTranslation();
     const { handleQuantity, clearCart, optimisticCart, removeItemOfCart, checkout } = useCartContext();
     const { confirm } = useConfirmContext();
 
     const handleClearCart = async () => {
         await confirm({
-            title: 'Confirmation de la suppression du panier',
-            description:
-                'Êtes-vous sûr de vouloir vider votre panier ? Cette action est irréversible et supprimera tous les articles de votre panier.',
-            confirmText: 'Vider le panier',
-            cancelText: 'Annuler',
+            title: t('cart.clear_confirm_title'),
+            description: t('cart.clear_confirm_description'),
+            confirmText: t('cart.clear'),
+            cancelText: t('common.cancel'),
             variant: 'destructive',
             icon: <Trash2 className="size-4" />,
             onConfirm: clearCart,
@@ -33,14 +34,14 @@ export function CartSheet() {
             </SheetTrigger>
             <SheetContent className="sm:max-w-md">
                 <SheetHeader>
-                    <SheetTitle>Mon panier</SheetTitle>
-                    <SheetDescription>Gérer les articles dans votre panier, modifier les quantités ou supprimer des articles.</SheetDescription>
+                    <SheetTitle>{t('cart.title')}</SheetTitle>
+                    <SheetDescription>{t('cart.description')}</SheetDescription>
                 </SheetHeader>
 
                 {optimisticCart && optimisticCart.items?.length > 0 && (
                     <div className="flex items-center justify-between border-b px-4 pb-3">
                         <span className="text-sm text-muted-foreground">
-                            {optimisticCart.items.length} {optimisticCart.items.length > 1 ? 'articles' : 'article'}
+                            {t(optimisticCart.items.length > 1 ? 'cart.item_count_plural' : 'cart.item_count', { count: optimisticCart.items.length })}
                         </span>
                         <Button
                             variant="ghost"
@@ -49,14 +50,14 @@ export function CartSheet() {
                             onClick={handleClearCart}
                         >
                             <Trash2 className="size-4" />
-                            <span>Vider le panier</span>
+                            <span>{t('cart.clear')}</span>
                         </Button>
                     </div>
                 )}
 
                 <div className="grid flex-1 auto-rows-min gap-4 px-4">
                     {!optimisticCart?.items.length ? (
-                        <div className="text-center text-muted-foreground">Votre panier est vide.</div>
+                        <div className="text-center text-muted-foreground">{t('cart.empty')}</div>
                     ) : (
                         optimisticCart.items.map((item) => (
                             <CardItem key={item.id} item={item} removeItemOfCart={removeItemOfCart} handleQuantity={handleQuantity} />
@@ -65,16 +66,16 @@ export function CartSheet() {
                 </div>
 
                 <div className="flex justify-between border-t px-4 pt-4 font-medium">
-                    <span>Total</span>
+                    <span>{t('cart.total')}</span>
                     <span>{optimisticCart?.total.toFixed(2)} €</span>
                 </div>
 
                 <SheetFooter className="flex-row-reverse justify-between">
                     <Button type="submit" onClick={checkout}>
-                        Passer à la caisse
+                        {t('cart.checkout')}
                     </Button>
                     <SheetClose asChild>
-                        <Button variant="outline">Fermer</Button>
+                        <Button variant="outline">{t('common.close')}</Button>
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>

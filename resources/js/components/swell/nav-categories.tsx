@@ -14,8 +14,10 @@ import { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { ChevronRight, Menu, X } from 'lucide-react';
 import { ComponentPropsWithoutRef, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export function NavCategories() {
+    const { t } = useTranslation();
     const { categories } = usePage<SharedData>().props;
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [windowWidth, setWindowWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 0);
@@ -62,7 +64,7 @@ export function NavCategories() {
                         size="icon"
                         onClick={() => setIsMobileMenuOpen(true)}
                         className="rounded-md p-2 hover:bg-accent"
-                        aria-label="Ouvrir le menu"
+                        aria-label={t('nav.open_menu')}
                     >
                         <Menu />
                     </Button>
@@ -85,13 +87,13 @@ export function NavCategories() {
                 >
                     {/* Header */}
                     <div className="flex items-center justify-between border-b p-4">
-                        <h2 className="text-lg font-semibold">Catégories</h2>
+                        <h2 className="text-lg font-semibold">{t('nav.categories')}</h2>
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => setIsMobileMenuOpen(false)}
                             className="rounded-md hover:bg-accent"
-                            aria-label="Fermer le menu"
+                            aria-label={t('nav.close_menu')}
                         >
                             <X className="size-5" />
                         </Button>

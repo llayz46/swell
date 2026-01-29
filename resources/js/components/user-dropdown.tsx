@@ -14,8 +14,10 @@ import { useInitials } from '@/hooks/use-initials';
 import type { SharedData } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
 import { CalendarIcon, GiftIcon, HeartIcon, LayoutGridIcon, LayoutListIcon, LogOutIcon, SettingsIcon, ShieldCheckIcon, UserIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function UserDropdown() {
+    const { t } = useTranslation();
     const { swell, auth } = usePage<SharedData>().props;
     const getInitials = useInitials();
     const isAdmin = auth.user.roles.some((role) => role.name === 'admin');
@@ -46,20 +48,20 @@ export function UserDropdown() {
                     <DropdownMenuItem asChild>
                         <Link href="/dashboard" className="flex items-center gap-2">
                             <LayoutGridIcon size={16} className="opacity-60" aria-hidden="true" />
-                            <span>Dashboard</span>
+                            <span>{t('nav.dashboard')}</span>
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <Link href="/orders" className="flex items-center gap-2">
                             <CalendarIcon size={16} className="opacity-60" aria-hidden="true" />
-                            <span>Commandes</span>
+                            <span>{t('nav.orders')}</span>
                         </Link>
                     </DropdownMenuItem>
                     {swell.wishlist.enabled && (
                         <DropdownMenuItem asChild>
                             <Link href="/wishlist" className="flex items-center gap-2">
                                 <HeartIcon size={16} className="opacity-60" aria-hidden="true" />
-                                <span>Wishlist</span>
+                                <span>{t('nav.wishlist')}</span>
                             </Link>
                         </DropdownMenuItem>
                     )}
@@ -67,7 +69,7 @@ export function UserDropdown() {
                         <DropdownMenuItem asChild>
                             <Link href="/loyalty" className="flex items-center gap-2">
                                 <GiftIcon size={16} className="opacity-60" aria-hidden="true" />
-                                <span>Fidélité</span>
+                                <span>{t('nav.loyalty')}</span>
                             </Link>
                         </DropdownMenuItem>
                     )}
@@ -79,7 +81,7 @@ export function UserDropdown() {
                             <DropdownMenuItem asChild>
                                 <Link href="/workspace" className="flex items-center gap-2">
                                     <LayoutListIcon size={16} className="opacity-60" aria-hidden="true" />
-                                    <span>Workspace</span>
+                                    <span>{t('nav.workspace')}</span>
                                 </Link>
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
@@ -91,7 +93,7 @@ export function UserDropdown() {
                     <DropdownMenuItem asChild>
                         <Link href="/settings" className="flex items-center gap-2">
                             <SettingsIcon size={16} className="opacity-60" aria-hidden="true" />
-                            <span>Paramètres</span>
+                            <span>{t('nav.settings')}</span>
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
@@ -103,7 +105,7 @@ export function UserDropdown() {
                             <DropdownMenuItem asChild>
                                 <Link href="/admin" className="flex items-center gap-2">
                                     <ShieldCheckIcon size={16} className="opacity-60" aria-hidden="true" />
-                                    <span>Admin Dashboard</span>
+                                    <span>{t('nav.admin')}</span>
                                 </Link>
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
@@ -113,7 +115,7 @@ export function UserDropdown() {
                 <DropdownMenuItem>
                     <Link className="flex items-center gap-2" method="post" href={logout.url()} as="button" onClick={() => router.flushAll()}>
                         <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
-                        <span>Se déconnecter</span>
+                        <span>{t('nav.logout')}</span>
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuContent>

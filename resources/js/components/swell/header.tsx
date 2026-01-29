@@ -1,18 +1,28 @@
 import AppLogoIcon from '@/components/app-logo-icon';
 import { CartSheet } from '@/components/swell/cart-sheet';
 import { CommandMenu } from '@/components/swell/command-menu';
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { UserDropdown } from '@/components/user-dropdown';
 import { NavCategories } from '@/components/swell/nav-categories';
+import { useLocale } from '@/hooks/use-locale';
 import type { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Heart, User } from 'lucide-react';
+import { Check, Heart, Languages, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function Header() {
+    const { t } = useTranslation();
     const { auth, swell } = usePage<SharedData>().props;
     const isMobile = useIsMobile();
+    const { locale, availableLocales, setLocale } = useLocale();
+
+    const localeLabels: Record<string, { label: string; flag: string }> = {
+        fr: { label: 'Français', flag: '🇫🇷' },
+        en: { label: 'English', flag: '🇬🇧' },
+    };
 
     return (
         <>
@@ -37,13 +47,13 @@ export function Header() {
                 <div className="inline-flex shrink-0 gap-4">
                     <nav className="hidden lg:block">
                         <Link href="/promotions" className={buttonVariants({ variant: 'link' })}>
-                            Promotions
+                            {t('nav.promotions')}
                         </Link>
                         <Link href="/products?sort=news" className={buttonVariants({ variant: 'link' })}>
-                            Nouveautés
+                            {t('nav.new_arrivals')}
                         </Link>
                         <Link href="/brands" className={buttonVariants({ variant: 'link' })}>
-                            Marques
+                            {t('nav.brands')}
                         </Link>
                     </nav>
     
@@ -63,6 +73,23 @@ export function Header() {
                                 <Heart size={20} />
                             </Link>
                         )}
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="hidden md:flex">
+                                    <Languages size={20} />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                {availableLocales.map((loc) => (
+                                    <DropdownMenuItem key={loc} onClick={() => setLocale(loc)} className="flex items-center gap-2">
+                                        <span>{localeLabels[loc]?.flag}</span>
+                                        <span>{localeLabels[loc]?.label ?? loc}</span>
+                                        {locale === loc && <Check size={16} className="ml-auto opacity-60" />}
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                         
                         {isMobile && <NavCategories />}
                     </div>

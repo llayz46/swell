@@ -21,8 +21,12 @@
     "nav.login": "Connexion",
     "nav.logout": "Déconnexion",
     "nav.register": "Inscription",
+    "nav.dashboard": "Dashboard",
     "nav.admin": "Admin Dashboard",
     "nav.workspace": "Workspace",
+    "nav.categories": "Catégories",
+    "nav.open_menu": "Ouvrir le menu",
+    "nav.close_menu": "Fermer le menu",
 
     "command.placeholder": "Rechercher un produit, une page...",
     "command.no_results": "Aucun produit trouvé pour \"{{query}}\"",
@@ -44,6 +48,20 @@
     "command.theme_choose": "Choisir un thème",
     "command.language": "Langue",
     "command.language_choose": "Choisir une langue",
+
+    "cart.title": "Mon panier",
+    "cart.description": "Gérer les articles dans votre panier, modifier les quantités ou supprimer des articles.",
+    "cart.empty": "Votre panier est vide.",
+    "cart.item_count": "{{count}} article",
+    "cart.item_count_plural": "{{count}} articles",
+    "cart.clear": "Vider le panier",
+    "cart.clear_confirm_title": "Confirmation de la suppression du panier",
+    "cart.clear_confirm_description": "Êtes-vous sûr de vouloir vider votre panier ? Cette action est irréversible et supprimera tous les articles de votre panier.",
+    "cart.checkout": "Passer à la caisse",
+    "cart.total": "Total",
+
+    "common.close": "Fermer",
+    "common.cancel": "Annuler",
 
     "home.title": "Accueil",
     "home.hero.title_line1": "Le starter-kit",

@@ -21,8 +21,12 @@
     "nav.login": "Login",
     "nav.logout": "Logout",
     "nav.register": "Register",
+    "nav.dashboard": "Dashboard",
     "nav.admin": "Admin Dashboard",
     "nav.workspace": "Workspace",
+    "nav.categories": "Categories",
+    "nav.open_menu": "Open menu",
+    "nav.close_menu": "Close menu",
 
     "command.placeholder": "Search for a product, a page...",
     "command.no_results": "No products found for \"{{query}}\"",
@@ -44,6 +48,20 @@
     "command.theme_choose": "Choose a theme",
     "command.language": "Language",
     "command.language_choose": "Choose a language",
+
+    "cart.title": "My Cart",
+    "cart.description": "Manage items in your cart, update quantities or remove items.",
+    "cart.empty": "Your cart is empty.",
+    "cart.item_count": "{{count}} item",
+    "cart.item_count_plural": "{{count}} items",
+    "cart.clear": "Clear cart",
+    "cart.clear_confirm_title": "Confirm cart clearing",
+    "cart.clear_confirm_description": "Are you sure you want to clear your cart? This action is irreversible and will remove all items from your cart.",
+    "cart.checkout": "Checkout",
+    "cart.total": "Total",
+
+    "common.close": "Close",
+    "common.cancel": "Cancel",
 
     "home.title": "Home",
     "home.hero.title_line1": "The starter-kit",
