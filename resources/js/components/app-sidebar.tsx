@@ -6,17 +6,20 @@ import { appSidebarConfig } from '@/config/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import AppLogo from './app-logo';
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Documentation',
-        href: 'https://swellkit.dev',
-        icon: BookOpen,
-    },
-];
-
 export function AppSidebar({ mainNavItems }: { mainNavItems: NavItem[] }) {
+    const { t } = useTranslation();
+
+    const footerNavItems: NavItem[] = [
+        {
+            title: t('common.documentation'),
+            href: 'https://swellkit.dev',
+            icon: BookOpen,
+        },
+    ];
+
     return (
         <Sidebar collapsible={appSidebarConfig.collapsible} variant={appSidebarConfig.variant}>
             <SidebarHeader>

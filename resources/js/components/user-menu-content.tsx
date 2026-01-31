@@ -10,8 +10,10 @@ import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { type SharedData } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
 import { Calendar, Gift, House, LayoutGrid, LayoutListIcon, LogOut, Settings, ShieldCheckIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function UserMenuContent() {
+    const { t } = useTranslation();
     const page = usePage<SharedData>();
     const { swell, auth } = page.props;
     const cleanup = useMobileNavigation();
@@ -34,20 +36,20 @@ export function UserMenuContent() {
                 <DropdownMenuItem asChild>
                     <Link className="block w-full" href={HomeController.url()} as="button" prefetch onClick={cleanup}>
                         <House className="mr-2" />
-                        Accueil
+                        {t('nav.home')}
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                     <Link className="block w-full" href={ordersIndex.url()} as="button" onClick={cleanup}>
                         <Calendar className="mr-2" />
-                        Commandes
+                        {t('nav.orders')}
                     </Link>
                 </DropdownMenuItem>
                 {swell.loyalty.enabled && (
                     <DropdownMenuItem asChild>
                         <Link className="block w-full" href={loyaltyIndex.url()} as="button" onClick={cleanup}>
                             <Gift className="mr-2" />
-                            Fidélité
+                            {t('nav.loyalty')}
                         </Link>
                     </DropdownMenuItem>
                 )}
@@ -55,7 +57,7 @@ export function UserMenuContent() {
                     <DropdownMenuItem asChild>
                         <Link className="block w-full" href="/dashboard" as="button" prefetch onClick={cleanup}>
                             <LayoutGrid className="mr-2" />
-                            Dashboard
+                            {t('nav.dashboard')}
                         </Link>
                     </DropdownMenuItem>
                 )}
@@ -67,7 +69,7 @@ export function UserMenuContent() {
                         <DropdownMenuItem asChild>
                             <Link href="/workspace" className="block w-full">
                                 <LayoutListIcon className="mr-2" />
-                                <span>Workspace</span>
+                                <span>{t('nav.workspace')}</span>
                             </Link>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
@@ -79,7 +81,7 @@ export function UserMenuContent() {
                 <DropdownMenuItem asChild>
                     <Link className="block w-full" href={profileEdit.url()} as="button" prefetch onClick={cleanup}>
                         <Settings className="mr-2" />
-                        Paramètres
+                        {t('nav.settings')}
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -90,7 +92,7 @@ export function UserMenuContent() {
                         <DropdownMenuItem asChild>
                             <Link className="block w-full" href={AdminController.url()} as="button" prefetch onClick={cleanup}>
                                 <ShieldCheckIcon className="mr-2" />
-                                Admin Dashboard
+                                {t('nav.admin')}
                             </Link>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
@@ -100,7 +102,7 @@ export function UserMenuContent() {
             <DropdownMenuItem asChild>
                 <Link className="block w-full" method="post" href={logout.url()} as="button" onClick={handleLogout}>
                     <LogOut className="mr-2" />
-                    Déconnexion
+                    {t('nav.logout')}
                 </Link>
             </DropdownMenuItem>
         </>
