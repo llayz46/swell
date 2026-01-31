@@ -12,8 +12,10 @@ import { store } from '@/routes/two-factor/login';
 import { Form, Head } from '@inertiajs/react';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function TwoFactorChallenge() {
+    const { t } = useTranslation();
     const [showRecoveryInput, setShowRecoveryInput] = useState<boolean>(false);
     const [code, setCode] = useState<string>('');
 
@@ -24,20 +26,18 @@ export default function TwoFactorChallenge() {
     }>(() => {
         if (showRecoveryInput) {
             return {
-                title: 'Code de récupération',
-                description:
-                    "Veuillez confirmer l'accès à votre compte en entrant l'un de vos codes de récupération d'urgence.",
-                toggleText: "se connecter avec un code d'authentification",
+                title: t('auth.2fa.recovery_title'),
+                description: t('auth.2fa.recovery_description'),
+                toggleText: t('auth.2fa.use_code'),
             };
         }
 
         return {
-            title: "Code d'authentification",
-            description:
-                "Entrez le code d'authentification fourni par votre application d'authentification.",
-            toggleText: 'se connecter avec un code de récupération',
+            title: t('auth.2fa.code_title'),
+            description: t('auth.2fa.code_description'),
+            toggleText: t('auth.2fa.use_recovery'),
         };
-    }, [showRecoveryInput]);
+    }, [showRecoveryInput, t]);
 
     const toggleRecoveryMode = (clearErrors: () => void): void => {
         setShowRecoveryInput(!showRecoveryInput);
@@ -50,7 +50,7 @@ export default function TwoFactorChallenge() {
             title={authConfigContent.title}
             description={authConfigContent.description}
         >
-            <Head title="Authentification à deux facteurs" />
+            <Head title={t('auth.2fa.title')} />
 
             <div className="space-y-6">
                 <Form
@@ -66,7 +66,7 @@ export default function TwoFactorChallenge() {
                                     <Input
                                         name="recovery_code"
                                         type="text"
-                                        placeholder="Entrez le code de récupération"
+                                        placeholder={t('auth.2fa.recovery_placeholder')}
                                         autoFocus={showRecoveryInput}
                                         required
                                     />
@@ -107,11 +107,11 @@ export default function TwoFactorChallenge() {
                                 className="w-full"
                                 disabled={processing}
                             >
-                                Continuer
+                                {t('auth.2fa.submit')}
                             </Button>
 
                             <div className="text-center text-sm text-muted-foreground">
-                                <span>ou vous pouvez </span>
+                                <span>{t('auth.2fa.toggle_prefix')} </span>
                                 <button
                                     type="button"
                                     className="cursor-pointer text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"

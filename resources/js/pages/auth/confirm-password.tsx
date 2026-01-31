@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -9,23 +10,25 @@ import AuthLayout from '@/layouts/auth-layout';
 import { store } from '@/routes/password/confirm';
 
 export default function ConfirmPassword() {
+    const { t } = useTranslation();
+
     return (
         <AuthLayout
-            title="Confirmer votre mot de passe"
-            description="Ceci est une zone sécurisée de l'application. Veuillez confirmer votre mot de passe avant de continuer."
+            title={t('auth.confirm.title')}
+            description={t('auth.confirm.description')}
         >
-            <Head title="Confirmer votre mot de passe" />
+            <Head title={t('auth.confirm.title')} />
 
             <Form {...store.form()} resetOnSuccess={['password']}>
                 {({ processing, errors }) => (
                     <div className="space-y-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="password">Mot de passe</Label>
+                            <Label htmlFor="password">{t('auth.confirm.password')}</Label>
                             <Input
                                 id="password"
                                 type="password"
                                 name="password"
-                                placeholder="Mot de passe"
+                                placeholder={t('auth.confirm.password_placeholder')}
                                 autoComplete="current-password"
                                 autoFocus
                             />
@@ -40,7 +43,7 @@ export default function ConfirmPassword() {
                                 data-test="confirm-password-button"
                             >
                                 {processing && <Spinner />}
-                                Confirmer votre mot de passe
+                                {t('auth.confirm.submit')}
                             </Button>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ import { create as registerPage } from '@/actions/Laravel/Fortify/Http/Controlle
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -25,6 +26,7 @@ interface LoginProps {
 }
 
 export default function Login({ status, canResetPassword }: LoginProps) {
+    const { t } = useTranslation();
     const { data, setData, post, processing, errors, reset } = useForm<Required<LoginForm>>({
         email: '',
         password: '',
@@ -39,13 +41,13 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     };
 
     return (
-        <AuthLayout title="Connectez-vous à votre compte" description="Entrez votre email et votre mot de passe ci-dessous pour vous connecter">
-            <Head title="Connexion" />
+        <AuthLayout title={t('auth.login.heading')} description={t('auth.login.description')}>
+            <Head title={t('auth.login.title')} />
 
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="email">Adresse email</Label>
+                        <Label htmlFor="email">{t('auth.login.email')}</Label>
                         <Input
                             id="email"
                             type="email"
@@ -55,17 +57,17 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             autoComplete="email"
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
-                            placeholder="email@exemple.com"
+                            placeholder={t('auth.login.email_placeholder')}
                         />
                         <InputError message={errors.email} />
                     </div>
 
                     <div className="grid gap-2">
                         <div className="flex items-center">
-                            <Label htmlFor="password">Mot de passe</Label>
+                            <Label htmlFor="password">{t('auth.login.password')}</Label>
                             {canResetPassword && (
                                 <TextLink href={forgotPassword.url()} className="ml-auto text-sm" tabIndex={5}>
-                                    Mot de passe oublié&nbsp;?
+                                    {t('auth.login.forgot_password')}
                                 </TextLink>
                             )}
                         </div>
@@ -77,7 +79,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             autoComplete="current-password"
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
-                            placeholder="Mot de passe"
+                            placeholder={t('auth.login.password_placeholder')}
                         />
                         <InputError message={errors.password} />
                     </div>
@@ -90,19 +92,19 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             onClick={() => setData('remember', !data.remember)}
                             tabIndex={3}
                         />
-                        <Label htmlFor="remember">Se souvenir de moi</Label>
+                        <Label htmlFor="remember">{t('auth.login.remember')}</Label>
                     </div>
 
                     <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
                         {processing && <LoaderCircle className="size-4 animate-spin" />}
-                        Se connecter
+                        {t('auth.login.submit')}
                     </Button>
                 </div>
 
                 <div className="text-center text-sm text-muted-foreground">
-                    Vous n&apos;avez pas de compte&nbsp;?{' '}
+                    {t('auth.login.no_account')}{' '}
                     <TextLink href={registerPage.url()} tabIndex={5}>
-                        S&apos;inscrire
+                        {t('auth.login.register')}
                     </TextLink>
                 </div>
             </form>

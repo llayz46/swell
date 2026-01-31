@@ -4,11 +4,14 @@ import { TextAnimate } from '@/components/magicui/text-animate';
 import { Button } from '@/components/ui/button';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Home, Search } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function NotFound() {
+    const { t } = useTranslation();
+
     return (
         <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-4">
-            <Head title="Page introuvable" />
+            <Head title={t('error.404.title')} />
 
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
                 <div className="bg-primary/3 absolute -top-1/2 left-1/2 size-200 -translate-x-1/2 rounded-full blur-3xl" />
@@ -27,25 +30,25 @@ export default function NotFound() {
 
                 <div className="mt-4 mb-3">
                     <TextAnimate animation="blurInUp" by="word" className="text-2xl font-semibold text-foreground sm:text-3xl">
-                        Page introuvable
+                        {t('error.404.title')}
                     </TextAnimate>
                 </div>
 
                 <TextAnimate animation="fadeIn" by="line" delay={0.3} className="mb-10 max-w-md text-muted-foreground">
-                    La page que vous recherchez n'existe pas ou a été déplacée. Vérifiez l'URL ou retournez à l'accueil.
+                    {t('error.404.description')}
                 </TextAnimate>
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                     <Button asChild size="lg" className="min-w-45 gap-2">
                         <Link href="/">
                             <Home className="size-4" />
-                            Retour à l'accueil
+                            {t('error.back_home')}
                         </Link>
                     </Button>
                     <Button asChild variant="outline" size="lg" className="min-w-45 gap-2">
                         <Link href="/products">
                             <Search className="size-4" />
-                            Voir les produits
+                            {t('error.404.browse')}
                         </Link>
                     </Button>
                 </div>
@@ -55,7 +58,7 @@ export default function NotFound() {
                     className="mt-8 flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                     <ArrowLeft className="size-4" />
-                    Revenir en arrière
+                    {t('error.go_back')}
                 </button>
             </div>
 

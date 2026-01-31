@@ -4,11 +4,14 @@ import { TextAnimate } from '@/components/magicui/text-animate';
 import { Button } from '@/components/ui/button';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Home, RefreshCw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function ServerError() {
+    const { t } = useTranslation();
+
     return (
         <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-4">
-            <Head title="Erreur serveur" />
+            <Head title={t('error.500.title')} />
 
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
                 <div className="absolute -top-1/2 left-1/2 size-200 -translate-x-1/2 rounded-full bg-red-500/5 blur-3xl" />
@@ -27,25 +30,24 @@ export default function ServerError() {
 
                 <div className="mt-4 mb-3">
                     <TextAnimate animation="blurInUp" by="word" className="text-2xl font-semibold text-foreground sm:text-3xl">
-                        Erreur serveur
+                        {t('error.500.title')}
                     </TextAnimate>
                 </div>
 
                 <TextAnimate animation="fadeIn" by="line" delay={0.3} className="mb-10 max-w-md text-muted-foreground">
-                    Une erreur inattendue s'est produite sur le serveur. Nos équipes ont été notifiées. Veuillez réessayer dans quelques
-                    instants.
+                    {t('error.500.description')}
                 </TextAnimate>
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                     <Button asChild size="lg" className="min-w-45 gap-2">
                         <Link href="/">
                             <Home className="size-4" />
-                            Retour à l'accueil
+                            {t('error.back_home')}
                         </Link>
                     </Button>
                     <Button size="lg" variant="outline" className="min-w-45 gap-2" onClick={() => window.location.reload()}>
                         <RefreshCw className="size-4" />
-                        Réessayer
+                        {t('error.500.retry')}
                     </Button>
                 </div>
 
@@ -54,7 +56,7 @@ export default function ServerError() {
                     className="mt-8 flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                     <ArrowLeft className="size-4" />
-                    Revenir en arrière
+                    {t('error.go_back')}
                 </button>
             </div>
 

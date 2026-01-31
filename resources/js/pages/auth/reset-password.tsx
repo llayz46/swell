@@ -2,6 +2,7 @@ import { store as resetPassword } from '@/actions/Laravel/Fortify/Http/Controlle
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,7 @@ type ResetPasswordForm = {
 };
 
 export default function ResetPassword({ token, email }: ResetPasswordProps) {
+    const { t } = useTranslation();
     const { data, setData, post, processing, errors, reset } = useForm<Required<ResetPasswordForm>>({
         token: token,
         email: email,
@@ -37,13 +39,13 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
     };
 
     return (
-        <AuthLayout title="Réinitialiser votre mot de passe" description="Entrer votre nouveau mot de passe pour réinitialiser votre compte">
-            <Head title="Réinitialiser votre mot de passe" />
+        <AuthLayout title={t('auth.reset.title')} description={t('auth.reset.description')}>
+            <Head title={t('auth.reset.title')} />
 
             <form onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="email">Adresse email</Label>
+                        <Label htmlFor="email">{t('auth.reset.email')}</Label>
                         <Input
                             id="email"
                             type="email"
@@ -58,7 +60,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="password">Mot de passe</Label>
+                        <Label htmlFor="password">{t('auth.reset.password')}</Label>
                         <Input
                             id="password"
                             type="password"
@@ -68,13 +70,13 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                             className="mt-1 block w-full"
                             autoFocus
                             onChange={(e) => setData('password', e.target.value)}
-                            placeholder="Mot de passe"
+                            placeholder={t('auth.reset.password_placeholder')}
                         />
                         <InputError message={errors.password} />
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="password_confirmation">Confirmer mot de passe</Label>
+                        <Label htmlFor="password_confirmation">{t('auth.reset.password_confirm')}</Label>
                         <Input
                             id="password_confirmation"
                             type="password"
@@ -83,14 +85,14 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                             value={data.password_confirmation}
                             className="mt-1 block w-full"
                             onChange={(e) => setData('password_confirmation', e.target.value)}
-                            placeholder="Confirmer mot de passe"
+                            placeholder={t('auth.reset.password_confirm_placeholder')}
                         />
                         <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>
 
                     <Button type="submit" className="mt-4 w-full" disabled={processing}>
                         {processing && <LoaderCircle className="size-4 animate-spin" />}
-                        Réinitialiser le mot de passe
+                        {t('auth.reset.submit')}
                     </Button>
                 </div>
             </form>

@@ -3,6 +3,7 @@ import { store as forgotPassword } from '@/actions/Laravel/Fortify/Http/Controll
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -12,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 
 export default function ForgotPassword({ status }: { status?: string }) {
+    const { t } = useTranslation();
     const { data, setData, post, processing, errors } = useForm<Required<{ email: string }>>({
         email: '',
     });
@@ -23,15 +25,15 @@ export default function ForgotPassword({ status }: { status?: string }) {
     };
 
     return (
-        <AuthLayout title="Mot de passe oublié" description="Entrez votre email pour recevoir un lien de réinitialisation du mot de passe">
-            <Head title="Mot de passe oublié" />
+        <AuthLayout title={t('auth.forgot.title')} description={t('auth.forgot.description')}>
+            <Head title={t('auth.forgot.title')} />
 
             {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
 
             <div className="space-y-6">
                 <form onSubmit={submit}>
                     <div className="grid gap-2">
-                        <Label htmlFor="email">Adresse email</Label>
+                        <Label htmlFor="email">{t('auth.forgot.email')}</Label>
                         <Input
                             id="email"
                             type="email"
@@ -40,7 +42,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                             value={data.email}
                             autoFocus
                             onChange={(e) => setData('email', e.target.value)}
-                            placeholder="mail@exemple.fr"
+                            placeholder={t('auth.forgot.email_placeholder')}
                         />
 
                         <InputError message={errors.email} />
@@ -49,14 +51,14 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     <div className="my-6 flex items-center justify-start">
                         <Button className="w-full" disabled={processing}>
                             {processing && <LoaderCircle className="size-4 animate-spin" />}
-                            Envoyer le lien de réinitialisation
+                            {t('auth.forgot.submit')}
                         </Button>
                     </div>
                 </form>
 
                 <div className="space-x-1 text-center text-sm text-muted-foreground">
-                    <span>Ou retourner à la page</span>
-                    <TextLink href={loginPage.url()}>de connexion</TextLink>
+                    <span>{t('auth.forgot.back_to')}</span>
+                    <TextLink href={loginPage.url()}>{t('auth.forgot.login_link')}</TextLink>
                 </div>
             </div>
         </AuthLayout>

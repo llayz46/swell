@@ -4,11 +4,14 @@ import { TextAnimate } from '@/components/magicui/text-animate';
 import { Button } from '@/components/ui/button';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Home, ShieldX } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Forbidden() {
+    const { t } = useTranslation();
+
     return (
         <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-4">
-            <Head title="Accès refusé" />
+            <Head title={t('error.403.title')} />
 
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
                 <div className="absolute -top-1/2 left-1/2 size-200 -translate-x-1/2 rounded-full bg-orange-500/5 blur-3xl" />
@@ -27,26 +30,25 @@ export default function Forbidden() {
 
                 <div className="mt-4 mb-3">
                     <TextAnimate animation="blurInUp" by="word" className="text-2xl font-semibold text-foreground sm:text-3xl">
-                        Accès refusé
+                        {t('error.403.title')}
                     </TextAnimate>
                 </div>
 
                 <TextAnimate animation="fadeIn" by="line" delay={0.3} className="mb-10 max-w-md text-muted-foreground">
-                    Vous n'avez pas les permissions nécessaires pour accéder à cette page. Contactez l'administrateur si vous pensez qu'il
-                    s'agit d'une erreur.
+                    {t('error.403.description')}
                 </TextAnimate>
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                     <Button asChild size="lg" className="min-w-45 gap-2">
                         <Link href="/">
                             <Home className="size-4" />
-                            Retour à l'accueil
+                            {t('error.back_home')}
                         </Link>
                     </Button>
                     <Button asChild variant="outline" size="lg" className="min-w-45 gap-2">
                         <Link href="/login">
                             <ShieldX className="size-4" />
-                            Se connecter
+                            {t('error.403.login')}
                         </Link>
                     </Button>
                 </div>
@@ -56,7 +58,7 @@ export default function Forbidden() {
                     className="mt-8 flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                     <ArrowLeft className="size-4" />
-                    Revenir en arrière
+                    {t('error.go_back')}
                 </button>
             </div>
 

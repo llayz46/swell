@@ -18,6 +18,7 @@ import type { Product, ProductImage, Review, SharedData } from '@/types';
 import { Head, Link, usePage, WhenVisible } from '@inertiajs/react';
 import { Heart, Loader2, RotateCcw, Shield, ShoppingCart, Star, Truck } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ShowProductProps {
     product: Product;
@@ -26,6 +27,7 @@ interface ShowProductProps {
 }
 
 export default function Show({ product, similarProducts, reviews }: ShowProductProps) {
+    const { t } = useTranslation();
     const { swell } = usePage<SharedData>().props;
     const featuredImage: ProductImage | undefined =
         product.images?.find((image) => image.is_featured) || product.images?.sort((a, b) => (a.order || 0) - (b.order || 0))[0];
@@ -79,7 +81,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                                 <PlaceholderImage className="size-full" />
                             )}
                             {product.isNew && (
-                                <Badge className="absolute top-4 left-4 rounded-sm bg-orange-400/90 text-primary-foreground">Nouveau</Badge>
+                                <Badge className="absolute top-4 left-4 rounded-sm bg-orange-400/90 text-primary-foreground">{t('product.new')}</Badge>
                             )}
                         </div>
 
@@ -120,7 +122,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                                             />
                                         ))}
                                     </div>
-                                    <span className="text-sm text-muted-foreground">({reviews.length} avis)</span>
+                                    <span className="text-sm text-muted-foreground">{t('product.show.reviews_count', { count: reviews.length })}</span>
                                 </div>
                             )}
                         </div>
@@ -129,14 +131,14 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                             <div className="flex items-start gap-2">
                                 {product.discount_price ? (
                                     <>
-                                        <span className="block text-3xl font-bold text-foreground">{product.discount_price.toFixed(2)} €</span>
-                                        <span className="text-muted-foreground line-through">{product.price.toFixed(2)} €</span>
+                                        <span className="block text-3xl font-bold text-foreground">{product.discount_price.toFixed(2)} &euro;</span>
+                                        <span className="text-muted-foreground line-through">{product.price.toFixed(2)} &euro;</span>
                                     </>
                                 ) : (
-                                    <span className="block text-3xl font-bold text-foreground">{product.price.toFixed(2)} €</span>
+                                    <span className="block text-3xl font-bold text-foreground">{product.price.toFixed(2)} &euro;</span>
                                 )}
                             </div>
-                            <p className="text-sm text-muted-foreground">TVA incluse, frais de port calculés à la caisse</p>
+                            <p className="text-sm text-muted-foreground">{t('product.show.tax_info')}</p>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -147,18 +149,18 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                                 )}
                             ></div>
                             <span className="text-sm text-foreground">
-                                {product.stock === 0 ? 'Indisponible' : product.stock < 11 ? `Reste ${product.stock}` : 'En stock'}
+                                {product.stock === 0 ? t('product.out_of_stock') : product.stock < 11 ? t('product.low_stock', { count: product.stock }) : t('product.in_stock')}
                             </span>
                         </div>
 
                         <div className="space-y-2">
-                            <h3 className="font-semibold text-foreground">Description</h3>
+                            <h3 className="font-semibold text-foreground">{t('product.show.description')}</h3>
                             <p className="leading-relaxed text-muted-foreground">{product.description}</p>
                         </div>
 
                         {product.collection && product.collection.products.length > 1 && (
                             <div className="space-y-4">
-                                <h3 className="font-semibold text-foreground">Produits associés</h3>
+                                <h3 className="font-semibold text-foreground">{t('product.show.related')}</h3>
                                 <div className="grid max-h-120 gap-3 overflow-y-auto pr-2">
                                     {product.collection.products.map((relatedProduct) => (
                                         <RelatedProduct key={relatedProduct.id} product={relatedProduct} currentProductId={product.id} />
@@ -169,7 +171,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
 
                         {product.options && product.options.length > 0 && (
                             <div className="space-y-3">
-                                <h3 className="font-semibold text-foreground">Variantes</h3>
+                                <h3 className="font-semibold text-foreground">{t('product.show.variants')}</h3>
                                 <div className="space-y-4">
                                     {product.options.map((option) => (
                                         <div key={option.id} className="space-y-2">
@@ -194,14 +196,14 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                                                         );
                                                     })
                                                 ) : (
-                                                    <span className="text-xs text-muted-foreground">Aucune valeur disponible</span>
+                                                    <span className="text-xs text-muted-foreground">{t('product.show.no_values')}</span>
                                                 )}
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                                 <div className="text-xs text-muted-foreground">
-                                    Sélection:{' '}
+                                    {t('product.show.selection')}{' '}
                                     {product.options.map((o, idx) => {
                                         const valId = selectedOptions[o.id];
                                         const label = o.values?.find((v) => v.id === valId)?.value ?? '—';
@@ -226,7 +228,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                                     onClick={() => addToCart(product, selectedOptions as unknown as Record<number, number>)}
                                 >
                                     <ShoppingCart className="mr-2 size-4" />
-                                    Ajouter au panier
+                                    {t('product.add_to_cart')}
                                 </Button>
                                 {swell.wishlist.enabled && (
                                     <Button
@@ -246,7 +248,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                                 className="w-full border bg-background text-foreground"
                                 onClick={() => buyNow(product)}
                             >
-                                Acheter maintenant
+                                {t('product.show.buy_now')}
                             </Button>
                         </div>
 
@@ -256,15 +258,15 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                             <div className="grid gap-3">
                                 <div className="flex items-center gap-3 text-sm">
                                     <Truck className="size-4 text-muted-foreground" />
-                                    <span className="text-foreground">Livraison gratuite dès 50€</span>
+                                    <span className="text-foreground">{t('product.show.free_shipping')}</span>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm">
                                     <Shield className="size-4 text-muted-foreground" />
-                                    <span className="text-foreground">Garantie 2 ans</span>
+                                    <span className="text-foreground">{t('product.show.warranty')}</span>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm">
                                     <RotateCcw className="size-4 text-muted-foreground" />
-                                    <span className="text-foreground">Retour gratuit sous 30 jours</span>
+                                    <span className="text-foreground">{t('product.show.returns')}</span>
                                 </div>
                             </div>
                         </div>
@@ -282,7 +284,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
                 {similarProducts.length > 0 && (
                     <WhenVisible data="similarProducts" fallback={<RelatedProductFallback />}>
                         <div className="mx-auto mt-12 mb-16 max-w-7xl">
-                            <h2 className="mb-6 text-2xl font-bold">Produits similaires</h2>
+                            <h2 className="mb-6 text-2xl font-bold">{t('product.similar')}</h2>
 
                             <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                                 {similarProducts &&
@@ -301,6 +303,7 @@ export default function Show({ product, similarProducts, reviews }: ShowProductP
 }
 
 function RelatedProduct({ product, currentProductId }: { product: Product; currentProductId: number }) {
+    const { t } = useTranslation();
     const current = product.id === currentProductId;
 
     return (
@@ -328,7 +331,7 @@ function RelatedProduct({ product, currentProductId }: { product: Product; curre
                         )}
                         {current && (
                             <Badge variant="secondary" className="rounded-sm text-xs">
-                                Actuel
+                                {t('product.show.current_badge')}
                             </Badge>
                         )}
                     </div>
@@ -336,17 +339,17 @@ function RelatedProduct({ product, currentProductId }: { product: Product; curre
                     <div className="flex items-center justify-between">
                         {product.discount_price != null ? (
                             <div className="flex items-baseline gap-2">
-                                <span className="font-semibold text-foreground">{product.discount_price.toFixed(2)} €</span>
-                                <span className="mb-auto text-sm text-muted-foreground line-through">{product.price.toFixed(2)} €</span>
+                                <span className="font-semibold text-foreground">{product.discount_price.toFixed(2)} &euro;</span>
+                                <span className="mb-auto text-sm text-muted-foreground line-through">{product.price.toFixed(2)} &euro;</span>
                             </div>
                         ) : (
-                            <span className="font-semibold text-foreground">{product.price.toFixed(2)} €</span>
+                            <span className="font-semibold text-foreground">{product.price.toFixed(2)} &euro;</span>
                         )}
 
                         <Badge
                             className={cn('rounded-sm', product.stock === 0 ? 'bg-red-500' : product.stock < 11 ? 'bg-orange-500' : 'bg-green-500')}
                         >
-                            {product.stock === 0 ? 'Indisponible' : product.stock < 11 ? `Reste ${product.stock}` : 'En stock'}
+                            {product.stock === 0 ? t('product.out_of_stock') : product.stock < 11 ? t('product.low_stock', { count: product.stock }) : t('product.in_stock')}
                         </Badge>
                     </div>
                 </div>
@@ -356,9 +359,11 @@ function RelatedProduct({ product, currentProductId }: { product: Product; curre
 }
 
 function RelatedProductFallback() {
+    const { t } = useTranslation();
+
     return (
         <div className="mx-auto my-16 max-w-7xl">
-            <h2 className="mb-6 text-2xl font-bold">Produits similaires</h2>
+            <h2 className="mb-6 text-2xl font-bold">{t('product.similar')}</h2>
 
             <div className="grid grid-cols-4 gap-3">
                 <Skeleton className="h-95" />
@@ -371,11 +376,13 @@ function RelatedProductFallback() {
 }
 
 function ReviewSectionFallback() {
+    const { t } = useTranslation();
+
     return (
         <div className="mx-auto my-16 max-w-7xl space-y-6">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <h2 className="text-2xl font-bold text-foreground">Avis clients</h2>
+                    <h2 className="text-2xl font-bold text-foreground">{t('product.show.customer_reviews')}</h2>
                 </div>
             </div>
 

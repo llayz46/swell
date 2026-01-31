@@ -3,12 +3,14 @@ import { store as verificationSend } from '@/actions/Laravel/Fortify/Http/Contro
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import AuthLayout from '@/layouts/auth-layout';
 
 export default function VerifyEmail({ status }: { status?: string }) {
+    const { t } = useTranslation();
     const { post, processing } = useForm({});
 
     const submit: FormEventHandler = (e) => {
@@ -19,25 +21,25 @@ export default function VerifyEmail({ status }: { status?: string }) {
 
     return (
         <AuthLayout
-            title="Vérifier l'email"
-            description="Veuillez vérifier votre adresse e-mail en cliquant sur le lien que nous venons de vous envoyer par e-mail."
+            title={t('auth.verify.heading')}
+            description={t('auth.verify.description')}
         >
-            <Head title="Vérification de l'email" />
+            <Head title={t('auth.verify.title')} />
 
             {status === 'verification-link-sent' && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    Un lien de vérification a été envoyé à l'adresse e-mail que vous avez fournie lors de votre inscription.
+                    {t('auth.verify.link_sent')}
                 </div>
             )}
 
             <form onSubmit={submit} className="space-y-6 text-center">
                 <Button disabled={processing} variant="secondary">
                     {processing && <LoaderCircle className="size-4 animate-spin" />}
-                    Recevoir un nouveau lien de vérification
+                    {t('auth.verify.resend')}
                 </Button>
 
                 <TextLink href={logout.url()} method="post" className="mx-auto block text-sm">
-                    Se déconnecter
+                    {t('auth.verify.logout')}
                 </TextLink>
             </form>
         </AuthLayout>

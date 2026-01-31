@@ -1,11 +1,14 @@
 import HomeController from '@/actions/App/Http/Controllers/HomeController';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 
 export default function FeatureDisabled({ feature }: { feature: string }) {
+    const { t } = useTranslation();
+
     return (
         <div className="container mx-auto flex h-screen flex-col items-center justify-center px-4">
-            <Head title="Fonctionnalité désactivée" />
+            <Head title={t('error.feature.title')} />
 
             <Link href={HomeController.url()} className="mx-auto mb-12 flex w-fit items-center gap-1 font-medium">
                 <div className="flex size-9 items-center justify-center">
@@ -16,20 +19,18 @@ export default function FeatureDisabled({ feature }: { feature: string }) {
                 </div>
             </Link>
 
-            <h1 className="mb-4 text-3xl font-bold">Fonctionnalité désactivée</h1>
-            <p className="mb-4">
-                La fonctionnalité <strong>{feature}</strong> est actuellement désactivée.
-            </p>
+            <h1 className="mb-4 text-3xl font-bold">{t('error.feature.title')}</h1>
+            <p className="mb-4" dangerouslySetInnerHTML={{ __html: t('error.feature.description', { feature }) }} />
             <p className="mb-6 text-center">
-                Consultez la documentation pour plus d'informations <br /> sur cette fonctionnalité et comment l'activer.
+                {t('error.feature.docs_info')}
             </p>
             <a href="https://swellkit.dev" target="_blank" className="text-blue-600 hover:underline">
-                Lien vers la documentation
+                {t('error.feature.docs_link')}
             </a>
 
             <div className="mt-8">
                 <Link href="/" className="hover:underline">
-                    Retour à l'accueil
+                    {t('error.feature.back_home')}
                 </Link>
             </div>
         </div>

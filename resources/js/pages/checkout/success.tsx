@@ -5,11 +5,14 @@ import { Separator } from '@/components/ui/separator';
 import { Order } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowRight, CheckCircle, Home, Mail, Package, Receipt } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Success({ order }: { order: Order }) {
+    const { t } = useTranslation();
+
     return (
         <div className="min-h-screen bg-background">
-            <Head title={`Confirmation de commande ${order.order_number}`} />
+            <Head title={t('checkout.title', { number: order.order_number })} />
 
             <div className="container mx-auto px-4 py-16">
                 <div className="mx-auto max-w-2xl">
@@ -19,27 +22,27 @@ export default function Success({ order }: { order: Order }) {
                                 <CheckCircle className="h-12 w-12 text-green-600 dark:text-green-400" />
                             </div>
                         </div>
-                        <h1 className="mb-2 text-3xl font-bold text-foreground">Commande confirmée !</h1>
-                        <p className="text-lg text-muted-foreground">Merci pour votre achat. Votre commande a été traitée avec succès.</p>
+                        <h1 className="mb-2 text-3xl font-bold text-foreground">{t('checkout.confirmed')}</h1>
+                        <p className="text-lg text-muted-foreground">{t('checkout.thank_you')}</p>
                     </div>
 
                     <SwellCard className="mb-6">
                         <SwellCardHeader>
-                            <h2 className="text-xl font-semibold text-foreground">Détails de la commande</h2>
+                            <h2 className="text-xl font-semibold text-foreground">{t('checkout.details')}</h2>
                             <Badge variant="secondary" className="rounded-sm bg-green-500 text-white dark:bg-green-900 dark:text-green-200">
-                                Confirmée
+                                {t('checkout.confirmed_badge')}
                             </Badge>
                         </SwellCardHeader>
 
                         <SwellCardContent>
                             <div className="space-y-4">
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Numéro de commande:</span>
+                                    <span className="text-muted-foreground">{t('checkout.order_number')}</span>
                                     <span className="font-mono text-foreground">{order.order_number}</span>
                                 </div>
 
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Email de confirmation:</span>
+                                    <span className="text-muted-foreground">{t('checkout.confirmation_email')}</span>
                                     <span className="text-foreground">{order.billing_address.email}</span>
                                 </div>
 
@@ -50,9 +53,9 @@ export default function Success({ order }: { order: Order }) {
                                         <div key={index} className="flex items-center justify-between">
                                             <div>
                                                 <p className="font-medium text-foreground">{item.name}</p>
-                                                <p className="text-sm text-muted-foreground">Quantité: {item.quantity}</p>
+                                                <p className="text-sm text-muted-foreground">{t('checkout.quantity', { count: item.quantity })}</p>
                                             </div>
-                                            <span className="font-semibold text-foreground">€{(item.price / 100).toFixed(2)}</span>
+                                            <span className="font-semibold text-foreground">&euro;{(item.price / 100).toFixed(2)}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -60,20 +63,20 @@ export default function Success({ order }: { order: Order }) {
                                 <Separator />
 
                                 <div className="flex items-center justify-between text-sm">
-                                    <span className="text-muted-foreground">Sous-total:</span>
-                                    <span className="text-foreground">€{(order.amount_subtotal / 100).toFixed(2)}</span>
+                                    <span className="text-muted-foreground">{t('checkout.subtotal')}</span>
+                                    <span className="text-foreground">&euro;{(order.amount_subtotal / 100).toFixed(2)}</span>
                                 </div>
                                 {order.amount_discount > 0 && (
                                     <div className="flex items-center justify-between text-sm">
-                                        <span className="text-muted-foreground">Réductions:</span>
+                                        <span className="text-muted-foreground">{t('checkout.discount')}</span>
                                         <span className="font-medium text-green-600 dark:text-green-400">
-                                            -€{(order.amount_discount / 100).toFixed(2)}
+                                            -&euro;{(order.amount_discount / 100).toFixed(2)}
                                         </span>
                                     </div>
                                 )}
                                 <div className="mt-2 flex items-center justify-between text-lg font-bold">
-                                    <span className="text-foreground">Total:</span>
-                                    <span className="text-foreground">€{(order.amount_total / 100).toFixed(2)}</span>
+                                    <span className="text-foreground">{t('checkout.total')}</span>
+                                    <span className="text-foreground">&euro;{(order.amount_total / 100).toFixed(2)}</span>
                                 </div>
                             </div>
                         </SwellCardContent>
@@ -81,7 +84,7 @@ export default function Success({ order }: { order: Order }) {
 
                     <SwellCard className="mb-6">
                         <SwellCardHeader>
-                            <h3 className="text-lg font-semibold text-foreground">Et maintenant ?</h3>
+                            <h3 className="text-lg font-semibold text-foreground">{t('checkout.whats_next')}</h3>
                         </SwellCardHeader>
 
                         <SwellCardContent>
@@ -91,10 +94,11 @@ export default function Success({ order }: { order: Order }) {
                                         <Mail className="size-4 text-primary" />
                                     </div>
                                     <div>
-                                        <p className="font-medium text-foreground">Confirmation par email</p>
-                                        <p className="text-sm text-muted-foreground">
-                                            Un email de confirmation a été envoyé à <b>{order.billing_address.email}</b>
-                                        </p>
+                                        <p className="font-medium text-foreground">{t('checkout.email_confirmation')}</p>
+                                        <p
+                                            className="text-sm text-muted-foreground"
+                                            dangerouslySetInnerHTML={{ __html: t('checkout.email_sent', { email: order.billing_address.email }) }}
+                                        />
                                     </div>
                                 </div>
 
@@ -103,8 +107,8 @@ export default function Success({ order }: { order: Order }) {
                                         <Package className="size-4 text-primary" />
                                     </div>
                                     <div>
-                                        <p className="font-medium text-foreground">Préparation et expédition</p>
-                                        <p className="text-sm text-muted-foreground">Votre commande sera expédiée sous 3-5 jours ouvrés</p>
+                                        <p className="font-medium text-foreground">{t('checkout.shipping')}</p>
+                                        <p className="text-sm text-muted-foreground">{t('checkout.shipping_description')}</p>
                                     </div>
                                 </div>
 
@@ -113,8 +117,8 @@ export default function Success({ order }: { order: Order }) {
                                         <Receipt className="size-4 text-primary" />
                                     </div>
                                     <div>
-                                        <p className="font-medium text-foreground">Suivi de commande</p>
-                                        <p className="text-sm text-muted-foreground">Vous recevrez un numéro de suivi dès l'expédition</p>
+                                        <p className="font-medium text-foreground">{t('checkout.tracking')}</p>
+                                        <p className="text-sm text-muted-foreground">{t('checkout.tracking_description')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +128,7 @@ export default function Success({ order }: { order: Order }) {
                     <div className="space-y-3">
                         <Button asChild size="lg" className="w-full">
                             <Link href="/orders">
-                                Voir mes commandes
+                                {t('checkout.view_orders')}
                                 <ArrowRight className="size-4" />
                             </Link>
                         </Button>
@@ -132,15 +136,15 @@ export default function Success({ order }: { order: Order }) {
                         <Button asChild variant="outline" size="lg" className="w-full border bg-background text-foreground">
                             <Link prefetch="mount" href="/">
                                 <Home className="size-4" />
-                                Continuer mes achats
+                                {t('checkout.continue_shopping')}
                             </Link>
                         </Button>
                     </div>
 
                     <div className="mt-8 text-center">
-                        <p className="mb-2 text-sm text-muted-foreground">Une question sur votre commande ?</p>
+                        <p className="mb-2 text-sm text-muted-foreground">{t('checkout.question')}</p>
                         <Button variant="link" className="p-0 text-primary hover:text-primary/80">
-                            Contactez notre support client
+                            {t('checkout.contact_support')}
                         </Button>
                     </div>
                 </div>
