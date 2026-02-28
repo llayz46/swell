@@ -8,7 +8,7 @@ import type {
     IssueStatus,
 } from '@/types/workspace';
 import { router } from '@inertiajs/react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { create } from 'zustand';
 
 type InitializeData = {
@@ -95,14 +95,14 @@ export const useIssueDetailStore = create<IssueDetailStore>((set, get) => ({
                 preserveState: true,
                 onSuccess: () => {
                     set({ isUpdating: false });
-                    toast.success('Statut mis à jour');
+                    sileo.success({ title: 'Statut mis à jour' });
                 },
                 onError: () => {
                     const { issue: currentIssue } = get();
                     if (currentIssue) {
                         set({ issue: { ...currentIssue, status: currentStatus }, isUpdating: false });
                     }
-                    toast.error('Erreur lors de la mise à jour du statut');
+                    sileo.error({ title: 'Erreur lors de la mise à jour du statut' });
                 },
             },
         );
@@ -127,14 +127,14 @@ export const useIssueDetailStore = create<IssueDetailStore>((set, get) => ({
                 preserveState: true,
                 onSuccess: () => {
                     set({ isUpdating: false });
-                    toast.success('Priorité mise à jour');
+                    sileo.success({ title: 'Priorité mise à jour' });
                 },
                 onError: () => {
                     const { issue: currentIssue } = get();
                     if (currentIssue) {
                         set({ issue: { ...currentIssue, priority: currentPriority }, isUpdating: false });
                     }
-                    toast.error('Erreur lors de la mise à jour de la priorité');
+                    sileo.error({ title: 'Erreur lors de la mise à jour de la priorité' });
                 },
             },
         );
@@ -158,14 +158,14 @@ export const useIssueDetailStore = create<IssueDetailStore>((set, get) => ({
                 preserveState: true,
                 onSuccess: () => {
                     set({ isUpdating: false });
-                    toast.success('Assigné mis à jour');
+                    sileo.success({ title: 'Assigné mis à jour' });
                 },
                 onError: () => {
                     const { issue: currentIssue } = get();
                     if (currentIssue) {
                         set({ issue: { ...currentIssue, assignee: currentAssignee }, isUpdating: false });
                     }
-                    toast.error("Erreur lors de la mise à jour de l'assigné");
+                    sileo.error({ title: "Erreur lors de la mise à jour de l'assigné" });
                 },
             },
         );
@@ -193,14 +193,14 @@ export const useIssueDetailStore = create<IssueDetailStore>((set, get) => ({
                 preserveState: true,
                 onSuccess: () => {
                     set({ isUpdating: false });
-                    toast.success(hasLabel ? 'Étiquette retirée' : 'Étiquette ajoutée');
+                    sileo.success({ title: hasLabel ? 'Étiquette retirée' : 'Étiquette ajoutée' });
                 },
                 onError: () => {
                     const { issue: currentIssue } = get();
                     if (currentIssue) {
                         set({ issue: { ...currentIssue, labels: currentLabels }, isUpdating: false });
                     }
-                    toast.error("Erreur lors de la mise à jour de l'étiquette");
+                    sileo.error({ title: "Erreur lors de la mise à jour de l'étiquette" });
                 },
             },
         );
@@ -224,14 +224,14 @@ export const useIssueDetailStore = create<IssueDetailStore>((set, get) => ({
                 preserveState: true,
                 onSuccess: () => {
                     set({ isUpdating: false });
-                    toast.success("Date d'échéance mise à jour");
+                    sileo.success({ title: "Date d'échéance mise à jour" });
                 },
                 onError: () => {
                     const { issue: currentIssue } = get();
                     if (currentIssue) {
                         set({ issue: { ...currentIssue, dueDate: currentDueDate }, isUpdating: false });
                     }
-                    toast.error("Erreur lors de la mise à jour de la date d'échéance");
+                    sileo.error({ title: "Erreur lors de la mise à jour de la date d'échéance" });
                 },
             },
         );
@@ -260,7 +260,7 @@ export const useIssueDetailStore = create<IssueDetailStore>((set, get) => ({
             preserveState: true,
             onSuccess: () => {
                 set({ isUpdating: false });
-                toast.success(wasSubscribed ? 'Désabonné des notifications' : 'Abonné aux notifications');
+                sileo.success({ title: wasSubscribed ? 'Désabonné des notifications' : 'Abonné aux notifications' });
             },
             onError: () => {
                 const { issue: currentIssue } = get();
@@ -274,7 +274,7 @@ export const useIssueDetailStore = create<IssueDetailStore>((set, get) => ({
                         isUpdating: false,
                     });
                 }
-                toast.error("Erreur lors de la modification de l'abonnement");
+                sileo.error({ title: "Erreur lors de la modification de l'abonnement" });
             },
         });
     },
@@ -298,11 +298,11 @@ export const useIssueDetailStore = create<IssueDetailStore>((set, get) => ({
                 preserveState: false, // Reload to get new comment with full data
                 onSuccess: () => {
                     set({ isSubmittingComment: false, replyingToCommentId: null });
-                    toast.success('Commentaire ajouté');
+                    sileo.success({ title: 'Commentaire ajouté' });
                 },
                 onError: () => {
                     set({ isSubmittingComment: false });
-                    toast.error("Erreur lors de l'ajout du commentaire");
+                    sileo.error({ title: "Erreur lors de l'ajout du commentaire" });
                 },
             },
         );
@@ -323,11 +323,11 @@ export const useIssueDetailStore = create<IssueDetailStore>((set, get) => ({
                 preserveState: false,
                 onSuccess: () => {
                     set({ isSubmittingComment: false, editingCommentId: null });
-                    toast.success('Commentaire modifié');
+                    sileo.success({ title: 'Commentaire modifié' });
                 },
                 onError: () => {
                     set({ isSubmittingComment: false });
-                    toast.error('Erreur lors de la modification du commentaire');
+                    sileo.error({ title: 'Erreur lors de la modification du commentaire' });
                 },
             },
         );
@@ -342,10 +342,10 @@ export const useIssueDetailStore = create<IssueDetailStore>((set, get) => ({
             preserveScroll: true,
             preserveState: false,
             onSuccess: () => {
-                toast.success('Commentaire supprimé');
+                sileo.success({ title: 'Commentaire supprimé' });
             },
             onError: () => {
-                toast.error('Erreur lors de la suppression du commentaire');
+                sileo.error({ title: 'Erreur lors de la suppression du commentaire' });
             },
         });
     },

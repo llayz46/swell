@@ -10,7 +10,7 @@ import { SharedData } from '@/types';
 import { useForm, usePage } from '@inertiajs/react';
 import { Loader2, Send, Star } from 'lucide-react';
 import { FormEventHandler } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 type ReviewForm = {
     product_id: number;
@@ -52,32 +52,24 @@ export function ReviewForm() {
             post(store.url(), {
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success('Commentaire ajouté avec succès', {
-                        description: 'Le commentaire a été ajouté avec succès.',
-                    });
+                    sileo.success({ title: 'Commentaire ajouté avec succès', description: 'Le commentaire a été ajouté avec succès.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error("Erreur lors de l'ajout du commentaire.", {
-                        description: allErrors,
-                    });
+                    sileo.error({ title: "Erreur lors de l'ajout du commentaire.", description: allErrors });
                 },
             });
         } else {
             put(update.url(review.id), {
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success('Commentaire modifié avec succès', {
-                        description: 'Le commentaire a été modifié avec succès.',
-                    });
+                    sileo.success({ title: 'Commentaire modifié avec succès', description: 'Le commentaire a été modifié avec succès.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error('Erreur lors de la modification du commentaire.', {
-                        description: allErrors,
-                    });
+                    sileo.error({ title: 'Erreur lors de la modification du commentaire.', description: allErrors });
                 },
             });
         }

@@ -16,7 +16,7 @@ import type { FormTabContentProps, ProductForm } from '@/types';
 import { CheckIcon, ChevronDownIcon, CirclePlus, Minus, PenLine, X } from 'lucide-react';
 import { useState } from 'react';
 import slugify from 'slugify';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 export function GeneralTabContent({ data, setData, brands, collections, processing, errors }: FormTabContentProps<ProductForm>) {
     const [openBrand, setOpenBrand] = useState<boolean>(false);
@@ -56,9 +56,7 @@ export function GeneralTabContent({ data, setData, brands, collections, processi
         }[];
     }) => {
         if (option.name === '' || option.values?.length === 0 || option.values?.some((v) => v.value.trim() === '')) {
-            toast.error("Erreur de configuration de l'option", {
-                description: "Le nom de l'option et chacune de ses valeurs doivent être renseignés.",
-            });
+            sileo.error({ title: "Erreur de configuration de l'option", description: "Le nom de l'option et chacune de ses valeurs doivent être renseignés." });
             return;
         }
 

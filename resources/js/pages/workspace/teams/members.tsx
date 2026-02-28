@@ -16,7 +16,7 @@ import { format, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { MoreHorizontal, Shield, ShieldOff, UserMinus } from 'lucide-react';
 import { useEffect } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 interface IssuesPageProps {
     team: Team;
@@ -64,17 +64,17 @@ function MemberRow({ team, member }: { team: Team; member: TeamMember }) {
     const { performPromoteMember, performDemoteMember, performRemoveMember } = useWorkspaceMembersStore();
 
     const handleRemoveMember = (member: TeamMember) => {
-        if (!isLead) return toast.error("Vous n'avez pas les droits pour retirer un membre de l'équipe");
+        if (!isLead) return sileo.error({ title: "Vous n'avez pas les droits pour retirer un membre de l'équipe" });
         performRemoveMember(team, member);
     };
 
     const handlePromoteMember = (member: TeamMember) => {
-        if (!isLead) return toast.error("Vous n'avez pas les droits pour promouvoir un membre de l'équipe");
+        if (!isLead) return sileo.error({ title: "Vous n'avez pas les droits pour promouvoir un membre de l'équipe" });
         performPromoteMember(team, member);
     };
 
     const handleDemoteMember = (member: TeamMember) => {
-        if (!isLead) return toast.error("Vous n'avez pas les droits pour rétrograder un membre de l'équipe");
+        if (!isLead) return sileo.error({ title: "Vous n'avez pas les droits pour rétrograder un membre de l'équipe" });
         performDemoteMember(team, member);
     };
 

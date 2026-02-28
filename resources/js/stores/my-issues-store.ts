@@ -1,6 +1,6 @@
 import type { IssueLabel, IssuePriority, IssueStatus } from '@/types/workspace';
 import { router } from '@inertiajs/react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { create } from 'zustand';
 import type { MyIssue } from '@/components/swell/workspace/my-issues/types';
 
@@ -91,7 +91,7 @@ export const useMyIssuesStore = create<MyIssuesStore>((set, get) => ({
         const newStatus = statuses.find((s) => s.slug === statusSlug);
 
         if (!newStatus) {
-            toast.error('Statut invalide');
+            sileo.error({ title: 'Statut invalide' });
             return;
         }
 
@@ -111,7 +111,7 @@ export const useMyIssuesStore = create<MyIssuesStore>((set, get) => ({
                     const newSet = new Set(updatingIssues);
                     newSet.delete(issueId);
                     set({ updatingIssues: newSet });
-                    toast.success('Statut mis à jour');
+                    sileo.success({ title: 'Statut mis à jour' });
                 },
                 onError: (errors) => {
                     updateIssueStatus(issueId, currentStatus);
@@ -121,7 +121,7 @@ export const useMyIssuesStore = create<MyIssuesStore>((set, get) => ({
                     set({ updatingIssues: newSet });
 
                     const errorMessage = (errors as Record<string, string>).status_id || 'Erreur lors de la mise à jour';
-                    toast.error(errorMessage);
+                    sileo.error({ title: errorMessage });
                 },
             },
         );
@@ -135,7 +135,7 @@ export const useMyIssuesStore = create<MyIssuesStore>((set, get) => ({
         const newPriority = priorities.find((p) => p.id === priorityId);
 
         if (!newPriority) {
-            toast.error('Priorité invalide');
+            sileo.error({ title: 'Priorité invalide' });
             return;
         }
 
@@ -155,7 +155,7 @@ export const useMyIssuesStore = create<MyIssuesStore>((set, get) => ({
                     const newSet = new Set(updatingIssues);
                     newSet.delete(issueId);
                     set({ updatingIssues: newSet });
-                    toast.success('Priorité mise à jour');
+                    sileo.success({ title: 'Priorité mise à jour' });
                 },
                 onError: (errors) => {
                     updateIssuePriority(issueId, currentPriority);
@@ -165,7 +165,7 @@ export const useMyIssuesStore = create<MyIssuesStore>((set, get) => ({
                     set({ updatingIssues: newSet });
 
                     const errorMessage = (errors as Record<string, string>).priority_id || 'Erreur lors de la mise à jour';
-                    toast.error(errorMessage);
+                    sileo.error({ title: errorMessage });
                 },
             },
         );
@@ -178,7 +178,7 @@ export const useMyIssuesStore = create<MyIssuesStore>((set, get) => ({
 
         const label = labels.find((l) => l.id === labelId);
         if (!label) {
-            toast.error('Étiquette invalide');
+            sileo.error({ title: 'Étiquette invalide' });
             return;
         }
 
@@ -199,7 +199,7 @@ export const useMyIssuesStore = create<MyIssuesStore>((set, get) => ({
                     const newSet = new Set(updatingIssues);
                     newSet.delete(issueId);
                     set({ updatingIssues: newSet });
-                    toast.success(hasLabel ? 'Étiquette retirée' : 'Étiquette ajoutée');
+                    sileo.success({ title: hasLabel ? 'Étiquette retirée' : 'Étiquette ajoutée' });
                 },
                 onError: (errors) => {
                     updateIssueLabels(issueId, currentLabels);
@@ -209,7 +209,7 @@ export const useMyIssuesStore = create<MyIssuesStore>((set, get) => ({
                     set({ updatingIssues: newSet });
 
                     const errorMessage = (errors as Record<string, string>).label_id || 'Erreur lors de la mise à jour';
-                    toast.error(errorMessage);
+                    sileo.error({ title: errorMessage });
                 },
             },
         );
@@ -236,7 +236,7 @@ export const useMyIssuesStore = create<MyIssuesStore>((set, get) => ({
                     const newSet = new Set(updatingIssues);
                     newSet.delete(issueId);
                     set({ updatingIssues: newSet });
-                    toast.success("Date d'échéance mise à jour");
+                    sileo.success({ title: "Date d'échéance mise à jour" });
                 },
                 onError: (errors) => {
                     updateIssueDueDate(issueId, currentDueDate || null);
@@ -246,7 +246,7 @@ export const useMyIssuesStore = create<MyIssuesStore>((set, get) => ({
                     set({ updatingIssues: newSet });
 
                     const errorMessage = (errors as Record<string, string>).due_date || 'Erreur lors de la mise à jour';
-                    toast.error(errorMessage);
+                    sileo.error({ title: errorMessage });
                 },
             },
         );

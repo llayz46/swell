@@ -3,9 +3,8 @@ import { Cart, CartItem, OrderItems, Product, ProductOption, ProductOptionValue 
 import { Page } from '@inertiajs/core';
 import { router } from '@inertiajs/react';
 import axios from 'axios';
-import { ShoppingCart } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 const optionsKey = (options?: CartItem['options'] | undefined) => {
     if (!options || options.length === 0) return '';
@@ -66,7 +65,7 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
         if (productHasOptions) {
             const expected = product.options!.length;
             if (options.length !== expected) {
-                toast.error('Veuillez sélectionner toutes les options du produit.');
+                sileo.error({ title: 'Veuillez sélectionner toutes les options du produit.' });
                 return;
             }
         }
@@ -102,19 +101,13 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
                 const serverCart = (page as Page<{ cart: Cart }>).props.cart;
                 setOptimisticCart({ ...serverCart, items: fillOptionLabels(serverCart.items) });
 
-                toast.success('Produit ajouté au panier', {
-                    description: product.brand.name + ' ' + product.name + ' a été ajouté à votre panier.',
-                    icon: <ShoppingCart className="size-4" />,
-                });
+                sileo.success({ title: 'Produit ajouté au panier', description: product.brand.name + ' ' + product.name + ' a été ajouté à votre panier.' });
             },
             onError: (errors) => {
                 fetchCart();
 
                 const err = errors as Record<string, string | undefined>;
-                toast.error("Erreur lors de l'ajout au panier", {
-                    description: err.product_id,
-                    icon: <ShoppingCart className="size-4" />,
-                });
+                sileo.error({ title: "Erreur lors de l'ajout au panier", description: err.product_id });
             },
         });
     };

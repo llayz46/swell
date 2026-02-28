@@ -1,6 +1,6 @@
 import type { InboxItem, NotificationType } from '@/types/workspace';
 import { router } from '@inertiajs/react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { create } from 'zustand';
 
 type OrderBy = 'newest' | 'oldest';
@@ -248,7 +248,7 @@ export const useInboxStore = create<InboxStore>((set, get) => ({
                     const newSet = new Set(get().updatingItems);
                     newSet.delete(id);
                     set({ updatingItems: newSet });
-                    toast.error('Erreur lors du marquage comme lu');
+                    sileo.error({ title: 'Erreur lors du marquage comme lu' });
                 },
             },
         );
@@ -278,7 +278,7 @@ export const useInboxStore = create<InboxStore>((set, get) => ({
                     const newSet = new Set(get().updatingItems);
                     newSet.delete(id);
                     set({ updatingItems: newSet });
-                    toast.error('Erreur lors du marquage comme non lu');
+                    sileo.error({ title: 'Erreur lors du marquage comme non lu' });
                 },
             },
         );
@@ -305,12 +305,12 @@ export const useInboxStore = create<InboxStore>((set, get) => ({
                 preserveScroll: true,
                 preserveState: true,
                 onSuccess: () => {
-                    toast.success('Toutes les notifications marquées comme lues');
+                    sileo.success({ title: 'Toutes les notifications marquées comme lues' });
                 },
                 onError: () => {
                     // Rollback
                     router.reload({ only: ['items'] });
-                    toast.error('Erreur lors du marquage');
+                    sileo.error({ title: 'Erreur lors du marquage' });
                 },
             },
         );
@@ -336,7 +336,7 @@ export const useInboxStore = create<InboxStore>((set, get) => ({
                     const newSet = new Set(get().updatingItems);
                     newSet.delete(id);
                     set({ updatingItems: newSet });
-                    toast.success('Notification mise en veille');
+                    sileo.success({ title: 'Notification mise en veille' });
                 },
                 onError: () => {
                     set((state) => ({
@@ -347,7 +347,7 @@ export const useInboxStore = create<InboxStore>((set, get) => ({
                     const newSet = new Set(get().updatingItems);
                     newSet.delete(id);
                     set({ updatingItems: newSet });
-                    toast.error('Erreur lors de la mise en veille');
+                    sileo.error({ title: 'Erreur lors de la mise en veille' });
                 },
             },
         );
@@ -382,7 +382,7 @@ export const useInboxStore = create<InboxStore>((set, get) => ({
                 const newSet = new Set(get().updatingItems);
                 newSet.delete(id);
                 set({ updatingItems: newSet });
-                toast.error('Erreur lors de la désactivation de la mise en veille');
+                sileo.error({ title: 'Erreur lors de la désactivation de la mise en veille' });
             },
         });
     },
@@ -402,13 +402,13 @@ export const useInboxStore = create<InboxStore>((set, get) => ({
                 const newSet = new Set(get().updatingItems);
                 newSet.delete(id);
                 set({ updatingItems: newSet });
-                toast.success('Notification supprimée');
+                sileo.success({ title: 'Notification supprimée' });
             },
             onError: () => {
                 const newSet = new Set(get().updatingItems);
                 newSet.delete(id);
                 set({ updatingItems: newSet });
-                toast.error('Erreur lors de la suppression');
+                sileo.error({ title: 'Erreur lors de la suppression' });
             },
         });
     },
@@ -418,10 +418,10 @@ export const useInboxStore = create<InboxStore>((set, get) => ({
             preserveScroll: true,
             onSuccess: () => {
                 set({ items: [], selectedItemId: null });
-                toast.success('Toutes les notifications supprimées');
+                sileo.success({ title: 'Toutes les notifications supprimées' });
             },
             onError: () => {
-                toast.error('Erreur lors de la suppression');
+                sileo.error({ title: 'Erreur lors de la suppression' });
             },
         });
     },
@@ -439,10 +439,10 @@ export const useInboxStore = create<InboxStore>((set, get) => ({
                             ? null
                             : state.selectedItemId,
                 }));
-                toast.success('Notifications lues supprimées');
+                sileo.success({ title: 'Notifications lues supprimées' });
             },
             onError: () => {
-                toast.error('Erreur lors de la suppression');
+                sileo.error({ title: 'Erreur lors de la suppression' });
             },
         });
     },

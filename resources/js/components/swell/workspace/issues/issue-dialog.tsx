@@ -15,7 +15,7 @@ import { useWorkspaceIssuesStore } from '@/stores/workspace-issues-store';
 import { useForm } from '@inertiajs/react';
 import { CheckIcon, ChevronsUpDown, LoaderCircle, X } from 'lucide-react';
 import { FormEventHandler, useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 interface IssueDialogProps {
     teamId: number;
@@ -93,13 +93,11 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
                 onSuccess: () => {
                     reset();
                     closeIssueDialog();
-                    toast.success('Tâche modifiée avec succès');
+                    sileo.success({ title: 'Tâche modifiée avec succès' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
-                    toast.error('Erreur lors de la modification de la tâche', {
-                        description: allErrors,
-                    });
+                    sileo.error({ title: 'Erreur lors de la modification de la tâche', description: allErrors });
                 },
             });
         } else {
@@ -108,13 +106,11 @@ export function IssueDialog({ teamId }: IssueDialogProps) {
                 onSuccess: () => {
                     reset();
                     closeIssueDialog();
-                    toast.success('Tâche créée avec succès');
+                    sileo.success({ title: 'Tâche créée avec succès' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
-                    toast.error('Erreur lors de la création de la tâche', {
-                        description: allErrors,
-                    });
+                    sileo.error({ title: 'Erreur lors de la création de la tâche', description: allErrors });
                 },
             });
         }

@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { useForm } from '@inertiajs/react';
 import { CircleAlertIcon, Folders } from 'lucide-react';
 import { FormEventHandler, ReactNode } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 type ConfirmDeleteDialogProps<T, K extends keyof T> = {
     item: T | null;
@@ -56,20 +56,14 @@ export function ConfirmDeleteDialog<T extends { id: number | string } & Record<K
             onSuccess: () => {
                 reset('name');
                 onClose();
-                toast.success(successMessage || `${prefix} ${itemLabel} a été supprimé·e avec succès`, {
-                    description: `${itemName} a bien été supprimé·e.`,
-                    icon,
-                });
+                sileo.success({ title: successMessage || `${prefix} ${itemLabel} a été supprimé·e avec succès`, description: `${itemName} a bien été supprimé·e.` });
             },
             onError: (errors) => {
                 const allErrors =
                     Object.values(errors).join('\n') ||
                     errorMessage ||
                     `Erreur lors de la suppression ${prefix === 'La' ? 'de la' : 'du'} ${itemLabel}. Veuillez réessayer.`;
-                toast.error(`Erreur lors de la suppression ${prefix === 'La' ? 'de la' : 'du'} ${itemLabel}`, {
-                    description: allErrors,
-                    icon,
-                });
+                sileo.error({ title: `Erreur lors de la suppression ${prefix === 'La' ? 'de la' : 'du'} ${itemLabel}`, description: allErrors });
             },
         });
     };

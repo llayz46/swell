@@ -19,9 +19,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { useCharacterLimit } from '@/hooks/use-character-limit';
 import { Category } from '@/types';
 import { useForm } from '@inertiajs/react';
-import { Folders, LoaderCircle, Plus } from 'lucide-react';
+import { LoaderCircle, Plus } from 'lucide-react';
 import { FormEventHandler, useEffect } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 type CategoryForm = {
     name: string;
@@ -78,18 +78,12 @@ export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDi
                 onSuccess: () => {
                     reset('name', 'description', 'status');
                     setOpen(false);
-                    toast.success('Catégorie créée avec succès', {
-                        description: data.name + ' a bien été créée.',
-                        icon: <Folders className="size-4" />,
-                    });
+                    sileo.success({ title: 'Catégorie créée avec succès', description: data.name + ' a bien été créée.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error('Erreur lors de la création de la catégorie', {
-                        description: allErrors,
-                        icon: <Folders className="size-4" />,
-                    });
+                    sileo.error({ title: 'Erreur lors de la création de la catégorie', description: allErrors });
                 },
             });
         } else {
@@ -98,18 +92,12 @@ export function CategoryDialog({ open, setOpen, category, parentId }: CategoryDi
                 onSuccess: () => {
                     reset('name', 'description', 'status');
                     setOpen(false);
-                    toast.success('Catégorie modifiée avec succès', {
-                        description: data.name + ' a bien été modifiée.',
-                        icon: <Folders className="size-4" />,
-                    });
+                    sileo.success({ title: 'Catégorie modifiée avec succès', description: data.name + ' a bien été modifiée.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error('Erreur lors de la modification de la catégorie', {
-                        description: allErrors,
-                        icon: <Folders className="size-4" />,
-                    });
+                    sileo.error({ title: 'Erreur lors de la modification de la catégorie', description: allErrors });
                 },
             });
         }

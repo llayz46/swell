@@ -15,9 +15,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { Collection } from '@/types';
 import { useForm } from '@inertiajs/react';
-import { Box, Boxes, LoaderCircle, Plus } from 'lucide-react';
+import { LoaderCircle, Plus } from 'lucide-react';
 import { FormEventHandler, useEffect } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 type CollectionForm = {
     title: string;
@@ -59,18 +59,12 @@ export function CollectionDialog({ open, setOpen, collection, inputValue }: Coll
                 onSuccess: () => {
                     reset('title');
                     setOpen(false);
-                    toast.success('Collection créé avec succès', {
-                        description: data.title + ' a bien été créé.',
-                        icon: <Boxes className="size-4" />,
-                    });
+                    sileo.success({ title: 'Collection créé avec succès', description: data.title + ' a bien été créé.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error('Erreur lors de la création de la collection.', {
-                        description: allErrors,
-                        icon: <Boxes className="size-4" />,
-                    });
+                    sileo.error({ title: 'Erreur lors de la création de la collection.', description: allErrors });
                 },
             });
         } else {
@@ -79,18 +73,12 @@ export function CollectionDialog({ open, setOpen, collection, inputValue }: Coll
                 onSuccess: () => {
                     reset('title');
                     setOpen(false);
-                    toast.success('Collection modifiée avec succès', {
-                        description: data.title + ' a bien été modifiée.',
-                        icon: <Box className="size-4" />,
-                    });
+                    sileo.success({ title: 'Collection modifiée avec succès', description: data.title + ' a bien été modifiée.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error('Erreur lors de la modification de la collection.', {
-                        description: allErrors,
-                        icon: <Boxes className="size-4" />,
-                    });
+                    sileo.error({ title: 'Erreur lors de la modification de la collection.', description: allErrors });
                 },
             });
         }

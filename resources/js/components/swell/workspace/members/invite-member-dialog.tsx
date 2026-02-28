@@ -13,7 +13,7 @@ import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { useForm, usePage } from '@inertiajs/react';
 import { CheckIcon, ChevronsUpDown, LoaderCircle } from 'lucide-react';
 import { FormEventHandler, useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 type InviteMemberFormData = {
     role: string | null;
@@ -66,7 +66,7 @@ export function InviteMemberDialog() {
         e.preventDefault();
 
         if (!data.team_id) {
-            toast.error('Veuillez sélectionner une équipe');
+            sileo.error({ title: 'Veuillez sélectionner une équipe' });
             return;
         }
 
@@ -75,13 +75,11 @@ export function InviteMemberDialog() {
             onSuccess: () => {
                 reset();
                 closeInviteMemberDialog();
-                toast.success(`Invitation envoyée à ${selectedMember?.name}`);
+                sileo.success({ title: `Invitation envoyée à ${selectedMember?.name}` });
             },
             onError: (errors) => {
                 const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
-                toast.error(`Erreur lors de l'envoi de l'invitation à ${selectedMember?.name}`, {
-                    description: allErrors,
-                });
+                sileo.error({ title: `Erreur lors de l'envoi de l'invitation à ${selectedMember?.name}`, description: allErrors });
             },
         });
     };

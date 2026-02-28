@@ -1,6 +1,6 @@
 import type { Team, TeamMember, WorkspaceMember } from '@/types/workspace';
 import { router } from '@inertiajs/react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { create } from 'zustand';
 
 type InvitableTeam = {
@@ -92,7 +92,7 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
                 newSet.delete(member.id);
                 set({ removingMembers: newSet });
 
-                toast.success(`${member.name} a été retiré de l'équipe avec succès`);
+                sileo.success({ title: `${member.name} a été retiré de l'équipe avec succès` });
             },
             onError: (errors) => {
                 const { removingMembers } = get();
@@ -101,7 +101,7 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
                 set({ removingMembers: newSet });
 
                 const errorMessage = (errors as Record<string, string>).member || 'Erreur lors du retrait du membre';
-                toast.error(errorMessage);
+                sileo.error({ title: errorMessage });
             },
         });
     },
@@ -123,7 +123,7 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
                     newSet.delete(member.id);
                     set({ promotingMembers: newSet });
 
-                    toast.success(`${member.name} a été promu lead avec succès`);
+                    sileo.success({ title: `${member.name} a été promu lead avec succès` });
                 },
                 onError: (errors) => {
                     const { promotingMembers } = get();
@@ -132,7 +132,7 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
                     set({ promotingMembers: newSet });
 
                     const errorMessage = (errors as Record<string, string>).member || 'Erreur lors de la promotion du membre';
-                    toast.error(errorMessage);
+                    sileo.error({ title: errorMessage });
                 },
             },
         );
@@ -155,7 +155,7 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
                     newSet.delete(member.id);
                     set({ demotingMembers: newSet });
 
-                    toast.success(`${member.name} a été rétrogradé membre avec succès`);
+                    sileo.success({ title: `${member.name} a été rétrogradé membre avec succès` });
                 },
                 onError: (errors) => {
                     const { demotingMembers } = get();
@@ -164,7 +164,7 @@ export const useWorkspaceMembersStore = create<WorkspaceMembersStore>((set, get)
                     set({ demotingMembers: newSet });
 
                     const errorMessage = (errors as Record<string, string>).member || 'Erreur lors de la rétrogradation du membre';
-                    toast.error(errorMessage);
+                    sileo.error({ title: errorMessage });
                 },
             },
         );

@@ -13,7 +13,7 @@ import { useWorkspaceTeamsStore } from '@/stores/workspace-teams-store';
 import { useForm } from '@inertiajs/react';
 import { CheckIcon, LoaderCircle, Smile } from 'lucide-react';
 import { FormEventHandler, useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 type TeamFormData = {
     name: string;
@@ -114,7 +114,7 @@ export function TeamDialog() {
 
         const submitMethod = isEditing ? put : post;
 
-        if (!isEditing && !isAdmin) return toast.error("Vous n'avez pas les droits pour " + (isEditing ? 'modifier' : 'créer') + ' une équipe');
+        if (!isEditing && !isAdmin) return sileo.error({ title: "Vous n'avez pas les droits pour " + (isEditing ? 'modifier' : 'créer') + ' une équipe' });
 
         const submitRoute = isEditing ? update.url(selectedTeamDialog!.id) : store.url();
 
@@ -123,13 +123,11 @@ export function TeamDialog() {
             onSuccess: () => {
                 reset();
                 closeTeamDialog();
-                toast.success(isEditing ? 'Équipe modifiée avec succès' : 'Équipe créée avec succès');
+                sileo.success({ title: isEditing ? 'Équipe modifiée avec succès' : 'Équipe créée avec succès' });
             },
             onError: (errors) => {
                 const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
-                toast.error('Erreur lors de ' + (isEditing ? 'la modification' : 'la création') + " de l'équipe", {
-                    description: allErrors,
-                });
+                sileo.error({ title: 'Erreur lors de ' + (isEditing ? 'la modification' : 'la création') + " de l'équipe", description: allErrors });
             },
         });
     };

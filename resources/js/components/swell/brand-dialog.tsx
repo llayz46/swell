@@ -15,9 +15,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Brand } from '@/types';
 import { useForm } from '@inertiajs/react';
-import { LoaderCircle, Plus, Tags } from 'lucide-react';
+import { LoaderCircle, Plus } from 'lucide-react';
 import { FormEventHandler, useEffect } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 type BrandForm = {
     name: string;
@@ -64,18 +64,12 @@ export function BrandDialog({ open, setOpen, brand, inputValue }: BrandDialogPro
                 onSuccess: () => {
                     reset('name', 'logo_url');
                     setOpen(false);
-                    toast.success('Marque créée avec succès', {
-                        description: data.name + ' a bien été créée.',
-                        icon: <Tags className="size-4" />,
-                    });
+                    sileo.success({ title: 'Marque créée avec succès', description: data.name + ' a bien été créée.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error('Erreur lors de la création de la marque.', {
-                        description: allErrors,
-                        icon: <Tags className="size-4" />,
-                    });
+                    sileo.error({ title: 'Erreur lors de la création de la marque.', description: allErrors });
                 },
             });
         } else {
@@ -85,18 +79,12 @@ export function BrandDialog({ open, setOpen, brand, inputValue }: BrandDialogPro
                 onSuccess: () => {
                     reset('name', 'logo_url');
                     setOpen(false);
-                    toast.success('Marque modifiée avec succès', {
-                        description: data.name + ' a bien été modifiée.',
-                        icon: <Tags className="size-4" />,
-                    });
+                    sileo.success({ title: 'Marque modifiée avec succès', description: data.name + ' a bien été modifiée.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error('Erreur lors de la modification de la marque.', {
-                        description: allErrors,
-                        icon: <Tags className="size-4" />,
-                    });
+                    sileo.error({ title: 'Erreur lors de la modification de la marque.', description: allErrors });
                 },
             });
         }

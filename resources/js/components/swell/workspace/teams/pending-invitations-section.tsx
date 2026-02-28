@@ -6,7 +6,7 @@ import { formatWorkspaceRole } from '@/utils/format-workspace-role';
 import { router } from '@inertiajs/react';
 import { Check, Clock, X } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 export function PendingInvitationsSection({ invitations }: { invitations: TeamInvitation[] }) {
     const [loadingInvitationId, setLoadingInvitationId] = useState<number | null>(null);
@@ -20,10 +20,10 @@ export function PendingInvitationsSection({ invitations }: { invitations: TeamIn
             {
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success("Vous avez rejoint l'équipe avec succès.");
+                    sileo.success({ title: "Vous avez rejoint l'équipe avec succès." });
                 },
                 onError: () => {
-                    toast.error("Une erreur est survenue lors de l'acceptation de l'invitation.");
+                    sileo.error({ title: "Une erreur est survenue lors de l'acceptation de l'invitation." });
                 },
                 onFinish: () => {
                     setLoadingInvitationId(null);

@@ -16,9 +16,9 @@ import { Transition } from '@headlessui/react';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { AlertCircle, CheckCircle, Edit, Eye, EyeOff, Info, Megaphone, MoreHorizontal, Trash2 } from 'lucide-react';
+import { AlertCircle, CheckCircle, Edit, Eye, EyeOff, Info, MoreHorizontal, Trash2 } from 'lucide-react';
 import { FormEventHandler, useMemo, useState } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[] }) {
     const { infoBanner } = usePage<SharedData>().props;
@@ -57,14 +57,10 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
         put(ordering.url(), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Bannières mises à jour avec succès !', {
-                    description: 'Vos modifications ont été enregistrées.',
-                });
+                sileo.success({ title: 'Bannières mises à jour avec succès !', description: 'Vos modifications ont été enregistrées.' });
             },
             onError: () => {
-                toast.error('Erreur lors de la mise à jour des bannières.', {
-                    description: 'Veuillez vérifier les erreurs et réessayer.',
-                });
+                sileo.error({ title: 'Erreur lors de la mise à jour des bannières.', description: 'Veuillez vérifier les erreurs et réessayer.' });
             },
             onFinish: () => {
                 setDefaults();
@@ -82,16 +78,10 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
         destroyBanner(destroy.url(id), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Bannière supprimée avec succès', {
-                    description: 'La bannière a été retirée.',
-                    icon: <Megaphone className="size-4" />,
-                });
+                sileo.success({ title: 'Bannière supprimée avec succès', description: 'La bannière a été retirée.' });
             },
             onError: () => {
-                toast.error('Erreur lors de la suppression', {
-                    description: 'Impossible de supprimer cette bannière.',
-                    icon: <Megaphone className="size-4" />,
-                });
+                sileo.error({ title: 'Erreur lors de la suppression', description: 'Impossible de supprimer cette bannière.' });
             },
         });
     };
@@ -111,14 +101,10 @@ export default function Banners({ breadcrumbs }: { breadcrumbs: BreadcrumbItem[]
         router.put(update.url(id), updatedBanner, {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success(`Bannière ${updatedBanner.is_active ? 'activée' : 'désactivée'} avec succès`, {
-                    description: `La bannière a été ${updatedBanner.is_active ? 'activée' : 'désactivée'}.`,
-                });
+                sileo.success({ title: `Bannière ${updatedBanner.is_active ? 'activée' : 'désactivée'} avec succès`, description: `La bannière a été ${updatedBanner.is_active ? 'activée' : 'désactivée'}.` });
             },
             onError: () => {
-                toast.error('Erreur lors de la mise à jour de la bannière.', {
-                    description: 'Veuillez vérifier les erreurs et réessayer.',
-                });
+                sileo.error({ title: 'Erreur lors de la mise à jour de la bannière.', description: 'Veuillez vérifier les erreurs et réessayer.' });
             },
         });
     };

@@ -17,9 +17,9 @@ import type { Product, ProductForm } from '@/types';
 import { calculateMargin } from '@/utils/product-price-calculating';
 import { Transition } from '@headlessui/react';
 import { Link, useForm } from '@inertiajs/react';
-import { AlertCircle, Bolt, ChartNoAxesCombined, Euro, ExternalLink, Eye, Images, Loader2, Package, Trash2, Warehouse } from 'lucide-react';
+import { AlertCircle, Bolt, ChartNoAxesCombined, Euro, ExternalLink, Eye, Images, Loader2, Trash2, Warehouse } from 'lucide-react';
 import { FormEventHandler, useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 interface ProductFormType {
     product?: Product;
@@ -97,36 +97,24 @@ export function ProductFormPage({ product, brands, collections, setDeleteProduct
                 method: 'put',
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success('Produit modifié avec succès', {
-                        description: data.name + ' a bien été modifié.',
-                        icon: <Package className="size-4" />,
-                    });
+                    sileo.success({ title: 'Produit modifié avec succès', description: data.name + ' a bien été modifié.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error('Erreur lors de la modification du produit.', {
-                        description: allErrors,
-                        icon: <Package className="size-4" />,
-                    });
+                    sileo.error({ title: 'Erreur lors de la modification du produit.', description: allErrors });
                 },
             });
         } else {
             post(store.url(), {
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success('Produit créer avec succès', {
-                        description: data.name + ' a bien été créer.',
-                        icon: <Package className="size-4" />,
-                    });
+                    sileo.success({ title: 'Produit créer avec succès', description: data.name + ' a bien été créer.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error('Erreur lors de la création du produit.', {
-                        description: allErrors,
-                        icon: <Package className="size-4" />,
-                    });
+                    sileo.error({ title: 'Erreur lors de la création du produit.', description: allErrors });
                 },
             });
         }

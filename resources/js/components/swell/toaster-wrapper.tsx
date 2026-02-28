@@ -1,5 +1,5 @@
 import { useAppearance } from '@/hooks/use-appearance';
-import { Toaster } from 'sonner';
+import { Toaster } from 'sileo';
 
 export function ToasterWrapper() {
     const { appearance } = useAppearance();
@@ -7,12 +7,7 @@ export function ToasterWrapper() {
     return (
         <Toaster
             theme={appearance}
-            toastOptions={{
-                classNames: {
-                    toast: '!bg-background !border !border-border !text-sm !font-medium !font-sans',
-                    description: '!text-sm !text-muted-foreground !font-sans',
-                },
-            }}
+            position="bottom-right"
         />
     );
 }

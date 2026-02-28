@@ -14,7 +14,7 @@ import { Form, Head, Link, usePage } from '@inertiajs/react';
 import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
 import { dashboard } from '@/routes';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { useTranslation } from 'react-i18next';
 
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
@@ -48,9 +48,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                         onError={(errors) => {
                             const allErrors = Object.values(errors).join('\n') || t('settings.profile.error_check');
 
-                            toast.error(t('settings.profile.error_update'), {
-                                description: allErrors,
-                            });
+                            sileo.error({ title: t('settings.profile.error_update'), description: allErrors });
                         }}
                         className="space-y-6"
                     >

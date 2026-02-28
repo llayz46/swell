@@ -18,7 +18,7 @@ import { useWorkspaceTeamsStore } from '@/stores/workspace-teams-store';
 import type { NavItem, NavItemWithChildren } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
 import { ChevronRight, LogOutIcon, MoreHorizontal, Settings } from 'lucide-react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 const isNavItemWithChildren = (item: NavItem | NavItemWithChildren): item is NavItemWithChildren => {
     return 'childrens' in item && Array.isArray(item.childrens);
@@ -94,10 +94,10 @@ const CollapsibleNavItem = ({ item }: { item: NavItemWithChildren }) => {
             {},
             {
                 onSuccess: () => {
-                    toast.success("Vous avez quitté l'équipe");
+                    sileo.success({ title: "Vous avez quitté l'équipe" });
                 },
                 onError: (error) => {
-                    toast.error(error.team);
+                    sileo.error({ title: error.team });
                 },
             },
         );

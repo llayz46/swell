@@ -1,6 +1,6 @@
 import type { Issue, IssueAssignee, IssueLabel, IssuePriority, IssueStatus, Team } from '@/types/workspace';
 import { router } from '@inertiajs/react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { create } from 'zustand';
 
 type Filters = {
@@ -203,7 +203,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
             typeof statusIdOrSlug === 'number' ? statuses.find((s) => s.id === statusIdOrSlug) : statuses.find((s) => s.slug === statusIdOrSlug);
 
         if (!newStatus) {
-            toast.error('Statut invalide');
+            sileo.error({ title: 'Statut invalide' });
             return;
         }
 
@@ -223,7 +223,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     const newSet = new Set(updatingIssues);
                     newSet.delete(issueId);
                     set({ updatingIssues: newSet });
-                    toast.success('Statut mis à jour avec succès');
+                    sileo.success({ title: 'Statut mis à jour avec succès' });
                 },
                 onError: (errors) => {
                     updateIssueStatus(issueId, currentStatus);
@@ -233,7 +233,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     set({ updatingIssues: newSet });
 
                     const errorMessage = (errors as Record<string, string>).status_id || 'Erreur lors de la mise à jour du statut';
-                    toast.error(errorMessage);
+                    sileo.error({ title: errorMessage });
                 },
             },
         );
@@ -247,7 +247,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
         const newPriority = priorities.find((p) => p.id === priorityId);
 
         if (!newPriority) {
-            toast.error('Priorité invalide');
+            sileo.error({ title: 'Priorité invalide' });
             return;
         }
 
@@ -267,7 +267,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     const newSet = new Set(updatingIssues);
                     newSet.delete(issueId);
                     set({ updatingIssues: newSet });
-                    toast.success('Priorité mise à jour avec succès');
+                    sileo.success({ title: 'Priorité mise à jour avec succès' });
                 },
                 onError: (errors) => {
                     updateIssuePriority(issueId, currentPriority);
@@ -277,7 +277,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     set({ updatingIssues: newSet });
 
                     const errorMessage = (errors as Record<string, string>).priority_id || 'Erreur lors de la mise à jour de la priorité';
-                    toast.error(errorMessage);
+                    sileo.error({ title: errorMessage });
                 },
             },
         );
@@ -302,7 +302,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     const newSet = new Set(updatingIssues);
                     newSet.delete(issueId);
                     set({ updatingIssues: newSet });
-                    toast.success('Assignation mise à jour avec succès');
+                    sileo.success({ title: 'Assignation mise à jour avec succès' });
                 },
                 onError: (errors) => {
                     updateIssueAssignee(issueId, currentAssignee);
@@ -312,7 +312,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     set({ updatingIssues: newSet });
 
                     const errorMessage = (errors as Record<string, string>).assignee_id || "Erreur lors de la mise à jour de l'assignation";
-                    toast.error(errorMessage);
+                    sileo.error({ title: errorMessage });
                 },
             },
         );
@@ -325,7 +325,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
 
         const label = labels.find((l) => l.id === labelId);
         if (!label) {
-            toast.error('Étiquette invalide');
+            sileo.error({ title: 'Étiquette invalide' });
             return;
         }
 
@@ -346,7 +346,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     const newSet = new Set(updatingIssues);
                     newSet.delete(issueId);
                     set({ updatingIssues: newSet });
-                    toast.success(hasLabel ? 'Étiquette retirée avec succès' : 'Étiquette ajoutée avec succès');
+                    sileo.success({ title: hasLabel ? 'Étiquette retirée avec succès' : 'Étiquette ajoutée avec succès' });
                 },
                 onError: (errors) => {
                     updateIssueLabels(issueId, currentLabels);
@@ -356,7 +356,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     set({ updatingIssues: newSet });
 
                     const errorMessage = (errors as Record<string, string>).label_id || "Erreur lors de la mise à jour de l'étiquette";
-                    toast.error(errorMessage);
+                    sileo.error({ title: errorMessage });
                 },
             },
         );
@@ -383,7 +383,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     const newSet = new Set(updatingIssues);
                     newSet.delete(issueId);
                     set({ updatingIssues: newSet });
-                    toast.success("Date d'échéance mise à jour avec succès");
+                    sileo.success({ title: "Date d'échéance mise à jour avec succès" });
                 },
                 onError: (errors) => {
                     updateIssueDueDate(issueId, currentDueDate || null);
@@ -393,7 +393,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                     set({ updatingIssues: newSet });
 
                     const errorMessage = (errors as Record<string, string>).due_date || "Erreur lors de la mise à jour de la date d'échéance";
-                    toast.error(errorMessage);
+                    sileo.error({ title: errorMessage });
                 },
             },
         );
@@ -413,7 +413,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                 const newSet = new Set(updatingIssues);
                 newSet.delete(issueId);
                 set({ updatingIssues: newSet });
-                toast.success('Tâche supprimée avec succès');
+                sileo.success({ title: 'Tâche supprimée avec succès' });
 
                 if (onSuccess) {
                     onSuccess();
@@ -426,7 +426,7 @@ export const useWorkspaceIssuesStore = create<WorkspaceIssuesStore>((set, get) =
                 set({ updatingIssues: newSet });
 
                 const errorMessage = (errors as Record<string, string>).message || 'Erreur lors de la suppression de la tâche';
-                toast.error(errorMessage);
+                sileo.error({ title: errorMessage });
             },
         });
     },

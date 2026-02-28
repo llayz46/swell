@@ -15,9 +15,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { BannerItem } from '@/types';
 import { useForm } from '@inertiajs/react';
-import { LoaderCircle, Megaphone, Plus } from 'lucide-react';
+import { LoaderCircle, Plus } from 'lucide-react';
 import { FormEventHandler, useEffect } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 
 type BannerForm = {
     message: string;
@@ -69,18 +69,12 @@ export function BannerDialog({ open, setOpen, banner, onCreated }: BannerDialogP
                         onCreated(newBanner);
                     }
 
-                    toast.success('Message ajouté avec succès', {
-                        description: 'Le message a bien été ajouté.',
-                        icon: <Megaphone className="size-4" />,
-                    });
+                    sileo.success({ title: 'Message ajouté avec succès', description: 'Le message a bien été ajouté.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error("Erreur lors de l'ajout du message", {
-                        description: allErrors,
-                        icon: <Megaphone className="size-4" />,
-                    });
+                    sileo.error({ title: "Erreur lors de l'ajout du message", description: allErrors });
                 },
             });
         } else {
@@ -89,18 +83,12 @@ export function BannerDialog({ open, setOpen, banner, onCreated }: BannerDialogP
                 onSuccess: () => {
                     reset('message');
                     setOpen(false);
-                    toast.success('Message modifié avec succès', {
-                        description: 'Le message a bien été modifié.',
-                        icon: <Megaphone className="size-4" />,
-                    });
+                    sileo.success({ title: 'Message modifié avec succès', description: 'Le message a bien été modifié.' });
                 },
                 onError: (errors) => {
                     const allErrors = Object.values(errors).join('\n') || 'Veuillez vérifier les informations saisies.';
 
-                    toast.error('Erreur lors de la modification du message', {
-                        description: allErrors,
-                        icon: <Megaphone className="size-4" />,
-                    });
+                    sileo.error({ title: 'Erreur lors de la modification du message', description: allErrors });
                 },
             });
         }
