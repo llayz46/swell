@@ -29,7 +29,6 @@ export function ConfirmDeleteDialog<T extends { id: number | string } & Record<K
     deleteRoute,
     successMessage,
     errorMessage,
-    icon = <Folders className="size-4" />,
     itemLabel = 'élément',
     prefix = 'La',
 }: ConfirmDeleteDialogProps<T, K>) {
